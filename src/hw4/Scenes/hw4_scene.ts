@@ -70,9 +70,9 @@ export default class hw4_scene extends Scene {
         this.load.spritesheet("slice", "hw4_assets/spritesheets/slice.json");
 
         // Load the tilemap
-        // HOMEWORK 4 - TODO
+        // HOMEWORK 4 - TODO [Complete]
         // Change this file to be your own tilemap
-        this.load.tilemap("level", "hw4_assets/tilemaps/cse380_hw4_tilejson.json");
+        this.load.tilemap("level", "hw4_assets/tilemaps/HW4_Map.json");
 
         // Load the scene info
         this.load.object("weaponData", "hw4_assets/data/weaponData.json");
@@ -96,7 +96,7 @@ export default class hw4_scene extends Scene {
     }
 
     startScene(){
-        // HOMEWORK 4 - TODO
+        // HOMEWORK 4 - TODO [Complete]
         /*
             Modify this line if needed.
             
@@ -195,7 +195,7 @@ export default class hw4_scene extends Scene {
         let health2 = (<BattlerAI>this.playerCharacters[1]._ai).health;
 
         //If both are dead, game over
-        if(health1 === 0 && health2 === 0){
+        if(health1 <= 0 || health2 <= 0){
             this.sceneManager.changeToScene(GameOver);
         }
 
@@ -242,7 +242,7 @@ export default class hw4_scene extends Scene {
         return closetEnemy;
     }
 
-    // HOMEWORK 4 - TODO
+    // HOMEWORK 4 - TODO [Complete]
     /**
      * This function spawns in all of the items in "items.json"
      * 
@@ -316,7 +316,7 @@ export default class hw4_scene extends Scene {
         }
     }
 
-    // HOMEWORK 4 - TODO
+    // HOMEWORK 4 - TODO [Complete]
     /**
      * Change positions of the player characters to whatever fits your map
      */
@@ -329,7 +329,7 @@ export default class hw4_scene extends Scene {
         // Create the players
         this.playerCharacters = Array(2);
         this.playerCharacters[0] = this.add.animatedSprite("player1", "primary");
-        this.playerCharacters[0].position.set(4*8, 62*8);
+        this.playerCharacters[0].position.set(35*16+8, 4*16+8);
         this.playerCharacters[0].addPhysics(new AABB(Vec2.ZERO, new Vec2(8, 8)));
         //First player is melee based, starts off with a knife and is short ranged
         this.playerCharacters[0].addAI(PlayerController,
@@ -350,7 +350,7 @@ export default class hw4_scene extends Scene {
 
         //Second player is ranged based, long range and starts with pistol
         this.playerCharacters[1] = this.add.animatedSprite("player2", "primary");
-        this.playerCharacters[1].position.set(2*8, 62*8);
+        this.playerCharacters[1].position.set(33*16+8, 4*16+8);
         this.playerCharacters[1].addPhysics(new AABB(Vec2.ZERO, new Vec2(8, 8)));
         this.playerCharacters[1].addAI(PlayerController,
             {
