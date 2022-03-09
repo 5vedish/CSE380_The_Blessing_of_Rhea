@@ -8,6 +8,7 @@ import Timer from "../../../Wolfie2D/Timing/Timer";
 import { hw4_Names, hw4_Statuses } from "../../hw4_constants";
 import EnemyAI, { EnemyStates } from "../EnemyAI";
 import EnemyState from "./EnemyState";
+import Stack from "../../../Wolfie2D/DataTypes/Stack";
 
 export default class Active extends EnemyState {
     // Timers for managing this state
@@ -38,7 +39,7 @@ export default class Active extends EnemyState {
 
     handleInput(event: GameEvent): void { }
 
-    // HOMEWORK 4 - TODO
+    // HOMEWORK 4 - TODO [Complete]
     /**
      * This function is called whenever we're defining a path towards the player, and it should create a path that moves
      * in the complete opposite direction. For example, if the path to the player is moving straight left, this method should create 
@@ -48,6 +49,11 @@ export default class Active extends EnemyState {
      */
     pickRetreatPath(pathToPlayer: NavigationPath){
 
+        let nextPoint = new Stack<Vec2>();
+        nextPoint.push(new Vec2(this.owner.position.x - (this.parent.lastPlayerPos.x - this.owner.position.x), this.owner.position.y - (this.parent.lastPlayerPos.y - this.owner.position.y)));
+
+        let retreatPath = new NavigationPath(nextPoint);
+        this.parent.retreatPath = retreatPath;
     }
 
     update(deltaT: number): void {

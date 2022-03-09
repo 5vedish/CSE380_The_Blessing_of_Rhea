@@ -329,13 +329,13 @@ export default class hw4_scene extends Scene {
         // Create the players
         this.playerCharacters = Array(2);
         this.playerCharacters[0] = this.add.animatedSprite("player1", "primary");
-        this.playerCharacters[0].position.set(35*16+8, 4*16+8);
+        this.playerCharacters[0].position.set(4*16+8, 36*16+8);
         this.playerCharacters[0].addPhysics(new AABB(Vec2.ZERO, new Vec2(8, 8)));
         //First player is melee based, starts off with a knife and is short ranged
         this.playerCharacters[0].addAI(PlayerController,
             {
                 speed: 100,
-                health: 25,
+                health: 50,
                 inventory: inventory,
                 items: this.items,
                 inputEnabled: true,
@@ -350,12 +350,12 @@ export default class hw4_scene extends Scene {
 
         //Second player is ranged based, long range and starts with pistol
         this.playerCharacters[1] = this.add.animatedSprite("player2", "primary");
-        this.playerCharacters[1].position.set(33*16+8, 4*16+8);
+        this.playerCharacters[1].position.set(4*16+8, 38*16+8);
         this.playerCharacters[1].addPhysics(new AABB(Vec2.ZERO, new Vec2(8, 8)));
         this.playerCharacters[1].addAI(PlayerController,
             {
                 speed: 100,
-                health: 10,
+                health: 50,
                 inventory: inventory,
                 items: this.items,
                 inputEnabled: false,
@@ -369,7 +369,7 @@ export default class hw4_scene extends Scene {
     }
 
     /**
-     * // HOMEWORK 4 - TODO
+     * // HOMEWORK 4 - TODO [Complete]
      * This function creates the navmesh for the game world.
      * 
      * It reads in information in the navmesh.json file.
@@ -390,7 +390,7 @@ export default class hw4_scene extends Scene {
     createNavmesh(): void {
         // Add a layer to display the graph
         let gLayer = this.addLayer("graph");
-        gLayer.setHidden(true);
+        gLayer.setHidden(false);
 
         let navmeshData = this.load.getObject("navmesh");
 
@@ -415,7 +415,7 @@ export default class hw4_scene extends Scene {
         this.navManager.addNavigableEntity(hw4_Names.NAVMESH, navmesh);
     }
 
-    // HOMEWORK 4 - TODO
+    // HOMEWORK 4 - TODO [Complete]
     /**
      * Here is where we initalize all enemies that are spawned in the scene, based off the enemy.json you'll create based on your own tilemap. 
      * The format for the json file is:
@@ -476,13 +476,14 @@ export default class hw4_scene extends Scene {
          * choose one of those paths due to how the path selection is implemented, there won't be any randomness given two or more equally valid paths.
          * 
          */
-        let actionsGun = [new AttackAction(3, [hw4_Statuses.IN_RANGE], [hw4_Statuses.REACHED_GOAL]),
-        new Move(2, [], [hw4_Statuses.IN_RANGE], {inRange: 100}),
-        new Retreat(1, [hw4_Statuses.LOW_HEALTH, hw4_Statuses.CAN_RETREAT], [hw4_Statuses.REACHED_GOAL], {retreatDistance: 200})];
+        let actionsGun = [new AttackAction(4, [hw4_Statuses.IN_RANGE], [hw4_Statuses.REACHED_GOAL]),
+        new Move(3, [], [hw4_Statuses.IN_RANGE], {inRange: 100}),
+        new Retreat(1, [hw4_Statuses.LOW_HEALTH, hw4_Statuses.CAN_RETREAT], [hw4_Statuses.REACHED_GOAL], {retreatDistance: 200}),
+        new Berserk(2, [hw4_Statuses.LOW_HEALTH, hw4_Statuses.CAN_BERSERK], [hw4_Statuses.REACHED_GOAL])];
 
-        let actionKnife = [new AttackAction(3, [hw4_Statuses.IN_RANGE], [hw4_Statuses.REACHED_GOAL]),
-        new Move(2, [], [hw4_Statuses.IN_RANGE], {inRange: 20}),
-        new Retreat(4, [hw4_Statuses.LOW_HEALTH, hw4_Statuses.CAN_RETREAT], [hw4_Statuses.REACHED_GOAL], {retreatDistance: 200})];
+        let actionKnife = [new AttackAction(3, [hw4_Statuses.IN_RANGE], [hw4_Statuses.REACHED_GOAL]), new Move(2, [], [hw4_Statuses.IN_RANGE], {inRange: 20}),
+        new Retreat(4, [hw4_Statuses.LOW_HEALTH, hw4_Statuses.CAN_RETREAT], [hw4_Statuses.REACHED_GOAL], {retreatDistance: 200})
+        , new Berserk(1, [hw4_Statuses.LOW_HEALTH, hw4_Statuses.CAN_BERSERK], [hw4_Statuses.REACHED_GOAL])];
 
 
         // HOMEWORK 4 - TODO

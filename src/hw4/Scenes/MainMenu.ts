@@ -68,7 +68,7 @@ export default class MainMenu extends Scene {
     );
     aboutHeader.textColor = Color.WHITE;
 
-    // HOMEWORK 4 - TODO: Give yourself credit and add your name to the about page! [Complete]
+    // HOMEWORK 4 - TODO [Complete]: Give yourself credit and add your name to the about page!
     const text1 = "This game was created by Zhixing Zhao";
     const text2 =
       "using the Wolfie2D game engine, a TypeScript game engine created by";

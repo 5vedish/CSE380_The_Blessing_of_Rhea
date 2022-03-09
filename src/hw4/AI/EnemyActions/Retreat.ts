@@ -22,7 +22,7 @@ export default class Retreat extends GoapAction {
         this.retreatDistance = options.retreatDistance;
     }
 
-    // HOMEWORK 4 - TODO
+    // HOMEWORK 4 - TODO [Complete]
     /**
      * Implement retreat action so that the enemy constantly moves away from the player until they get past the retreatDistance. If they succesfully move 
      * far away enough, they heal back to their max health. The low health status should NOT be removed, once an enemy is low health, that remains
@@ -33,7 +33,26 @@ export default class Retreat extends GoapAction {
      * as far away as possible.
      */
     performAction(statuses: Array<string>, actor: StateMachineGoapAI, deltaT: number, target?: StateMachineGoapAI): Array<string> {
-        return null;
+
+        if (this.checkPreconditions(statuses)){
+
+            let enemy = <EnemyAI> actor;
+            let playerPos = enemy.lastPlayerPos;
+            let distance = enemy.owner.position.distanceTo(playerPos);
+
+            if (distance >= this.retreatDistance){
+                enemy.health = enemy.maxHealth;
+                return this.effects;
+            }
+
+            this.path = enemy.retreatPath;
+            enemy.owner.rotation = Vec2.UP.angleToCCW(this.path.getMoveDirection(enemy.owner));
+            enemy.owner.moveOnPath(enemy.speed * deltaT, this.path);
+            return null;
+
+        }
+
+        return this.effects;
     }
 
     updateCost(options: Record<string, number>): void {}
