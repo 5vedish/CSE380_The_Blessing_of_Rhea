@@ -443,7 +443,7 @@ export default class hw4_scene extends Scene {
         // Create an enemies array
         this.enemies = new Array(enemyData.numEnemies);
 
-        // HOMEWORK 4 - TODO
+        // HOMEWORK 4 - TODO [Complete]
         /**
          * Here we have the current actions that are given to the two existing enemy types, the gun enemy and knife enemy. 
          * Both AI will look to move towards a player and attack once in range at the start, trying to get the 
@@ -485,8 +485,18 @@ export default class hw4_scene extends Scene {
         new Retreat(4, [hw4_Statuses.LOW_HEALTH, hw4_Statuses.CAN_RETREAT], [hw4_Statuses.REACHED_GOAL], {retreatDistance: 200})
         , new Berserk(1, [hw4_Statuses.LOW_HEALTH, hw4_Statuses.CAN_BERSERK], [hw4_Statuses.REACHED_GOAL])];
 
+        let actionBumRush = [new AttackAction(3, [hw4_Statuses.IN_RANGE], [hw4_Statuses.REACHED_GOAL]), 
+        new Move(1, [], [hw4_Statuses.IN_RANGE], {inRange: 20}),
+        new Retreat(5, [hw4_Statuses.CAN_BERSERK], [hw4_Statuses.REACHED_GOAL], {retreatDistance:0})
+        , new Berserk(1, [hw4_Statuses.CAN_BERSERK], [hw4_Statuses.REACHED_GOAL])];
 
-        // HOMEWORK 4 - TODO
+        let actionSniper = [new AttackAction(2, [hw4_Statuses.IN_RANGE], [hw4_Statuses.REACHED_GOAL]), 
+        new Move(5, [], [hw4_Statuses.IN_RANGE], {inRange: 300}),
+        new Retreat(1, [hw4_Statuses.CAN_RETREAT], [hw4_Statuses.REACHED_GOAL], {retreatDistance:400})
+        , new Berserk(7, [], [hw4_Statuses.REACHED_GOAL])];
+
+
+        // HOMEWORK 4 - TODO [Complete]
         /**
          * To help facillate testing the proper sequence of actions that your AI should take, since it can be hard visually,
          *  I've created some test methods you can use to determine whether your AI is behaving correctly. 
@@ -502,9 +512,11 @@ export default class hw4_scene extends Scene {
          * 
          * Use these functions below to make sure your AI are taking the proper actions given certain situations.
          */
-        /*let resultGun = this.generateGoapPlans(actionsGun, [hw4_Statuses.IN_RANGE, hw4_Statuses.LOW_HEALTH, hw4_Statuses.CAN_BERSERK, hw4_Statuses.CAN_RETREAT], hw4_Statuses.REACHED_GOAL);
+        let resultGun = this.generateGoapPlans(actionsGun, [hw4_Statuses.IN_RANGE, hw4_Statuses.LOW_HEALTH, hw4_Statuses.CAN_BERSERK, hw4_Statuses.CAN_RETREAT], hw4_Statuses.REACHED_GOAL);
         let resultKnife = this.generateGoapPlans(actionKnife, [hw4_Statuses.IN_RANGE, hw4_Statuses.LOW_HEALTH, hw4_Statuses.CAN_BERSERK, hw4_Statuses.CAN_RETREAT], hw4_Statuses.REACHED_GOAL);
-        this.testGoapPlans(resultGun, resultKnife, null, null);*/
+        let resultBumRush = this.generateGoapPlans(actionBumRush, [hw4_Statuses.IN_RANGE, hw4_Statuses.LOW_HEALTH, hw4_Statuses.CAN_BERSERK, hw4_Statuses.CAN_RETREAT], hw4_Statuses.REACHED_GOAL);
+        let resultSniper = this.generateGoapPlans(actionSniper, [hw4_Statuses.IN_RANGE, hw4_Statuses.LOW_HEALTH, hw4_Statuses.CAN_BERSERK, hw4_Statuses.CAN_RETREAT], hw4_Statuses.REACHED_GOAL);
+        this.testGoapPlans(resultGun, resultKnife, resultBumRush, resultSniper);
 
         // Initialize the enemies
         for(let i = 0; i < enemyData.numEnemies; i++){
@@ -534,7 +546,7 @@ export default class hw4_scene extends Scene {
             let weapon;
             let actions;
             let range;
-            // HOMEWORK 4 - TODO
+            // HOMEWORK 4 - TODO [Complete]
             /**
              * Once you've set up the actions for your custom enemy types, assign them here so they'll be spawned in your game.
              * They can have any weapons you want.
@@ -553,10 +565,14 @@ export default class hw4_scene extends Scene {
                 range = 20;
             }
             else if (data.type === "custom_enemy1") {
-                //ADD CODE HERE
+                weapon = this.createWeapon("knife");
+                actions = actionBumRush;
+                range = 20;
             }
             else if (data.type === "custom_enemy2") {
-                //ADD CODE HERE
+                weapon = this.createWeapon("laserGun");
+                actions = actionSniper;
+                range = 300;
             }
 
             let enemyOptions = {

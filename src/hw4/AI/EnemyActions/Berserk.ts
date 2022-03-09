@@ -3,6 +3,7 @@ import GoapAction from "../../../Wolfie2D/DataTypes/Interfaces/GoapAction";
 import Vec2 from "../../../Wolfie2D/DataTypes/Vec2";
 import Emitter from "../../../Wolfie2D/Events/Emitter";
 import GameNode from "../../../Wolfie2D/Nodes/GameNode";
+import Timer from "../../../Wolfie2D/Timing/Timer";
 import EnemyAI from "../EnemyAI";
 
 // HOMEWORK 4 - TODO [Complete]
@@ -25,11 +26,9 @@ export default class Berserk extends GoapAction {
         if (this.checkPreconditions(statuses)){
 
             let enemy = <EnemyAI> actor;
-            enemy.speed *= 10;
+            enemy.speed *= 1.5;
             enemy.weapon.type.damage *= 2;
-            enemy.weapon.type.cooldown *= 10;
-
-            console.log("AM BERSERKING")
+            enemy.weapon.cooldownTimer = new Timer(enemy.weapon.type.cooldown/2);
             
             return this.effects;
         }

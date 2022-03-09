@@ -19,15 +19,15 @@
       "position": [1424,144],
       "mode": "patrol",
       "route": [4,5,6,7],
-      "health": 10,
-      "type": "knife_enemy"
+      "health": 3,
+      "type": "custom_enemy1"
     },
     {
       "position": [1840,560],
       "mode": "patrol",
       "route": [6,7,4,5],
-      "health": 5,
-      "type": "gun_enemy"
+      "health": 50,
+      "type": "custom_enemy2"
     },
     {
       "position": [1680,1680],
@@ -47,15 +47,15 @@
       "position": [976,1776],
       "mode": "patrol",
       "route": [12,13],
-      "health": 10,
-      "type": "knife_enemy"
+      "health": 3,
+      "type": "custom_enemy1"
     },
     {
       "position": [1008,1072],
       "mode": "patrol",
       "route": [14,15],
-      "health": 5,
-      "type": "gun_enemy"
+      "health": 50,
+      "type": "custom_enemy2"
     },
     {
       "position": [1008,1328],
@@ -75,15 +75,15 @@
       "position": [1136,464],
       "mode": "patrol",
       "route": [20,21],
-      "health": 10,
-      "type": "knife_enemy"
+      "health": 3,
+      "type": "custom_enemy1"
     },
     {
       "position": [528, 1040],
       "mode": "guard",
       "guardPosition": [528, 1040],
-      "health": 5,
-      "type": "gun_enemy"
+      "health": 50,
+      "type": "custom_enemy2"
     },
     {
       "position": [528, 1360],
@@ -103,15 +103,15 @@
       "position": [112, 1584],
       "mode": "guard",
       "guardPosition": [112, 1584],
-      "health": 10,
-      "type": "knife_enemy"
+      "health": 3,
+      "type": "custom_enemy1"
     },
     {
       "position": [112, 1744],
       "mode": "guard",
       "guardPosition": [112, 1744],
-      "health": 5,
-      "type": "gun_enemy"
+      "health": 50,
+      "type": "custom_enemy2"
     },
     {
       "position": [304, 400],
@@ -131,21 +131,21 @@
       "position": [304, 656],
       "mode": "guard",
       "guardPosition": [304, 656],
-      "health": 10,
-      "type": "knife_enemy"
+      "health": 3,
+      "type": "custom_enemy1"
     },
     {
       "position": [624, 656],
       "mode": "guard",
       "guardPosition": [624, 656],
-      "health": 5,
-      "type": "gun_enemy"
+      "health": 50,
+      "type": "custom_enemy2"
     },
     {
       "position": [1712, 1392],
       "mode": "guard",
       "guardPosition": [1712, 1392],
-      "health": 5,
+      "health": 10,
       "type": "knife_enemy"
     },
 
@@ -155,8 +155,8 @@
       "position": [496, 1200],
       "mode": "guard",
       "guardPosition": [496, 1200],
-      "health": 10,
-      "type": "gun_enemy"
+      "health": 50,
+      "type": "custom_enemy2"
     }
   ]
 }
