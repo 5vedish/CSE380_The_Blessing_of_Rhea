@@ -1,8 +1,8 @@
-import Vec2 from "../../../../Wolfie2D/DataTypes/Vec2";
-import GameNode from "../../../../Wolfie2D/Nodes/GameNode";
-import AnimatedSprite from "../../../../Wolfie2D/Nodes/Sprites/AnimatedSprite";
-import Scene from "../../../../Wolfie2D/Scene/Scene";
-import WeaponType from "./WeaponType";
+import Vec2 from "../../../../../Wolfie2D/DataTypes/Vec2";
+import GameNode from "../../../../../Wolfie2D/Nodes/GameNode";
+import AnimatedSprite from "../../../../../Wolfie2D/Nodes/Sprites/AnimatedSprite";
+import Scene from "../../../../../Wolfie2D/Scene/Scene";
+import WeaponType from ".././WeaponType";
 
 export default class Slice extends WeaponType {
 

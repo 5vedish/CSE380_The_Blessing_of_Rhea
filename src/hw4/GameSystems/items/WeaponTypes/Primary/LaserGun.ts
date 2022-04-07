@@ -1,16 +1,16 @@
-import AABB from "../../../../Wolfie2D/DataTypes/Shapes/AABB";
-import Vec2 from "../../../../Wolfie2D/DataTypes/Vec2";
-import GameNode, { TweenableProperties } from "../../../../Wolfie2D/Nodes/GameNode";
-import { GraphicType } from "../../../../Wolfie2D/Nodes/Graphics/GraphicTypes";
-import Line from "../../../../Wolfie2D/Nodes/Graphics/Line";
-import OrthogonalTilemap from "../../../../Wolfie2D/Nodes/Tilemaps/OrthogonalTilemap";
-import Scene from "../../../../Wolfie2D/Scene/Scene";
-import Color from "../../../../Wolfie2D/Utils/Color";
-import { EaseFunctionType } from "../../../../Wolfie2D/Utils/EaseFunctions";
-import { hw4_Events } from "../../../hw4_constants";
-import WeaponType from "./WeaponType";
+import AABB from "../../../../../Wolfie2D/DataTypes/Shapes/AABB";
+import Vec2 from "../../../../../Wolfie2D/DataTypes/Vec2";
+import GameNode, { TweenableProperties } from "../../../../../Wolfie2D/Nodes/GameNode";
+import { GraphicType } from "../../../../../Wolfie2D/Nodes/Graphics/GraphicTypes";
+import Line from "../../../../../Wolfie2D/Nodes/Graphics/Line";
+import OrthogonalTilemap from "../../../../../Wolfie2D/Nodes/Tilemaps/OrthogonalTilemap";
+import Scene from "../../../../../Wolfie2D/Scene/Scene";
+import Color from "../../../../../Wolfie2D/Utils/Color";
+import { EaseFunctionType } from "../../../../../Wolfie2D/Utils/EaseFunctions";
+import { hw4_Events } from "../../../../hw4_constants";
+import WeaponType from "../WeaponType";
 
-export default class SemiAutoGun extends WeaponType {
+export default class LaserGun extends WeaponType {
 
     color: Color;
     private hexColor: string;
@@ -95,8 +95,8 @@ export default class SemiAutoGun extends WeaponType {
     }
 
     clone(): WeaponType {
-        let newType = new SemiAutoGun();
-        newType.initialize({color: this.hexColor,damage: this.damage, cooldown: this.cooldown, displayName: this.displayName, spriteKey: this.spriteKey, useVolume: this.useVolume});
+        let newType = new LaserGun();
+        newType.initialize({damage: this.damage, color: this.hexColor, cooldown: this.cooldown, displayName: this.displayName, spriteKey: this.spriteKey, useVolume: this.useVolume});
         return newType;
     }
 }

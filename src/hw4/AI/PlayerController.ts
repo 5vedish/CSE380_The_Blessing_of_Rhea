@@ -109,7 +109,7 @@ export default class PlayerController implements BattlerAI {
 
                 if (item) {
                     // Move the item from the ui to the gameworld
-                    item.moveSprite(this.owner.position, "primary");
+                    // item.moveSprite(this.owner.position, "primary");
 
                     // Add the item to the list of items
                     this.items.push(item);

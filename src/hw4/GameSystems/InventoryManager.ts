@@ -77,7 +77,7 @@ export default class InventoryManager {
             this.items[this.currentSlot] = item;
             
             // Update the gui
-            item.moveSprite(new Vec2(this.position.x + this.currentSlot*(this.slotSize.x + this.padding), this.position.y), this.itemLayer);
+            // item.moveSprite(new Vec2(this.position.x + this.currentSlot*(this.slotSize.x + this.padding), this.position.y), this.itemLayer);
 
             return true;
         }
