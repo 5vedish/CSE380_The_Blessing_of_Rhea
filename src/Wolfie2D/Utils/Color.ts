@@ -108,6 +108,23 @@ export default class Color {
 		return new Color(255, 100, 0, 1);
 	}
 
+	/**	
+		 * Orange color
+		 * @returns rgb(255, 100, 0)
+		 */
+	static get BROWN(): Color {
+		return new Color(82, 58, 58, 1);
+	}
+
+	/**	
+		 * Orange color
+		 * @returns rgb(255, 100, 0)
+		 */
+	 static get GRAY(): Color {
+		return new Color(178, 169, 181, 1);
+	}
+
+
 	/**
 	 * Sets the color to the values provided
 	 * @param r Red

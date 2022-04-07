@@ -3,199 +3,108 @@ import { UIElementType } from "../../Wolfie2D/Nodes/UIElements/UIElementTypes";
 import Layer from "../../Wolfie2D/Scene/Layer";
 import Scene from "../../Wolfie2D/Scene/Scene";
 import Color from "../../Wolfie2D/Utils/Color";
-import Label from "../../Wolfie2D/Nodes/UIElements/Label";
-import hw4_scene from "./hw4_scene";
+import LevelSelection from "./LevelSelection";
+import ControlScreen from "./ControlScreen";
+import HelpScreen from "./HelpScreen";
+import Sprite from "../../Wolfie2D/Nodes/Sprites/Sprite";
 
 export default class MainMenu extends Scene {
-  // Layers, for multiple main menu screens
-  private mainMenu: Layer;
-  private about: Layer;
-  private control: Layer;
+  private splashScreen: Layer;
+  private bg: Sprite;
 
-  loadScene() {}
+  private mainMenu: Layer;
+
+  loadScene() {
+    this.load.image("splash_screen", "project_assets/Screens/Splash.png");
+  }
 
   startScene() {
-    const center = this.viewport.getCenter();
+    const origin = new Vec2(192, 64);
 
-    // The main menu
+    // add splash (filler)
+    this.splashScreen = this.addUILayer("splashScreen");
+    this.bg = this.add.sprite("splash_screen", "splashScreen");
+    this.bg.position.copy(this.viewport.getCenter());
+
+    /* ########## MAIN MENU  ########## */
     this.mainMenu = this.addUILayer("mainMenu");
 
-    // Add play button, and give it an event to emit on press
+    // Add start game button
     const play = this.add.uiElement(UIElementType.BUTTON, "mainMenu", {
-      position: new Vec2(center.x, center.y - 100),
-      text: "Play",
+      position: new Vec2(origin.x + 94, origin.y + 144),
+      text: "Start Game",
     });
-    play.size.set(200, 50);
-    play.borderWidth = 2;
-    play.borderColor = Color.WHITE;
-    play.backgroundColor = Color.TRANSPARENT;
+    play.size.set(384, 128);
+    play.borderWidth = 4;
+    play.borderRadius = 0;
+    play.borderColor = Color.GRAY;
+    play.backgroundColor = Color.BROWN;
     play.onClickEventId = "play";
 
-    // Add controls button
+    // Add level select button
+    const levels = this.add.uiElement(UIElementType.BUTTON, "mainMenu", {
+      position: new Vec2(origin.x + 94, origin.y + 305),
+      text: "Level Select",
+    });
+    levels.size.set(384, 128);
+    levels.borderWidth = 4;
+    levels.borderRadius = 0;
+    levels.borderColor = Color.GRAY;
+    levels.backgroundColor = Color.BROWN;
+    levels.onClickEventId = "select_levels";
 
+    // Add controls button
     const controls = this.add.uiElement(UIElementType.BUTTON, "mainMenu", {
-      position: new Vec2(center.x, center.y),
+      position: new Vec2(origin.x + 94, origin.y + 466),
       text: "Controls",
     });
-    controls.size.set(200, 50);
-    controls.borderWidth = 2;
-    controls.borderColor = Color.WHITE;
-    controls.backgroundColor = Color.TRANSPARENT;
+    controls.size.set(384, 128);
+    controls.borderWidth = 4;
+    controls.borderRadius = 0;
+    controls.borderColor = Color.GRAY;
+    controls.backgroundColor = Color.BROWN;
     controls.onClickEventId = "control";
 
-    // Add about button
-    const about = this.add.uiElement(UIElementType.BUTTON, "mainMenu", {
-      position: new Vec2(center.x, center.y + 100),
-      text: "About",
+    // Add help button
+    const help = this.add.uiElement(UIElementType.BUTTON, "mainMenu", {
+      position: new Vec2(origin.x + 94, origin.y + 627),
+      text: "Help / Cheats",
     });
-    about.size.set(200, 50);
-    about.borderWidth = 2;
-    about.borderColor = Color.WHITE;
-    about.backgroundColor = Color.TRANSPARENT;
-    about.onClickEventId = "about";
+    help.size.set(384, 128);
+    help.borderWidth = 4;
+    help.borderRadius = 0;
+    help.borderColor = Color.GRAY;
+    help.backgroundColor = Color.BROWN;
+    help.onClickEventId = "help";
 
-    /* ########## ABOUT SCREEN ########## */
-    this.about = this.addUILayer("about");
-    this.about.setHidden(true);
-
-    const aboutHeader = <Label>this.add.uiElement(
-      UIElementType.LABEL,
-      "about",
-      {
-        position: new Vec2(center.x, center.y - 250),
-        text: "About",
-      }
-    );
-    aboutHeader.textColor = Color.WHITE;
-
-    // HOMEWORK 4 - TODO [Complete]: Give yourself credit and add your name to the about page!
-    const text1 = "This game was created by Zhixing Zhao";
-    const text2 =
-      "using the Wolfie2D game engine, a TypeScript game engine created by";
-    const text3 = "Joe Weaver and Richard McKenna.";
-
-    const line1 = <Label>this.add.uiElement(UIElementType.LABEL, "about", {
-      position: new Vec2(center.x, center.y - 50),
-      text: text1,
-    });
-    const line2 = <Label>this.add.uiElement(UIElementType.LABEL, "about", {
-      position: new Vec2(center.x, center.y),
-      text: text2,
-    });
-    const line3 = <Label>this.add.uiElement(UIElementType.LABEL, "about", {
-      position: new Vec2(center.x, center.y + 50),
-      text: text3,
-    });
-
-    line1.textColor = Color.WHITE;
-    line2.textColor = Color.WHITE;
-    line3.textColor = Color.WHITE;
-
-    const aboutBack = this.add.uiElement(UIElementType.BUTTON, "about", {
-      position: new Vec2(center.x, center.y + 250),
-      text: "Back",
-    });
-    aboutBack.size.set(200, 50);
-    aboutBack.borderWidth = 2;
-    aboutBack.borderColor = Color.WHITE;
-    aboutBack.backgroundColor = Color.TRANSPARENT;
-    aboutBack.onClickEventId = "menu";
-
-    // Subscribe to the button events
+    // Subscribe events
+    this.receiver.subscribe("start");
     this.receiver.subscribe("play");
-    this.receiver.subscribe("about");
-    this.receiver.subscribe("menu");
+    this.receiver.subscribe("select_levels");
     this.receiver.subscribe("control");
-
-    // HOMEWORK 4 - TODO [Complete]
-    /*
-            Add a controls screen here.
-            Use the About screen as inspiration for how to do so.
-            The controls screen should list all controls:
-
-            WASD to move
-            Q to drop an item
-            E to pick up an item
-            Click to use current item
-            1&2 to change items
-            Z to switch to player 1
-            X to switch to player 2
-
-            You should also include a back button to return to the main menu.
-
-            Additionally, on the main menu, you should be able to press a button to reach the controls screen.
-        */
-
-    // Controls Screen
-
-    this.control = this.addUILayer("control");
-    this.control.setHidden(true);
-
-    const controlHeader = <Label>this.add.uiElement(
-      UIElementType.LABEL,
-      "control",
-      {
-        position: new Vec2(center.x, center.y - 250),
-        text: "Controls",
-      }
-    );
-    controlHeader.textColor = Color.WHITE;
-
-    let addControlsText = (text: String, y_offset: number) => {
-      const line = <Label>this.add.uiElement(UIElementType.LABEL, "control", {
-        position: new Vec2(center.x, center.y + y_offset),
-        text: text,
-      });
-      line.textColor = Color.WHITE;
-    };
-
-    addControlsText(
-      "Right Click - move the selected player to the point clicked on screen",
-      -150
-    );
-
-    addControlsText("E - pick up an item from the ground", -50);
-
-    addControlsText("Q - drop the current item to the ground", 50);
-
-    addControlsText("1 and 2 - equip an inventory item", 150);
-
-    addControlsText("Z and X - swap between player characters", 250);
-
-    const controlBack = this.add.uiElement(UIElementType.BUTTON, "control", {
-      position: new Vec2(center.x, center.y + 350),
-      text: "Back",
-    });
-    controlBack.size.set(200, 50);
-    controlBack.borderWidth = 2;
-    controlBack.borderColor = Color.WHITE;
-    controlBack.backgroundColor = Color.TRANSPARENT;
-    controlBack.onClickEventId = "menu";
+    this.receiver.subscribe("help");
+    this.receiver.subscribe("back");
   }
 
   updateScene() {
     while (this.receiver.hasNextEvent()) {
       let event = this.receiver.getNextEvent();
-
       console.log(event);
 
+      /* TODO - CHANGE TO SPECIFIED SCENE */
       if (event.type === "play") {
-        this.sceneManager.changeToScene(hw4_scene, {});
       }
 
-      if (event.type === "about") {
-        this.about.setHidden(false);
-        this.mainMenu.setHidden(true);
+      if (event.type === "select_levels") {
+        this.sceneManager.changeToScene(LevelSelection, {});
       }
 
-      if (event.type === "menu") {
-        this.mainMenu.setHidden(false);
-        this.about.setHidden(true);
-        this.control.setHidden(true);
-      }
       if (event.type === "control") {
-        this.mainMenu.setHidden(true);
-        this.control.setHidden(false);
+        this.sceneManager.changeToScene(ControlScreen, {});
+      }
+
+      if (event.type === "help") {
+        this.sceneManager.changeToScene(HelpScreen, {});
       }
     }
   }
