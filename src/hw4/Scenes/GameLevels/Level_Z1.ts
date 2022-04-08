@@ -80,7 +80,7 @@ export default class level_z1 extends GameLevel {
 
     protected initPlayer() : void {
         this.player = this.add.animatedSprite("zeus", "primary");
-        this.player.scale.set(1.5, 1.5);
+        this.player.scale.set(1, 1);
         if(!this.playerSpawn){
             console.warn("Player spawn was never set - setting spawn to (0, 0)");
             this.playerSpawn = Vec2.ZERO;
