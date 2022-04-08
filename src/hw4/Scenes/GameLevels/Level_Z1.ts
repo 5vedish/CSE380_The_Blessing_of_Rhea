@@ -59,7 +59,7 @@ export default class level_z1 extends GameLevel {
         this.playerSpawn = new Vec2(32*32, 32*32);
         // this.viewport.setFocus(new Vec2(this.playerSpawn.x, this.playerSpawn.y));
         
-        this.maxEnemies = 5;
+        this.maxEnemies = 15;
         
         this.initLayers();
         this.initPlayer();
@@ -77,7 +77,7 @@ export default class level_z1 extends GameLevel {
 
     protected initPlayer() : void {
         this.player = this.add.animatedSprite("zeus", "primary");
-        this.player.scale.set(2, 2);
+        this.player.scale.set(1.5, 1.5);
         if(!this.playerSpawn){
             console.warn("Player spawn was never set - setting spawn to (0, 0)");
             this.playerSpawn = Vec2.ZERO;
@@ -106,7 +106,6 @@ export default class level_z1 extends GameLevel {
 
         // Spawn enemies in
         if(this.enemies.length < this.maxEnemies){
-            console.log("px: " + this.player.position.x + " | py: " + this.player.position.y)
             this.addEnemy("snake");
         }
     }
