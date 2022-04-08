@@ -31,6 +31,9 @@ export default class GameLevel extends Scene{
     protected enemies: Array<AnimatedSprite>;
     protected enemySpawns: Array<Vec2>;
 
+    // Tilemap walls
+    protected walls: OrthogonalTilemap;
+
     loadScene(): void {
         //Initialize the possible spawning areas for enemies
         //Each Vec2 holds the pixels that will be added to the center of the viewport so enemies spawn outside
@@ -43,7 +46,7 @@ export default class GameLevel extends Scene{
         this.enemySpawns.push(new Vec2(0, -275)); //Top of viewport
         this.enemySpawns.push(new Vec2(0, 275)); //Bottom of viewport
 
-
+        
     }
 
     updateScene(deltaT: number): void {
@@ -104,5 +107,6 @@ export default class GameLevel extends Scene{
             }
         }
         this.enemies.push(enemy);
+        enemy.setGroup("enemy");
     }
 }

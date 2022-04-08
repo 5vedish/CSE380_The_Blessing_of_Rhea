@@ -94,7 +94,18 @@ export default class MainMenu extends Scene {
 
       /* TODO - CHANGE TO SPECIFIED SCENE */
       if (event.type === "play") {
-        this.sceneManager.changeToScene(level_z1, {})
+        let physicsOptions = {
+            physics: {
+                groupNames: ["Wall", "player", "enemy"],
+                collisions:
+                [
+                    [0, 1, 1],
+                    [1, 0, 0],
+                    [1, 0, 0]
+                ]
+            }
+        }
+        this.sceneManager.changeToScene(level_z1, {}, physicsOptions);
       }
 
       if (event.type === "select_levels") {

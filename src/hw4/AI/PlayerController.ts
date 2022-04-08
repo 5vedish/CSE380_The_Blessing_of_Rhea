@@ -11,9 +11,10 @@ import Item from "../GameSystems/items/Item";
 import Weapon from "../GameSystems/items/Weapon";
 import { hw4_Events, hw4_Names } from "../hw4_constants";
 import BattlerAI from "./BattlerAI";
+import StateMachineAI from "../../Wolfie2D/AI/StateMachineAI";
 
 
-export default class PlayerController implements BattlerAI {
+export default class PlayerController extends StateMachineAI implements BattlerAI {
     // Fields from BattlerAI
     health: number;
 
@@ -41,7 +42,7 @@ export default class PlayerController implements BattlerAI {
     private lookDirection: Vec2;
     private path: NavigationPath;
 
-    private receiver: Receiver;
+    protected receiver: Receiver;
 
 
     initializeAI(owner: AnimatedSprite, options: Record<string, any>): void {
@@ -56,7 +57,7 @@ export default class PlayerController implements BattlerAI {
         this.inventory = options.inventory;
 
         this.receiver = new Receiver();
-        this.receiver.subscribe(hw4_Events.SWAP_PLAYER);
+        // this.receiver.subscribe(hw4_Events.SWAP_PLAYER);
     }
 
     activate(options: Record<string, any>): void { }
@@ -96,47 +97,7 @@ export default class PlayerController implements BattlerAI {
             movement = movement.add(new Vec2(horizontalAxis * this.speed, 0));
             
             // Move the player
-            
-            this.owner.position.add(movement.scaled(deltaT));
-
-            // Check for slot change
-            if (Input.isJustPressed("slot1")) {
-                this.inventory.changeSlot(0);
-            } else if (Input.isJustPressed("slot2")) {
-                this.inventory.changeSlot(1);
-            }
-
-            
-        }
-
-        //Move on path if selected
-        if (this.path != null) {
-            if (this.path.isDone()) {
-                this.path = null;
-            }
-            else {
-                this.owner.moveOnPath(this.speed * deltaT, this.path);
-                this.owner.rotation = Vec2.UP.angleToCCW(this.path.getMoveDirection(this.owner));
-            }
-        }
-        else {
-            //Target an enemy and attack
-            if (this.target != null) {
-                let item = this.inventory.getItem();
-                this.lookDirection = this.owner.position.dirTo(this.target);
-
-                // If there is an item in the current slot, use it
-                if (item) {
-                    item.use(this.owner, "player", this.lookDirection);
-                    this.owner.rotation = Vec2.UP.angleToCCW(this.lookDirection);
-
-                    if (item instanceof Healthpack) {
-                        // Destroy the used healthpack
-                        this.inventory.removeItem();
-                        item.sprite.visible = false;
-                    }
-                }
-            }
+            this.owner.position.add(movement.scaled(deltaT));   
         }
     }
 

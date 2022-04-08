@@ -52,7 +52,10 @@ export default class level_z1 extends GameLevel {
     }
 
     startScene(): void {
-        this.add.tilemap("levelZ1", new Vec2(1, 1));
+        // Add in the tilemap and get the wall layer
+        let tilemapLayers = this.add.tilemap("levelZ1", new Vec2(1, 1));
+        this.walls = <OrthogonalTilemap>tilemapLayers[1].getItems()[0];
+        
         this.viewport.setBounds(0, 0, 64*32, 64*32);
         this.viewport.setSize(this.viewport.getHalfSize());
 
@@ -72,7 +75,7 @@ export default class level_z1 extends GameLevel {
         this.addUILayer("UI");
         
         // Add the primary layer for players and enemies
-        this.addLayer("primary", 1);
+        this.addLayer("primary", 10);
     }
 
     protected initPlayer() : void {
@@ -83,8 +86,8 @@ export default class level_z1 extends GameLevel {
             this.playerSpawn = Vec2.ZERO;
         }
         this.player.position = this.playerSpawn;
-        this.player.addPhysics(new AABB(Vec2.ZERO, new Vec2(14, 14)));
-        this.player.colliderOffset.set(0, 2);
+        this.player.addPhysics(new AABB(Vec2.ZERO, new Vec2(32, 32)));
+        //this.player.colliderOffset.set(0, 2);
         
         // TODO - ADD PLAYER AI HERE
         this.player.addAI(PlayerController,
