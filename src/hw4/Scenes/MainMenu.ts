@@ -7,6 +7,7 @@ import LevelSelection from "./LevelSelection";
 import ControlScreen from "./ControlScreen";
 import HelpScreen from "./HelpScreen";
 import Sprite from "../../Wolfie2D/Nodes/Sprites/Sprite";
+import level_z1 from "./GameLevels/Level_Z1";
 
 export default class MainMenu extends Scene {
   private splashScreen: Layer;
@@ -93,6 +94,7 @@ export default class MainMenu extends Scene {
 
       /* TODO - CHANGE TO SPECIFIED SCENE */
       if (event.type === "play") {
+        this.sceneManager.changeToScene(level_z1, {})
       }
 
       if (event.type === "select_levels") {
@@ -106,6 +108,7 @@ export default class MainMenu extends Scene {
       if (event.type === "help") {
         this.sceneManager.changeToScene(HelpScreen, {});
       }
+      
     }
   }
 }
