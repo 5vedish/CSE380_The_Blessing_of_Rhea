@@ -97,7 +97,7 @@ export default class PlayerController extends StateMachineAI implements BattlerA
             movement = movement.add(new Vec2(horizontalAxis * this.speed, 0));
             
             // Move the player
-            this.owner.position.add(movement.scaled(deltaT));   
+            this.owner.move(movement);   
         }
     }
 
