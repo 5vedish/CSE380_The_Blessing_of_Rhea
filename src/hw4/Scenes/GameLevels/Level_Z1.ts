@@ -86,13 +86,13 @@ export default class level_z1 extends GameLevel {
             this.playerSpawn = Vec2.ZERO;
         }
         this.player.position = this.playerSpawn;
-        this.player.addPhysics(new AABB(Vec2.ZERO, new Vec2(32, 32)));
+        this.player.addPhysics(new AABB(Vec2.ZERO, new Vec2(16, 16)));
         //this.player.colliderOffset.set(0, 2);
         
         // TODO - ADD PLAYER AI HERE
         this.player.addAI(PlayerController,
             {
-                speed: 1,
+                speed: 5,
                 health: 50,
                 inputEnabled: true,
                 range: 30
