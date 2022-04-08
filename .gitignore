@@ -1,6 +1,9 @@
 # Exclude node modules
 node_modules
 
+# Exclude bundle and index
+dist/*
+
 # Include the demo_assets folder
 !dist/demo_assets/
 
