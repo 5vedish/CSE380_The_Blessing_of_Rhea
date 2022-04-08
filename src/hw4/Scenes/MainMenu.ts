@@ -16,7 +16,7 @@ export default class MainMenu extends Scene {
   private mainMenu: Layer;
 
   loadScene() {
-    this.load.image("splash_screen", "project_assets/Screens/Splash.png");
+    this.load.image("rhea", "project_assets/Screens/Rhea.png");
   }
 
   startScene() {
@@ -24,7 +24,7 @@ export default class MainMenu extends Scene {
 
     // add splash (filler)
     this.splashScreen = this.addUILayer("splashScreen");
-    this.bg = this.add.sprite("splash_screen", "splashScreen");
+    this.bg = this.add.sprite("rhea", "splashScreen");
     this.bg.position.copy(this.viewport.getCenter());
 
     /* ########## MAIN MENU  ########## */
