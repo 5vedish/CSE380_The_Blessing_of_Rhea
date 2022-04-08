@@ -79,11 +79,24 @@ export default class PlayerController implements BattlerAI {
         while(this.receiver.hasNextEvent()){
             this.handleEvent(this.receiver.getNextEvent());
         }
+        
         if (this.inputEnabled && this.health > 0) {
-            //Check right click
-            if (Input.isMouseJustPressed(2)) {
-                this.path = this.owner.getScene().getNavigationManager().getPath(hw4_Names.NAVMESH, this.owner.position, Input.getGlobalMousePosition(), true);
-            }
+            // Handle input for player movement
+            let verticalAxis = (Input.isPressed('up') ? 1 : 0) + (Input.isPressed('down') ? -1 : 0);
+            let horizontalAxis = (Input.isPressed('left') ? -1 : 0) + (Input.isPressed('right') ? 1 : 0);
+
+            // Handles animation based on inputs
+            if (Input.isPressed('left')) this.owner.animation.playIfNotAlready("left");
+            else if (Input.isPressed('right')) this.owner.animation.playIfNotAlready("right");
+            else this.owner.animation.playIfNotAlready("idle");
+
+            // TODO - WILL NEED TO IMPLEMENT PLAYER DIRECTION TO INDICATE WHICH IDLE ANIMATION WE ARE USING
+
+            let movement = Vec2.UP.scaled(verticalAxis * this.speed);
+            movement = movement.add(new Vec2(horizontalAxis * this.speed, 0));
+            
+            // Move the player
+            this.owner.position.add(movement.scaled(deltaT));
 
             // Check for slot change
             if (Input.isJustPressed("slot1")) {
@@ -92,29 +105,7 @@ export default class PlayerController implements BattlerAI {
                 this.inventory.changeSlot(1);
             }
 
-            if (Input.isJustPressed("pickup")) {
-                // Check if there is an item to pick up
-                for (let item of this.items) {
-                    if (this.owner.collisionShape.overlaps(item.sprite.boundary)) {
-                        // We overlap it, try to pick it up
-                        this.inventory.addItem(item);
-                        break;
-                    }
-                }
-            }
-
-            if (Input.isJustPressed("drop")) {
-                // Check if we can drop our current item
-                let item = this.inventory.removeItem();
-
-                if (item) {
-                    // Move the item from the ui to the gameworld
-                    // item.moveSprite(this.owner.position, "primary");
-
-                    // Add the item to the list of items
-                    this.items.push(item);
-                }
-            }
+            
         }
 
         //Move on path if selected

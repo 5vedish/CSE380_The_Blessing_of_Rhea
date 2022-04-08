@@ -39,11 +39,10 @@ export default class level_z1 extends GameLevel {
 
     loadScene(): void {
         //Load Zeus
-        this.load.spritesheet("Zeus", "project_assets/Spritesheets/Zeus.json"); 
+        this.load.spritesheet("zeus", "project_assets/Spritesheets/Zeus.json"); 
 
         //Load Snake
         this.load.spritesheet("snake", "project_assets/Spritesheets/Snake.json")
-
 
         //Load tilemap
         this.load.tilemap("levelZ1", "project_assets/Tilemaps/LevelZ1.json");
@@ -51,17 +50,53 @@ export default class level_z1 extends GameLevel {
     }
 
     startScene(): void {
-        this.add.tilemap("levelZ1", new Vec2(2, 2));
+        this.add.tilemap("levelZ1", new Vec2(1, 1));
         this.viewport.setBounds(0, 0, 64*32, 64*32);
-        this.viewport.setCenter(5*32, 14*32);
 
-        this.playerSpawn = new Vec2(5*32, 14*32);
+        this.playerSpawn = new Vec2(55*32, 14*32);
+        // this.viewport.setFocus(new Vec2(this.playerSpawn.x, this.playerSpawn.y));
         
         this.maxEnemies = 10;
+
+        this.initLayers();
+        this.initPlayer();
 
         //Spawn enemies in
         // for(let i = 0; i<this.maxEnemies; i++){
         //     this.addEnemy("snake", )
         // }
-    }   
+    }
+    
+    protected initLayers() : void {
+        // Add a layer for the UI
+        this.addUILayer("UI");
+        
+        // Add the primary layer for players and enemies
+        this.addLayer("primary", 1);
+    }
+
+    protected initPlayer() : void {
+        this.player = this.add.animatedSprite("zeus", "primary");
+        this.player.scale.set(2, 2);
+        if(!this.playerSpawn){
+            console.warn("Player spawn was never set - setting spawn to (0, 0)");
+            this.playerSpawn = Vec2.ZERO;
+        }
+        this.player.position.copy(this.playerSpawn);
+        this.player.addPhysics(new AABB(Vec2.ZERO, new Vec2(14, 14)));
+        this.player.colliderOffset.set(0, 2);
+        
+        // TODO - ADD PLAYER AI HERE
+        this.player.addAI(PlayerController,
+            {
+                speed: 100,
+                health: 50,
+                inputEnabled: true,
+                range: 30
+            });
+        this.player.animation.play("idle");
+
+        this.player.setGroup("player");
+        this.viewport.follow(this.player);
+    }
 }

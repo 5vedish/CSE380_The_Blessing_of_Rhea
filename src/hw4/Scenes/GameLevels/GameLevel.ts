@@ -29,11 +29,11 @@ export default class GameLevel extends Scene{
     protected enemyTypes: Array<AnimatedSprite>;
     protected enemies: Array<AnimatedSprite>;
 
-
-
+    
     updateScene(deltaT: number): void {
         //Handles events
     }
+
 
     protected addEnemy(spriteKey: string, player: GameNode): void{
         let enemy = this.add.animatedSprite(spriteKey, "primary");
