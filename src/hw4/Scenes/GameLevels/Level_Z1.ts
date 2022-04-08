@@ -52,6 +52,7 @@ export default class level_z1 extends GameLevel {
     startScene(): void {
         this.add.tilemap("levelZ1", new Vec2(1, 1));
         this.viewport.setBounds(0, 0, 64*32, 64*32);
+        this.viewport.setSize(this.viewport.getHalfSize());
 
         this.playerSpawn = new Vec2(55*32, 14*32);
         // this.viewport.setFocus(new Vec2(this.playerSpawn.x, this.playerSpawn.y));
