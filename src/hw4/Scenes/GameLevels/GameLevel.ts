@@ -15,6 +15,7 @@ import Scene from "../../../Wolfie2D/Scene/Scene";
 import Timer from "../../../Wolfie2D/Timing/Timer";
 import Color from "../../../Wolfie2D/Utils/Color";
 import { EaseFunctionType } from "../../../Wolfie2D/Utils/EaseFunctions";
+import EnemyAI from "../../AI/EnemyAI";
 
 export default class GameLevel extends Scene{
     //Player info
@@ -28,7 +29,22 @@ export default class GameLevel extends Scene{
     protected maxEnemies: number;
     protected enemyTypes: Array<AnimatedSprite>;
     protected enemies: Array<AnimatedSprite>;
+    protected enemySpawns: Array<Vec2>;
 
+    loadScene(): void {
+        //Initialize the possible spawning areas for enemies
+        //Each Vec2 holds the pixels that will be added to the center of the viewport so enemies spawn outside
+        //View port is 800x450
+        this.enemySpawns = new Array<Vec2>();
+        this.enemyTypes = new Array<AnimatedSprite>();
+        this.enemies = new Array<AnimatedSprite>();
+        this.enemySpawns.push(new Vec2(-450, 0)); //Left of viewport
+        this.enemySpawns.push(new Vec2(450, 0)); //Right of viewport
+        this.enemySpawns.push(new Vec2(0, -275)); //Top of viewport
+        this.enemySpawns.push(new Vec2(0, 275)); //Bottom of viewport
+
+
+    }
 
     updateScene(deltaT: number): void {
         //Handles events
@@ -52,9 +68,41 @@ export default class GameLevel extends Scene{
 			this.player.position.y = (64 * 32) - 32;
     }
 
+    protected boundaryCheck(viewportCenter: Vec2, postion: Vec2){
+        return (viewportCenter.x + postion.x < 16 
+        || viewportCenter.x + postion.x > 64*32-16
+        || viewportCenter.y + postion.y < 32 
+        || viewportCenter.y + postion.y > 64*32-32);
+    }
 
-    protected addEnemy(spriteKey: string, player: GameNode): void{
+
+    protected addEnemy(spriteKey: string): void{
         let enemy = this.add.animatedSprite(spriteKey, "primary");
-        enemy.position.set(player.position.x + 10, player.position.y + 10);
+        enemy.scale.set(2,2);
+        enemy.addPhysics();
+        enemy.animation.play("Left Move");
+        //Randomly select one of the spawnpoints outside the viewport;
+        let spawnPointIndex = Math.floor(Math.random() * 4);
+
+        let viewportCenter = this.viewport.getCenter();
+        // console.log("x: " + viewportCenter.x, " | y: " + viewportCenter.y);
+        //check if spawn position is out of bounds
+        while(true){
+            if(this.boundaryCheck(viewportCenter, this.enemySpawns[spawnPointIndex])){
+                spawnPointIndex = (spawnPointIndex + 1) % 5;
+            } else {
+                //Find a random x or y of that side
+                if(this.enemySpawns[spawnPointIndex].x === 0){
+                    //along top or bottom
+                    let xOffset = Math.floor(Math.random() * 736) - 368
+                    enemy.position.set(viewportCenter.x + xOffset, viewportCenter.y + this.enemySpawns[spawnPointIndex].y);
+                } else {
+                    let yOffset =Math.floor(Math.random() * 386) - 193
+                    enemy.position.set(viewportCenter.x + this.enemySpawns[spawnPointIndex].x,viewportCenter.y + yOffset);
+                }
+                break;
+            }
+        }
+        this.enemies.push(enemy);
     }
 }

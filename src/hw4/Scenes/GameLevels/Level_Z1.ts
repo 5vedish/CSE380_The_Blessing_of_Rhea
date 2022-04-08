@@ -47,6 +47,8 @@ export default class level_z1 extends GameLevel {
         //Load tilemap
         this.load.tilemap("levelZ1", "project_assets/Tilemaps/LevelZ1.json");
 
+        super.loadScene();
+
     }
 
     startScene(): void {
@@ -54,18 +56,15 @@ export default class level_z1 extends GameLevel {
         this.viewport.setBounds(0, 0, 64*32, 64*32);
         this.viewport.setSize(this.viewport.getHalfSize());
 
-        this.playerSpawn = new Vec2(55*32, 14*32);
+        this.playerSpawn = new Vec2(32*32, 32*32);
         // this.viewport.setFocus(new Vec2(this.playerSpawn.x, this.playerSpawn.y));
         
-        this.maxEnemies = 10;
-
+        this.maxEnemies = 5;
+        
         this.initLayers();
         this.initPlayer();
 
-        //Spawn enemies in
-        // for(let i = 0; i<this.maxEnemies; i++){
-        //     this.addEnemy("snake", )
-        // }
+        
     }
     
     protected initLayers() : void {
@@ -83,7 +82,7 @@ export default class level_z1 extends GameLevel {
             console.warn("Player spawn was never set - setting spawn to (0, 0)");
             this.playerSpawn = Vec2.ZERO;
         }
-        this.player.position.copy(this.playerSpawn);
+        this.player.position = this.playerSpawn;
         this.player.addPhysics(new AABB(Vec2.ZERO, new Vec2(14, 14)));
         this.player.colliderOffset.set(0, 2);
         
@@ -98,10 +97,17 @@ export default class level_z1 extends GameLevel {
         this.player.animation.play("idle");
 
         this.player.setGroup("player");
+        // this.viewport.setCenter(this.playerSpawn);
         this.viewport.follow(this.player);
     }
 
     updateScene(deltaT: number): void {
         super.updateScene(deltaT);
+
+        // Spawn enemies in
+        if(this.enemies.length < this.maxEnemies){
+            console.log("px: " + this.player.position.x + " | py: " + this.player.position.y)
+            this.addEnemy("snake");
+        }
     }
 }
