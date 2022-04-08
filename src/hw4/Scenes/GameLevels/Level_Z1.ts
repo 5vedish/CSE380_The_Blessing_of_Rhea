@@ -89,7 +89,7 @@ export default class level_z1 extends GameLevel {
         // TODO - ADD PLAYER AI HERE
         this.player.addAI(PlayerController,
             {
-                speed: 100,
+                speed: 200,
                 health: 50,
                 inputEnabled: true,
                 range: 30
@@ -98,5 +98,9 @@ export default class level_z1 extends GameLevel {
 
         this.player.setGroup("player");
         this.viewport.follow(this.player);
+    }
+
+    updateScene(deltaT: number): void {
+        super.updateScene(deltaT);
     }
 }

@@ -29,9 +29,27 @@ export default class GameLevel extends Scene{
     protected enemyTypes: Array<AnimatedSprite>;
     protected enemies: Array<AnimatedSprite>;
 
-    
+
     updateScene(deltaT: number): void {
         //Handles events
+
+        // Prevents the player from going out of map
+        this.lockPlayer();
+    }
+    
+
+    protected lockPlayer() : void {
+        let x = this.player.position.x;
+		let y = this.player.position.y;
+		if (x <= 16)
+			this.player.position.x = 16;
+		else if (x >= (64 * 32) - 16) 
+			this.player.position.x = (64 * 32) - 16;
+
+		if (y <= 32)
+			this.player.position.y = 32;
+		else if (y >= (64 * 32) - 32) 
+			this.player.position.y = (64 * 32) - 32;
     }
 
 

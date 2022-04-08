@@ -79,7 +79,7 @@ export default class PlayerController implements BattlerAI {
         while(this.receiver.hasNextEvent()){
             this.handleEvent(this.receiver.getNextEvent());
         }
-        
+
         if (this.inputEnabled && this.health > 0) {
             // Handle input for player movement
             let verticalAxis = (Input.isPressed('up') ? 1 : 0) + (Input.isPressed('down') ? -1 : 0);
@@ -96,6 +96,7 @@ export default class PlayerController implements BattlerAI {
             movement = movement.add(new Vec2(horizontalAxis * this.speed, 0));
             
             // Move the player
+            
             this.owner.position.add(movement.scaled(deltaT));
 
             // Check for slot change
