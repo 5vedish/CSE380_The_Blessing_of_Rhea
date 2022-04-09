@@ -12,11 +12,13 @@ import level_z1 from "./GameLevels/Level_Z1";
 export default class MainMenu extends Scene {
   private splashScreen: Layer;
   private bg: Sprite;
+  private logo: Sprite;
 
   private mainMenu: Layer;
 
   loadScene() {
     this.load.image("rhea", "project_assets/Screens/Rhea.png");
+    this.load.image("logo", "project_assets/Screens/Logo.png");
   }
 
   startScene() {
@@ -26,6 +28,8 @@ export default class MainMenu extends Scene {
     this.splashScreen = this.addUILayer("splashScreen");
     this.bg = this.add.sprite("rhea", "splashScreen");
     this.bg.position.copy(this.viewport.getCenter());
+    this.logo = this.add.sprite("logo", "splashScreen");
+    this.logo.position.set(this.viewport.getCenter().x + 300, this.viewport.getCenter().y - 300);
 
     /* ########## MAIN MENU  ########## */
     this.mainMenu = this.addUILayer("mainMenu");
