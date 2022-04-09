@@ -48,11 +48,7 @@ export default class GameLevel extends Scene{
         this.enemySpawns.push(new Vec2(-450, 0)); //Left of viewport
         this.enemySpawns.push(new Vec2(450, 0)); //Right of viewport
         this.enemySpawns.push(new Vec2(0, -275)); //Top of viewport
-        this.enemySpawns.push(new Vec2(0, 275)); //Bottom of viewport
-         // Load the nav mesh
-         this.load.object("navmesh", "project_assets/data/navmesh.json");
-
-        
+        this.enemySpawns.push(new Vec2(0, 275)); //Bottom of viewport      
     }
 
     updateScene(deltaT: number): void {
@@ -113,6 +109,15 @@ export default class GameLevel extends Scene{
                 break;
             }
         }
+
+        let options = {
+            health: 1,
+            player: this.player,
+            speed: 5
+        }
+
+        enemy.addAI(EnemyAI, options);
+
         this.enemies.push(enemy);
         enemy.setGroup("enemy");
     }

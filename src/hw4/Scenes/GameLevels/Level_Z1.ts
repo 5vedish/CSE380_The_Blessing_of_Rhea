@@ -92,7 +92,7 @@ export default class level_z1 extends GameLevel {
         // TODO - ADD PLAYER AI HERE
         this.player.addAI(PlayerController,
             {
-                speed: 5,
+                speed: 2,
                 health: 50,
                 inputEnabled: true,
                 range: 30

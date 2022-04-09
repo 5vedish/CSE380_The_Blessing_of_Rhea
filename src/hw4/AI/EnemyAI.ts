@@ -30,7 +30,7 @@ export default class EnemyAI extends StateMachineGoapAI implements BattlerAI {
     health: number;
 
     /** The default movement speed of this AI */
-    speed: number = 20;
+    speed: number = 100;
 
     /** The weapon this AI has */
     weapon: Weapon;
@@ -56,39 +56,10 @@ export default class EnemyAI extends StateMachineGoapAI implements BattlerAI {
     initializeAI(owner: AnimatedSprite, options: Record<string, any>): void {
         this.owner = owner;
 
-        // if (options.defaultMode === "alert") {
-        //     // Alert mode
-        //     console.log("Reached Alert Mode");
-        //     this.addState(EnemyStates.ALERT, new Alert(this, owner));
-        // } else {
-        //     // Patrol mode
-        //     this.addState(EnemyStates.DEFAULT, new Patrol(this, owner, options.patrolRoute));
-        // }
-
-        this.addState(EnemyStates.DEFAULT, new Alert(this, owner));
-        this.addState(EnemyStates.TARGETING, new Active(this, owner));
-
-        this.maxHealth = options.health;
+        this.addState(EnemyStates.DEFAULT, new Active(this, owner));
 
         this.health = options.health;
-
         this.player = options.player;
-
-        this.inRange = options.inRange;
-
-        this.goal = options.goal;
-
-        options.target = this.player.position;
-
-        this.currentStatus = options.status;
-
-        this.possibleActions = options.actions;
-
-        this.plan = new Stack<GoapAction>();
-
-        this.planner = new GoapActionPlanner();
-
-        console.log(options.target);
 
         // Initialize to the default state
         this.initialize(EnemyStates.DEFAULT, options);
@@ -174,10 +145,10 @@ export default class EnemyAI extends StateMachineGoapAI implements BattlerAI {
         super.update(deltaT);
 
         // This is the plan that is executed in the Active state, so whenever we don't have a plan, acquire a new one given the current statuses the enemy has
-        if (this.plan.isEmpty()) {
-            //get a new plan
-            this.plan = this.planner.plan(hw4_Statuses.REACHED_GOAL, this.possibleActions, this.currentStatus, null);
-        }
+        // if (this.plan.isEmpty()) {
+        //     //get a new plan
+        //     this.plan = this.planner.plan(hw4_Statuses.REACHED_GOAL, this.possibleActions, this.currentStatus, null);
+        // }
     }
 }
 
