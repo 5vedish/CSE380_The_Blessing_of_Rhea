@@ -37,10 +37,7 @@ export default class EnemyAI extends StateMachineGoapAI implements BattlerAI {
     weapon: Weapon;
 
     /** A reference to the player object */
-    player1: GameNode;
-
-    /** A reference to the player object */
-    player2: GameNode;
+    player: GameNode;
 
     // The current known position of the player
     playerPos: Vec2;
@@ -60,30 +57,29 @@ export default class EnemyAI extends StateMachineGoapAI implements BattlerAI {
     initializeAI(owner: AnimatedSprite, options: Record<string, any>): void {
         this.owner = owner;
 
-        if (options.defaultMode === "guard") {
-            // Guard mode
-            this.addState(EnemyStates.DEFAULT, new Guard(this, owner, options.guardPosition));
-        } else {
-            // Patrol mode
-            this.addState(EnemyStates.DEFAULT, new Patrol(this, owner, options.patrolRoute));
-        }
+        // if (options.defaultMode === "alert") {
+        //     // Alert mode
+        //     console.log("Reached Alert Mode");
+        //     this.addState(EnemyStates.ALERT, new Alert(this, owner));
+        // } else {
+        //     // Patrol mode
+        //     this.addState(EnemyStates.DEFAULT, new Patrol(this, owner, options.patrolRoute));
+        // }
 
-        this.addState(EnemyStates.ALERT, new Alert(this, owner));
+        this.addState(EnemyStates.DEFAULT, new Alert(this, owner));
         this.addState(EnemyStates.TARGETING, new Active(this, owner));
 
         this.maxHealth = options.health;
 
         this.health = options.health;
 
-        this.weapon = options.weapon;
-
-        this.player1 = options.player1;
-
-        this.player2 = options.player2;
+        this.player = options.player;
 
         this.inRange = options.inRange;
 
         this.goal = options.goal;
+
+        options.target = this.player.position;
 
         this.currentStatus = options.status;
 
@@ -93,8 +89,10 @@ export default class EnemyAI extends StateMachineGoapAI implements BattlerAI {
 
         this.planner = new GoapActionPlanner();
 
+        console.log(options.target);
+
         // Initialize to the default state
-        this.initialize(EnemyStates.DEFAULT);
+        this.initialize(EnemyStates.DEFAULT, options);
 
         this.getPlayerPosition();
     }
@@ -170,32 +168,7 @@ export default class EnemyAI extends StateMachineGoapAI implements BattlerAI {
 
     getPlayerPosition(): Vec2 {
         //Get the position of the closest player in sight
-        let pos = this.player1.position;
-        let position1 = this.isPlayerVisible(pos);
-        
-        pos = this.player2.position;
-        let position2 = this.isPlayerVisible(pos);
-
-        // Determine which player position to return
-        if (position1 == null && position2 == null){
-            return null;
-        }
-        else if (position1 == null){
-            return position2;
-        }
-        else if (position2 == null){
-            return position1;
-        }
-
-        // If both are in sight, pick the closet one
-        let distance1 = Math.sqrt(Math.pow(this.owner.position.x - position1.x, 2) + Math.pow(this.owner.position.y - position1.y, 2));
-        let distance2 = Math.sqrt(Math.pow(this.owner.position.x - position2.x, 2) + Math.pow(this.owner.position.y - position2.y, 2));
-        if (distance1 < distance2){
-            return position1;
-        }
-        else{
-            return position2;
-        }
+        return this.player.position;
     }
 
     update(deltaT: number){

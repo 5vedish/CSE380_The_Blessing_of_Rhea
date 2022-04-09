@@ -24,6 +24,7 @@ export default class Alert extends EnemyState {
     // Receives options.target
     onEnter(options: Record<string, any>): void {
         this.alertTimer.start();
+        console.log(this.owner.position.x + ',' + this.owner.position.y + "!!!");
         this.path = this.owner.getScene().getNavigationManager().getPath(hw4_Names.NAVMESH, this.owner.position, options.target, true);
     }
 
