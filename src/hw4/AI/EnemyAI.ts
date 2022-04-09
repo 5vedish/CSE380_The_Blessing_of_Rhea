@@ -16,8 +16,7 @@ import { hw4_Events, hw4_Names, hw4_Statuses } from "../hw4_constants";
 import BattlerAI from "./BattlerAI";
 import Alert from "./EnemyStates/Alert";
 import Active from "./EnemyStates/Active";
-import Guard from "./EnemyStates/Guard";
-import Patrol from "./EnemyStates/Patrol";
+
 
 
 export default class EnemyAI extends StateMachineGoapAI implements BattlerAI {

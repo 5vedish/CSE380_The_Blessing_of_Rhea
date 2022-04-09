@@ -20,7 +20,6 @@ import { hw4_Statuses } from "../../hw4_constants";
 import Move from "../../AI/EnemyActions/Move";
 import PositionGraph from "../../../Wolfie2D/DataTypes/Graphs/PositionGraph";
 import Navmesh from "../../../Wolfie2D/Pathfinding/Navmesh";
-import { project_Names } from "../../project_constantst";
 
 export default class GameLevel extends Scene{
     //Player info
