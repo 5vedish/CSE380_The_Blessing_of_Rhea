@@ -52,7 +52,6 @@ export default class level_z1 extends GameLevel {
     }
 
     startScene(): void {
-        this.createNavmesh();
         // Add in the tilemap and get the wall layer
         let tilemapLayers = this.add.tilemap("levelZ1", new Vec2(1, 1));
         this.walls = <OrthogonalTilemap>tilemapLayers[1].getItems()[0];
