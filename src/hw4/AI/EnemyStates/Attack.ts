@@ -21,7 +21,6 @@ export default class Attack extends EnemyState {
      retObj: Record<string, any>;
  
      player : GameNode;
-     canAttack: boolean;
 
      dir: any;
      
@@ -35,9 +34,7 @@ export default class Attack extends EnemyState {
  
      }
 
-     onEnter(options: Record<string, any>): void {
-        this.canAttack = true;
-     }
+     onEnter(options: Record<string, any>): void {}
 
      handleInput(event: GameEvent): void {}
 
