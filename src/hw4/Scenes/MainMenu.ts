@@ -17,8 +17,8 @@ export default class MainMenu extends Scene {
   private mainMenu: Layer;
 
   loadScene() {
-    this.load.image("rhea", "project_assets/Screens/Rhea.png");
-    this.load.image("logo", "project_assets/Screens/Logo.png");
+    this.load.image("rhea", "project_assets/screens/Rhea.png");
+    this.load.image("logo", "project_assets/screens/Logo.png");
   }
 
   startScene() {

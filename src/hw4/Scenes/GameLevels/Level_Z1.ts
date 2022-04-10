@@ -46,7 +46,7 @@ export default class level_z1 extends GameLevel {
         this.load.spritesheet("snake", "project_assets/spritesheets/Snake.json")
 
         //Load tilemap
-        this.load.tilemap("levelZ1", "project_assets/Tilemaps/LevelZ1.json");
+        this.load.tilemap("levelZ1", "project_assets/tilemaps/LevelZ1.json");
 
         super.loadScene();
     }
@@ -121,8 +121,8 @@ export default class level_z1 extends GameLevel {
 
         //Update health bar
         let health = this.playerStats.stats.health;
-        let multiplier = this.playerStats.stats.maxHealth/100;
-        this.healthBar.size = new Vec2((health*2)/multiplier, 10);
-        this.healthBar.position = new Vec2((health+(42*multiplier))/multiplier, 22);
+        let percentage = this.playerStats.stats.maxHealth/100;
+        this.healthBar.size = new Vec2((health*2)/percentage, 10);
+        this.healthBar.position = new Vec2((health+(42*percentage))/percentage, 22);
     }
 }

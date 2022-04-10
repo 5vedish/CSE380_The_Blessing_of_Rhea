@@ -14,7 +14,7 @@ export default class HelpScreen extends Scene {
   private helpScreen: Layer;
 
   loadScene() {
-    this.load.image("splash_screen", "project_assets/Screens/Splash.png");
+    this.load.image("splash_screen", "project_assets/screens/Splash.png");
   }
 
   startScene() {

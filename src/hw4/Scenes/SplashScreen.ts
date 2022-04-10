@@ -12,7 +12,7 @@ export default class SplashScreen extends Scene {
   private bg: Sprite;
 
   loadScene() {
-    this.load.image("splash_screen", "project_assets/Screens/Splash.png");
+    this.load.image("splash_screen", "project_assets/screens/Splash.png");
   }
 
   startScene() {

@@ -16,8 +16,8 @@ export default class LevelSelection extends Scene {
   private levelSelect: Layer;
 
   loadScene() {
-    this.load.image("splash_screen", "project_assets/Screens/Splash.png");
-    this.load.image("level_z1", "project_assets/Tilemaps/LevelZ1Preview.png");
+    this.load.image("splash_screen", "project_assets/screens/Splash.png");
+    this.load.image("level_z1", "project_assets/tilemaps/LevelZ1Preview.png");
   }
 
   startScene() {
