@@ -34,6 +34,7 @@ import Map from "../../../Wolfie2D/DataTypes/Map";
 import Stack from "../../../Wolfie2D/DataTypes/Stack";
 import Berserk from "../../AI/EnemyActions/Berserk";
 import GameLevel from "./GameLevel";
+import CharacterStat from "../../PlayerStatus";
 
 export default class level_z1 extends GameLevel {
 
@@ -65,7 +66,10 @@ export default class level_z1 extends GameLevel {
         
         this.initLayers();
         this.initPlayer();
+        this.addUILayer("healthbar");
+        this.healthBar = this.add.graphic(GraphicType.RECT, "healthbar", {position: new Vec2(80, 5), size: new Vec2(this.playerStats.stats.health * 2, 10)});
         super.startScene();
+        
         this.initializeWeapons();
         
     }
@@ -89,15 +93,18 @@ export default class level_z1 extends GameLevel {
         this.player.addPhysics(new AABB(Vec2.ZERO, new Vec2(16, 16)));
         //this.player.colliderOffset.set(0, 2);
         
+        this.playerStats = new CharacterStat(50, 1, 10, 2);
         // TODO - ADD PLAYER AI HERE
         this.player.addAI(PlayerController,
             {
                 speed: 2,
                 health: 50,
                 inputEnabled: true,
-                range: 30
+                range: 30,
+                playerStats: this.playerStats
             });
         this.player.animation.play("idle");
+
 
         this.player.setGroup("player");
         // this.viewport.setCenter(this.playerSpawn);
@@ -111,5 +118,11 @@ export default class level_z1 extends GameLevel {
         if(this.enemies.length < this.maxEnemies){
             this.addEnemy("snake");
         }
+
+        //Update health bar
+        let health = this.playerStats.stats.health;
+        let multiplier = this.playerStats.stats.maxHealth/100;
+        this.healthBar.size = new Vec2((health*2)/multiplier, 10);
+        this.healthBar.position = new Vec2((health+(42*multiplier))/multiplier, 22);
     }
 }

@@ -12,6 +12,7 @@ import Weapon from "../GameSystems/items/Weapon";
 import { hw4_Events, hw4_Names } from "../hw4_constants";
 import BattlerAI from "./BattlerAI";
 import StateMachineAI from "../../Wolfie2D/AI/StateMachineAI";
+import CharacterStat from "../PlayerStatus";
 
 
 export default class PlayerController extends StateMachineAI implements BattlerAI {
@@ -33,6 +34,8 @@ export default class PlayerController extends StateMachineAI implements BattlerA
     // The inventory of the player
     inventory: InventoryManager;
 
+    playerStats: CharacterStat;
+
     /** A list of items in the game world */
     private items: Array<Item>;
 
@@ -52,6 +55,7 @@ export default class PlayerController extends StateMachineAI implements BattlerA
         this.health = options.health;
         this.inputEnabled = options.inputEnabled;
         this.range = options.range;
+        this.playerStats = options.playerStats;
 
         this.items = options.items;
         this.inventory = options.inventory;
@@ -103,7 +107,7 @@ export default class PlayerController extends StateMachineAI implements BattlerA
 
     damage(damage: number): void {
         this.health -= damage;
-        console.log(this.health);
+        this.playerStats.editHealth(damage * -1);
     }
 
     destroy() {

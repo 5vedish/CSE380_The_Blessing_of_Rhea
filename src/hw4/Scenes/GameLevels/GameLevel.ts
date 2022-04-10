@@ -26,6 +26,8 @@ import RegistryManager from "../../../Wolfie2D/Registry/RegistryManager";
 import BattleManager from "../../GameSystems/BattleManager";
 import Weapon from "../../GameSystems/items/Weapon";
 import BattlerAI from "../../AI/BattlerAI";
+import Graphic from "../../../Wolfie2D/Nodes/Graphic";
+import CharacterStat from "../../PlayerStatus";
 
 export default class GameLevel extends Scene{
     //Player info
@@ -41,6 +43,10 @@ export default class GameLevel extends Scene{
     protected enemyTypes: Array<AnimatedSprite>;
     protected enemies: Array<AnimatedSprite>;
     protected enemySpawns: Array<Vec2>;
+
+    protected playerStats: CharacterStat
+
+    protected healthBar: Graphic;
 
     // Tilemap walls
     protected walls: OrthogonalTilemap;
