@@ -103,6 +103,7 @@ export default class PlayerController extends StateMachineAI implements BattlerA
 
     damage(damage: number): void {
         this.health -= damage;
+        console.log(this.health);
     }
 
     destroy() {

@@ -20,6 +20,12 @@ import { hw4_Statuses } from "../../hw4_constants";
 import Move from "../../AI/EnemyActions/Move";
 import PositionGraph from "../../../Wolfie2D/DataTypes/Graphs/PositionGraph";
 import Navmesh from "../../../Wolfie2D/Pathfinding/Navmesh";
+import { Project_Events } from "../../project_constants";
+import WeaponType from "../../GameSystems/items/WeaponTypes/WeaponType";
+import RegistryManager from "../../../Wolfie2D/Registry/RegistryManager";
+import BattleManager from "../../GameSystems/BattleManager";
+import Weapon from "../../GameSystems/items/Weapon";
+import BattlerAI from "../../AI/BattlerAI";
 
 export default class GameLevel extends Scene{
     //Player info
@@ -28,6 +34,7 @@ export default class GameLevel extends Scene{
 
     //Each level has a timer
     protected levelTimer: Timer;
+    protected invincibilityTimer: Timer;
 
     //Each level has a set number of enemies
     protected maxEnemies: number;
@@ -38,7 +45,14 @@ export default class GameLevel extends Scene{
     // Tilemap walls
     protected walls: OrthogonalTilemap;
 
+    protected battleManager: BattleManager;
+
     loadScene(): void {
+        this.load.spritesheet("slice", "project_assets/spritesheets/slice.json");
+        this.load.object("weaponData", "project_assets/data/weaponData.json");
+        this.load.image("knife", "project_assets/sprites/knife.png");
+        this.load.image("laserGun", "project_assets/sprites/laserGun.png");
+        this.load.image("pistol", "project_assets/sprites/pistol.png");
         //Initialize the possible spawning areas for enemies
         //Each Vec2 holds the pixels that will be added to the center of the viewport so enemies spawn outside
         //View port is 800x450
@@ -51,11 +65,28 @@ export default class GameLevel extends Scene{
         this.enemySpawns.push(new Vec2(0, 275)); //Bottom of viewport      
     }
 
+    startScene(): void {
+        this.battleManager = new BattleManager();
+        this.battleManager.setPlayers([<BattlerAI>this.player._ai]);
+    }
+
     updateScene(deltaT: number): void {
         //Handles events
+        while (this.receiver.hasNextEvent()) {
+            let event = this.receiver.getNextEvent();
+            switch (event.type) {
+                
+            }
+        }
 
         // Prevents the player from going out of map
         this.lockPlayer();
+        this.subscribeToEvents();
+    }
+
+    protected subscribeToEvents(): void {
+        this.receiver.subscribe ([
+        ]);
     }
     
 
@@ -110,15 +141,59 @@ export default class GameLevel extends Scene{
             }
         }
 
+        let weapon = this.createWeapon("knife");
+
         let options = {
             health: 1,
             player: this.player,
-            speed: 5
+            speed: 5,
+            weapon: weapon
         }
 
         enemy.addAI(EnemyAI, options);
-
-        this.enemies.push(enemy);
         enemy.setGroup("enemy");
+        this.enemies.push(enemy);
+        this.battleManager.setEnemies([<BattlerAI>enemy._ai]);
+    }
+
+    /**
+     * 
+     * Creates and returns a new weapon
+     * @param type The weaponType of the weapon, as a string
+     */
+     createWeapon(type: string): Weapon {
+        let weaponType = <WeaponType>RegistryManager.getRegistry("weaponTypes").get(type);
+
+        let sprite = this.add.sprite(weaponType.spriteKey, "primary");
+
+        return new Weapon(sprite, weaponType, this.battleManager);
+    }
+
+    /**
+     * Initalizes all weapon types based of data from weaponData.json
+     */
+     initializeWeapons(): void{
+        let weaponData = this.load.getObject("weaponData");
+
+        for(let i = 0; i < weaponData.numWeapons; i++){
+            let weapon = weaponData.weapons[i];
+
+            // Get the constructor of the prototype
+            let constr = RegistryManager.getRegistry("weaponTemplates").get(weapon.weaponType);
+
+            // Create a weapon type
+            let weaponType = new constr();
+
+            // Initialize the weapon type
+            weaponType.initialize(weapon);
+
+            // Register the weapon type
+            RegistryManager.getRegistry("weaponTypes").registerItem(weapon.name, weaponType)
+        }
+    }
+
+
+    protected handleCollisions() : void {
+        
     }
 }

@@ -16,6 +16,7 @@ import { hw4_Events, hw4_Names, hw4_Statuses } from "../hw4_constants";
 import BattlerAI from "./BattlerAI";
 import Alert from "./EnemyStates/Alert";
 import Active from "./EnemyStates/Active";
+import Attack from "./EnemyStates/Attack";
 
 
 
@@ -56,13 +57,16 @@ export default class EnemyAI extends StateMachineGoapAI implements BattlerAI {
     initializeAI(owner: AnimatedSprite, options: Record<string, any>): void {
         this.owner = owner;
 
-        this.addState(EnemyStates.DEFAULT, new Active(this, owner));
+        this.addState(EnemyStates.DEFAULT, new Active(this, owner, options.player));
+        this.addState(EnemyStates.ATTACK, new Attack(this, owner, options.player));
 
         this.health = options.health;
         this.player = options.player;
+        this.weapon = options.weapon;
 
         // Initialize to the default state
         this.initialize(EnemyStates.DEFAULT, options);
+        // this.initialize(EnemyStates.ATTACK, options);
 
         this.getPlayerPosition();
     }
@@ -156,5 +160,6 @@ export enum EnemyStates {
     DEFAULT = "default",
     ALERT = "alert",
     TARGETING = "targeting",
-    PREVIOUS = "previous"
+    PREVIOUS = "previous",
+    ATTACK = "attack"
 }

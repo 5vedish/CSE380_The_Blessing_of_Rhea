@@ -21,9 +21,13 @@ export default class Active extends EnemyState {
 
     currentPath : NavigationPath;
     player : GameNode;
+    range: number;
     
-    constructor(parent: EnemyAI, owner: GameNode) {
+    constructor(parent: EnemyAI, owner: GameNode, player: GameNode) {
         super(parent, owner);
+        this.player = player;
+        this.range = 5;
+        
 
         // Regularly update the player location
         this.pollTimer = new Timer(100);
@@ -33,9 +37,6 @@ export default class Active extends EnemyState {
     }
 
     onEnter(options: Record<string, any>): void {
-
-        this.player = options.player;
-
         let stack = new Stack<Vec2>();
         stack.push(this.player.position);
         this.currentPath = new NavigationPath(stack);
@@ -68,15 +69,17 @@ export default class Active extends EnemyState {
     }
 
     update(deltaT: number): void {
-        console.log(this.parent.speed + "adfadf");
-
-        if (this.currentPath.isDone()){
-            // if current path is empty
-            let stack = new Stack<Vec2>();
-            stack.push(this.player.position);
-            this.currentPath = new NavigationPath(stack);
+        if (Math.abs(this.player.position.x - this.owner.position.x) <= this.range && Math.abs(this.player.position.y - this.owner.position.y) <= this.range) {
+            this.finished(EnemyStates.ATTACK);
         } else {
-            this.owner.moveOnPath(this.parent.speed * deltaT, this.currentPath);
+            if (this.currentPath.isDone()){
+                // if current path is empty
+                let stack = new Stack<Vec2>();
+                stack.push(this.player.position);
+                this.currentPath = new NavigationPath(stack);
+            } else {
+                this.owner.moveOnPath(this.parent.speed * deltaT, this.currentPath);
+            }
         }
 
     }

@@ -48,7 +48,6 @@ export default class level_z1 extends GameLevel {
         this.load.tilemap("levelZ1", "project_assets/Tilemaps/LevelZ1.json");
 
         super.loadScene();
-
     }
 
     startScene(): void {
@@ -66,7 +65,8 @@ export default class level_z1 extends GameLevel {
         
         this.initLayers();
         this.initPlayer();
-
+        super.startScene();
+        this.initializeWeapons();
         
     }
     
