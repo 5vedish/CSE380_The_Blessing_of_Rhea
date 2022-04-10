@@ -39,10 +39,10 @@ export default class level_z1 extends GameLevel {
 
     loadScene(): void {
         //Load Zeus
-        this.load.spritesheet("zeus", "project_assets/Spritesheets/Zeus.json"); 
+        this.load.spritesheet("zeus", "project_assets/spritesheets/Zeus.json"); 
 
         //Load Snake
-        this.load.spritesheet("snake", "project_assets/Spritesheets/Snake.json")
+        this.load.spritesheet("snake", "project_assets/spritesheets/Snake.json")
 
         //Load tilemap
         this.load.tilemap("levelZ1", "project_assets/Tilemaps/LevelZ1.json");
