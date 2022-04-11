@@ -21,7 +21,6 @@ import Label from "../../../Wolfie2D/Nodes/UIElements/Label";
 import { UIElementType } from "../../../Wolfie2D/Nodes/UIElements/UIElementTypes";
 import Color from "../../../Wolfie2D/Utils/Color";
 import Input from "../../../Wolfie2D/Input/Input";
-import GameOver from "../GameOver";
 import AttackAction from "../../AI/EnemyActions/AttackAction";
 import Move from "../../AI/EnemyActions/Move";
 import Retreat from "../../AI/EnemyActions/Retreat";
