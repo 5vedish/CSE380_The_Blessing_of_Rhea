@@ -42,7 +42,7 @@ export default class GameLevel extends Scene{
     //Each level has a set number of enemies
     protected maxEnemies: number;
     protected currentNumEnemies: number = 0;
-    protected enemyTypes: Array<AnimatedSprite>;
+    protected enemyArray: Array<AnimatedSprite>;
 
     protected enemySpawns: Array<Vec2>;
 
@@ -57,7 +57,7 @@ export default class GameLevel extends Scene{
 
     protected battleManager: BattleManager;
 
-    protected pauseFlag: boolean;
+    protected pauseFlag: boolean = false;
 
     loadScene(): void {
         this.load.spritesheet("slice", "project_assets/spritesheets/slice.json");
@@ -71,7 +71,7 @@ export default class GameLevel extends Scene{
         //Each Vec2 holds the pixels that will be added to the center of the viewport so enemies spawn outside
         //View port is 800x450
         this.enemySpawns = new Array<Vec2>();
-        this.enemyTypes = new Array<AnimatedSprite>();
+        this.enemyArray = new Array<AnimatedSprite>();
         this.enemySpawns.push(new Vec2(-450, 0)); //Left of viewport
         this.enemySpawns.push(new Vec2(450, 0)); //Right of viewport
         this.enemySpawns.push(new Vec2(0, -275)); //Top of viewport
@@ -84,16 +84,29 @@ export default class GameLevel extends Scene{
     }
 
     updateScene(deltaT: number): void {
+
+        if (Input.isKeyJustPressed("escape")){
+            this.pauseFlag = !this.pauseFlag;
+
+            this.enemyArray.map((enemy) => {
+                enemy.freeze()
+                enemy.setAIActive(false, {});
+                enemy.animation.stop();
+            });
+            this.player.freeze();
+            this.player.setAIActive(false, {});
+            this.player.animation.stop();
+        }
         
         //Handles events
-        while (this.receiver.hasNextEvent()) {
+        while (this.receiver.hasNextEvent() && !this.pauseFlag) {
             let event = this.receiver.getNextEvent();
-            console.log(event.data);
             switch (event.type) {
                 case "enemyDied":
                     this.currentNumEnemies -= 1;
                     let enemy = <CanvasNode>event.data.get("enemy");
                     this.battleManager.enemies = this.battleManager.enemies.filter(enemy => enemy !== <BattlerAI>(event.data.get("enemy")._ai));
+                    this.enemyArray = this.enemyArray.filter(enemy => enemy !== (event.data.get("enemy")));
                     this.playerStats.gainedExperience(200); //TO DO make dynamic later based on player level
                     enemy.destroy();
                     break;
@@ -148,7 +161,7 @@ export default class GameLevel extends Scene{
     }
 
 
-    protected addEnemy(spriteKey: string): void{
+    protected addEnemy(spriteKey: string): AnimatedSprite{
         let enemy = this.add.animatedSprite(spriteKey, "primary");
 
         enemy.scale.set(2,2);
@@ -194,6 +207,8 @@ export default class GameLevel extends Scene{
         } else {
             this.battleManager.enemies.push(<BattlerAI>enemy._ai);
         }
+
+        return enemy;
     }
 
     /**

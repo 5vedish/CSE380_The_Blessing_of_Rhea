@@ -62,7 +62,7 @@ export default class level_z1 extends GameLevel {
         this.playerSpawn = new Vec2(32*32, 32*32);
         // this.viewport.setFocus(new Vec2(this.playerSpawn.x, this.playerSpawn.y));
         
-        this.maxEnemies = 15;
+        this.maxEnemies = 2;
         
         super.startScene();
         this.initLayers();
@@ -130,9 +130,8 @@ export default class level_z1 extends GameLevel {
 
         // Spawn enemies in
         if(this.currentNumEnemies < this.maxEnemies){
-            this.addEnemy("snake");
+            this.enemyArray.push(this.addEnemy("snake"));
         }
-
         
         //Check if player died
         if(this.playerStats.stats.health <= 0){

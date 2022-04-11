@@ -18,7 +18,8 @@ import RegistryManager from "./Wolfie2D/Registry/RegistryManager";
             {name: "up", keys: ["w"]},
             {name: "left", keys: ["a"]},
             {name: "down", keys: ["s"]},
-            {name: "right", keys: ["d"]}
+            {name: "right", keys: ["d"]},
+            {name: "pause", keys: ["escape"]}
         ],
         useWebGL: false,                        // Tell the game we want to use webgl
         showDebug: false                        // Whether to show debug messages. You can change this to true if you want
