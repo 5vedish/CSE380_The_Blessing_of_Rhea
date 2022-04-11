@@ -64,7 +64,9 @@ export default class level_z1 extends GameLevel {
         
         this.maxEnemies = 15;
         
+        super.startScene();
         this.initLayers();
+        this.initializeWeapons();
         this.initPlayer();
         //Health Bar top left
         // this.healthBar = this.add.graphic(GraphicType.RECT, "primary", {position: new Vec2(80, 5), 
@@ -73,9 +75,6 @@ export default class level_z1 extends GameLevel {
         //Health Bar follows below character
         this.healthBar = this.add.graphic(GraphicType.RECT, "primary", {position: new Vec2(this.player.position.x, this.player.position.y + 25), 
                 size: new Vec2(this.playerStats.stats.health * 2, 10)});
-        super.startScene();
-        
-        this.initializeWeapons();
         
     }
     
@@ -118,6 +117,8 @@ export default class level_z1 extends GameLevel {
         this.player.setGroup("player");
         // this.viewport.setCenter(this.playerSpawn);
         this.viewport.follow(this.player);
+
+        this.battleManager.setPlayers([<BattlerAI>this.player._ai]);
     }
 
     updateScene(deltaT: number): void {

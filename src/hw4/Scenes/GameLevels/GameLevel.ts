@@ -60,6 +60,8 @@ export default class GameLevel extends Scene{
         this.load.image("knife", "project_assets/sprites/knife.png");
         this.load.image("laserGun", "project_assets/sprites/laserGun.png");
         this.load.image("pistol", "project_assets/sprites/pistol.png");
+        this.load.image("lightning", "project_assets/sprites/lightning.png");
+        this.load.spritesheet("lightning", "project_assets/spritesheets/lightning.json");
         //Initialize the possible spawning areas for enemies
         //Each Vec2 holds the pixels that will be added to the center of the viewport so enemies spawn outside
         //View port is 800x450
@@ -74,7 +76,6 @@ export default class GameLevel extends Scene{
 
     startScene(): void {
         this.battleManager = new BattleManager();
-        this.battleManager.setPlayers([<BattlerAI>this.player._ai]);
     }
 
     updateScene(deltaT: number): void {
@@ -169,6 +170,9 @@ export default class GameLevel extends Scene{
      * @param type The weaponType of the weapon, as a string
      */
      createWeapon(type: string): Weapon {
+
+        console.log(this.battleManager + "BATTLE MANAGE FOR " + type);
+        
         let weaponType = <WeaponType>RegistryManager.getRegistry("weaponTypes").get(type);
 
         let sprite = this.add.sprite(weaponType.spriteKey, "primary");
