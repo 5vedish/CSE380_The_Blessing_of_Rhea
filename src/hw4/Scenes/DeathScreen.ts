@@ -24,13 +24,17 @@ export default class DeathScreen extends Scene{
     const returnToMainMenu = this.add.uiElement(
         UIElementType.BUTTON,
         "death",
-        { position: new Vec2(800, 450), text: "Return to Main Menu" }
+        { position: new Vec2(800, 450), text: "" }
       );
       returnToMainMenu.size.set(1600, 900);
       returnToMainMenu.borderWidth = 2;
       returnToMainMenu.borderColor = Color.TRANSPARENT;
       returnToMainMenu.backgroundColor = Color.TRANSPARENT;
       returnToMainMenu.onClickEventId = "returnToMainMenu";
+
+      const returnLabel = <Label>this.add.uiElement(UIElementType.LABEL, "death", {position: new Vec2(800, 675), text: "Return to Main Menu"})
+      returnLabel.textColor = Color.BROWN;
+
   
       this.receiver.subscribe("returnToMainMenu");
     }
