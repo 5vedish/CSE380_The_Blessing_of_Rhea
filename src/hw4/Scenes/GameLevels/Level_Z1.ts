@@ -62,7 +62,7 @@ export default class level_z1 extends GameLevel {
         this.playerSpawn = new Vec2(32*32, 32*32);
         // this.viewport.setFocus(new Vec2(this.playerSpawn.x, this.playerSpawn.y));
         
-        this.maxEnemies = 2;
+        this.maxEnemies = 15;
         
         super.startScene();
         this.initLayers();
@@ -101,9 +101,10 @@ export default class level_z1 extends GameLevel {
         //this.player.colliderOffset.set(0, 2);
 
         // create weapon
-        let weapon = this.createWeapon("lightning");
+        this.weapon = this.createWeapon("lightning");
         
         this.playerStats = new CharacterStat(50, 1, 10, 2);
+        this.playerStats.weaponCoolDown = this.weapon.type.cooldown;
         // TODO - ADD PLAYER AI HERE
         this.player.addAI(PlayerController,
             {
@@ -112,7 +113,7 @@ export default class level_z1 extends GameLevel {
                 inputEnabled: true,
                 range: 30,
                 playerStats: this.playerStats,
-                weapon: weapon
+                weapon: this.weapon
             });
         this.player.animation.play("idle");
 

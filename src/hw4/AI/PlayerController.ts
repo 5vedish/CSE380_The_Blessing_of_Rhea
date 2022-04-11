@@ -14,7 +14,7 @@ import BattlerAI from "./BattlerAI";
 import StateMachineAI from "../../Wolfie2D/AI/StateMachineAI";
 import CharacterStat from "../PlayerStatus";
 import Emitter from "../../Wolfie2D/Events/Emitter";
-import { Project_Events } from "../../ProjectEnums";
+import { Project_Events } from "../project_constants";
 
 
 export default class PlayerController extends StateMachineAI implements BattlerAI {

@@ -20,7 +20,7 @@ import { hw4_Statuses } from "../../hw4_constants";
 import Move from "../../AI/EnemyActions/Move";
 import PositionGraph from "../../../Wolfie2D/DataTypes/Graphs/PositionGraph";
 import Navmesh from "../../../Wolfie2D/Pathfinding/Navmesh";
-import { Project_Events } from "../../../ProjectEnums";
+import { Project_Events } from "../../project_constants";
 import WeaponType from "../../GameSystems/items/WeaponTypes/WeaponType";
 import RegistryManager from "../../../Wolfie2D/Registry/RegistryManager";
 import BattleManager from "../../GameSystems/BattleManager";
@@ -29,11 +29,18 @@ import BattlerAI from "../../AI/BattlerAI";
 import Graphic from "../../../Wolfie2D/Nodes/Graphic";
 import CharacterStat from "../../PlayerStatus";
 import CanvasNode from "../../../Wolfie2D/Nodes/CanvasNode";
+import Hourglass from "../../GameSystems/items/Hourglass";
+import Sprite from "../../../Wolfie2D/Nodes/Sprites/Sprite";
+import PlayerController from "../../AI/PlayerController";
 
 export default class GameLevel extends Scene{
     //Player info
     protected playerSpawn: Vec2;
     protected player: AnimatedSprite;
+
+    protected playerController: PlayerController;
+
+    protected weapon: Weapon;
 
     //Each level has a timer
     protected levelTimer: Timer;
@@ -52,6 +59,8 @@ export default class GameLevel extends Scene{
 
     protected levelUI: Label;
 
+    protected levelChanged: number = 0;
+
     // Tilemap walls
     protected walls: OrthogonalTilemap;
 
@@ -68,6 +77,7 @@ export default class GameLevel extends Scene{
         this.load.image("lightning", "project_assets/sprites/lightning.png");
         this.load.spritesheet("lightning", "project_assets/spritesheets/lightning.json");
         this.load.image("pause_screen", "project_assets/screens/pause.png");
+        this.load.image("hourglass", "project_assets/sprites/hourglass.png")
         //Initialize the possible spawning areas for enemies
         //Each Vec2 holds the pixels that will be added to the center of the viewport so enemies spawn outside
         //View port is 800x450
@@ -95,30 +105,38 @@ export default class GameLevel extends Scene{
         
     }
 
+    pauseEntities(){
+        this.enemyArray.map((enemy) => {
+            enemy.freeze()
+            enemy.setAIActive(false, {});
+            enemy.animation.stop();
+        });
+        this.player.freeze();
+        this.player.setAIActive(false, {});
+        this.player.animation.stop();
+    }
+
+    unpauseEntities(){
+        this.enemyArray.map((enemy) => {
+            enemy.unfreeze();
+            enemy.setAIActive(true, {});
+            enemy.animation.play("Left Move", true);
+        });
+        this.player.unfreeze();
+        this.player.setAIActive(true, {});
+        this.player.animation.play("idle", true); 
+    }
+
     updateScene(deltaT: number): void {
 
         if (Input.isKeyJustPressed("escape")){
             this.pauseFlag = !this.pauseFlag;
 
             if (this.pauseFlag){
-                this.enemyArray.map((enemy) => {
-                    enemy.freeze()
-                    enemy.setAIActive(false, {});
-                    enemy.animation.stop();
-                });
-                this.player.freeze();
-                this.player.setAIActive(false, {});
-                this.player.animation.stop();
+                this.pauseEntities();
                 this.getLayer("pause").enable();
             } else {
-                this.enemyArray.map((enemy) => {
-                    enemy.unfreeze();
-                    enemy.setAIActive(true, {});
-                    enemy.animation.play("Left Move", true);
-                });
-                this.player.unfreeze();
-                this.player.setAIActive(true, {});
-                this.player.animation.play("idle", true);
+                this.unpauseEntities();
                 this.getLayer("pause").disable();
             }
 
@@ -128,7 +146,7 @@ export default class GameLevel extends Scene{
         while (this.receiver.hasNextEvent() && !this.pauseFlag) {
             let event = this.receiver.getNextEvent();
             switch (event.type) {
-                case "enemyDied":
+                case Project_Events.ENEMYDIED:
                     this.currentNumEnemies -= 1;
                     let enemy = <CanvasNode>event.data.get("enemy");
                     this.battleManager.enemies = this.battleManager.enemies.filter(enemy => enemy !== <BattlerAI>(event.data.get("enemy")._ai));
@@ -146,11 +164,22 @@ export default class GameLevel extends Scene{
                     //Health bar is following the player
                     // this.healthBar.size = new Vec2((this.playerStats.stats.health), 5);
                     // this.healthBar.position = new Vec2(this.player.position.x, this.player.position.y + 25);
-                    this.levelUI.text = "Lvl: " + this.playerStats.level
                     break;
+                    case Project_Events.LEVELUP:
+                        //TO DO LEVEL UP SELECT ITEM SCREEN
+                        // let hourgass = new Hourglass(new Sprite("hourglass"));
+                        // hourgass.use(null, this.weapon, this.playerStats);
+                        this.levelUI.text = "Lvl: " + this.playerStats.level
             }
-
         }
+
+        //Handle leveling up
+        // while(this.levelChanged != 0){
+        //     //TO DO handling clicking items on
+            // let hourgass = new Hourglass(new Sprite("hourglass"));
+            // hourgass.use(null, this.weapon, this.playerStats);
+        //     this.levelChanged--;
+        // }
 
         
 
@@ -160,7 +189,7 @@ export default class GameLevel extends Scene{
     }
 
     protected subscribeToEvents(): void {
-        this.receiver.subscribe (["enemyDied", Project_Events.DAMAGED
+        this.receiver.subscribe ([Project_Events.ENEMYDIED, Project_Events.DAMAGED, Project_Events.LEVELUP
         ]);
     }
     

@@ -17,6 +17,7 @@ import BattlerAI from "./BattlerAI";
 import Alert from "./EnemyStates/Alert";
 import Active from "./EnemyStates/Active";
 import Attack from "./EnemyStates/Attack";
+import { Project_Events } from "../project_constants";
 
 
 
@@ -83,7 +84,7 @@ export default class EnemyAI extends StateMachineGoapAI implements BattlerAI {
             this.owner.isCollidable = false;
             // this.owner.visible = false;
 
-            this.emitter.fireEvent("enemyDied", {enemy: this.owner})
+            this.emitter.fireEvent(Project_Events.ENEMYDIED, {enemy: this.owner})
         }
     }
     isPlayerVisible(pos: Vec2): Vec2{
