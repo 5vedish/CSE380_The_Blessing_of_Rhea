@@ -24,9 +24,9 @@ export default class SplashScreen extends Scene {
     const clickStart = this.add.uiElement(
       UIElementType.BUTTON,
       "splashScreen",
-      { position: new Vec2(800, 675), text: "Click to Start" }
+      { position: new Vec2(800, 450), text: "Click to Start" }
     );
-    clickStart.size.set(200, 50);
+    clickStart.size.set(1600, 900);
     clickStart.borderWidth = 2;
     clickStart.borderColor = Color.TRANSPARENT;
     clickStart.backgroundColor = Color.TRANSPARENT;

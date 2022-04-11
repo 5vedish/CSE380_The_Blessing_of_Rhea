@@ -35,6 +35,7 @@ import Stack from "../../../Wolfie2D/DataTypes/Stack";
 import Berserk from "../../AI/EnemyActions/Berserk";
 import GameLevel from "./GameLevel";
 import CharacterStat from "../../PlayerStatus";
+import DeathScreen from "../DeathScreen";
 
 export default class level_z1 extends GameLevel {
 
@@ -124,5 +125,10 @@ export default class level_z1 extends GameLevel {
         let percentage = this.playerStats.stats.maxHealth/100;
         this.healthBar.size = new Vec2((health*2)/percentage, 10);
         this.healthBar.position = new Vec2((health+(42*percentage))/percentage, 22);
+
+        //Check if player died
+        if(this.playerStats.stats.health <= 0){
+            this.sceneManager.changeToScene(DeathScreen);
+        }
     }
 }
