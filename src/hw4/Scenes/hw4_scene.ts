@@ -21,7 +21,6 @@ import Label from "../../Wolfie2D/Nodes/UIElements/Label";
 import { UIElementType } from "../../Wolfie2D/Nodes/UIElements/UIElementTypes";
 import Color from "../../Wolfie2D/Utils/Color";
 import Input from "../../Wolfie2D/Input/Input";
-import GameOver from "./GameOver";
 import AttackAction from "../AI/EnemyActions/AttackAction";
 import Move from "../AI/EnemyActions/Move";
 import Retreat from "../AI/EnemyActions/Retreat";
@@ -195,9 +194,9 @@ export default class hw4_scene extends Scene {
         let health2 = (<BattlerAI>this.playerCharacters[1]._ai).health;
 
         //If both are dead, game over
-        if(health1 <= 0 || health2 <= 0){
-            this.sceneManager.changeToScene(GameOver);
-        }
+        // if(health1 <= 0 || health2 <= 0){
+        //     this.sceneManager.changeToScene(GameOver);
+        // }
 
         // update closest enemy of each player
         let closetEnemy1 = this.getClosestEnemy(this.playerCharacters[0].position, (<PlayerController>this.playerCharacters[0]._ai).range);

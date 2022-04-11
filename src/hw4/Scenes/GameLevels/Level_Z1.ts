@@ -66,8 +66,13 @@ export default class level_z1 extends GameLevel {
         
         this.initLayers();
         this.initPlayer();
-        this.addUILayer("healthbar");
-        this.healthBar = this.add.graphic(GraphicType.RECT, "healthbar", {position: new Vec2(80, 5), size: new Vec2(this.playerStats.stats.health * 2, 10)});
+        //Health Bar top left
+        // this.healthBar = this.add.graphic(GraphicType.RECT, "primary", {position: new Vec2(80, 5), 
+        //     size: new Vec2(this.playerStats.stats.health * 2, 10)});
+
+        //Health Bar follows below character
+        this.healthBar = this.add.graphic(GraphicType.RECT, "primary", {position: new Vec2(this.player.position.x, this.player.position.y + 25), 
+                size: new Vec2(this.playerStats.stats.health * 2, 10)});
         super.startScene();
         
         this.initializeWeapons();
@@ -124,11 +129,15 @@ export default class level_z1 extends GameLevel {
         }
 
         //Update health bar
-        let health = this.playerStats.stats.health;
-        let percentage = this.playerStats.stats.maxHealth/100;
-        this.healthBar.size = new Vec2((health*2)/percentage, 10);
-        this.healthBar.position = new Vec2((health+(42*percentage))/percentage, 22);
-
+        //Health bar is static on top left
+        // let health = this.playerStats.stats.health;
+        // let percentage = this.playerStats.stats.maxHealth/100;
+        // this.healthBar.size = new Vec2((health*2)/percentage, 10);
+        // this.healthBar.position = new Vec2((health+(42*percentage))/percentage, 22);
+        //Health bar is following the player
+        this.healthBar.size = new Vec2((this.playerStats.stats.health), 5);
+        this.healthBar.position = new Vec2(this.player.position.x, this.player.position.y + 25);
+        
         //Check if player died
         if(this.playerStats.stats.health <= 0){
             this.sceneManager.changeToScene(DeathScreen);
