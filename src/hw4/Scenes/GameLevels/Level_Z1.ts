@@ -92,6 +92,9 @@ export default class level_z1 extends GameLevel {
         this.player.position = this.playerSpawn;
         this.player.addPhysics(new AABB(Vec2.ZERO, new Vec2(16, 16)));
         //this.player.colliderOffset.set(0, 2);
+
+        // create weapon
+        let weapon = this.createWeapon("lightning");
         
         this.playerStats = new CharacterStat(50, 1, 10, 2);
         // TODO - ADD PLAYER AI HERE
@@ -101,7 +104,8 @@ export default class level_z1 extends GameLevel {
                 health: 50,
                 inputEnabled: true,
                 range: 30,
-                playerStats: this.playerStats
+                playerStats: this.playerStats,
+                weapon: weapon
             });
         this.player.animation.play("idle");
 

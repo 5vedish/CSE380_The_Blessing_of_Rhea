@@ -48,7 +48,7 @@ export default class Weapon extends Item {
      * Uses this weapon in the specified direction.
      * This only works if the cooldown timer has ended
      */
-    use(user: GameNode, userType: string, direction: Vec2): boolean {
+    use(user: GameNode, userType: string, direction: Vec2, options: Record<string,any>): boolean {
         // If the cooldown timer is still running, we can't use the weapon
         if(!this.cooldownTimer.isStopped()){
             return false;
@@ -57,7 +57,7 @@ export default class Weapon extends Item {
         this.assets = this.type.createRequiredAssets(this.sprite.getScene());
 
         // Do a type specific weapon animation
-        this.type.doAnimation(user, direction, ...this.assets);
+        this.type.doAnimation(user, direction, ...this.assets, options);
 
         // Apply damage
         this.battleManager.handleInteraction(userType, this);

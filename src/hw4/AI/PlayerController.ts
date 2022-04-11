@@ -22,6 +22,9 @@ export default class PlayerController extends StateMachineAI implements BattlerA
     // The actual player sprite
     owner: AnimatedSprite;
 
+    // player primary weapon
+    weapon: Weapon;
+
     // Attack range
     range: number;
 
@@ -56,6 +59,7 @@ export default class PlayerController extends StateMachineAI implements BattlerA
         this.inputEnabled = options.inputEnabled;
         this.range = options.range;
         this.playerStats = options.playerStats;
+        this.weapon = options.weapon;
 
         this.items = options.items;
         this.inventory = options.inventory;
@@ -94,6 +98,10 @@ export default class PlayerController extends StateMachineAI implements BattlerA
             if (Input.isPressed('left')) this.owner.animation.playIfNotAlready("left");
             else if (Input.isPressed('right')) this.owner.animation.playIfNotAlready("right");
             else this.owner.animation.playIfNotAlready("idle");
+
+            if (Input.isMouseJustPressed()){
+                this.weapon.use(this.owner, "player", Input.getMousePressPosition(), []);
+            }
 
             // TODO - WILL NEED TO IMPLEMENT PLAYER DIRECTION TO INDICATE WHICH IDLE ANIMATION WE ARE USING
 

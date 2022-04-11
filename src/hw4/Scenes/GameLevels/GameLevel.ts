@@ -20,7 +20,8 @@ import { hw4_Statuses } from "../../hw4_constants";
 import Move from "../../AI/EnemyActions/Move";
 import PositionGraph from "../../../Wolfie2D/DataTypes/Graphs/PositionGraph";
 import Navmesh from "../../../Wolfie2D/Pathfinding/Navmesh";
-import { Project_Events } from "../../project_constants";
+import { Project_Events
+ } from "../../project_constants";
 import WeaponType from "../../GameSystems/items/WeaponTypes/WeaponType";
 import RegistryManager from "../../../Wolfie2D/Registry/RegistryManager";
 import BattleManager from "../../GameSystems/BattleManager";
