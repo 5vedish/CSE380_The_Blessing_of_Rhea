@@ -67,6 +67,7 @@ export default class GameLevel extends Scene{
         this.load.image("pistol", "project_assets/sprites/pistol.png");
         this.load.image("lightning", "project_assets/sprites/lightning.png");
         this.load.spritesheet("lightning", "project_assets/spritesheets/lightning.json");
+        this.load.image("pause_screen", "project_assets/screens/pause.png");
         //Initialize the possible spawning areas for enemies
         //Each Vec2 holds the pixels that will be added to the center of the viewport so enemies spawn outside
         //View port is 800x450
@@ -81,6 +82,17 @@ export default class GameLevel extends Scene{
     startScene(): void {
         this.battleManager = new BattleManager();
         this.subscribeToEvents();
+        this.addUILayer("gui");
+
+        this.addUILayer("pause").disable();
+        let pauseScreen = this.add.sprite("pause_screen", "pause");
+        pauseScreen.position.copy(this.viewport.getOrigin());
+        pauseScreen.alpha = .5;
+
+        let healthBarBorder = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(196, 16), 
+            size: new Vec2(256, 8)});
+        healthBarBorder.alpha = .5;
+        
     }
 
     updateScene(deltaT: number): void {
@@ -97,6 +109,7 @@ export default class GameLevel extends Scene{
                 this.player.freeze();
                 this.player.setAIActive(false, {});
                 this.player.animation.stop();
+                this.getLayer("pause").enable();
             } else {
                 this.enemyArray.map((enemy) => {
                     enemy.unfreeze();
@@ -106,6 +119,7 @@ export default class GameLevel extends Scene{
                 this.player.unfreeze();
                 this.player.setAIActive(true, {});
                 this.player.animation.play("idle", true);
+                this.getLayer("pause").disable();
             }
 
         }
@@ -126,9 +140,9 @@ export default class GameLevel extends Scene{
                     //Update health bar
                     //Health bar is static on top left
                     let health = this.playerStats.stats.health;
-                    let percentage = this.playerStats.stats.maxHealth/100;
-                    this.healthBar.size = new Vec2((health*2)/percentage, 10);
-                    this.healthBar.position = new Vec2((health+(42*percentage))/percentage, 22);
+                    let percentage = health/this.playerStats.stats.maxHealth;
+                    this.healthBar.size = new Vec2(percentage*256, 8);
+                    this.healthBar.position = new Vec2(196 + (percentage-1)*128,16);
                     //Health bar is following the player
                     // this.healthBar.size = new Vec2((this.playerStats.stats.health), 5);
                     // this.healthBar.position = new Vec2(this.player.position.x, this.player.position.y + 25);

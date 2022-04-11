@@ -68,17 +68,16 @@ export default class level_z1 extends GameLevel {
         this.initLayers();
         this.initializeWeapons();
         this.initPlayer();
+
+
         //Health Bar top left
-        this.addUILayer("gui");
-        this.healthBar = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(80, 5), 
-            size: new Vec2(this.playerStats.stats.health * 2, 10)});
-
-        this.levelUI = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(60, 42), 
-                text: "Lvl: " + this.playerStats.level});
-        this.levelUI.textColor = Color.BLACK;
-
+        this.healthBar = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(196, 16), 
+            size: new Vec2(256, 8)});
         //Health Bar follows below character
-        
+
+        this.levelUI = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(86, 32), 
+            text: "Lvl: " + this.playerStats.level});
+        this.levelUI.textColor = Color.BLACK;
         
     }
     
