@@ -100,9 +100,7 @@ export default class PlayerController extends StateMachineAI implements BattlerA
             else this.owner.animation.playIfNotAlready("idle");
 
             if (Input.isMouseJustPressed()){
-                console.log("(" + this.owner.position.x + "," + this.owner.position.y + ")");
-                console.log(Input.getGlobalMousePosition() + "MOUSE COORDS");
-                this.weapon.use(this.owner, "player", Input.getMousePressPosition(), []);
+                this.weapon.use(this.owner, "player", Input.getGlobalMousePosition(), []);
             }
 
             // TODO - WILL NEED TO IMPLEMENT PLAYER DIRECTION TO INDICATE WHICH IDLE ANIMATION WE ARE USING
