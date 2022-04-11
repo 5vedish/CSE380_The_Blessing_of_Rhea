@@ -51,6 +51,8 @@ export default class GameLevel extends Scene{
 
     protected healthBar: Graphic;
 
+    protected levelUI: Label;
+
     // Tilemap walls
     protected walls: OrthogonalTilemap;
 
@@ -84,7 +86,6 @@ export default class GameLevel extends Scene{
         
         //Handles events
         while (this.receiver.hasNextEvent()) {
-            console.log("Blah");
             let event = this.receiver.getNextEvent();
             console.log(event.data);
             switch (event.type) {
@@ -92,11 +93,23 @@ export default class GameLevel extends Scene{
                     this.currentNumEnemies -= 1;
                     let enemy = <CanvasNode>event.data.get("enemy");
                     this.battleManager.enemies = this.battleManager.enemies.filter(enemy => enemy !== <BattlerAI>(event.data.get("enemy")._ai));
+                    this.playerStats.gainedExperience(200); //TO DO make dynamic later based on player level
                     enemy.destroy();
                     break;
             }
 
         }
+
+        //Update health bar
+        //Health bar is static on top left
+        let health = this.playerStats.stats.health;
+        let percentage = this.playerStats.stats.maxHealth/100;
+        this.healthBar.size = new Vec2((health*2)/percentage, 10);
+        this.healthBar.position = new Vec2((health+(42*percentage))/percentage, 22);
+        //Health bar is following the player
+        // this.healthBar.size = new Vec2((this.playerStats.stats.health), 5);
+        // this.healthBar.position = new Vec2(this.player.position.x, this.player.position.y + 25);
+        this.levelUI.text = "Lvl: " + this.playerStats.level
 
         // Prevents the player from going out of map
         this.lockPlayer();
@@ -163,7 +176,7 @@ export default class GameLevel extends Scene{
         let weapon = this.createWeapon("knife");
 
         let options = {
-            health: 3,
+            health: 1,
             player: this.player,
             speed: 5,
             weapon: weapon
