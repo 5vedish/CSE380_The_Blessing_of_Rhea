@@ -13,6 +13,8 @@ import { hw4_Events, hw4_Names } from "../hw4_constants";
 import BattlerAI from "./BattlerAI";
 import StateMachineAI from "../../Wolfie2D/AI/StateMachineAI";
 import CharacterStat from "../PlayerStatus";
+import Emitter from "../../Wolfie2D/Events/Emitter";
+import { Project_Events } from "../../ProjectEnums";
 
 
 export default class PlayerController extends StateMachineAI implements BattlerAI {
@@ -49,6 +51,7 @@ export default class PlayerController extends StateMachineAI implements BattlerA
     private path: NavigationPath;
 
     protected receiver: Receiver;
+    protected emitter: Emitter;
 
 
     initializeAI(owner: AnimatedSprite, options: Record<string, any>): void {
@@ -66,6 +69,7 @@ export default class PlayerController extends StateMachineAI implements BattlerA
 
         this.receiver = new Receiver();
         // this.receiver.subscribe(hw4_Events.SWAP_PLAYER);
+        this.emitter = new Emitter();
     }
 
     activate(options: Record<string, any>): void { }
@@ -125,6 +129,8 @@ export default class PlayerController extends StateMachineAI implements BattlerA
         this.health -= damage;
         this.playerStats.editHealth(damage * -1);
         this.owner.animation.play("damage");
+
+        this.emitter.fireEvent(Project_Events.DAMAGED);
     }
 
     destroy() {

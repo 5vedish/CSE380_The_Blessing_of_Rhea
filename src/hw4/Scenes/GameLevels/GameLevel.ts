@@ -20,8 +20,7 @@ import { hw4_Statuses } from "../../hw4_constants";
 import Move from "../../AI/EnemyActions/Move";
 import PositionGraph from "../../../Wolfie2D/DataTypes/Graphs/PositionGraph";
 import Navmesh from "../../../Wolfie2D/Pathfinding/Navmesh";
-import { Project_Events
- } from "../../project_constants";
+import { Project_Events } from "../../../ProjectEnums";
 import WeaponType from "../../GameSystems/items/WeaponTypes/WeaponType";
 import RegistryManager from "../../../Wolfie2D/Registry/RegistryManager";
 import BattleManager from "../../GameSystems/BattleManager";
@@ -57,6 +56,8 @@ export default class GameLevel extends Scene{
     protected walls: OrthogonalTilemap;
 
     protected battleManager: BattleManager;
+
+    protected pauseFlag: boolean;
 
     loadScene(): void {
         this.load.spritesheet("slice", "project_assets/spritesheets/slice.json");
@@ -96,20 +97,23 @@ export default class GameLevel extends Scene{
                     this.playerStats.gainedExperience(200); //TO DO make dynamic later based on player level
                     enemy.destroy();
                     break;
+                case Project_Events.DAMAGED:
+                    //Update health bar
+                    //Health bar is static on top left
+                    let health = this.playerStats.stats.health;
+                    let percentage = this.playerStats.stats.maxHealth/100;
+                    this.healthBar.size = new Vec2((health*2)/percentage, 10);
+                    this.healthBar.position = new Vec2((health+(42*percentage))/percentage, 22);
+                    //Health bar is following the player
+                    // this.healthBar.size = new Vec2((this.playerStats.stats.health), 5);
+                    // this.healthBar.position = new Vec2(this.player.position.x, this.player.position.y + 25);
+                    this.levelUI.text = "Lvl: " + this.playerStats.level
+                    break;
             }
 
         }
 
-        //Update health bar
-        //Health bar is static on top left
-        let health = this.playerStats.stats.health;
-        let percentage = this.playerStats.stats.maxHealth/100;
-        this.healthBar.size = new Vec2((health*2)/percentage, 10);
-        this.healthBar.position = new Vec2((health+(42*percentage))/percentage, 22);
-        //Health bar is following the player
-        // this.healthBar.size = new Vec2((this.playerStats.stats.health), 5);
-        // this.healthBar.position = new Vec2(this.player.position.x, this.player.position.y + 25);
-        this.levelUI.text = "Lvl: " + this.playerStats.level
+        
 
         // Prevents the player from going out of map
         this.lockPlayer();
@@ -117,7 +121,7 @@ export default class GameLevel extends Scene{
     }
 
     protected subscribeToEvents(): void {
-        this.receiver.subscribe (["enemyDied"
+        this.receiver.subscribe (["enemyDied", Project_Events.DAMAGED
         ]);
     }
     
