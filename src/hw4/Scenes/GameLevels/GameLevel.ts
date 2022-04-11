@@ -145,7 +145,7 @@ export default class GameLevel extends Scene{
         //check if spawn position is out of bounds
         while(true){
             if(this.boundaryCheck(viewportCenter, this.enemySpawns[spawnPointIndex])){
-                spawnPointIndex = (spawnPointIndex + 1) % 5;
+                spawnPointIndex = (spawnPointIndex + 1) % 4;
             } else {
                 //Find a random x or y of that side
                 if(this.enemySpawns[spawnPointIndex].x === 0){
