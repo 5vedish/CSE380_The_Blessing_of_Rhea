@@ -88,14 +88,26 @@ export default class GameLevel extends Scene{
         if (Input.isKeyJustPressed("escape")){
             this.pauseFlag = !this.pauseFlag;
 
-            this.enemyArray.map((enemy) => {
-                enemy.freeze()
-                enemy.setAIActive(false, {});
-                enemy.animation.stop();
-            });
-            this.player.freeze();
-            this.player.setAIActive(false, {});
-            this.player.animation.stop();
+            if (this.pauseFlag){
+                this.enemyArray.map((enemy) => {
+                    enemy.freeze()
+                    enemy.setAIActive(false, {});
+                    enemy.animation.stop();
+                });
+                this.player.freeze();
+                this.player.setAIActive(false, {});
+                this.player.animation.stop();
+            } else {
+                this.enemyArray.map((enemy) => {
+                    enemy.unfreeze();
+                    enemy.setAIActive(true, {});
+                    enemy.animation.play("Left Move", true);
+                });
+                this.player.unfreeze();
+                this.player.setAIActive(true, {});
+                this.player.animation.play("idle", true);
+            }
+
         }
         
         //Handles events
