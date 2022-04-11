@@ -29,6 +29,7 @@ import Weapon from "../../GameSystems/items/Weapon";
 import BattlerAI from "../../AI/BattlerAI";
 import Graphic from "../../../Wolfie2D/Nodes/Graphic";
 import CharacterStat from "../../PlayerStatus";
+import CanvasNode from "../../../Wolfie2D/Nodes/CanvasNode";
 
 export default class GameLevel extends Scene{
     //Player info
@@ -41,8 +42,9 @@ export default class GameLevel extends Scene{
 
     //Each level has a set number of enemies
     protected maxEnemies: number;
+    protected currentNumEnemies: number = 0;
     protected enemyTypes: Array<AnimatedSprite>;
-    protected enemies: Array<AnimatedSprite>;
+
     protected enemySpawns: Array<Vec2>;
 
     protected playerStats: CharacterStat
@@ -67,7 +69,6 @@ export default class GameLevel extends Scene{
         //View port is 800x450
         this.enemySpawns = new Array<Vec2>();
         this.enemyTypes = new Array<AnimatedSprite>();
-        this.enemies = new Array<AnimatedSprite>();
         this.enemySpawns.push(new Vec2(-450, 0)); //Left of viewport
         this.enemySpawns.push(new Vec2(450, 0)); //Right of viewport
         this.enemySpawns.push(new Vec2(0, -275)); //Top of viewport
@@ -76,24 +77,34 @@ export default class GameLevel extends Scene{
 
     startScene(): void {
         this.battleManager = new BattleManager();
+        this.subscribeToEvents();
     }
 
     updateScene(deltaT: number): void {
+        
         //Handles events
         while (this.receiver.hasNextEvent()) {
+            console.log("Blah");
             let event = this.receiver.getNextEvent();
+            console.log(event.data);
             switch (event.type) {
-                
+                case "enemyDied":
+                    this.currentNumEnemies -= 1;
+                    let enemy = <CanvasNode>event.data.get("enemy");
+                    this.battleManager.enemies = this.battleManager.enemies.filter(enemy => enemy !== <BattlerAI>(event.data.get("enemy")._ai));
+                    enemy.destroy();
+                    break;
             }
+
         }
 
         // Prevents the player from going out of map
         this.lockPlayer();
-        this.subscribeToEvents();
+        
     }
 
     protected subscribeToEvents(): void {
-        this.receiver.subscribe ([
+        this.receiver.subscribe (["enemyDied"
         ]);
     }
     
@@ -152,7 +163,7 @@ export default class GameLevel extends Scene{
         let weapon = this.createWeapon("knife");
 
         let options = {
-            health: 1,
+            health: 3,
             player: this.player,
             speed: 5,
             weapon: weapon
@@ -160,8 +171,12 @@ export default class GameLevel extends Scene{
 
         enemy.addAI(EnemyAI, options);
         enemy.setGroup("enemy");
-        this.enemies.push(enemy);
-        this.battleManager.setEnemies([<BattlerAI>enemy._ai]);
+        this.currentNumEnemies += 1;
+        if(this.battleManager.enemies === undefined){
+            this.battleManager.setEnemies([<BattlerAI>enemy._ai])
+        } else {
+            this.battleManager.enemies.push(<BattlerAI>enemy._ai);
+        }
     }
 
     /**
@@ -170,8 +185,6 @@ export default class GameLevel extends Scene{
      * @param type The weaponType of the weapon, as a string
      */
      createWeapon(type: string): Weapon {
-
-        console.log(this.battleManager + "BATTLE MANAGE FOR " + type);
         
         let weaponType = <WeaponType>RegistryManager.getRegistry("weaponTypes").get(type);
 

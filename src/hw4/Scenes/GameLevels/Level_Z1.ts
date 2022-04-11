@@ -125,7 +125,7 @@ export default class level_z1 extends GameLevel {
         super.updateScene(deltaT);
 
         // Spawn enemies in
-        if(this.enemies.length < this.maxEnemies){
+        if(this.currentNumEnemies < this.maxEnemies){
             this.addEnemy("snake");
         }
 
