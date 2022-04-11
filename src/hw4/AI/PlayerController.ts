@@ -95,9 +95,17 @@ export default class PlayerController extends StateMachineAI implements BattlerA
             let horizontalAxis = (Input.isPressed('left') ? -1 : 0) + (Input.isPressed('right') ? 1 : 0);
 
             // Handles animation based on inputs
-            if (Input.isPressed('left')) this.owner.animation.playIfNotAlready("left");
-            else if (Input.isPressed('right')) this.owner.animation.playIfNotAlready("right");
-            else this.owner.animation.playIfNotAlready("idle");
+            if(!this.owner.animation.isPlaying("damage")){
+                if(!this.owner.animation.isPlaying("attacking")){
+                    if(Input.isPressed('left')){
+                        this.owner.animation.playIfNotAlready("left");
+                    } else if(Input.isPressed('right')){
+                        this.owner.animation.playIfNotAlready("right");
+                    } else {
+                        this.owner.animation.playIfNotAlready("idle");
+                    }
+                }
+            }
 
             if (Input.isMouseJustPressed()){
                 this.weapon.use(this.owner, "player", Input.getGlobalMousePosition(), []);
@@ -116,6 +124,7 @@ export default class PlayerController extends StateMachineAI implements BattlerA
     damage(damage: number): void {
         this.health -= damage;
         this.playerStats.editHealth(damage * -1);
+        this.owner.animation.play("damage");
     }
 
     destroy() {

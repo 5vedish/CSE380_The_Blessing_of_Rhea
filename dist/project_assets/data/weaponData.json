@@ -8,7 +8,7 @@
             "animationSprite": "Lightning",
             "spriteKey": "lightning",
             "damage": 1,
-            "cooldown": 350,
+            "cooldown": 1500,
             "useVolume": 10
         },
         {

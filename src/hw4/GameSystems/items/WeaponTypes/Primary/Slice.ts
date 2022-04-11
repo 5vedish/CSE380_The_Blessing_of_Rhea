@@ -28,6 +28,7 @@ export default class Slice extends WeaponType {
 
     createRequiredAssets(scene: Scene): [AnimatedSprite] {
         let slice = scene.add.animatedSprite("slice", "primary");
+        slice.scale.set(1.5,1.5);
         slice.animation.play("NORMAL", true);
 
         return [slice];

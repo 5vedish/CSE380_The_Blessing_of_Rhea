@@ -135,7 +135,7 @@ export default class GameLevel extends Scene{
         let enemy = this.add.animatedSprite(spriteKey, "primary");
 
         enemy.scale.set(2,2);
-        enemy.addPhysics();
+        enemy.addPhysics(new AABB(Vec2.ZERO, new Vec2(8, 8)));
         enemy.animation.play("Left Move");
         //Randomly select one of the spawnpoints outside the viewport;
         let spawnPointIndex = Math.floor(Math.random() * 4);

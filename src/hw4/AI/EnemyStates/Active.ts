@@ -26,7 +26,7 @@ export default class Active extends EnemyState {
     constructor(parent: EnemyAI, owner: GameNode, player: GameNode) {
         super(parent, owner);
         this.player = player;
-        this.range = 5;
+        this.range = 10;
         
 
         // Regularly update the player location

@@ -68,7 +68,7 @@ export default class level_z1 extends GameLevel {
         this.initLayers();
         this.initializeWeapons();
         this.initPlayer();
-        //Health Bar top left
+        //Health Bar top lefta
         // this.healthBar = this.add.graphic(GraphicType.RECT, "primary", {position: new Vec2(80, 5), 
         //     size: new Vec2(this.playerStats.stats.health * 2, 10)});
 

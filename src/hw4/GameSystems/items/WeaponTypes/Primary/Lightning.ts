@@ -17,7 +17,7 @@ export default class Lightning extends WeaponType {
     doAnimation(attacker: GameNode, position: Vec2, zapSprite: AnimatedSprite, options: Record<string,any>): void {
 
         zapSprite.position = position;
-
+        (<AnimatedSprite>attacker).animation.play("attacking");
         // Move the slice out from the player
         // sliceSprite.position = attacker.position.clone().add(direction.scaled(16));
         
