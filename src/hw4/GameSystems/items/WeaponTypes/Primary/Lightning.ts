@@ -23,7 +23,7 @@ export default class Lightning extends WeaponType {
         
         // Play the slice animation w/o loop, but queue the normal animation
         zapSprite.animation.play("lightning");
-        zapSprite.animation.queue("normal");
+        zapSprite.animation.queue("normal");    
     }
 
     createRequiredAssets(scene: Scene): [AnimatedSprite] {
