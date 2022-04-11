@@ -30,6 +30,7 @@ import Graphic from "../../../Wolfie2D/Nodes/Graphic";
 import CharacterStat from "../../PlayerStatus";
 import CanvasNode from "../../../Wolfie2D/Nodes/CanvasNode";
 import Hourglass from "../../GameSystems/items/Hourglass";
+import HermesSandals from "../../GameSystems/items/HermesSandals";
 import Sprite from "../../../Wolfie2D/Nodes/Sprites/Sprite";
 import PlayerController from "../../AI/PlayerController";
 
@@ -39,8 +40,6 @@ export default class GameLevel extends Scene{
     protected player: AnimatedSprite;
 
     protected playerController: PlayerController;
-
-    protected weapon: Weapon;
 
     //Each level has a timer
     protected levelTimer: Timer;
@@ -78,6 +77,7 @@ export default class GameLevel extends Scene{
         this.load.spritesheet("lightning", "project_assets/spritesheets/lightning.json");
         this.load.image("pause_screen", "project_assets/screens/pause.png");
         this.load.image("hourglass", "project_assets/sprites/hourglass.png")
+        this.load.image("hermes_sandals", "project_assets/sprites/hermes_sandals.png");
         //Initialize the possible spawning areas for enemies
         //Each Vec2 holds the pixels that will be added to the center of the viewport so enemies spawn outside
         //View port is 800x450
@@ -167,8 +167,10 @@ export default class GameLevel extends Scene{
                     break;
                     case Project_Events.LEVELUP:
                         //TO DO LEVEL UP SELECT ITEM SCREEN
-                        // let hourgass = new Hourglass(new Sprite("hourglass"));
-                        // hourgass.use(null, this.weapon, this.playerStats);
+                        let hourgass = new Hourglass(new Sprite("hourglass"));
+                        hourgass.use(null, this.playerController.weapon, this.playerStats);
+                        // let hermes_sandals = new HermesSandals(new Sprite("hermes_sandals"));
+                        // hermes_sandals.use(null, this.playerStats, this.playerController);
                         this.levelUI.text = "Lvl: " + this.playerStats.level
             }
         }

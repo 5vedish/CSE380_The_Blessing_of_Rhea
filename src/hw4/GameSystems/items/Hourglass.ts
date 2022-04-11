@@ -8,7 +8,7 @@ import Weapon from "./Weapon";
 export default class Hourglass extends Item {
     
     use(user: GameNode, weapon: Weapon, characterStats: CharacterStat): void {
-        weapon.type.cooldown *= .1;
+        weapon.type.cooldown *= .9;
         characterStats.weaponCoolDown = weapon.type.cooldown;
         weapon.cooldownTimer = new Timer(weapon.type.cooldown);
     }

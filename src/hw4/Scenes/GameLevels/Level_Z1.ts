@@ -101,10 +101,10 @@ export default class level_z1 extends GameLevel {
         //this.player.colliderOffset.set(0, 2);
 
         // create weapon
-        this.weapon = this.createWeapon("lightning");
+        let weapon = this.createWeapon("lightning");
         
         this.playerStats = new CharacterStat(50, 1, 10, 2);
-        this.playerStats.weaponCoolDown = this.weapon.type.cooldown;
+        this.playerStats.weaponCoolDown = weapon.type.cooldown;
         // TODO - ADD PLAYER AI HERE
         this.player.addAI(PlayerController,
             {
@@ -113,7 +113,7 @@ export default class level_z1 extends GameLevel {
                 inputEnabled: true,
                 range: 30,
                 playerStats: this.playerStats,
-                weapon: this.weapon
+                weapon: weapon
             });
         this.player.animation.play("idle");
 
@@ -123,6 +123,7 @@ export default class level_z1 extends GameLevel {
         this.viewport.follow(this.player);
 
         this.battleManager.setPlayers([<BattlerAI>this.player._ai]);
+        this.playerController = <PlayerController> this.player._ai;
     }
 
     updateScene(deltaT: number): void {
