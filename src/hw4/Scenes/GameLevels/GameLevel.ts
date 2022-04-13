@@ -33,6 +33,9 @@ import Hourglass from "../../GameSystems/items/Hourglass";
 import HermesSandals from "../../GameSystems/items/HermesSandals";
 import Sprite from "../../../Wolfie2D/Nodes/Sprites/Sprite";
 import PlayerController from "../../AI/PlayerController";
+import Receiver from "../../../Wolfie2D/Events/Receiver";
+import Lightning from "../../GameSystems/items/WeaponTypes/Primary/Lightning";
+import Layer from "../../../Wolfie2D/Scene/Layer";
 
 export default class GameLevel extends Scene{
     //Player info
@@ -58,6 +61,8 @@ export default class GameLevel extends Scene{
 
     protected levelUI: Label;
 
+    private levelUpLayer: Layer;
+
     protected levelChanged: number = 0;
 
     // Tilemap walls
@@ -66,6 +71,12 @@ export default class GameLevel extends Scene{
     protected battleManager: BattleManager;
 
     protected pauseFlag: boolean = false;
+
+    protected levelReceiver: Receiver;
+
+    protected itemsArray: Array<string> = ["hourglass", "hermes_sandals"];
+
+    protected itemConstructorPairings: Record<string,any> = [{"hourglass" : Hourglass}, {"hermes_sandals" : HermesSandals}]
 
     loadScene(): void {
         this.load.spritesheet("slice", "project_assets/spritesheets/slice.json");
@@ -91,6 +102,8 @@ export default class GameLevel extends Scene{
 
     startScene(): void {
         this.battleManager = new BattleManager();
+        this.levelReceiver = new Receiver();
+        this.levelReceiver.subscribe(["one", "two"]);
         this.subscribeToEvents();
         this.addUILayer("gui");
 
@@ -102,7 +115,56 @@ export default class GameLevel extends Scene{
         let healthBarBorder = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(196, 16), 
             size: new Vec2(256, 8)});
         healthBarBorder.alpha = .5;
+
+        this.levelUpLayer = this.addUILayer("levelUp");
+        // this.levelUpLayer.disable();
+        this.levelUpLayer.setDepth(1000);
         
+
+        const button1 = this.add.uiElement(UIElementType.BUTTON, "levelUp", {
+            position: new Vec2((this.viewport.getOrigin().x - this.viewport.getHalfSize().x/2), this.viewport.getOrigin().y),
+            text: "",
+          });
+          button1.size.set(64, 64);
+          button1.borderWidth = 4;
+          button1.borderRadius = 0;
+          button1.borderColor = Color.GRAY;
+          button1.backgroundColor = Color.BROWN;
+          button1.onClickEventId = "one";
+          button1.onClick = () => {
+            console.log("I AM BEING CLICKED");
+          }
+          button1.onEnter = () => {
+              console.log("ENTERED BUTTON");
+          }
+        //   button1.onEnterEventId = "one";
+          button1.onRelease = () => {
+              console.log("ON RELEASE");
+          }
+
+
+        const button2 = this.add.uiElement(UIElementType.BUTTON, "levelUp", {
+            position: new Vec2((this.viewport.getOrigin().x), this.viewport.getOrigin().y),
+            text: "",
+          });
+          button2.size.set(64, 64);
+          button2.borderWidth = 4;
+          button2.borderRadius = 0;
+          button2.borderColor = Color.GRAY;
+          button2.backgroundColor = Color.BROWN;
+          button2.onClickEventId = "two";
+
+        //   const button3 = this.add.uiElement(UIElementType.BUTTON, "levelUp", {
+        //     position: new Vec2((this.viewport.getCenter().x + this.viewport.getHalfSize().x/2), this.viewport.getCenter().y),
+        //     text: "",
+        //   });
+        //   button3.size.set(256, 256);
+        //   button3.borderWidth = 4;
+        //   button3.borderRadius = 0;
+        //   button3.borderColor = Color.GRAY;
+        //   button3.backgroundColor = Color.BROWN;
+        //   button3.onClickEventId = "3";
+  
     }
 
     pauseEntities(){
@@ -129,6 +191,55 @@ export default class GameLevel extends Scene{
 
     updateScene(deltaT: number): void {
 
+
+        // handle leveling up
+        if (this.levelChanged) {
+
+            if (this.receiver.hasNextEvent()){
+                console.log("Original receiver");
+            }
+
+            // while(this.levelChanged > 0){
+            //     let hermes_sandals = new HermesSandals(new Sprite("hermes_sandals"));
+            //                 hermes_sandals.use(null, this.playerStats, this.playerController);
+            //     console.log(this.playerStats.stats.speed + "Speed");
+            //     this.levelChanged--;
+            // }
+                this.getLayer("levelUp").enable();
+
+                while(this.levelReceiver.hasNextEvent()){
+                let event = this.levelReceiver.getNextEvent();
+
+                switch (event.type) {
+                        case "one":
+                            console.log("PICKED UP HERMES BOOTS");
+                            let item = new this.itemConstructorPairings.get(this.itemsArray[0])();
+                            item.use(this.player, this.playerController.weapon, this.playerStats, this.playerController);
+          
+                            break;
+                        case "two":
+                            let item2 = new this.itemConstructorPairings.get(this.itemsArray[1])();
+                            item2.use(this.player, this.playerController.weapon, this.playerStats, this.playerController);
+                            break;
+                        // case "3":
+                        //     break;
+                        default:
+                            console.log("NOTHING WORKED");
+                            break;
+                }
+
+                this.levelChanged--;
+            }
+
+            if (this.levelChanged === 0){
+                this.getLayer("levelUp").disable();
+                this.unpauseEntities();
+                this.pauseFlag = !this.pauseFlag;
+            }
+            
+        }
+        
+
         if (Input.isKeyJustPressed("escape")){
             this.pauseFlag = !this.pauseFlag;
 
@@ -141,7 +252,7 @@ export default class GameLevel extends Scene{
             }
 
         }
-        
+
         //Handles events
         while (this.receiver.hasNextEvent() && !this.pauseFlag) {
             let event = this.receiver.getNextEvent();
@@ -167,23 +278,17 @@ export default class GameLevel extends Scene{
                     break;
                     case Project_Events.LEVELUP:
                         //TO DO LEVEL UP SELECT ITEM SCREEN
-                        let hourgass = new Hourglass(new Sprite("hourglass"));
-                        hourgass.use(null, this.playerController.weapon, this.playerStats);
+                        // let hourgass = new Hourglass(new Sprite("hourglass"));
+                        // hourgass.use(null, this.playerController.weapon, this.playerStats);
                         // let hermes_sandals = new HermesSandals(new Sprite("hermes_sandals"));
                         // hermes_sandals.use(null, this.playerStats, this.playerController);
                         this.levelUI.text = "Lvl: " + this.playerStats.level
+                        this.levelChanged = event.data.get("levelChange");
+                        this.pauseFlag = !this.pauseFlag;
+                        this.pauseEntities();
+                        break;
             }
-        }
-
-        //Handle leveling up
-        // while(this.levelChanged != 0){
-        //     //TO DO handling clicking items on
-            // let hourgass = new Hourglass(new Sprite("hourglass"));
-            // hourgass.use(null, this.weapon, this.playerStats);
-        //     this.levelChanged--;
-        // }
-
-        
+        }    
 
         // Prevents the player from going out of map
         this.lockPlayer();

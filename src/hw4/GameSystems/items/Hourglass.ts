@@ -4,12 +4,13 @@ import BattlerAI from "../../AI/BattlerAI";
 import CharacterStat from "../../PlayerStatus";
 import Item from "./Item";
 import Weapon from "./Weapon";
+import PlayerController from "../../AI/PlayerController";
 
 export default class Hourglass extends Item {
     
-    use(user: GameNode, weapon: Weapon, characterStats: CharacterStat): void {
+    use(user: GameNode, weapon: Weapon, playerStats: CharacterStat, playerController: PlayerController): void {
         weapon.type.cooldown *= .9;
-        characterStats.weaponCoolDown = weapon.type.cooldown;
+        playerStats.weaponCoolDown = weapon.type.cooldown;
         weapon.cooldownTimer = new Timer(weapon.type.cooldown);
     }
 }

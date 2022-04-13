@@ -62,7 +62,7 @@ export default class level_z1 extends GameLevel {
         this.playerSpawn = new Vec2(32*32, 32*32);
         // this.viewport.setFocus(new Vec2(this.playerSpawn.x, this.playerSpawn.y));
         
-        this.maxEnemies = 15;
+        this.maxEnemies = 2;
         
         super.startScene();
         this.initLayers();
@@ -104,7 +104,6 @@ export default class level_z1 extends GameLevel {
         let weapon = this.createWeapon("lightning");
         
         this.playerStats = new CharacterStat(50, 1, 10, 2);
-        this.playerStats.weaponCoolDown = weapon.type.cooldown;
         // TODO - ADD PLAYER AI HERE
         this.player.addAI(PlayerController,
             {
@@ -123,14 +122,13 @@ export default class level_z1 extends GameLevel {
         this.viewport.follow(this.player);
 
         this.battleManager.setPlayers([<BattlerAI>this.player._ai]);
-        this.playerController = <PlayerController> this.player._ai;
     }
 
     updateScene(deltaT: number): void {
         super.updateScene(deltaT);
 
         // Spawn enemies in
-        if(this.currentNumEnemies < this.maxEnemies){
+        if(this.currentNumEnemies < this.maxEnemies && !this.pauseFlag){
             this.enemyArray.push(this.addEnemy("snake"));
         }
         
