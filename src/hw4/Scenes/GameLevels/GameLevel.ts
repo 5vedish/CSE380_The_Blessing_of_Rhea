@@ -355,7 +355,7 @@ export default class GameLevel extends Scene{
         let weapon = this.createWeapon("knife");
 
         let options = {
-            health: 1,
+            health: 3,
             player: this.player,
             speed: 5,
             weapon: weapon
