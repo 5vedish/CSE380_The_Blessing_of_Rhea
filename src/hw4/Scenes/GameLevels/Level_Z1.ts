@@ -48,6 +48,8 @@ export default class level_z1 extends GameLevel {
         //Load tilemap
         this.load.tilemap("levelZ1", "project_assets/tilemaps/LevelZ1.json");
 
+        this.load.image("lightningImg", "project_assets/sprites/lightning.png")
+
         super.loadScene();
     }
 
@@ -78,6 +80,12 @@ export default class level_z1 extends GameLevel {
         this.levelUI = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(86, 32), 
             text: "Lvl: " + this.playerStats.level});
         this.levelUI.textColor = Color.BLACK;
+
+        this.weaponIcon = this.add.sprite("lightningImg", "gui");
+        this.weaponIcon.position = new Vec2(48, 24);
+        this.weaponIconCoolDown = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(48, 24), size: new Vec2(32,32)});
+        this.weaponIconCoolDown.color = Color.GRAY;
+        this.weaponIconCoolDown.alpha = 0;
         
     }
     

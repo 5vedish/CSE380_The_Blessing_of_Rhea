@@ -65,6 +65,11 @@ export default class GameLevel extends Scene{
 
     protected levelChanged: number = 0;
 
+    //Sprite to hold weapon icon
+    protected weaponIcon: Sprite;
+
+    protected weaponIconCoolDown: Graphic;
+
     // Tilemap walls
     protected walls: OrthogonalTilemap;
 
@@ -277,6 +282,21 @@ export default class GameLevel extends Scene{
                         break;
             }
         }    
+        
+        //Update the weapon cooldown icon
+        let weaponTimeLeft = this.playerController.weapon.cooldownTimer.getTimeLeft();
+        let weaponTotalTime = this.playerController.weapon.cooldownTimer.getTotalTime();
+        let timePercentage = weaponTimeLeft/weaponTotalTime;
+        if(timePercentage > 0){
+            this.weaponIconCoolDown.alpha = 0.5;
+        } else {
+            this.weaponIconCoolDown.alpha = 0;
+        }
+        // this.weaponIconCoolDown.alpha = timePercentage;
+        this.weaponIconCoolDown.size = new Vec2(32, (1-timePercentage)*32);
+        this.weaponIconCoolDown.position = new Vec2(48, 24+(timePercentage*16));
+        // console.log(timePercentage);
+        
 
         // Prevents the player from going out of map
         this.lockPlayer();
