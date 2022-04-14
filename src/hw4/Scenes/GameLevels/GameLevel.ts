@@ -74,7 +74,7 @@ export default class GameLevel extends Scene{
 
     protected levelReceiver: Receiver;
 
-    protected itemsArray: Array<string> = ["hourglass", "hermes_sandals"];
+    protected itemsArray: Array<string> = ["hourglass", "hermes_sandals", "hourglass"];
 
     protected itemConstructorPairings: Map<string,any> = new Map([["hourglass" , Hourglass], ["hermes_sandals", HermesSandals]]);
 
@@ -103,7 +103,7 @@ export default class GameLevel extends Scene{
     startScene(): void {
         this.battleManager = new BattleManager();
         this.levelReceiver = new Receiver();
-        this.levelReceiver.subscribe(["one", "two"]);
+        this.levelReceiver.subscribe(["one", "two", "three"]);
         this.subscribeToEvents();
         this.addUILayer("gui");
 
@@ -142,92 +142,21 @@ export default class GameLevel extends Scene{
           button2.backgroundColor = Color.BROWN;
           button2.onClickEventId = "two";
 
-        //   const button3 = this.add.uiElement(UIElementType.BUTTON, "levelUp", {
-        //     position: new Vec2((this.viewport.getCenter().x + this.viewport.getHalfSize().x/2), this.viewport.getCenter().y),
-        //     text: "",
-        //   });
-        //   button3.size.set(256, 256);
-        //   button3.borderWidth = 4;
-        //   button3.borderRadius = 0;
-        //   button3.borderColor = Color.GRAY;
-        //   button3.backgroundColor = Color.BROWN;
-        //   button3.onClickEventId = "3";
+          const button3 = this.add.uiElement(UIElementType.BUTTON, "levelUp", {
+            position: new Vec2((this.viewport.getOrigin().x + this.viewport.getHalfSize().x/2), this.viewport.getOrigin().y),
+            text: "",
+          });
+          button3.size.set(64, 64);
+          button3.borderWidth = 4;
+          button3.borderRadius = 0;
+          button3.borderColor = Color.GRAY;
+          button3.backgroundColor = Color.BROWN;
+          button3.onClickEventId = "three";
   
     }
 
-    pauseEntities(){
-        this.enemyArray.map((enemy) => {
-            enemy.freeze()
-            enemy.setAIActive(false, {});
-            enemy.animation.stop();
-        });
-        this.player.freeze();
-        this.player.setAIActive(false, {});
-        this.player.animation.stop();
-    }
-
-    unpauseEntities(){
-        this.enemyArray.map((enemy) => {
-            enemy.unfreeze();
-            enemy.setAIActive(true, {});
-            enemy.animation.play("Left Move", true);
-        });
-        this.player.unfreeze();
-        this.player.setAIActive(true, {});
-        this.player.animation.play("idle", true); 
-    }
-
     updateScene(deltaT: number): void {
-
-
-        // handle leveling up
-        if (this.levelChanged) {
-
-            if (this.receiver.hasNextEvent()){
-                console.log("Original receiver");
-            }
-
-            // while(this.levelChanged > 0){
-            //     let hermes_sandals = new HermesSandals(new Sprite("hermes_sandals"));
-            //                 hermes_sandals.use(null, this.playerStats, this.playerController);
-            //     console.log(this.playerStats.stats.speed + "Speed");
-            //     this.levelChanged--;
-            // }
-                this.getLayer("levelUp").enable();
-
-                while(this.levelReceiver.hasNextEvent()){
-                let event = this.levelReceiver.getNextEvent();
-
-                switch (event.type) {
-                        case "one":
-                            console.log("BOOM" + this.playerController);
-                            let item = new (this.itemConstructorPairings.get(this.itemsArray[0]))(new Sprite("hourglass"));
-                            item.use(this.player, this.playerController.weapon, this.playerStats, this.playerController);
-          
-                            break;
-                        case "two":
-                            let item2 = new (this.itemConstructorPairings.get(this.itemsArray[0]))(new Sprite("hourglass"));
-                            item2.use(this.player, this.playerController.weapon, this.playerStats, this.playerController);
-                            break;
-                        // case "3":
-                        //     break;
-                        default:
-                            console.log("NOTHING WORKED");
-                            break;
-                }
-
-                this.levelChanged--;
-            }
-
-            if (this.levelChanged === 0){
-                this.getLayer("levelUp").disable();
-                this.unpauseEntities();
-                this.pauseFlag = !this.pauseFlag;
-            }
-            
-        }
-        
-
+        // pause via escape
         if (Input.isKeyJustPressed("escape")){
             this.pauseFlag = !this.pauseFlag;
 
@@ -241,54 +170,117 @@ export default class GameLevel extends Scene{
 
         }
 
-        //Handles events
+        // handle leveling up
+        if (this.levelChanged) {
+            // level up events
+            while(this.levelReceiver.hasNextEvent()){
+
+                let event = this.levelReceiver.getNextEvent();
+                
+                switch (event.type) {
+                        
+                    case "one":
+
+                        let item = new (this.itemConstructorPairings.get(this.itemsArray[0]))(new Sprite(this.itemsArray[0]));
+                        item.use(this.player, this.playerController.weapon, this.playerStats, this.playerController);
+                        break;
+
+                    case "two":
+
+                        let item2 = new (this.itemConstructorPairings.get(this.itemsArray[1]))(new Sprite(this.itemsArray[1]));
+                        item2.use(this.player, this.playerController.weapon, this.playerStats, this.playerController);
+                        break;
+
+                    case "three":
+
+                        let item3 = new (this.itemConstructorPairings.get(this.itemsArray[2]))(new Sprite(this.itemsArray[2]));
+                        item3.use(this.player, this.playerController.weapon, this.playerStats, this.playerController);
+                        break;
+
+                }
+
+                this.levelChanged--;
+            }
+
+            if (this.levelChanged === 0){
+                this.pauseFlag = !this.pauseFlag;
+                this.getLayer("levelUp").disable();
+                this.unpauseEntities();         
+            }
+            
+        }
+
+        // main events
         while (this.receiver.hasNextEvent() && !this.pauseFlag) {
             let event = this.receiver.getNextEvent();
+
             switch (event.type) {
+
                 case Project_Events.ENEMYDIED:
-                    this.currentNumEnemies -= 1;
-                    let enemy = <CanvasNode>event.data.get("enemy");
+                    // remove enemy from both arrays
+                    const enemy = <CanvasNode>event.data.get("enemy");
                     this.battleManager.enemies = this.battleManager.enemies.filter(enemy => enemy !== <BattlerAI>(event.data.get("enemy")._ai));
                     this.enemyArray = this.enemyArray.filter(enemy => enemy !== (event.data.get("enemy")));
-                    this.playerStats.gainedExperience(200); //TO DO make dynamic later based on player level
                     enemy.destroy();
+                    this.currentNumEnemies -= 1;
+                    this.playerStats.gainedExperience(200); // to-do : scaling
                     break;
+
                 case Project_Events.DAMAGED:
-                    //Update health bar
-                    //Health bar is static on top left
-                    let health = this.playerStats.stats.health;
-                    let percentage = health/this.playerStats.stats.maxHealth;
+
+                    // update health bar
+                    const percentage = this.playerStats.stats.health/this.playerStats.stats.maxHealth;
+                    // scale by percentage
                     this.healthBar.size = new Vec2(percentage*256, 8);
+                    // rebalance position
                     this.healthBar.position = new Vec2(196 + (percentage-1)*128,16);
-                    //Health bar is following the player
-                    // this.healthBar.size = new Vec2((this.playerStats.stats.health), 5);
-                    // this.healthBar.position = new Vec2(this.player.position.x, this.player.position.y + 25);
                     break;
+
                     case Project_Events.LEVELUP:
-                        //TO DO LEVEL UP SELECT ITEM SCREEN
-                        // let hourgass = new Hourglass(new Sprite("hourglass"));
-                        // hourgass.use(null, this.playerController.weapon, this.playerStats);
-                        // let hermes_sandals = new HermesSandals(new Sprite("hermes_sandals"));
-                        // hermes_sandals.use(null, this.playerStats, this.playerController);
-                        this.levelUI.text = "Lvl: " + this.playerStats.level
-                        this.levelChanged = event.data.get("levelChange");
+
                         this.pauseFlag = !this.pauseFlag;
                         this.pauseEntities();
+                        //show layer
+                        this.getLayer("levelUp").enable();
+                        this.levelChanged = event.data.get("levelChange");
+                        this.levelUI.text = "Lvl" + this.playerStats.level;
                         break;
             }
         }    
 
-        // Prevents the player from going out of map
-        this.lockPlayer();
-        
+        // prevents the player from going out of bounds
+        this.lockPlayer();   
     }
 
+    protected pauseEntities(){
+        this.enemyArray.map((enemy) => {
+            enemy.freeze()
+            enemy.setAIActive(false, {});
+            enemy.animation.stop();
+        });
+        this.player.freeze();
+        this.player.setAIActive(false, {});
+        this.player.animation.stop();
+    }
+
+    protected unpauseEntities(){
+        this.enemyArray.map((enemy) => {
+            enemy.unfreeze();
+            enemy.setAIActive(true, {});
+            enemy.animation.play("Left Move", true);
+        });
+        this.player.unfreeze();
+        this.player.setAIActive(true, {});
+        this.player.animation.play("idle", true); 
+    }
+
+    // main events
     protected subscribeToEvents(): void {
         this.receiver.subscribe ([Project_Events.ENEMYDIED, Project_Events.DAMAGED, Project_Events.LEVELUP
         ]);
     }
-    
 
+    // keeps players in bounds
     protected lockPlayer() : void {
         let x = this.player.position.x;
 		let y = this.player.position.y;
@@ -303,6 +295,7 @@ export default class GameLevel extends Scene{
 			this.player.position.y = (64 * 32) - 32;
     }
 
+    // check map bounds
     protected boundaryCheck(viewportCenter: Vec2, postion: Vec2){
         return (viewportCenter.x + postion.x < 16 
         || viewportCenter.x + postion.x > 64*32-16
@@ -310,24 +303,25 @@ export default class GameLevel extends Scene{
         || viewportCenter.y + postion.y > 64*32-32);
     }
 
-
     protected addEnemy(spriteKey: string): AnimatedSprite{
         let enemy = this.add.animatedSprite(spriteKey, "primary");
 
         enemy.scale.set(2,2);
         enemy.addPhysics(new AABB(Vec2.ZERO, new Vec2(8, 8)));
         enemy.animation.play("Left Move");
-        //Randomly select one of the spawnpoints outside the viewport;
+
+        // randomly select one of the spawnpoints outside the viewport;
         let spawnPointIndex = Math.floor(Math.random() * 4);
 
         let viewportCenter = this.viewport.getCenter();
-        // console.log("x: " + viewportCenter.x, " | y: " + viewportCenter.y);
+
         //check if spawn position is out of bounds
         while(true){
+
             if(this.boundaryCheck(viewportCenter, this.enemySpawns[spawnPointIndex])){
                 spawnPointIndex = (spawnPointIndex + 1) % 4;
             } else {
-                //Find a random x or y of that side
+                // find a random x or y of that side
                 if(this.enemySpawns[spawnPointIndex].x === 0){
                     //along top or bottom
                     let xOffset = Math.floor(Math.random() * 736) - 368
@@ -341,7 +335,7 @@ export default class GameLevel extends Scene{
         }
 
         let weapon = this.createWeapon("knife");
-
+        // generate options for enemy
         let options = {
             health: 1,
             player: this.player,
@@ -352,6 +346,7 @@ export default class GameLevel extends Scene{
         enemy.addAI(EnemyAI, options);
         enemy.setGroup("enemy");
         this.currentNumEnemies += 1;
+
         if(this.battleManager.enemies === undefined){
             this.battleManager.setEnemies([<BattlerAI>enemy._ai])
         } else {

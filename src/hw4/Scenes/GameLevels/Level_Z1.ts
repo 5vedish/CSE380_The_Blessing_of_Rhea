@@ -76,7 +76,7 @@ export default class level_z1 extends GameLevel {
         //Health Bar follows below character
 
         this.levelUI = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(86, 32), 
-            text: "Lvl: " + this.playerStats.level});
+            text: "Lvl" + this.playerStats.level});
         this.levelUI.textColor = Color.BLACK;
         
     }
