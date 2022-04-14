@@ -122,6 +122,7 @@ export default class level_z1 extends GameLevel {
         this.viewport.follow(this.player);
 
         this.battleManager.setPlayers([<BattlerAI>this.player._ai]);
+        this.playerController = <PlayerController> this.player._ai;
     }
 
     updateScene(deltaT: number): void {

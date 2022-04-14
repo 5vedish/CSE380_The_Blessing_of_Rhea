@@ -76,7 +76,7 @@ export default class GameLevel extends Scene{
 
     protected itemsArray: Array<string> = ["hourglass", "hermes_sandals"];
 
-    protected itemConstructorPairings: Record<string,any> = [{"hourglass" : Hourglass}, {"hermes_sandals" : HermesSandals}]
+    protected itemConstructorPairings: Map<string,any> = new Map([["hourglass" , Hourglass], ["hermes_sandals", HermesSandals]]);
 
     loadScene(): void {
         this.load.spritesheet("slice", "project_assets/spritesheets/slice.json");
@@ -117,8 +117,7 @@ export default class GameLevel extends Scene{
         healthBarBorder.alpha = .5;
 
         this.levelUpLayer = this.addUILayer("levelUp");
-        // this.levelUpLayer.disable();
-        this.levelUpLayer.setDepth(1000);
+        this.levelUpLayer.disable();
         
 
         const button1 = this.add.uiElement(UIElementType.BUTTON, "levelUp", {
@@ -131,17 +130,6 @@ export default class GameLevel extends Scene{
           button1.borderColor = Color.GRAY;
           button1.backgroundColor = Color.BROWN;
           button1.onClickEventId = "one";
-          button1.onClick = () => {
-            console.log("I AM BEING CLICKED");
-          }
-          button1.onEnter = () => {
-              console.log("ENTERED BUTTON");
-          }
-        //   button1.onEnterEventId = "one";
-          button1.onRelease = () => {
-              console.log("ON RELEASE");
-          }
-
 
         const button2 = this.add.uiElement(UIElementType.BUTTON, "levelUp", {
             position: new Vec2((this.viewport.getOrigin().x), this.viewport.getOrigin().y),
@@ -212,13 +200,13 @@ export default class GameLevel extends Scene{
 
                 switch (event.type) {
                         case "one":
-                            console.log("PICKED UP HERMES BOOTS");
-                            let item = new this.itemConstructorPairings.get(this.itemsArray[0])();
+                            console.log("BOOM" + this.playerController);
+                            let item = new (this.itemConstructorPairings.get(this.itemsArray[0]))(new Sprite("hourglass"));
                             item.use(this.player, this.playerController.weapon, this.playerStats, this.playerController);
           
                             break;
                         case "two":
-                            let item2 = new this.itemConstructorPairings.get(this.itemsArray[1])();
+                            let item2 = new (this.itemConstructorPairings.get(this.itemsArray[0]))(new Sprite("hourglass"));
                             item2.use(this.player, this.playerController.weapon, this.playerStats, this.playerController);
                             break;
                         // case "3":
@@ -355,7 +343,7 @@ export default class GameLevel extends Scene{
         let weapon = this.createWeapon("knife");
 
         let options = {
-            health: 3,
+            health: 1,
             player: this.player,
             speed: 5,
             weapon: weapon
