@@ -32,8 +32,8 @@ export default class SplashScreen extends Scene {
     clickStart.backgroundColor = Color.TRANSPARENT;
     clickStart.onClickEventId = "start";
 
-    const cliclLabel = <Label>this.add.uiElement(UIElementType.LABEL, "splashScreen", {position: new Vec2(800, 675), text: "Click to Start"})
-    cliclLabel.textColor = Color.BROWN;
+    const clickLabel = <Label>this.add.uiElement(UIElementType.LABEL, "splashScreen", {position: new Vec2(800, 675), text: "Click to Start"})
+    clickLabel.textColor = Color.BROWN;
 
     this.receiver.subscribe("start");
   }

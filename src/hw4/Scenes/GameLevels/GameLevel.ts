@@ -36,52 +36,54 @@ import PlayerController from "../../AI/PlayerController";
 import Receiver from "../../../Wolfie2D/Events/Receiver";
 import Lightning from "../../GameSystems/items/WeaponTypes/Primary/Lightning";
 import Layer from "../../../Wolfie2D/Scene/Layer";
+import UIElement from "../../../Wolfie2D/Nodes/UIElement";
 
 export default class GameLevel extends Scene{
-    //Player info
-    protected playerSpawn: Vec2;
-    protected player: AnimatedSprite;
-
-    protected playerController: PlayerController;
 
     //Each level has a timer
     protected levelTimer: Timer;
     protected invincibilityTimer: Timer;
+    protected pauseFlag: boolean = false;
+
+    //Player info
+    protected playerSpawn: Vec2;
+    protected player: AnimatedSprite;
+    protected playerController: PlayerController;
+    protected playerStats: CharacterStat
 
     //Each level has a set number of enemies
+    protected enemySpawns: Array<Vec2>;
     protected maxEnemies: number;
     protected currentNumEnemies: number = 0;
     protected enemyArray: Array<AnimatedSprite>;
 
-    protected enemySpawns: Array<Vec2>;
-
-    protected playerStats: CharacterStat
-
+    // guis
     protected healthBar: Graphic;
-
     protected levelUI: Label;
 
+    // leveling
     private levelUpLayer: Layer;
-
     protected levelChanged: number = 0;
+    protected levelReceiver: Receiver;
+    protected button1: UIElement;
+    protected button2: UIElement;
+    protected button3: UIElement;
+    protected item1: Sprite;
+    protected item2: Sprite;
+    protected item3: Sprite;
+
+    // items
+    protected itemsArray = ["hourglass", "hermes_sandals"];
+    protected selectionArray: Array<string> = [];
+    protected itemConstructorPairings: Map<string,any> = new Map([["hourglass" , Hourglass], ["hermes_sandals", HermesSandals]]);
 
     //Sprite to hold weapon icon
+    protected battleManager: BattleManager;
     protected weaponIcon: Sprite;
-
     protected weaponIconCoolDown: Graphic;
 
     // Tilemap walls
     protected walls: OrthogonalTilemap;
-
-    protected battleManager: BattleManager;
-
-    protected pauseFlag: boolean = false;
-
-    protected levelReceiver: Receiver;
-
-    protected itemsArray: Array<string> = ["hourglass", "hermes_sandals", "hourglass"];
-
-    protected itemConstructorPairings: Map<string,any> = new Map([["hourglass" , Hourglass], ["hermes_sandals", HermesSandals]]);
 
     loadScene(): void {
         this.load.spritesheet("slice", "project_assets/spritesheets/slice.json");
@@ -122,42 +124,43 @@ export default class GameLevel extends Scene{
         healthBarBorder.alpha = .5;
 
         this.levelUpLayer = this.addUILayer("levelUp");
+        let dim = this.add.graphic(GraphicType.RECT, "levelUp", { position: this.viewport.getOrigin(), size: new Vec2(this.viewport.getHalfSize().x*2, 
+            this.viewport.getHalfSize().y*2) });
+        dim.color = Color.BLACK;
+        dim.alpha = .5;
         this.levelUpLayer.disable();
         
 
-        const button1 = this.add.uiElement(UIElementType.BUTTON, "levelUp", {
-            position: new Vec2((this.viewport.getOrigin().x - this.viewport.getHalfSize().x/2), this.viewport.getOrigin().y),
-            text: "",
+        this.button1 = this.add.uiElement(UIElementType.BUTTON, "levelUp", {
+            position: new Vec2((this.viewport.getOrigin().x - this.viewport.getHalfSize().x/2), this.viewport.getOrigin().y), text: ""
           });
-          button1.size.set(64, 64);
-          button1.borderWidth = 4;
-          button1.borderRadius = 0;
-          button1.borderColor = Color.GRAY;
-          button1.backgroundColor = Color.BROWN;
-          button1.onClickEventId = "one";
+          this.button1.size.set(144, 144);
+          this.button1.borderWidth = 10;
+          this.button1.borderRadius = 10;
+          this.button1.borderColor = Color.WHITE;
+          this.button1.backgroundColor = Color.BROWN;
+          this.button1.onClickEventId = "one";
 
-        const button2 = this.add.uiElement(UIElementType.BUTTON, "levelUp", {
-            position: new Vec2((this.viewport.getOrigin().x), this.viewport.getOrigin().y),
-            text: "",
+          this.button2 = this.add.uiElement(UIElementType.BUTTON, "levelUp", {
+            position: new Vec2((this.viewport.getOrigin().x), this.viewport.getOrigin().y), text: ""
           });
-          button2.size.set(64, 64);
-          button2.borderWidth = 4;
-          button2.borderRadius = 0;
-          button2.borderColor = Color.GRAY;
-          button2.backgroundColor = Color.BROWN;
-          button2.onClickEventId = "two";
+          this.button2.size.set(144, 144);
+          this.button2.borderWidth = 10;
+          this.button2.borderRadius = 10;
+          this.button2.borderColor = Color.WHITE;
+          this.button2.backgroundColor = Color.BROWN;
+          this.button2.onClickEventId = "two";
 
-          const button3 = this.add.uiElement(UIElementType.BUTTON, "levelUp", {
-            position: new Vec2((this.viewport.getOrigin().x + this.viewport.getHalfSize().x/2), this.viewport.getOrigin().y),
-            text: "",
+          this.button3 = this.add.uiElement(UIElementType.BUTTON, "levelUp", {
+            position: new Vec2((this.viewport.getOrigin().x + this.viewport.getHalfSize().x/2), this.viewport.getOrigin().y), text: ""
           });
-          button3.size.set(64, 64);
-          button3.borderWidth = 4;
-          button3.borderRadius = 0;
-          button3.borderColor = Color.GRAY;
-          button3.backgroundColor = Color.BROWN;
-          button3.onClickEventId = "three";
-  
+          this.button3.size.set(144, 144);
+          this.button3.borderWidth = 10;
+          this.button3.borderRadius = 10;
+          this.button3.borderColor = Color.WHITE;
+          this.button3.backgroundColor = Color.BROWN;
+          this.button3.onClickEventId = "three";
+
     }
 
     updateScene(deltaT: number): void {
@@ -186,31 +189,32 @@ export default class GameLevel extends Scene{
                         
                     case "one":
 
-                        let item = new (this.itemConstructorPairings.get(this.itemsArray[0]))(new Sprite(this.itemsArray[0]));
+                        let item = new (this.itemConstructorPairings.get(this.selectionArray[0]))(new Sprite(this.selectionArray[0]));
                         item.use(this.player, this.playerController.weapon, this.playerStats, this.playerController);
                         break;
 
                     case "two":
 
-                        let item2 = new (this.itemConstructorPairings.get(this.itemsArray[1]))(new Sprite(this.itemsArray[1]));
+                        let item2 = new (this.itemConstructorPairings.get(this.selectionArray[1]))(new Sprite(this.selectionArray[1]));
                         item2.use(this.player, this.playerController.weapon, this.playerStats, this.playerController);
                         break;
 
                     case "three":
 
-                        let item3 = new (this.itemConstructorPairings.get(this.itemsArray[2]))(new Sprite(this.itemsArray[2]));
+                        let item3 = new (this.itemConstructorPairings.get(this.selectionArray[2]))(new Sprite(this.selectionArray[2]));
                         item3.use(this.player, this.playerController.weapon, this.playerStats, this.playerController);
                         break;
 
                 }
 
                 this.levelChanged--;
+                this.rollItems();
             }
 
             if (this.levelChanged === 0){
                 this.pauseFlag = !this.pauseFlag;
                 this.getLayer("levelUp").disable();
-                this.unpauseEntities();         
+                this.unpauseEntities();        
             }
             
         }
@@ -249,6 +253,8 @@ export default class GameLevel extends Scene{
                         this.getLayer("levelUp").enable();
                         this.levelChanged = event.data.get("levelChange");
                         this.levelUI.text = "Lvl" + this.playerStats.level;
+                        
+                        this.rollItems();
                         break;
             }
         }    
@@ -381,7 +387,7 @@ export default class GameLevel extends Scene{
      * Creates and returns a new weapon
      * @param type The weaponType of the weapon, as a string
      */
-     createWeapon(type: string): Weapon {
+    createWeapon(type: string): Weapon {
         
         let weaponType = <WeaponType>RegistryManager.getRegistry("weaponTypes").get(type);
 
@@ -393,7 +399,7 @@ export default class GameLevel extends Scene{
     /**
      * Initalizes all weapon types based of data from weaponData.json
      */
-     initializeWeapons(): void{
+    initializeWeapons(): void{
         let weaponData = this.load.getObject("weaponData");
 
         for(let i = 0; i < weaponData.numWeapons; i++){
@@ -411,6 +417,33 @@ export default class GameLevel extends Scene{
             // Register the weapon type
             RegistryManager.getRegistry("weaponTypes").registerItem(weapon.name, weaponType)
         }
+    }
+
+    protected rollItems() : void{
+
+        this.selectionArray = [];
+
+        while (this.selectionArray.length < 3){
+
+            this.selectionArray.push(this.itemsArray[Math.floor(Math.random() * this.itemsArray.length)]);
+
+        }
+        
+        this.item1 = new Sprite(this.selectionArray[0]);
+        this.item1.position = new Vec2(this.button1.position.x, this.button1.position.y);
+        this.item2 = new Sprite(this.selectionArray[1]);
+        this.item2.position = new Vec2(this.button2.position.x, this.button2.position.y);
+        this.item3 = new Sprite(this.selectionArray[2]);
+        this.item3.position = new Vec2(this.button3.position.x, this.button3.position.y);
+
+        this.getLayer("levelUp").addNode(this.item1);
+        this.getLayer("levelUp").addNode(this.item2);
+        this.getLayer("levelUp").addNode(this.item3);
+  
+    }
+
+    protected constructButtons() : void{
+
     }
 
 
