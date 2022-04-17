@@ -68,6 +68,8 @@ export default class PlayerController extends StateMachineAI implements BattlerA
         this.inventory = options.inventory;
 
         this.receiver = new Receiver();
+
+        this.receiver.subscribe(Project_Events.PLAYERATTACKED);
         // this.receiver.subscribe(hw4_Events.SWAP_PLAYER);
         this.emitter = new Emitter();
     }
@@ -75,16 +77,11 @@ export default class PlayerController extends StateMachineAI implements BattlerA
     activate(options: Record<string, any>): void { }
 
     handleEvent(event: GameEvent): void {
-        // If our id matches this player, set boolean and update inventory UI
-        if (event.type === hw4_Events.SWAP_PLAYER) {
-            if (event.data.get("id") === this.owner.id) {
-                this.inputEnabled = true;
-                this.inventory.setActive(true);
-            }
-            else {
-                this.inputEnabled = false;
-                this.inventory.setActive(false);
-            }
+        switch(event.type){
+            case Project_Events.PLAYERATTACKED:
+                    //handle removing attack sprite
+                    let attackSpirte = event.data.get("owner");
+                    attackSpirte.destroy();     
         }
     }
 

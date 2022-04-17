@@ -141,7 +141,7 @@ export default class AnimationManager {
         this.animationState = AnimationState.STOPPED;
 
         if(this.onEndEvent !== null){
-            this.emitter.fireEvent(this.onEndEvent, {owner: this.owner.id, animation: this.currentAnimation});
+            this.emitter.fireEvent(this.onEndEvent, {owner: this.owner, animation: this.currentAnimation});
         }
 
         // If there is a pending animation, play it
