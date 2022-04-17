@@ -207,8 +207,15 @@ export default class GameLevel extends Scene{
 
                 }
 
+                this.getLayer("levelUp").removeNode(this.item1);
+                this.getLayer("levelUp").removeNode(this.item2);
+                this.getLayer("levelUp").removeNode(this.item3);
+
                 this.levelChanged--;
-                this.rollItems();
+                // accounting for multiple levels
+                if (this.selectionArray.length < 3){
+                    this.rollItems();
+                }  
             }
 
             if (this.levelChanged === 0){
