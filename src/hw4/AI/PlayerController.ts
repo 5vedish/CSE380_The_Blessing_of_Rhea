@@ -117,8 +117,9 @@ export default class PlayerController extends StateMachineAI implements BattlerA
             let movement = Vec2.UP.scaled(verticalAxis * this.speed);
             movement = movement.add(new Vec2(horizontalAxis * this.speed, 0));
             
-            // Move the player
-            this.owner.move(movement);   
+            // this.owner.move(movement);
+            //Scale the diagonal movements to match one directions speed
+            (verticalAxis && horizontalAxis) ? this.owner.move(movement.scale(0.75)) : this.owner.move(movement);
         }
     }
 
