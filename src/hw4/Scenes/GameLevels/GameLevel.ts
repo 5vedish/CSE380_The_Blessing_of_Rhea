@@ -302,7 +302,7 @@ export default class GameLevel extends Scene{
         this.enemyArray.map((enemy) => {
             enemy.unfreeze();
             enemy.setAIActive(true, {});
-            enemy.animation.play("Left Move", true);
+            enemy.animation.play("moving", true);
         });
         this.player.unfreeze();
         this.player.setAIActive(true, {});
@@ -338,12 +338,12 @@ export default class GameLevel extends Scene{
         || viewportCenter.y + postion.y > 64*32-32);
     }
 
-    protected addEnemy(spriteKey: string): AnimatedSprite{
+    protected addEnemy(spriteKey: string, options: Record<string, any>): AnimatedSprite{
         let enemy = this.add.animatedSprite(spriteKey, "primary");
 
-        enemy.scale.set(2,2);
+        enemy.scale.set(1,1);
         enemy.addPhysics(new AABB(Vec2.ZERO, new Vec2(8, 8)));
-        enemy.animation.play("Left Move");
+        enemy.animation.play("moving");
 
         // randomly select one of the spawnpoints outside the viewport;
         let spawnPointIndex = Math.floor(Math.random() * 4);
@@ -369,14 +369,14 @@ export default class GameLevel extends Scene{
             }
         }
 
-        let weapon = this.createWeapon("knife");
-        // generate options for enemy
-        let options = {
-            health: 1,
-            player: this.player,
-            speed: 5,
-            weapon: weapon
-        }
+        // let weapon = this.createWeapon("knife");
+        // // generate options for enemy
+        // let options = {
+        //     health: 1,
+        //     player: this.player,
+        //     speed: 5,
+        //     weapon: weapon
+        // }
 
         enemy.addAI(EnemyAI, options);
         enemy.setGroup("enemy");

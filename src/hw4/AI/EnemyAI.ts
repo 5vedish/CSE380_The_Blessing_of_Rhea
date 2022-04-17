@@ -76,8 +76,8 @@ export default class EnemyAI extends StateMachineGoapAI implements BattlerAI {
 
     damage(damage: number): void {
         this.health -= damage;
-        this.owner.animation.play("Left Damage");
-        this.owner.animation.queue("Left Move", true);
+        this.owner.animation.play("damage");
+        this.owner.animation.queue("moving", true);
         // If health goes below 0, disable AI and fire enemyDied event
         if (this.health <= 0) {
             this.owner.setAIActive(false, {});

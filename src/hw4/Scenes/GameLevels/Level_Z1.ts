@@ -24,7 +24,7 @@ import Input from "../../../Wolfie2D/Input/Input";
 import AttackAction from "../../AI/EnemyActions/AttackAction";
 import Move from "../../AI/EnemyActions/Move";
 import Retreat from "../../AI/EnemyActions/Retreat";
-import { TweenableProperties } from "../../../Wolfie2D/Nodes/GameNode";
+import GameNode, { TweenableProperties } from "../../../Wolfie2D/Nodes/GameNode";
 import Line from "../../../Wolfie2D/Nodes/Graphics/Line";
 import { EaseFunctionType } from "../../../Wolfie2D/Utils/EaseFunctions";
 import GoapAction from "../../../Wolfie2D/DataTypes/Interfaces/GoapAction";
@@ -36,7 +36,17 @@ import GameLevel from "./GameLevel";
 import CharacterStat from "../../PlayerStatus";
 import DeathScreen from "../DeathScreen";
 
+interface CustomEnemy {
+    name: string,
+    health: number,
+    player: GameNode,
+    speed: number,
+    weapon: Weapon
+}
+
 export default class level_z1 extends GameLevel {
+
+    enemies: CustomEnemy[] = [];
 
     loadScene(): void {
         //Load Zeus
@@ -44,6 +54,7 @@ export default class level_z1 extends GameLevel {
 
         //Load Snake
         this.load.spritesheet("snake", "project_assets/spritesheets/Snake.json")
+        this.load.spritesheet("harpy", "project_assets/spritesheets/harpy.json")
 
         //Load tilemap
         this.load.tilemap("levelZ1", "project_assets/tilemaps/LevelZ1.json");
@@ -87,6 +98,19 @@ export default class level_z1 extends GameLevel {
         this.weaponIconCoolDown.color = Color.GRAY;
         this.weaponIconCoolDown.alpha = 0;
         
+        this.enemies.push({
+            name: "snake",
+            health: 1,
+            player: this.player,
+            speed: 5,
+            weapon: this.createWeapon("knife")});
+            
+        this.enemies.push({
+            name: "harpy",
+            health: 1,
+            player: this.player,
+            speed: 5,
+            weapon: this.createWeapon("knife")});
     }
     
     protected initLayers() : void {
@@ -138,7 +162,14 @@ export default class level_z1 extends GameLevel {
 
         // Spawn enemies in
         if(this.currentNumEnemies < this.maxEnemies && !this.pauseFlag){
-            this.enemyArray.push(this.addEnemy("snake"));
+            let enemyType = this.enemies[Math.floor(Math.random() * this.enemies.length)];
+            let options = {
+                health: enemyType.health,
+                player: enemyType.player,
+                speed: enemyType.speed,
+                weapon: enemyType.weapon
+            }
+            this.enemyArray.push(this.addEnemy(enemyType.name, options));
         }
         
         //Check if player died
