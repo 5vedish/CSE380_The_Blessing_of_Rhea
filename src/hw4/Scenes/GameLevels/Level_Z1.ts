@@ -32,21 +32,11 @@ import GoapActionPlanner from "../../../Wolfie2D/AI/GoapActionPlanner";
 import Map from "../../../Wolfie2D/DataTypes/Map";
 import Stack from "../../../Wolfie2D/DataTypes/Stack";
 import Berserk from "../../AI/EnemyActions/Berserk";
-import GameLevel from "./GameLevel";
+import GameLevel, { CustomEnemy } from "./GameLevel";
 import CharacterStat from "../../PlayerStatus";
 import DeathScreen from "../DeathScreen";
 
-interface CustomEnemy {
-    name: string,
-    health: number,
-    player: GameNode,
-    speed: number,
-    weapon: Weapon
-}
-
 export default class level_z1 extends GameLevel {
-
-    enemies: CustomEnemy[] = [];
 
     loadScene(): void {
         //Load Zeus
@@ -98,18 +88,18 @@ export default class level_z1 extends GameLevel {
         this.weaponIconCoolDown.color = Color.GRAY;
         this.weaponIconCoolDown.alpha = 0;
         
-        this.enemies.push({
+        this.spawnableEnemies.push({
             name: "snake",
             health: 1,
             player: this.player,
             speed: 5,
             weapon: this.createWeapon("knife")});
             
-        this.enemies.push({
+        this.spawnableEnemies.push({
             name: "harpy",
-            health: 1,
+            health: 3,
             player: this.player,
-            speed: 5,
+            speed: 7,
             weapon: this.createWeapon("knife")});
     }
     
@@ -162,7 +152,7 @@ export default class level_z1 extends GameLevel {
 
         // Spawn enemies in
         if(this.currentNumEnemies < this.maxEnemies && !this.pauseFlag){
-            let enemyType = this.enemies[Math.floor(Math.random() * this.enemies.length)];
+            let enemyType = this.spawnableEnemies[Math.floor(Math.random() * this.spawnableEnemies.length)];
             let options = {
                 health: enemyType.health,
                 player: enemyType.player,

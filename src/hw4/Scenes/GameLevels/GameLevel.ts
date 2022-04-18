@@ -38,6 +38,14 @@ import Lightning from "../../GameSystems/items/WeaponTypes/Primary/Lightning";
 import Layer from "../../../Wolfie2D/Scene/Layer";
 import UIElement from "../../../Wolfie2D/Nodes/UIElement";
 
+export interface CustomEnemy {
+    name: string,
+    health: number,
+    player: GameNode,
+    speed: number,
+    weapon: Weapon
+}
+
 export default class GameLevel extends Scene{
 
     //Each level has a timer
@@ -56,6 +64,7 @@ export default class GameLevel extends Scene{
     protected maxEnemies: number;
     protected currentNumEnemies: number = 0;
     protected enemyArray: Array<AnimatedSprite>;
+    protected spawnableEnemies: CustomEnemy[] = []; //List of possible enemies that can be spawned
 
     // guis
     protected healthBar: Graphic;

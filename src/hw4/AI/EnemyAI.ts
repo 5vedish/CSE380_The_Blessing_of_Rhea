@@ -55,6 +55,8 @@ export default class EnemyAI extends StateMachineGoapAI implements BattlerAI {
     // Path away from player
     retreatPath: NavigationPath;
 
+    spriteFlipped: boolean = false;
+
     initializeAI(owner: AnimatedSprite, options: Record<string, any>): void {
         this.owner = owner;
 
@@ -143,6 +145,11 @@ export default class EnemyAI extends StateMachineGoapAI implements BattlerAI {
         //     //get a new plan
         //     this.plan = this.planner.plan(hw4_Statuses.REACHED_GOAL, this.possibleActions, this.currentStatus, null);
         // }
+        //Flip enemy sprites towards the player on the x-axis
+        if(this.owner._velocity.x !== 0)
+            (this.owner._velocity.x >= 0.01) ? (this.spriteFlipped = false):(this.spriteFlipped = true);
+        (this.spriteFlipped) ? ((<AnimatedSprite>this.owner).invertX = false):((<AnimatedSprite>this.owner).invertX = true);
+
     }
 }
 
