@@ -147,7 +147,7 @@ export default class GameLevel extends Scene{
           this.button1.borderWidth = 10;
           this.button1.borderRadius = 10;
           this.button1.borderColor = Color.WHITE;
-          this.button1.backgroundColor = Color.BROWN;
+          this.button1.backgroundColor = Color.GRAYISH;
           this.button1.onClickEventId = "one";
 
           this.button2 = this.add.uiElement(UIElementType.BUTTON, "levelUp", {
@@ -157,7 +157,7 @@ export default class GameLevel extends Scene{
           this.button2.borderWidth = 10;
           this.button2.borderRadius = 10;
           this.button2.borderColor = Color.WHITE;
-          this.button2.backgroundColor = Color.BROWN;
+          this.button2.backgroundColor = Color.GRAYISH;
           this.button2.onClickEventId = "two";
 
           this.button3 = this.add.uiElement(UIElementType.BUTTON, "levelUp", {
@@ -167,7 +167,7 @@ export default class GameLevel extends Scene{
           this.button3.borderWidth = 10;
           this.button3.borderRadius = 10;
           this.button3.borderColor = Color.WHITE;
-          this.button3.backgroundColor = Color.BROWN;
+          this.button3.backgroundColor = Color.GRAYISH;
           this.button3.onClickEventId = "three";
 
     }

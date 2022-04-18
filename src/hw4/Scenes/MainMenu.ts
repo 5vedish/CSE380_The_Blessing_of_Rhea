@@ -55,15 +55,15 @@ export default class MainMenu extends Scene {
     play.size.set(384, 128);
     play.borderWidth = 10;
     play.borderRadius = 10;
-    play.borderColor = Color.GRAY;
-    play.backgroundColor = Color.BROWN;
+    play.borderColor = Color.BORDERCOLOR;
+    play.backgroundColor = Color.GRAYISH;
     play.onClickEventId = "play";
     play.onEnter = () => {
       play.borderColor = Color.WHITE;
       this.playButton.alpha = 2* Math.abs(this.flash.getTimeLeft()/1000 - .5);
     }
     play.onLeave = () => {
-      play.borderColor = Color.GRAY;
+      play.borderColor = Color.BORDERCOLOR;
       this.playButton.alpha = 1;
     }
 
@@ -79,15 +79,15 @@ export default class MainMenu extends Scene {
     levels.size.set(384, 128);
     levels.borderWidth = 10;
     levels.borderRadius = 10;
-    levels.borderColor = Color.GRAY;
-    levels.backgroundColor = Color.BROWN;
+    levels.borderColor = Color.BORDERCOLOR;
+    levels.backgroundColor = Color.GRAYISH;
     levels.onClickEventId = "select_levels";
     levels.onEnter = () => {
       levels.borderColor = Color.WHITE;
       this.selectButton.alpha = 2* Math.abs(this.flash.getTimeLeft()/1000 - .5);
     }
     levels.onLeave = () => {
-      levels.borderColor = Color.GRAY;
+      levels.borderColor = Color.BORDERCOLOR;
       this.selectButton.alpha = 1;
     }
 
@@ -102,15 +102,15 @@ export default class MainMenu extends Scene {
     controls.size.set(384, 128);
     controls.borderWidth = 10;
     controls.borderRadius = 10;
-    controls.borderColor = Color.GRAY;
-    controls.backgroundColor = Color.BROWN;
+    controls.borderColor = Color.BORDERCOLOR;
+    controls.backgroundColor = Color.GRAYISH;
     controls.onClickEventId = "control";
     controls.onEnter = () => {
       controls.borderColor = Color.WHITE;
       this.controlsButton.alpha = 2* Math.abs(this.flash.getTimeLeft()/1000 - .5);
     }
     controls.onLeave = () => {
-      controls.borderColor = Color.GRAY;
+      controls.borderColor = Color.BORDERCOLOR;
       this.controlsButton.alpha = 1;
     }
 
@@ -125,15 +125,15 @@ export default class MainMenu extends Scene {
     help.size.set(384, 128);
     help.borderWidth = 10;
     help.borderRadius = 10;
-    help.borderColor = Color.GRAY;
-    help.backgroundColor = Color.BROWN;
+    help.borderColor = Color.BORDERCOLOR;
+    help.backgroundColor = Color.GRAYISH;
     help.onClickEventId = "help";
     help.onEnter = () => {
       help.borderColor = Color.WHITE;
       this.helpButton.alpha = 2* Math.abs(this.flash.getTimeLeft()/1000 - .5);
     }
     help.onLeave = () => {
-      help.borderColor = Color.GRAY;
+      help.borderColor = Color.BORDERCOLOR;
       this.helpButton.alpha = 1;
     }
 

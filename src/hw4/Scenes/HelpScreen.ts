@@ -34,8 +34,8 @@ export default class HelpScreen extends Scene {
     backstory.size.set(680, 355);
     backstory.borderWidth = 5;
     backstory.borderRadius = 0;
-    backstory.borderColor = Color.GRAY;
-    backstory.backgroundColor = Color.BROWN;
+    backstory.borderColor = Color.BORDERCOLOR;
+    backstory.backgroundColor = Color.GRAYISH;
     // No click event
 
     const backstoryHeader = <Label>(
@@ -160,8 +160,8 @@ export default class HelpScreen extends Scene {
     developers.size.set(674, 232);
     developers.borderWidth = 5;
     developers.borderRadius = 0;
-    developers.borderColor = Color.GRAY;
-    developers.backgroundColor = Color.BROWN;
+    developers.borderColor = Color.BORDERCOLOR;
+    developers.backgroundColor = Color.GRAYISH;
     // No click event
 
     const devHeader = <Label>(
@@ -203,8 +203,8 @@ export default class HelpScreen extends Scene {
     cheats.size.set(472, 774);
     cheats.borderWidth = 5;
     cheats.borderRadius = 0;
-    cheats.borderColor = Color.GRAY;
-    cheats.backgroundColor = Color.BROWN;
+    cheats.borderColor = Color.BORDERCOLOR;
+    cheats.backgroundColor = Color.GRAYISH;
     // No click event
 
     const cheatHeader = <Label>(
@@ -222,8 +222,8 @@ export default class HelpScreen extends Scene {
     });
     invincible.size.set(384, 128);
     invincible.borderWidth = 5;
-    invincible.borderColor = Color.GRAY;
-    invincible.backgroundColor = Color.BROWN;
+    invincible.borderColor = Color.BORDERCOLOR;
+    invincible.backgroundColor = Color.GRAYISH;
     invincible.onClickEventId = "invincible";
 
     const unlockLevels = this.add.uiElement(
@@ -233,8 +233,8 @@ export default class HelpScreen extends Scene {
     );
     unlockLevels.size.set(384, 128);
     unlockLevels.borderWidth = 5;
-    unlockLevels.borderColor = Color.GRAY;
-    unlockLevels.backgroundColor = Color.BROWN;
+    unlockLevels.borderColor = Color.BORDERCOLOR;
+    unlockLevels.backgroundColor = Color.GRAYISH;
     unlockLevels.onClickEventId = "unlock";
 
     const instantKill = this.add.uiElement(UIElementType.BUTTON, "helpScreen", {
@@ -243,8 +243,8 @@ export default class HelpScreen extends Scene {
     });
     instantKill.size.set(384, 128);
     instantKill.borderWidth = 5;
-    instantKill.borderColor = Color.GRAY;
-    instantKill.backgroundColor = Color.BROWN;
+    instantKill.borderColor = Color.BORDERCOLOR;
+    instantKill.backgroundColor = Color.GRAYISH;
     instantKill.onClickEventId = "kill";
 
     const doubleSpeed = this.add.uiElement(UIElementType.BUTTON, "helpScreen", {
@@ -253,8 +253,8 @@ export default class HelpScreen extends Scene {
     });
     doubleSpeed.size.set(384, 128);
     doubleSpeed.borderWidth = 5;
-    doubleSpeed.borderColor = Color.GRAY;
-    doubleSpeed.backgroundColor = Color.BROWN;
+    doubleSpeed.borderColor = Color.BORDERCOLOR;
+    doubleSpeed.backgroundColor = Color.GRAYISH;
     doubleSpeed.onClickEventId = "speed";
 
     // Back button
@@ -264,8 +264,8 @@ export default class HelpScreen extends Scene {
     });
     backHelp.size.set(75, 80);
     backHelp.borderWidth = 2;
-    backHelp.borderColor = Color.GRAY;
-    backHelp.backgroundColor = Color.BROWN;
+    backHelp.borderColor = Color.BORDERCOLOR;
+    backHelp.backgroundColor = Color.GRAYISH;
     backHelp.onClickEventId = "back";
 
     this.receiver.subscribe("invincible");

@@ -33,7 +33,7 @@ export default class DeathScreen extends Scene{
       returnToMainMenu.onClickEventId = "returnToMainMenu";
 
       const returnLabel = <Label>this.add.uiElement(UIElementType.LABEL, "death", {position: new Vec2(800, 675), text: "Return to Main Menu"})
-      returnLabel.textColor = Color.BROWN;
+      returnLabel.textColor = Color.GRAYISH;
 
   
       this.receiver.subscribe("returnToMainMenu");

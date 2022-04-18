@@ -34,8 +34,8 @@ export default class ControlScreen extends Scene {
     controlBorder.size.set(385, 227);
     controlBorder.borderWidth = 5;
     controlBorder.borderRadius = 0;
-    controlBorder.borderColor = Color.GRAY;
-    controlBorder.backgroundColor = Color.BROWN;
+    controlBorder.borderColor = Color.BORDERCOLOR;
+    controlBorder.backgroundColor = Color.GRAYISH;
     // No click event
 
     // Text in controls box
@@ -92,8 +92,8 @@ export default class ControlScreen extends Scene {
     tutorial.size.set(870, 730);
     tutorial.borderWidth = 5;
     tutorial.borderRadius = 0;
-    tutorial.borderColor = Color.GRAY;
-    tutorial.backgroundColor = Color.BROWN;
+    tutorial.borderColor = Color.BORDERCOLOR;
+    tutorial.backgroundColor = Color.GRAYISH;
     // No click event
 
     const tutorialHeader = <Label>(
@@ -103,7 +103,7 @@ export default class ControlScreen extends Scene {
       })
     );
     tutorialHeader.fontSize = 36;
-    tutorialHeader.textColor = Color.GRAY;
+    tutorialHeader.textColor = Color.BORDERCOLOR;
 
     /* TODO - HAVE TO ADD TUTORIAL ATTACK SPRITES AND DESCRIPTIONS */
 
@@ -114,8 +114,8 @@ export default class ControlScreen extends Scene {
     });
     backControls.size.set(75, 80);
     backControls.borderWidth = 2;
-    backControls.borderColor = Color.GRAY;
-    backControls.backgroundColor = Color.BROWN;
+    backControls.borderColor = Color.BORDERCOLOR;
+    backControls.backgroundColor = Color.GRAYISH;
     backControls.onClickEventId = "back";
 
     this.receiver.subscribe("back");

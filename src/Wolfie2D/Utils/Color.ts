@@ -112,8 +112,12 @@ export default class Color {
 		 * Orange color
 		 * @returns rgb(255, 100, 0)
 		 */
-	static get BROWN(): Color {
-		return new Color(82, 58, 58, 1);
+	static get GRAYISH(): Color {
+		return new Color(151, 150, 148, 1);
+	}
+
+	static get BORDERCOLOR(): Color{
+		return new Color(125, 116, 98, 1);
 	}
 
 	/**	

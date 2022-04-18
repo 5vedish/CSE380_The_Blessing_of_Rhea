@@ -33,7 +33,7 @@
 			]
 		},
         {
-			"name": "Left Attack",
+			"name": "attack",
 			"repeat": false,
 			"frames": [
 				{

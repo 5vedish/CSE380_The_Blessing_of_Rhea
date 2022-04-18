@@ -134,8 +134,8 @@ export default class LevelSelection extends Scene {
     });
     backLevel.size.set(75, 80);
     backLevel.borderWidth = 2;
-    backLevel.borderColor = Color.GRAY;
-    backLevel.backgroundColor = Color.BROWN;
+    backLevel.borderColor = Color.BORDERCOLOR;
+    backLevel.backgroundColor = Color.GRAYISH;
     backLevel.onClickEventId = "back";
 
     this.receiver.subscribe("back");
