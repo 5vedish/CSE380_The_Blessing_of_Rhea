@@ -8,6 +8,7 @@ import ControlScreen from "./ControlScreen";
 import HelpScreen from "./HelpScreen";
 import Sprite from "../../Wolfie2D/Nodes/Sprites/Sprite";
 import level_z1 from "./GameLevels/Level_Z1";
+import Timer from "../../Wolfie2D/Timing/Timer";
 
 export default class MainMenu extends Scene {
   private splashScreen: Layer;
@@ -15,14 +16,26 @@ export default class MainMenu extends Scene {
   private logo: Sprite;
 
   private mainMenu: Layer;
+  private flash: Timer;
+
+  private playButton: Sprite;
+  private selectButton: Sprite;
+  private controlsButton: Sprite;
+  private helpButton: Sprite;
 
   loadScene() {
     this.load.image("rhea", "project_assets/screens/Rhea.png");
     this.load.image("logo", "project_assets/screens/Logo.png");
+    this.load.image("start", "project_assets/sprites/start.png");
+    this.load.image("select", "project_assets/sprites/select.png");
+    this.load.image("controls", "project_assets/sprites/controls.png");
+    this.load.image("help", "project_assets/sprites/help.png");
   }
 
   startScene() {
     const origin = new Vec2(192, 64);
+    this.flash = new Timer(1000, null, true);
+    this.flash.start(); 
 
     // add splash (filler)
     this.splashScreen = this.addUILayer("splashScreen");
@@ -37,50 +50,95 @@ export default class MainMenu extends Scene {
     // Add start game button
     const play = this.add.uiElement(UIElementType.BUTTON, "mainMenu", {
       position: new Vec2(origin.x + 94, origin.y + 144),
-      text: "Start Game",
+      text: "",
     });
     play.size.set(384, 128);
-    play.borderWidth = 4;
-    play.borderRadius = 0;
+    play.borderWidth = 10;
+    play.borderRadius = 10;
     play.borderColor = Color.GRAY;
     play.backgroundColor = Color.BROWN;
     play.onClickEventId = "play";
+    play.onEnter = () => {
+      play.borderColor = Color.WHITE;
+      this.playButton.alpha = 2* Math.abs(this.flash.getTimeLeft()/1000 - .5);
+    }
+    play.onLeave = () => {
+      play.borderColor = Color.GRAY;
+      this.playButton.alpha = 1;
+    }
+
+    this.playButton = this.add.sprite("start", "mainMenu");
+    this.playButton.position = play.position;
+    
 
     // Add level select button
     const levels = this.add.uiElement(UIElementType.BUTTON, "mainMenu", {
       position: new Vec2(origin.x + 94, origin.y + 305),
-      text: "Level Select",
+      text: "",
     });
     levels.size.set(384, 128);
-    levels.borderWidth = 4;
-    levels.borderRadius = 0;
+    levels.borderWidth = 10;
+    levels.borderRadius = 10;
     levels.borderColor = Color.GRAY;
     levels.backgroundColor = Color.BROWN;
     levels.onClickEventId = "select_levels";
+    levels.onEnter = () => {
+      levels.borderColor = Color.WHITE;
+      this.selectButton.alpha = 2* Math.abs(this.flash.getTimeLeft()/1000 - .5);
+    }
+    levels.onLeave = () => {
+      levels.borderColor = Color.GRAY;
+      this.selectButton.alpha = 1;
+    }
+
+    this.selectButton = this.add.sprite("select", "mainMenu");
+    this.selectButton.position = levels.position;
 
     // Add controls button
     const controls = this.add.uiElement(UIElementType.BUTTON, "mainMenu", {
       position: new Vec2(origin.x + 94, origin.y + 466),
-      text: "Controls",
+      text: "",
     });
     controls.size.set(384, 128);
-    controls.borderWidth = 4;
-    controls.borderRadius = 0;
+    controls.borderWidth = 10;
+    controls.borderRadius = 10;
     controls.borderColor = Color.GRAY;
     controls.backgroundColor = Color.BROWN;
     controls.onClickEventId = "control";
+    controls.onEnter = () => {
+      controls.borderColor = Color.WHITE;
+      this.controlsButton.alpha = 2* Math.abs(this.flash.getTimeLeft()/1000 - .5);
+    }
+    controls.onLeave = () => {
+      controls.borderColor = Color.GRAY;
+      this.controlsButton.alpha = 1;
+    }
+
+    this.controlsButton = this.add.sprite("controls", "mainMenu");
+    this.controlsButton.position = controls.position;
 
     // Add help button
     const help = this.add.uiElement(UIElementType.BUTTON, "mainMenu", {
       position: new Vec2(origin.x + 94, origin.y + 627),
-      text: "Help / Cheats",
+      text: "",
     });
     help.size.set(384, 128);
-    help.borderWidth = 4;
-    help.borderRadius = 0;
+    help.borderWidth = 10;
+    help.borderRadius = 10;
     help.borderColor = Color.GRAY;
     help.backgroundColor = Color.BROWN;
     help.onClickEventId = "help";
+    help.onEnter = () => {
+      help.borderColor = Color.WHITE;
+      this.helpButton.alpha = 2* Math.abs(this.flash.getTimeLeft()/1000 - .5);
+    }
+    help.onLeave = () => {
+      help.borderColor = Color.GRAY;
+      this.helpButton.alpha = 1;
+    }
+
+    this.helpButton = this.add.sprite("help", "mainMenu");
+    this.helpButton.position = help.position;
 
     // Subscribe events
     this.receiver.subscribe("start");
@@ -92,9 +150,11 @@ export default class MainMenu extends Scene {
   }
 
   updateScene() {
+
     while (this.receiver.hasNextEvent()) {
       let event = this.receiver.getNextEvent();
-      console.log(event);
+      
+
 
       /* TODO - CHANGE TO SPECIFIED SCENE */
       if (event.type === "play") {
