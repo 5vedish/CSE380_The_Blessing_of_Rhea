@@ -1,0 +1,178 @@
+{
+	"name": "BigSnake",
+	"spriteSheetImage": "BigSnake.png",
+	"spriteWidth": 256,
+	"spriteHeight": 256,
+	"leftBuffer": 0,
+	"rightBuffer": 0,
+	"topBuffer": 0,
+	"bottomBuffer": 0,
+	"columns": 6,
+	"rows": 2,
+	"animations": [
+		{
+			"name": "moving",
+			"repeat": true,
+			"frames": [
+				{
+					"index": 0,
+					"duration": 10
+				},
+				{
+					"index": 1,
+					"duration": 10
+				},
+                {
+                    "index": 2,
+                    "duration": 10
+                },
+                {
+                    "index": 1,
+                    "duration": 10
+                }
+			]
+		},
+        {
+			"name": "attack",
+			"repeat": false,
+			"frames": [
+				{
+					"index": 0,
+					"duration": 10
+				},
+				{
+					"index": 1,
+					"duration": 10
+				},
+                {
+                    "index": 2,
+                    "duration": 10
+                },
+                {
+                    "index": 3,
+                    "duration": 10
+                },
+                {
+                    "index": 4,
+                    "duration": 10
+                },
+                {
+                    "index": 3,
+                    "duration": 10
+                },
+                {
+                    "index": 2,
+                    "duration": 10
+                },
+                {
+                    "index": 1,
+                    "duration": 10
+                },
+                {
+					"index": 0,
+					"duration": 10
+				}
+			]
+		},
+        {
+			"name": "damage",
+			"repeat": false,
+			"frames": [
+				{
+					"index": 0,
+					"duration": 10
+				},
+				{
+					"index": 5,
+					"duration": 10
+				},
+                {
+                    "index": 0,
+                    "duration": 10
+                }
+			]
+		},
+        {
+			"name": "Right Idle",
+			"repeat": true,
+			"frames": [
+				{
+					"index": 5,
+					"duration": 10
+				},
+				{
+					"index": 6,
+					"duration": 10
+				},
+                {
+                    "index": 7,
+                    "duration": 10
+                },
+                {
+                    "index": 6,
+                    "duration": 10
+                }
+			]
+		},
+        {
+			"name": "Right Attack",
+			"repeat": false,
+			"frames": [
+				{
+					"index": 6,
+					"duration": 10
+				},
+				{
+					"index": 7,
+					"duration": 10
+				},
+                {
+                    "index": 8,
+                    "duration": 10
+                },
+                {
+                    "index": 9,
+                    "duration": 10
+                },
+                {
+                    "index": 10,
+                    "duration": 10
+                },
+                {
+                    "index": 9,
+                    "duration": 10
+                },
+                {
+                    "index": 8,
+                    "duration": 10
+                },
+                {
+                    "index": 7,
+                    "duration": 10
+                },
+                {
+					"index": 6,
+					"duration": 10
+				}
+			]
+		},
+        {
+			"name": "Right Damage",
+			"repeat": false,
+			"frames": [
+				{
+					"index": 6,
+					"duration": 10
+				},
+				{
+					"index": 11,
+					"duration": 10
+				},
+                {
+                    "index": 6,
+                    "duration": 10
+                }
+			]
+		}
+	]
+}

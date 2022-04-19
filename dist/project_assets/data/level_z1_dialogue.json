@@ -1,0 +1,11 @@
+{   
+    "dialogue": 
+    {
+    "lines": ["What in Tartarus are you?", 
+        "Sssss...", "What's that? I can't quite understand you.", "Sssss!", "Welp. I never did like snakes anyway."],
+    "speaker": [0, 1, 0, 1, 0],
+    "speakerName": ["Bigzeus", "bigsnake"],
+    "speakerPositions": ["left", "right", "left", "right", "left"],
+    "speakerAnimations": ["idle", "moving", "idle", "moving", "idle"]
+    }
+}
