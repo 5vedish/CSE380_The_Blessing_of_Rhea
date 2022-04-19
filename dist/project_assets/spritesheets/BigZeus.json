@@ -110,7 +110,7 @@
         },
         {
             "name": "attacking",
-			"repeat": false,
+			"repeat": true,
 			"frames": [
 				{
 					"index": 20,

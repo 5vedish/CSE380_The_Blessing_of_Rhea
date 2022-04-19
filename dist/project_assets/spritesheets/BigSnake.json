@@ -34,7 +34,7 @@
 		},
         {
 			"name": "attack",
-			"repeat": false,
+			"repeat": true,
 			"frames": [
 				{
 					"index": 0,
