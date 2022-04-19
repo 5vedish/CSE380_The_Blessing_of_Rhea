@@ -6,6 +6,6 @@
     "speaker": [0, 1, 0, 1, 0],
     "speakerName": ["Bigzeus", "bigsnake"],
     "speakerPositions": ["left", "right", "left", "right", "left"],
-    "speakerAnimations": ["idle", "moving", "idle", "moving", "idle"]
+    "speakerAnimations": ["idle", "moving", "idle", "attack", "attacking"]
     }
 }

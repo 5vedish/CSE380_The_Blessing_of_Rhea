@@ -82,19 +82,23 @@ export default class Level_Z1_Cutscene extends Scene{
         this.line1 = <Label> this.add.uiElement(UIElementType.LABEL, "lit", { position: new Vec2(player.position.x-300, player.position.y+100),text: ""});
         this.line1.fontSize = 32;
         this.line1.setHAlign(HAlign.LEFT);
+        this.line1.setTextColor(Color.WHITE);
 
         this.line2 = <Label> this.add.uiElement(UIElementType.LABEL, "lit", { position: new Vec2(player.position.x-330, player.position.y+130),text: ""});
         this.line2.fontSize = 32;
         this.line2.setHAlign(HAlign.LEFT);
+        this.line2.setTextColor(Color.WHITE);
 
         this.line3 = <Label> this.add.uiElement(UIElementType.LABEL, "lit", { position: new Vec2(player.position.x-330, player.position.y+160),text: ""});
         this.line3.fontSize = 32;
         this.line3.setHAlign(HAlign.LEFT);
+        this.line3.setTextColor(Color.WHITE);
 
         this.line4 = <Label> this.add.uiElement(UIElementType.LABEL, "lit", { position: new Vec2(player.position.x-330, player.position.y+190),text: ""});
         this.line4.fontSize = 32;
         this.line4.setHAlign(HAlign.LEFT);
-        
+        this.line3.setTextColor(Color.WHITE);
+
         this.scroll = new Timer(1000, () => {
             if (this.currentLine < this.buffers.length - 1){
                 this.currentLine++;
