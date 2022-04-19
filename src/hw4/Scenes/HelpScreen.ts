@@ -27,7 +27,7 @@ export default class HelpScreen extends Scene {
 
     // Backstory text
     const backstory = this.add.uiElement(
-      UIElementType.TEXT_INPUT,
+      UIElementType.LABEL,
       "helpScreen",
       { position: new Vec2(462, 260), text: "" }
     );
@@ -153,7 +153,7 @@ export default class HelpScreen extends Scene {
 
     // Developers
     const developers = this.add.uiElement(
-      UIElementType.TEXT_INPUT,
+      UIElementType.LABEL,
       "helpScreen",
       { position: new Vec2(457, 625), text: "" }
     );
@@ -196,7 +196,7 @@ export default class HelpScreen extends Scene {
     dev1.textColor = dev2.textColor = dev3.textColor = Color.WHITE;
 
     // Cheats
-    const cheats = this.add.uiElement(UIElementType.TEXT_INPUT, "helpScreen", {
+    const cheats = this.add.uiElement(UIElementType.LABEL, "helpScreen", {
       position: new Vec2(1106, 450),
       text: "",
     });

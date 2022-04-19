@@ -11,7 +11,7 @@
 	"rows": 2,
 	"animations": [
 		{
-			"name": "move",
+			"name": "moving",
 			"repeat": true,
 			"frames": [
 				{
@@ -29,7 +29,7 @@
 			]
 		},
         {
-            "name": "attacking",
+            "name": "attack",
 			"repeat": false,
 			"frames": [
 				{

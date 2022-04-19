@@ -27,7 +27,7 @@ export default class ControlScreen extends Scene {
 
     // Controls Border
     const controlBorder = this.add.uiElement(
-      UIElementType.TEXT_INPUT,
+      UIElementType.LABEL,
       "controls",
       { position: new Vec2(285, 279), text: "" }
     );
@@ -85,7 +85,7 @@ export default class ControlScreen extends Scene {
         Color.WHITE;
 
     // Tutorial Border
-    const tutorial = this.add.uiElement(UIElementType.TEXT_INPUT, "controls", {
+    const tutorial = this.add.uiElement(UIElementType.LABEL, "controls", {
       position: new Vec2(1006, 429),
       text: "",
     });
