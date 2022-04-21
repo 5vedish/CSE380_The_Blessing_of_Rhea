@@ -65,7 +65,7 @@ export default class level_z1 extends GameLevel {
         this.playerSpawn = new Vec2(32*32, 32*32);
         // this.viewport.setFocus(new Vec2(this.playerSpawn.x, this.playerSpawn.y));
         
-        this.maxEnemies = 2;
+        this.maxEnemies = 15;
         
         super.startScene();
         this.initLayers();
@@ -93,14 +93,16 @@ export default class level_z1 extends GameLevel {
             health: 1,
             player: this.player,
             speed: 5,
-            weapon: this.createWeapon("knife")});
+            weapon: this.createWeapon("knife"),
+            experience: 200});
             
         this.spawnableEnemies.push({
             name: "harpy",
             health: 3,
             player: this.player,
             speed: 7,
-            weapon: this.createWeapon("knife")});
+            weapon: this.createWeapon("knife"),
+            experience: 250});
     }
     
     protected initLayers() : void {
@@ -157,7 +159,8 @@ export default class level_z1 extends GameLevel {
                 health: enemyType.health,
                 player: enemyType.player,
                 speed: enemyType.speed,
-                weapon: enemyType.weapon
+                weapon: enemyType.weapon,
+                experience: enemyType.experience
             }
             this.enemyArray.push(this.addEnemy(enemyType.name, options));
         }

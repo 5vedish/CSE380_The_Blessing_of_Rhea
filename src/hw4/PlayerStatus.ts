@@ -36,7 +36,6 @@ export default class CharacterStat{
         this.experience += experience;
         //Check if the player leveled up
         this.level += Math.floor(this.experience / (factor * 500));
-        console.log(prevLevl + " | " + this.level);
         this.experience = (this.experience / (factor * 500) >= 1) ? this.experience % (factor * 500) : this.experience
         if(this.level - prevLevl) this.emitter.fireEvent(Project_Events.LEVELUP, {levelChange: this.level - prevLevl});
     }

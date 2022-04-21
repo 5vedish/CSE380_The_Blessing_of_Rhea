@@ -37,6 +37,9 @@ export default class EnemyAI extends StateMachineGoapAI implements BattlerAI {
     /** The weapon this AI has */
     weapon: Weapon;
 
+    //Experience the player would gain
+    experience: number;
+
     /** A reference to the player object */
     player: GameNode;
 
@@ -66,6 +69,7 @@ export default class EnemyAI extends StateMachineGoapAI implements BattlerAI {
         this.health = options.health;
         this.player = options.player;
         this.weapon = options.weapon;
+        this.experience = options.experience;
 
         // Initialize to the default state
         this.initialize(EnemyStates.DEFAULT, options);

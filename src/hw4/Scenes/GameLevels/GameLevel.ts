@@ -43,7 +43,8 @@ export interface CustomEnemy {
     health: number,
     player: GameNode,
     speed: number,
-    weapon: Weapon
+    weapon: Weapon,
+    experience: number
 }
 
 export default class GameLevel extends Scene{
@@ -132,6 +133,8 @@ export default class GameLevel extends Scene{
             size: new Vec2(256, 8)});
         healthBarBorder.alpha = .5;
 
+
+        //Level up UI
         this.levelUpLayer = this.addUILayer("levelUp");
         let dim = this.add.graphic(GraphicType.RECT, "levelUp", { position: this.viewport.getOrigin(), size: new Vec2(this.viewport.getHalfSize().x*2, 
             this.viewport.getHalfSize().y*2) });
@@ -244,11 +247,12 @@ export default class GameLevel extends Scene{
                 case Project_Events.ENEMYDIED:
                     // remove enemy from both arrays
                     const enemy = <CanvasNode>event.data.get("enemy");
+                    const enemyExperience = (<EnemyAI>enemy._ai).experience;
                     this.battleManager.enemies = this.battleManager.enemies.filter(enemy => enemy !== <BattlerAI>(event.data.get("enemy")._ai));
                     this.enemyArray = this.enemyArray.filter(enemy => enemy !== (event.data.get("enemy")));
                     enemy.destroy();
                     this.currentNumEnemies -= 1;
-                    this.playerStats.gainedExperience(200); // to-do : scaling
+                    this.playerStats.gainedExperience(enemyExperience); // to-do : scaling
                     break;
 
                 case Project_Events.DAMAGED:
