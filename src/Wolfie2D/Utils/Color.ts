@@ -120,6 +120,10 @@ export default class Color {
 		return new Color(125, 116, 98, 1);
 	}
 
+	static get LIGHTBLUE(): Color{
+		return new Color(48, 222, 223, 1);
+	}
+
 	/**	
 		 * Orange color
 		 * @returns rgb(255, 100, 0)

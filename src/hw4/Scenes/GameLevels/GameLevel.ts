@@ -146,7 +146,7 @@ export default class GameLevel extends Scene{
 
         let expBarBorder = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(216, 32), 
             size: new Vec2(216, 4)});
-        expBarBorder.color = Color.BLUE;
+        expBarBorder.color = Color.LIGHTBLUE;
         expBarBorder.alpha = .5;
 
 
