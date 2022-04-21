@@ -310,6 +310,7 @@ export default class Tutorial extends GameLevel {
         //Check if player died
         if(this.playerStats.stats.health <= 0){
             this.viewport.setSize(1600, 900);
+            this.playerController.destroy();
             this.sceneManager.changeToScene(Level_Z1_Cutscene);
         }
     }

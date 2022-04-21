@@ -11,7 +11,7 @@ export default class HermesSandals extends Item {
         // (<BattlerAI>user._ai).health += 1;
         // playerStats.stats.speed *= 1.05;
         // For Test
-        playerStats.stats.speed *= 1.05;
+        playerStats.stats.speed *= 1.1;
         playerController.setSpeed(playerStats.stats.speed);
     }
 

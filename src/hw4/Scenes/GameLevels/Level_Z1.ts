@@ -90,17 +90,17 @@ export default class level_z1 extends GameLevel {
         
         this.spawnableEnemies.push({
             name: "snake",
-            health: 1,
+            health: 2,
             player: this.player,
-            speed: 5,
+            speed: 8,
             weapon: this.createWeapon("knife"),
             experience: 200});
             
         this.spawnableEnemies.push({
             name: "harpy",
-            health: 3,
+            health: 6,
             player: this.player,
-            speed: 7,
+            speed: 10,
             weapon: this.createWeapon("knife"),
             experience: 250});
     }

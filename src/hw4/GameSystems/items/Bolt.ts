@@ -8,7 +8,7 @@ import Weapon from "./Weapon";
 export default class Bolt extends Item {
     
     use(user: GameNode, weapon: Weapon, playerStats: CharacterStat, playerController: PlayerController): void {
-        playerController.weapon.type.damage *= 4;
+        playerController.weapon.type.damage *= 1.1;
     }
 
 }
