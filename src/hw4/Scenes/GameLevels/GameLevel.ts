@@ -71,6 +71,7 @@ export default class GameLevel extends Scene{
     // guis
     protected healthBar: Graphic;
     protected levelUI: Label;
+    protected expBar: Graphic;
 
     // leveling
     private levelUpLayer: Layer;
@@ -130,10 +131,24 @@ export default class GameLevel extends Scene{
         let pauseScreen = this.add.sprite("pause_screen", "pause");
         pauseScreen.position.copy(this.viewport.getOrigin());
         pauseScreen.alpha = .5;
+        
 
+        //Health Bar
         let healthBarBorder = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(196, 16), 
             size: new Vec2(256, 8)});
         healthBarBorder.alpha = .5;
+
+
+        //Experience bar
+        this.expBar = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(216, 32), 
+            size: new Vec2(0, 0)});
+        this.expBar.color = Color.BLUE;
+
+        let expBarBorder = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(216, 32), 
+            size: new Vec2(216, 4)});
+        expBarBorder.color = Color.BLUE;
+        expBarBorder.alpha = .5;
+
 
 
         //Level up UI
@@ -255,6 +270,12 @@ export default class GameLevel extends Scene{
                     enemy.destroy();
                     this.currentNumEnemies -= 1;
                     this.playerStats.gainedExperience(enemyExperience); // to-do : scaling
+
+                    //Update the exp bar
+                    let reqExp = Math.pow(this.playerStats.level, 1.5);
+                    let expPercentage = this.playerStats.experience / (reqExp * 500);
+                    this.expBar.size = new Vec2(expPercentage*216, 4);
+                    this.expBar.position = new Vec2(108*expPercentage+(216/2), 32);
                     break;
 
                 case Project_Events.DAMAGED:
@@ -296,7 +317,6 @@ export default class GameLevel extends Scene{
         this.weaponIconCoolDown.size = new Vec2(32, (1-timePercentage)*32);
         this.weaponIconCoolDown.position = new Vec2(48, 24+(timePercentage*16));
         // console.log(timePercentage);
-        
 
         // prevents the player from going out of bounds
         this.lockPlayer();   
