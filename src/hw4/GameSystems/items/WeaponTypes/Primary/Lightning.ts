@@ -42,4 +42,5 @@ export default class Lightning extends WeaponType {
         newType.initialize({damage: this.damage, cooldown: this.cooldown, displayName: this.displayName, spriteKey: this.spriteKey, useVolume: this.useVolume});
         return newType;
     }
+
 }

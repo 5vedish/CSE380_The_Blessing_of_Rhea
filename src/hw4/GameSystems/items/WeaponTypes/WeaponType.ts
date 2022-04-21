@@ -32,4 +32,5 @@ export default abstract class WeaponType {
     abstract hits(node: GameNode, ...args: any): boolean;
 
     abstract clone(): WeaponType;
+
 }

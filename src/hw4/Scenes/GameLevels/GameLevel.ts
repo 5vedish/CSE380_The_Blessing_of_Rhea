@@ -37,6 +37,7 @@ import Receiver from "../../../Wolfie2D/Events/Receiver";
 import Lightning from "../../GameSystems/items/WeaponTypes/Primary/Lightning";
 import Layer from "../../../Wolfie2D/Scene/Layer";
 import UIElement from "../../../Wolfie2D/Nodes/UIElement";
+import Bolt from "../../GameSystems/items/Bolt";
 
 export interface CustomEnemy {
     name: string,
@@ -83,9 +84,9 @@ export default class GameLevel extends Scene{
     protected item3: Sprite;
 
     // items
-    protected itemsArray = ["hourglass", "hermes_sandals"];
+    protected itemsArray = ["hourglass", "hermes_sandals", "bolt"];
     protected selectionArray: Array<string> = [];
-    protected itemConstructorPairings: Map<string,any> = new Map([["hourglass" , Hourglass], ["hermes_sandals", HermesSandals]]);
+    protected itemConstructorPairings: Map<string,any> = new Map([["hourglass" , Hourglass], ["hermes_sandals", HermesSandals], ["bolt", Bolt]]);
 
     //Sprite to hold weapon icon
     protected battleManager: BattleManager;
@@ -106,6 +107,7 @@ export default class GameLevel extends Scene{
         this.load.image("pause_screen", "project_assets/screens/pause.png");
         this.load.image("hourglass", "project_assets/sprites/hourglass.png")
         this.load.image("hermes_sandals", "project_assets/sprites/hermes_sandals.png");
+        this.load.image("bolt", "project_assets/sprites/Bolt.png")
         //Initialize the possible spawning areas for enemies
         //Each Vec2 holds the pixels that will be added to the center of the viewport so enemies spawn outside
         //View port is 800x450
