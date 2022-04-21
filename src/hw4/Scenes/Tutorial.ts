@@ -69,7 +69,7 @@ export default class Tutorial extends GameLevel {
         this.playerSpawn = new Vec2(32*32, 50*32);
         // this.viewport.setFocus(new Vec2(this.playerSpawn.x, this.playerSpawn.y));
         
-        this.maxEnemies = 15;
+        this.maxEnemies = 40;
         
         super.startScene();
         this.initLayers();
@@ -265,7 +265,7 @@ export default class Tutorial extends GameLevel {
             }
         }
 
-        if(this.player.position.y < 21*32){
+        if(this.player.position.y < 20*32){
             this.player.freeze();
             this.player.setAIActive(false, {});
             // Spawn enemies in
@@ -309,6 +309,7 @@ export default class Tutorial extends GameLevel {
 
         //Check if player died
         if(this.playerStats.stats.health <= 0){
+            this.viewport.setSize(1600, 900);
             this.sceneManager.changeToScene(Level_Z1_Cutscene);
         }
     }

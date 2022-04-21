@@ -60,7 +60,7 @@ export default class level_z1 extends GameLevel {
         this.walls = <OrthogonalTilemap>tilemapLayers[1].getItems()[0];
         
         this.viewport.setBounds(0, 0, 64*32, 64*32);
-        // this.viewport.setSize(this.viewport.getHalfSize());
+        this.viewport.setSize(this.viewport.getHalfSize());
 
         this.playerSpawn = new Vec2(32*32, 32*32);
         // this.viewport.setFocus(new Vec2(this.playerSpawn.x, this.playerSpawn.y));
@@ -190,6 +190,7 @@ export default class level_z1 extends GameLevel {
         
         //Check if player died
         if(this.playerStats.stats.health <= 0){
+            this.viewport.setSize(1600, 900);
             this.sceneManager.changeToScene(DeathScreen);
         }
     }
