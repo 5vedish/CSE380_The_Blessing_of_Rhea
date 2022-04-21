@@ -343,7 +343,7 @@ export default class GameLevel extends Scene{
 			this.player.position.y = (64 * 32) - 32;
     }
 
-    // check map bounds
+    // check map bounds for spawning enemies
     protected boundaryCheck(viewportCenter: Vec2, postion: Vec2){
         return (viewportCenter.x + postion.x < 16 
         || viewportCenter.x + postion.x > 64*32-16
@@ -357,40 +357,7 @@ export default class GameLevel extends Scene{
         enemy.scale.set(1,1);
         enemy.addPhysics(new AABB(Vec2.ZERO, new Vec2(8, 8)));
         enemy.animation.play("moving");
-
-        // randomly select one of the spawnpoints outside the viewport;
-        let spawnPointIndex = Math.floor(Math.random() * 4);
-
-        let viewportCenter = this.viewport.getCenter();
-
-        //check if spawn position is out of bounds
-        while(true){
-
-            if(this.boundaryCheck(viewportCenter, this.enemySpawns[spawnPointIndex])){
-                spawnPointIndex = (spawnPointIndex + 1) % 4;
-            } else {
-                // find a random x or y of that side
-                if(this.enemySpawns[spawnPointIndex].x === 0){
-                    //along top or bottom
-                    let xOffset = Math.floor(Math.random() * 736) - 368
-                    enemy.position.set(viewportCenter.x + xOffset, viewportCenter.y + this.enemySpawns[spawnPointIndex].y);
-                } else {
-                    let yOffset =Math.floor(Math.random() * 386) - 193
-                    enemy.position.set(viewportCenter.x + this.enemySpawns[spawnPointIndex].x,viewportCenter.y + yOffset);
-                }
-                break;
-            }
-        }
-
-        // let weapon = this.createWeapon("knife");
-        // // generate options for enemy
-        // let options = {
-        //     health: 1,
-        //     player: this.player,
-        //     speed: 5,
-        //     weapon: weapon
-        // }
-
+        enemy.position = options.positon;
         enemy.addAI(EnemyAI, options);
         enemy.setGroup("enemy");
         this.currentNumEnemies += 1;

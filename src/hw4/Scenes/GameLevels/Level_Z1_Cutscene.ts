@@ -51,7 +51,7 @@ export default class Level_Z1_Cutscene extends Scene{
         // add the map
         this.add.tilemap("levelZ1", new Vec2(1,1));
         this.viewport.setBounds(0, 0, 64*32, 64*32);
-        this.viewport.setSize(this.viewport.getHalfSize());
+        // this.viewport.setSize(this.viewport.getHalfSize());
         
         // add the player
         let player = this.add.animatedSprite("zeus", "top");
@@ -153,7 +153,7 @@ export default class Level_Z1_Cutscene extends Scene{
                     }
                 }
 
-                this.viewport.setSize(1600, 900);
+                // this.viewport.setSize(1600, 900);
                 this.sceneManager.changeToScene(level_z1, {}, physicsOptions);
             } else {
 

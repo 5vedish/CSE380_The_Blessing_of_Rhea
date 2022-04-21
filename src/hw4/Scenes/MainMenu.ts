@@ -10,6 +10,7 @@ import Sprite from "../../Wolfie2D/Nodes/Sprites/Sprite";
 import level_z1 from "./GameLevels/Level_Z1";
 import Timer from "../../Wolfie2D/Timing/Timer";
 import Level_Z1_Cutscene from "./GameLevels/Level_Z1_Cutscene";
+import Tutorial from "./Tutorial";
 
 export default class MainMenu extends Scene {
   private splashScreen: Layer;
@@ -170,7 +171,7 @@ export default class MainMenu extends Scene {
                 ]
             }
         }
-        this.sceneManager.changeToScene(Level_Z1_Cutscene, {}, physicsOptions);
+        this.sceneManager.changeToScene(Tutorial, {}, physicsOptions);
       }
 
       if (event.type === "select_levels") {

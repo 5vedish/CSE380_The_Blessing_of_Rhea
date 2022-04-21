@@ -60,7 +60,7 @@ export default class level_z1 extends GameLevel {
         this.walls = <OrthogonalTilemap>tilemapLayers[1].getItems()[0];
         
         this.viewport.setBounds(0, 0, 64*32, 64*32);
-        this.viewport.setSize(this.viewport.getHalfSize());
+        // this.viewport.setSize(this.viewport.getHalfSize());
 
         this.playerSpawn = new Vec2(32*32, 32*32);
         // this.viewport.setFocus(new Vec2(this.playerSpawn.x, this.playerSpawn.y));
@@ -127,12 +127,12 @@ export default class level_z1 extends GameLevel {
         // create weapon
         let weapon = this.createWeapon("lightning");
         
-        this.playerStats = new CharacterStat(50, 1, 10, 2);
+        this.playerStats = new CharacterStat(100, 1, 10, 2);
         // TODO - ADD PLAYER AI HERE
         this.player.addAI(PlayerController,
             {
                 speed: 2,
-                health: 50,
+                health: 100,
                 inputEnabled: true,
                 range: 30,
                 playerStats: this.playerStats,
@@ -155,12 +155,35 @@ export default class level_z1 extends GameLevel {
         // Spawn enemies in
         if(this.currentNumEnemies < this.maxEnemies && !this.pauseFlag){
             let enemyType = this.spawnableEnemies[Math.floor(Math.random() * this.spawnableEnemies.length)];
+
+            // randomly select one of the spawnpoints outside the viewport;
+            let spawnPointIndex = Math.floor(Math.random() * 4);
+            let viewportCenter = this.viewport.getCenter();
+            let enemyPosition;
+            //check if spawn position is out of bounds
+            while(true){
+                if(this.boundaryCheck(viewportCenter, this.enemySpawns[spawnPointIndex])){
+                    spawnPointIndex = (spawnPointIndex + 1) % 4;
+                } else {
+                    // find a random x or y of that side
+                    if(this.enemySpawns[spawnPointIndex].x === 0){
+                        //along top or bottom
+                        let xOffset = Math.floor(Math.random() * 736) - 368
+                        enemyPosition = new Vec2(viewportCenter.x + xOffset, viewportCenter.y + this.enemySpawns[spawnPointIndex].y);
+                    } else {
+                        let yOffset =Math.floor(Math.random() * 386) - 193
+                        enemyPosition = new Vec2(viewportCenter.x + this.enemySpawns[spawnPointIndex].x,viewportCenter.y + yOffset);
+                    }
+                    break;
+                }
+            }
             let options = {
                 health: enemyType.health,
                 player: enemyType.player,
                 speed: enemyType.speed,
                 weapon: enemyType.weapon,
-                experience: enemyType.experience
+                experience: enemyType.experience,
+                positon: enemyPosition
             }
             this.enemyArray.push(this.addEnemy(enemyType.name, options));
         }
