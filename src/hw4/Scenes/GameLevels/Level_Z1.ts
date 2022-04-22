@@ -95,15 +95,19 @@ export default class level_z1 extends GameLevel {
             player: this.player,
             speed: 8,
             weapon: this.createWeapon("knife"),
-            experience: 200});
+            range: 10,
+            experience: 200
+        });
             
         this.spawnableEnemies.push({
             name: "harpy",
             health: 6,
             player: this.player,
             speed: 10,
-            weapon: this.createWeapon("knife"),
-            experience: 250});
+            weapon: this.createWeapon("laserGun"),
+            range: 150,
+            experience: 250
+        });
     }
     
     protected initLayers() : void {
@@ -159,10 +163,12 @@ export default class level_z1 extends GameLevel {
 
             let enemyPosition = this.randomSpawn();
             let options = {
+                name: enemyType.name,
                 health: enemyType.health,
                 player: enemyType.player,
                 speed: enemyType.speed,
                 weapon: enemyType.weapon,
+                range: enemyType.range,
                 experience: enemyType.experience,
                 positon: enemyPosition
             }

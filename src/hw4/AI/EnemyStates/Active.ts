@@ -22,18 +22,15 @@ export default class Active extends EnemyState {
     currentPath : NavigationPath;
     player : GameNode;
     range: number;
-    
-    constructor(parent: EnemyAI, owner: GameNode, player: GameNode) {
+
+    constructor(parent: EnemyAI, owner: GameNode, player: GameNode, range: number) {
         super(parent, owner);
         this.player = player;
-        this.range = 10;
+        this.range = range;
         
-
         // Regularly update the player location
         this.pollTimer = new Timer(100);
-
         this.exitTimer = new Timer(1000);
-
     }
 
     onEnter(options: Record<string, any>): void {

@@ -71,7 +71,7 @@ export default class LaserGun extends WeaponType {
 
     createRequiredAssets(scene: Scene): [Line] {
         let line = <Line>scene.add.graphic(GraphicType.LINE, "primary", {start: new Vec2(-1, 1), end: new Vec2(-1, -1)});
-        line.color = this.color;
+        line.color = new Color(80, 56, 12, 1);
 
         line.tweens.add("fade", {
             startDelay: 0,

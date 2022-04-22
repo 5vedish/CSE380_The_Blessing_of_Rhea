@@ -34,8 +34,6 @@ import Stack from "../../Wolfie2D/DataTypes/Stack";
 import Berserk from "../AI/EnemyActions/Berserk";
 import GameLevel from "./GameLevels/GameLevel";
 import CharacterStat from "../PlayerStatus";
-import DeathScreen from "DeathScreen";
-import Graphic from "../../Wolfie2D/Nodes/Graphic";
 import Level_Z1_Cutscene from "./GameLevels/Level_Z1_Cutscene";
 
 export default class Tutorial extends GameLevel {
@@ -94,19 +92,13 @@ export default class Tutorial extends GameLevel {
         
         this.spawnableEnemies.push({
             name: "snake",
-            health: 1,
+            health: 2,
             player: this.player,
-            speed: 5,
+            speed: 8,
             weapon: this.createWeapon("knife"),
-            experience: 200});
-            
-        this.spawnableEnemies.push({
-            name: "harpy",
-            health: 3,
-            player: this.player,
-            speed: 10,
-            weapon: this.createWeapon("knife"),
-            experience: 250});
+            range: 10,
+            experience: 200
+        });
         
         let firstEnemy = this.add.animatedSprite("snake", "primary");
         firstEnemy.scale.set(1,1);
@@ -298,6 +290,7 @@ export default class Tutorial extends GameLevel {
                     player: enemyType.player,
                     speed: enemyType.speed,
                     weapon: enemyType.weapon,
+                    range: enemyType.range,
                     experience: enemyType.experience,
                     positon: enemyPosition
                 }

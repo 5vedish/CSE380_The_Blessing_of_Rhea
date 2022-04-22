@@ -21,17 +21,17 @@ export default class Attack extends EnemyState {
      retObj: Record<string, any>;
  
      player : GameNode;
-
+     monsterType: string;
      dir: any;
      
-     constructor(parent: EnemyAI, owner: GameNode, player: GameNode) {
+     constructor(parent: EnemyAI, owner: GameNode, player: GameNode, monsterType: string) {
          super(parent, owner);
          this.player = player;
+         this.monsterType = monsterType;
  
          // Regularly update the player location
          this.pollTimer = new Timer(100);
          this.exitTimer = new Timer(1000);
- 
      }
 
      onEnter(options: Record<string, any>): void {}
@@ -41,6 +41,7 @@ export default class Attack extends EnemyState {
      update(deltaT: number): void {
         // Gets the direction to attack
         this.dir = this.player.position.clone().sub(this.owner.position).normalize();
+        if (this.monsterType === "harpy") this.dir.rotateCCW(Math.PI / 4 * Math.random() - Math.PI/12);
         if (this.parent.weapon.use(this.owner, "enemy", this.dir, [])) {
             // Play attack animation here
             (<AnimatedSprite> this.owner).animation.play("attack");

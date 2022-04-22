@@ -45,6 +45,7 @@ export interface CustomEnemy {
     player: GameNode,
     speed: number,
     weapon: Weapon,
+    range: number,
     experience: number
 }
 

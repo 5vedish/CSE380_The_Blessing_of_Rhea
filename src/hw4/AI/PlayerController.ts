@@ -53,6 +53,8 @@ export default class PlayerController extends StateMachineAI implements BattlerA
     protected receiver: Receiver;
     protected emitter: Emitter;
 
+    protected flipSprite: boolean;
+
 
     initializeAI(owner: AnimatedSprite, options: Record<string, any>): void {
         this.owner = owner;
@@ -99,13 +101,21 @@ export default class PlayerController extends StateMachineAI implements BattlerA
             // Handles animation based on inputs
             if(!this.owner.animation.isPlaying("damage")){
                 if(!this.owner.animation.isPlaying("attacking")){
-                    if(Input.isPressed('left')){
-                        this.owner.animation.playIfNotAlready("left");
-                    } else if(Input.isPressed('right')){
+                    // if(Input.isPressed('left')){
+                    //     this.owner.animation.playIfNotAlready("left");
+                    // } else if(Input.isPressed('right')){
+                    //     this.owner.animation.playIfNotAlready("right");
+                    // } else {
+                    //     this.owner.animation.playIfNotAlready("idle");
+                    // }
+
+                    if (this.owner._velocity.x !== 0) {
+                        this.flipSprite = this.owner._velocity.x < 0;
+                        if (this.flipSprite) (<AnimatedSprite> this.owner).invertX = true;
+                        else (<AnimatedSprite> this.owner).invertX = false;
                         this.owner.animation.playIfNotAlready("right");
-                    } else {
-                        this.owner.animation.playIfNotAlready("idle");
-                    }
+                    } else if (this.owner._velocity.y !== 0) this.owner.animation.playIfNotAlready("right"); 
+                    else this.owner.animation.playIfNotAlready("idle");
                 }
             }
 

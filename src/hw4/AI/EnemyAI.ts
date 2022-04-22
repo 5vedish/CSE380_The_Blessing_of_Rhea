@@ -63,8 +63,8 @@ export default class EnemyAI extends StateMachineGoapAI implements BattlerAI {
     initializeAI(owner: AnimatedSprite, options: Record<string, any>): void {
         this.owner = owner;
         
-        this.addState(EnemyStates.DEFAULT, new Active(this, owner, options.player));
-        this.addState(EnemyStates.ATTACK, new Attack(this, owner, options.player));
+        this.addState(EnemyStates.DEFAULT, new Active(this, owner, options.player, options.range));
+        this.addState(EnemyStates.ATTACK, new Attack(this, owner, options.player, options.name));
 
         this.health = options.health;
         this.player = options.player;
@@ -162,5 +162,6 @@ export enum EnemyStates {
     ALERT = "alert",
     TARGETING = "targeting",
     PREVIOUS = "previous",
-    ATTACK = "attack"
+    ATTACK = "attack",
+    MOVEANDATTACK = "move_and_attack"
 }
