@@ -72,6 +72,7 @@ export default class level_z1 extends GameLevel {
         this.initializeWeapons();
         this.initPlayer();
 
+        this.tilemap = this.player.getScene().getTilemap("Wall") as OrthogonalTilemap;
 
         //Health Bar top left
         this.healthBar = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(196, 16), 
@@ -156,27 +157,7 @@ export default class level_z1 extends GameLevel {
         if(this.currentNumEnemies < this.maxEnemies && !this.pauseFlag){
             let enemyType = this.spawnableEnemies[Math.floor(Math.random() * this.spawnableEnemies.length)];
 
-            // randomly select one of the spawnpoints outside the viewport;
-            let spawnPointIndex = Math.floor(Math.random() * 4);
-            let viewportCenter = this.viewport.getCenter();
-            let enemyPosition;
-            //check if spawn position is out of bounds
-            while(true){
-                if(this.boundaryCheck(viewportCenter, this.enemySpawns[spawnPointIndex])){
-                    spawnPointIndex = (spawnPointIndex + 1) % 4;
-                } else {
-                    // find a random x or y of that side
-                    if(this.enemySpawns[spawnPointIndex].x === 0){
-                        //along top or bottom
-                        let xOffset = Math.floor(Math.random() * 736) - 368
-                        enemyPosition = new Vec2(viewportCenter.x + xOffset, viewportCenter.y + this.enemySpawns[spawnPointIndex].y);
-                    } else {
-                        let yOffset =Math.floor(Math.random() * 386) - 193
-                        enemyPosition = new Vec2(viewportCenter.x + this.enemySpawns[spawnPointIndex].x,viewportCenter.y + yOffset);
-                    }
-                    break;
-                }
-            }
+            let enemyPosition = this.randomSpawn();
             let options = {
                 health: enemyType.health,
                 player: enemyType.player,

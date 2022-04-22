@@ -96,6 +96,7 @@ export default class GameLevel extends Scene{
 
     // Tilemap walls
     protected walls: OrthogonalTilemap;
+    protected tilemap : OrthogonalTilemap;
 
     loadScene(): void {
         this.load.spritesheet("slice", "project_assets/spritesheets/slice.json");
@@ -451,6 +452,36 @@ export default class GameLevel extends Scene{
         this.getLayer("levelUp").addNode(this.item2);
         this.getLayer("levelUp").addNode(this.item3);
   
+    }
+
+    protected randomSpawn(): Vec2 {
+        // randomly select one of the spawnpoints outside the viewport;
+        let spawnPointIndex = Math.floor(Math.random() * 4);
+        let viewportCenter = this.viewport.getCenter();
+        let enemyPosition;
+        //check if spawn position is out of bounds
+        while(true){
+            if(this.boundaryCheck(viewportCenter, this.enemySpawns[spawnPointIndex])){
+                spawnPointIndex = (spawnPointIndex + 1) % 4;
+            } else {
+                // find a random x or y of that side
+                if(this.enemySpawns[spawnPointIndex].x === 0){
+                    //along top or bottom
+                    let xOffset = Math.floor(Math.random() * 736) - 368
+                    enemyPosition = new Vec2(viewportCenter.x + xOffset, viewportCenter.y + this.enemySpawns[spawnPointIndex].y);
+                } else {
+                    let yOffset =Math.floor(Math.random() * 386) - 193
+                    enemyPosition = new Vec2(viewportCenter.x + this.enemySpawns[spawnPointIndex].x,viewportCenter.y + yOffset);
+                }
+                //Check if spawn positon is a wall
+                let spawnTile = this.tilemap.getColRowAt(enemyPosition);
+                let tile = this.tilemap.getTileAtRowCol(spawnTile);
+                if(!this.tilemap.isTileCollidable(tile)){
+                    return enemyPosition;
+                }
+                
+            }
+        }
     }
 
     protected constructButtons() : void{
