@@ -1,8 +1,8 @@
 {
 	"name": "Giant",
 	"spriteSheetImage": "Giant.png",
-	"spriteWidth": 32,
-	"spriteHeight": 32,
+	"spriteWidth": 96,
+	"spriteHeight": 96,
 	"leftBuffer": 0,
 	"rightBuffer": 0,
 	"topBuffer": 0,
