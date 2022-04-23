@@ -162,12 +162,13 @@ export default class MainMenu extends Scene {
       if (event.type === "play") {
         let physicsOptions = {
             physics: {
-                groupNames: ["Wall", "player", "enemy"],
+                groupNames: ["Wall", "player", "enemy", "projectile"],
                 collisions:
                 [
-                    [0, 1, 1],
-                    [1, 0, 0],
-                    [1, 0, 1]
+                    [0, 1, 1, 0],
+                    [1, 0, 0, 0],
+                    [1, 0, 1, 0],
+                    [0, 0, 0, 0]
                 ]
             }
         }

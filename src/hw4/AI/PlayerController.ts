@@ -136,7 +136,7 @@ export default class PlayerController extends StateMachineAI implements BattlerA
         this.health -= damage;
         this.playerStats.editHealth(damage * -1);
         this.owner.animation.play("damage");
-
+        
         this.emitter.fireEvent(Project_Events.DAMAGED);
     }
 

@@ -452,9 +452,10 @@ export default class GameLevel extends Scene{
             this.projectiles[i] = this.add.animatedSprite("leaf", "primary");
             this.projectiles[i].position = new Vec2(0, 0);
             this.projectiles[i].visible = false;
-            this.projectiles[i].addAI(ProjectileAI, {speed: 75});
+            this.projectiles[i].addAI(ProjectileAI, {speed: 4, player: this.player});
             this.projectiles[i].addPhysics(new AABB(Vec2.ZERO, new Vec2(32, 32)));
             this.projectiles[i].animation.playIfNotAlready("shoot", true);
+            this.projectiles[i].setGroup("projectile");
         }
     }
 
@@ -472,7 +473,7 @@ export default class GameLevel extends Scene{
             projectile.visible = true;
             projectile.position = position.clone();
             (<ProjectileAI> projectile._ai).setDirection(dir);
-            projectile.setAIActive(true, {speed: 75});
+            projectile.setAIActive(true, {speed: 4});
         }
     }
 
