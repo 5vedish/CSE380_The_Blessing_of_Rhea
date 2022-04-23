@@ -1,4 +1,5 @@
 import AnimatedSprite from "../../Wolfie2D/Nodes/Sprites/AnimatedSprite";
+import Scene from "../../Wolfie2D/Scene/Scene";
 import Timer from "../../Wolfie2D/Timing/Timer";
 import EnemyAI from "./EnemyAI";
 import ProjectileAI from "./ProjectileAI";
@@ -13,6 +14,7 @@ export default class RangeAI extends EnemyAI{
         super.initializeAI(owner, options);
         this.projectiles = options.projectiles;
         this.attackCooldown = new Timer(options.cooldown);
+        this.scene = options.scene;
     }
 
     update(deltaT: number){
@@ -41,7 +43,11 @@ export default class RangeAI extends EnemyAI{
 
     destroy(): void {
         for(let p of this.projectiles){
-            p.destroy();
+            if(this.scene.getSceneGraph().getNode(p.id) === undefined){
+                continue;
+            } else {
+                p.destroy();
+            }
         }
         super.destroy();
     }

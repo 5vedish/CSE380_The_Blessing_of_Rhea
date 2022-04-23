@@ -42,6 +42,10 @@ export interface CustomEnemy {
 
 export default class GameLevel extends Scene{
 
+    //Timer for levels that require players to survive
+    protected gameTimer: Timer;
+    protected gameTime: Label;
+
     //Each level has a timer
     protected levelTimer: Timer;
     protected invincibilityTimer: Timer;
@@ -329,6 +333,10 @@ export default class GameLevel extends Scene{
         this.player.freeze();
         this.player.setAIActive(false, {});
         this.player.animation.stop();
+
+        // if(this.gameTimer != undefined){
+        //     this.gameTimer.pause();
+        // }
     }
 
     protected unpauseEntities(){
@@ -340,6 +348,10 @@ export default class GameLevel extends Scene{
         this.player.unfreeze();
         this.player.setAIActive(true, {});
         this.player.animation.play("idle", true); 
+
+        // if(this.gameTimer != undefined){
+        //     this.gameTimer.st;
+        // }
     }
 
     // main events
@@ -499,12 +511,9 @@ export default class GameLevel extends Scene{
         }
     }
 
-    protected constructButtons() : void{
-
-    }
-
-
-    protected handleCollisions() : void {
-        
+    protected parseTimeLeft(timeLeft: number): string{
+        let seconds = Math.floor((timeLeft / 1000) % 60),
+        minutes = Math.floor((timeLeft / (1000 * 60)) % 60)
+        return `${minutes}:${seconds}`
     }
 }

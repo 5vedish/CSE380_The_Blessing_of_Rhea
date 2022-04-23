@@ -9,6 +9,7 @@ import Active from "./EnemyStates/Active";
 import Attack from "./EnemyStates/Attack";
 import { Project_Events } from "../project_constants";
 import Emitter from "../../Wolfie2D/Events/Emitter";
+import Scene from "../../Wolfie2D/Scene/Scene";
 
 
 
@@ -39,6 +40,8 @@ export default class EnemyAI extends StateMachineGoapAI implements BattlerAI {
 
     // The last known position of the player
     lastPlayerPos: Vec2;
+
+    protected scene: Scene;
 
     // Attack range
     inRange: number;
