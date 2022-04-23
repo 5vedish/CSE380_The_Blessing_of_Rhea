@@ -261,6 +261,8 @@ export default class Tutorial extends GameLevel {
                         break;
                     }
                 }
+
+                // TO DO - FIX ENEMY OPTIONS (AI)
                 let options = {
                     health: enemyType.health,
                     player: enemyType.player,
@@ -270,7 +272,7 @@ export default class Tutorial extends GameLevel {
                     experience: enemyType.experience,
                     positon: enemyPosition
                 }
-                let enemy =this.addEnemy(enemyType.name, options);
+                let enemy = this.addEnemy(enemyType.name, options);
                 this.enemyArray.push(enemy);
             }
         }

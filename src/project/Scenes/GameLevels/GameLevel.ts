@@ -246,6 +246,7 @@ export default class GameLevel extends Scene{
 
                 this.levelChanged--;
                 // accounting for multiple levels
+                this.selectionArray = [];
                 if (this.selectionArray.length < 3){
                     this.rollItems();
                 }  
@@ -461,9 +462,7 @@ export default class GameLevel extends Scene{
     protected rollItems() : void{
 
         this.selectionArray = [];
-
         while (this.selectionArray.length < 3){
-
             this.selectionArray.push(this.itemsArray[Math.floor(Math.random() * this.itemsArray.length)]);
 
         }
