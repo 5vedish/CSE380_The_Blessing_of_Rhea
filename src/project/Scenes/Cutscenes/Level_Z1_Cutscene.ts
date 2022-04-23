@@ -159,7 +159,11 @@ export default class Level_Z1_Cutscene extends Scene{
                 if (this.speakerPositions[this.dialogueNumber] === "left"){
 
                     if (this.rightSprite){
-                        this.rightSprite.destroy();
+                        this.rightSprite.alpha = .5;
+                    }
+
+                    if (this.leftSprite){
+                        this.leftSprite.destroy();
                     }
     
                     this.leftSprite = this.add.animatedSprite(this.speakerName[this.speaker[this.dialogueNumber]], "top");
@@ -168,7 +172,11 @@ export default class Level_Z1_Cutscene extends Scene{
                 } else {
     
                     if (this.leftSprite){
-                        this.leftSprite.destroy();
+                        this.leftSprite.alpha = .5;
+                    }
+
+                    if (this.rightSprite){
+                    this.rightSprite.destroy();
                     }
                     
                     this.rightSprite = this.add.animatedSprite(this.speakerName[this.speaker[this.dialogueNumber]], "top");
