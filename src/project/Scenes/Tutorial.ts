@@ -202,7 +202,7 @@ export default class Tutorial extends GameLevel {
         // create weapon
         let weapon = this.createWeapon("lightning");
         
-        this.playerStats = new CharacterStat(50, 1, 10, 2);
+        this.playerStats = new CharacterStat(50, 1, 10, 2, weapon.cooldownTimer.getTotalTime());
         // TODO - ADD PLAYER AI HERE
         this.player.addAI(PlayerController,
             {

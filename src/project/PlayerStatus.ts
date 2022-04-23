@@ -14,8 +14,9 @@ export default class CharacterStat{
 
     experience: number = 0;
 
-    constructor(maxHealth: number, attack: number, defense: number, speed: number){
+    constructor(maxHealth: number, attack: number, defense: number, speed: number, weaponCooldown: number){
         this.stats = new Stats(maxHealth, maxHealth, attack, defense, speed);
+        this.weaponCoolDown = weaponCooldown;
         this.emitter = new Emitter();
     }
 

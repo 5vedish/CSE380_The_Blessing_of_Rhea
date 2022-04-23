@@ -96,14 +96,6 @@ export default class PlayerController extends StateMachineAI implements BattlerA
             // Handles animation based on inputs
             if(!this.owner.animation.isPlaying("damage")){
                 if(!this.owner.animation.isPlaying("attacking")){
-                    // if(Input.isPressed('left')){
-                    //     this.owner.animation.playIfNotAlready("left");
-                    // } else if(Input.isPressed('right')){
-                    //     this.owner.animation.playIfNotAlready("right");
-                    // } else {
-                    //     this.owner.animation.playIfNotAlready("idle");
-                    // }
-
                     if (this.owner._velocity.x !== 0) {
                         this.flipSprite = this.owner._velocity.x < 0;
                         if (this.flipSprite) (<AnimatedSprite> this.owner).invertX = true;

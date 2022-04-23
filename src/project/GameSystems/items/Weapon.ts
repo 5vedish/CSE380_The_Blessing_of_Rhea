@@ -51,6 +51,7 @@ export default class Weapon {
      */
     use(user: GameNode, userType: string, direction: Vec2, options: Record<string,any>): boolean {
         // If the cooldown timer is still running, we can't use the weapon
+        console.log("adwadda " + this.cooldownTimer.getTimeLeft());
         if(!this.cooldownTimer.isStopped()){
             return false;
         }

@@ -14,10 +14,12 @@ import DeathScreen from "../DeathScreen";
 import RangeAI from "../../AI/RangeAI";
 import Timer from "../../../Wolfie2D/Timing/Timer";
 import Weapon from "../../GameSystems/items/Weapon";
+import Lightning from "../../GameSystems/items/WeaponTypes/Primary/Lightning";
 
 export default class level_z2 extends GameLevel {
 
     private weapon: Weapon;
+
     loadScene(): void {
         //Load Zeus
         this.load.spritesheet("zeus", "project_assets/spritesheets/Zeus.json"); 
@@ -36,7 +38,10 @@ export default class level_z2 extends GameLevel {
 
     initScene(init: Record<string, any>): void {
         this.playerStats = init.characterStats;
-        this.weapon = init.weapon;
+        let weapon = <Weapon>init.weapon;
+        weapon.cooldownTimer = new Timer(this.playerStats.weaponCoolDown);
+        weapon.sprite.setScene(this);
+        this.weapon = weapon;
     }
     
     startScene(): void {
@@ -56,7 +61,7 @@ export default class level_z2 extends GameLevel {
         super.startScene();
         this.initLayers();
         this.initializeWeapons();
-        this.initPlayer(this.weapon);
+        this.initPlayer();
         this.tilemap = this.player.getScene().getTilemap("Wall") as OrthogonalTilemap;
 
         this.enemyConstructorPairings = new Map([["snake" , EnemyAI], ["harpy", RangeAI]]);
@@ -115,7 +120,7 @@ export default class level_z2 extends GameLevel {
         // }
     }
 
-    protected initPlayer(weapon: Weapon) : void {
+    protected initPlayer() : void {
         this.player = this.add.animatedSprite("zeus", "primary");
         this.player.scale.set(1, 1);
         if(!this.playerSpawn){
@@ -126,6 +131,8 @@ export default class level_z2 extends GameLevel {
         this.player.addPhysics(new AABB(Vec2.ZERO, new Vec2(16, 16)));
         //this.player.colliderOffset.set(0, 2);
 
+
+        this.weapon.battleManager = this.battleManager;
         // TODO - ADD PLAYER AI HERE
         this.player.addAI(PlayerController,
             {
@@ -134,10 +141,11 @@ export default class level_z2 extends GameLevel {
                 inputEnabled: true,
                 range: 30,
                 playerStats: this.playerStats,
-                weapon: weapon
+                weapon: this.weapon
             });
         this.player.animation.play("idle");
 
+        console.log((<PlayerController>this.player._ai).weapon);
 
         this.player.setGroup("player");
         // this.viewport.setCenter(this.playerSpawn);
