@@ -70,7 +70,6 @@ export default class Timer implements Updateable {
     }
 
     unpause(): void {
-        console.log("UNPAUSING");
         this.state = TimerState.ACTIVE;
     }
 

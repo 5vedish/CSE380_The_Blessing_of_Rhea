@@ -87,7 +87,7 @@ export default class Tutorial extends GameLevel {
             player: this.player,
             speed: 5,
             weapon: this.createWeapon("knife"),
-            experience: 500}
+            experience: 200}
         firstEnemy.addAI(EnemyAI, options);
         firstEnemy.position.set(this.player.position.x, 44*32);
         firstEnemy.freeze();
@@ -106,7 +106,7 @@ export default class Tutorial extends GameLevel {
             player: this.player,
             speed: 5,
             weapon: this.createWeapon("knife"),
-            experience: 5000}
+            experience: 200}
         secondEnemy.addAI(EnemyAI, options);
         secondEnemy.position.set(33*32+16, 30*32+16);
         secondEnemy.freeze();

@@ -76,6 +76,7 @@ export default class SceneManager {
 		this.pendingScene = null;
 
 		// Init the scene
+		console.log("initScene");
 		this.currentScene.initScene(this.pendingSceneInit);
 
 		// Enqueue all scene asset loads

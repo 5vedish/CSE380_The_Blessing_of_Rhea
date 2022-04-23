@@ -83,7 +83,7 @@ export default class level_z1 extends GameLevel {
         this.enemyConstructorPairings = new Map([["snake" , EnemyAI], ["harpy", RangeAI]]);
 
         //Create how long players need to survive for
-        this.gameTimer = new Timer(30000);
+        this.gameTimer = new Timer(10000);
         this.gameTimer.start();
 
         this.gameTime = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(this.viewport.getHalfSize().x, 16), text: `${this.parseTimeLeft(this.gameTimer.getTimeLeft())}`});
@@ -190,6 +190,7 @@ export default class level_z1 extends GameLevel {
                 this.removeEnemies = true;
                 this.maxEnemies = 0;
                 for(let enemy of this.enemyArray){
+                    this.battleManager.enemies.pop();
                     enemy.destroy();
                 }
             }

@@ -8,18 +8,20 @@ export default class BattleManager {
     enemies: Array<BattlerAI>;
 
     handleInteraction(attackerType: string, weapon: Weapon) {
-        if (attackerType === "player" && this.enemies != undefined) {
-            // Check for collisions with enemies
-            for (let enemy of this.enemies) {
-                if (weapon.hits(enemy.owner)) {
-                    enemy.damage(weapon.type.damage);
+        if((this.enemies != undefined && this.enemies.length>0)){
+            if (attackerType === "player") {
+                // Check for collisions with enemies
+                for (let enemy of this.enemies) {
+                    if (weapon.hits(enemy.owner)) {
+                        enemy.damage(weapon.type.damage);
+                    }
                 }
-            }
-        } else {
-            // Check for collision with player
-            for (let player of this.players) {
-                if (weapon.hits(player.owner)) {
-                    player.damage(weapon.type.damage);
+            } else {
+                // Check for collision with player
+                for (let player of this.players) {
+                    if (weapon.hits(player.owner)) {
+                        player.damage(weapon.type.damage);
+                    }
                 }
             }
         }

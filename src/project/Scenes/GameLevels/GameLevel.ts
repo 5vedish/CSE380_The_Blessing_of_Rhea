@@ -294,7 +294,7 @@ export default class GameLevel extends Scene{
                 case Project_Events.DAMAGED:
 
                     // update health bar
-                    const percentage = this.playerStats.stats.health/this.playerStats.stats.maxHealth;
+                    let percentage = this.playerStats.stats.health/this.playerStats.stats.maxHealth;
                     // scale by percentage
                     this.healthBar.size = new Vec2(percentage*256, 8);
                     // rebalance position

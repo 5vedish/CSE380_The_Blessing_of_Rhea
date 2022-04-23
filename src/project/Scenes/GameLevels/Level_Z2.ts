@@ -62,8 +62,10 @@ export default class level_z2 extends GameLevel {
         this.enemyConstructorPairings = new Map([["snake" , EnemyAI], ["harpy", RangeAI]]);
 
         //Health Bar top left
+
+        let percentage = this.playerStats.stats.health/this.playerStats.stats.maxHealth;
         this.healthBar = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(196, 16), 
-            size: new Vec2(256, 8)});
+            size: new Vec2(percentage*256, 8)});
         //Health Bar follows below character
 
         this.levelUI = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(86, 32), 
@@ -89,29 +91,28 @@ export default class level_z2 extends GameLevel {
 
     updateScene(deltaT: number): void {
         super.updateScene(deltaT);
-        console.log(this.sceneGraph)
 
-        // Spawn enemies in
-        if(this.currentNumEnemies < this.maxEnemies && !this.pauseFlag){
-            let enemyType = this.spawnableEnemies[Math.floor(Math.random() * this.spawnableEnemies.length)];
+        // // Spawn enemies in
+        // if(this.currentNumEnemies < this.maxEnemies && !this.pauseFlag){
+        //     let enemyType = this.spawnableEnemies[Math.floor(Math.random() * this.spawnableEnemies.length)];
 
-            let enemyPosition = this.randomSpawn();
-            let options = {
-                name: enemyType.name,
-                health: enemyType.health,
-                player: enemyType.player,
-                speed: enemyType.speed,
-                weapon: enemyType.weapon,
-                range: enemyType.range,
-                experience: enemyType.experience,
-                positon: enemyPosition,
-                projectiles: this.createProjectiles(5 , "leaf"),
-                cooldown: 1000,
-                scene: this,
-                ai: this.enemyConstructorPairings.get(enemyType.name)
-            }
-            this.enemyArray.push(this.addEnemy(enemyType.name, options));
-        }
+        //     let enemyPosition = this.randomSpawn();
+        //     let options = {
+        //         name: enemyType.name,
+        //         health: enemyType.health,
+        //         player: enemyType.player,
+        //         speed: enemyType.speed,
+        //         weapon: enemyType.weapon,
+        //         range: enemyType.range,
+        //         experience: enemyType.experience,
+        //         positon: enemyPosition,
+        //         projectiles: this.createProjectiles(5 , "leaf"),
+        //         cooldown: 1000,
+        //         scene: this,
+        //         ai: this.enemyConstructorPairings.get(enemyType.name)
+        //     }
+        //     this.enemyArray.push(this.addEnemy(enemyType.name, options));
+        // }
     }
 
     protected initPlayer(weapon: Weapon) : void {
