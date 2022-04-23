@@ -29,6 +29,7 @@ import Layer from "../../../Wolfie2D/Scene/Layer";
 import UIElement from "../../../Wolfie2D/Nodes/UIElement";
 import Bolt from "../../GameSystems/items/Bolt";
 import ProjectileAI from "../../AI/ProjectileAI";
+import DeathScreen from "../DeathScreen";
 
 export interface CustomEnemy {
     name: string,
@@ -45,6 +46,8 @@ export default class GameLevel extends Scene{
     protected enemyConstructorPairings: Map<string,any>;
 
     //Timer for levels that require players to survive
+    protected startSceneTimer: Timer = new Timer(5000);
+    protected startedLevel: boolean = false;
     protected gameTimer: Timer;
     protected gameTime: Label;
     protected changeLevelTimer: Timer;
@@ -143,28 +146,6 @@ export default class GameLevel extends Scene{
         pauseScreen.alpha = .5;
         
 
-        //Health Bar
-        let healthBarBorder = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(196, 16), 
-            size: new Vec2(256, 8)});
-        healthBarBorder.alpha = .5;
-
-        //Health Bar top left
-        this.healthBar = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(196, 16), 
-            size: new Vec2(256, 8)});
-        //Health Bar follows below character
-
-        //Experience bar
-        this.expBar = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(216, 32), 
-            size: new Vec2(0, 0)});
-        this.expBar.color = Color.BLUE;
-
-        let expBarBorder = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(216, 32), 
-            size: new Vec2(216, 4)});
-        expBarBorder.color = Color.LIGHTBLUE;
-        expBarBorder.alpha = .5;
-
-
-
         //Level up UI
         this.levelUpLayer = this.addUILayer("levelUp");
         let dim = this.add.graphic(GraphicType.RECT, "levelUp", { position: this.viewport.getOrigin(), size: new Vec2(this.viewport.getHalfSize().x*2, 
@@ -172,6 +153,15 @@ export default class GameLevel extends Scene{
         dim.color = Color.BLACK;
         dim.alpha = .5;
         this.levelUpLayer.disable();
+
+        //Character health and level
+        let healthBarBorder = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(196, 16), 
+            size: new Vec2(256, 8)});
+        healthBarBorder.alpha = .5;
+        let expBarBorder = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(216, 32), 
+            size: new Vec2(216, 4)});
+        expBarBorder.color = Color.LIGHTBLUE;
+        expBarBorder.alpha = .5;
         
 
         this.button1 = this.add.uiElement(UIElementType.BUTTON, "levelUp", {
@@ -331,6 +321,14 @@ export default class GameLevel extends Scene{
 
         // prevents the player from going out of bounds
         this.lockPlayer();   
+
+        //Check if player died
+        if(this.playerStats.stats.health <= 0){
+            this.viewport.setSize(1600, 900);
+            this.healthBar.destroy();
+            this.expBar.destroy();
+            this.sceneManager.changeToScene(DeathScreen);
+        }
     }
 
     protected pauseEntities(){
@@ -402,7 +400,7 @@ export default class GameLevel extends Scene{
         enemy.scale.set(1,1);
         enemy.addPhysics(new AABB(Vec2.ZERO, new Vec2(8,8))); //Monkey patched collision box, dynamic later
         enemy.animation.play("moving");
-        enemy.position = options.positon;
+        enemy.position = options.position;
         enemy.addAI(options.ai, options);
         enemy.setGroup("enemy");
         this.currentNumEnemies += 1;
@@ -493,6 +491,8 @@ export default class GameLevel extends Scene{
         let spawnPointIndex = Math.floor(Math.random() * 4);
         let viewportCenter = this.viewport.getCenter();
         let enemyPosition;
+        // console.log(this.boundaryCheck(viewportCenter, this.enemySpawns[spawnPointIndex]));
+        // return this.player.position.clone();
         //check if spawn position is out of bounds
         while(true){
             if(this.boundaryCheck(viewportCenter, this.enemySpawns[spawnPointIndex])){
@@ -507,13 +507,15 @@ export default class GameLevel extends Scene{
                     let yOffset =Math.floor(Math.random() * 386) - 193
                     enemyPosition = new Vec2(viewportCenter.x + this.enemySpawns[spawnPointIndex].x,viewportCenter.y + yOffset);
                 }
-                //Check if spawn positon is a wall
-                let spawnTile = this.tilemap.getColRowAt(enemyPosition);
-                let tile = this.tilemap.getTileAtRowCol(spawnTile);
-                if(!this.tilemap.isTileCollidable(tile)){
-                    return enemyPosition;
-                }
-                
+                // //Check if spawn positon is a wall
+                // let spawnTile = this.tilemap.getColRowAt(enemyPosition);
+                // let tile = this.tilemap.getTileAtRowCol(spawnTile);
+                // if(!this.tilemap.isTileCollidable(tile)){
+                //     // return enemyPosition;
+                //     console.log("yes");
+                    
+                // }
+                return enemyPosition;
             }
         }
     }

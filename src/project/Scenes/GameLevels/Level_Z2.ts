@@ -56,7 +56,7 @@ export default class level_z2 extends GameLevel {
         this.playerSpawn = new Vec2(32*32, 32*32);
         // this.viewport.setFocus(new Vec2(this.playerSpawn.x, this.playerSpawn.y));
         
-        this.maxEnemies = 1;
+        this.maxEnemies = 15;
         
         super.startScene();
         this.initLayers();
@@ -66,12 +66,16 @@ export default class level_z2 extends GameLevel {
 
         this.enemyConstructorPairings = new Map([["snake" , EnemyAI], ["harpy", RangeAI]]);
 
-        //Health Bar top left
-
+        //Add health bar and exp bar
         let percentage = this.playerStats.stats.health/this.playerStats.stats.maxHealth;
-        this.healthBar = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(196, 16), 
-            size: new Vec2(percentage*256, 8)});
-        //Health Bar follows below character
+        this.healthBar = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(196 + (percentage-1)*128,16), 
+        size: new Vec2(percentage*256, 8)});
+        //Experience bar
+        let reqExp = Math.pow(this.playerStats.level, 1.5);
+        let expPercentage = this.playerStats.experience / (reqExp * 500);
+        this.expBar = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(108*expPercentage+(216/2), 32), 
+            size: new Vec2(expPercentage*216, 4)});
+        this.expBar.color = Color.BLUE;
 
         this.levelUI = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(86, 32), 
             text: "Lvl" + this.playerStats.level});
@@ -92,32 +96,39 @@ export default class level_z2 extends GameLevel {
             range: 10,
             experience: 200
         });
+        
+        this.startSceneTimer.start();
     }
 
     updateScene(deltaT: number): void {
         super.updateScene(deltaT);
+        // Spawn enemies in
+        if(this.startSceneTimer.isStopped()){
+            if(!this.startedLevel){
+                this.startedLevel = true;
+            }
 
-        // // Spawn enemies in
-        // if(this.currentNumEnemies < this.maxEnemies && !this.pauseFlag){
-        //     let enemyType = this.spawnableEnemies[Math.floor(Math.random() * this.spawnableEnemies.length)];
-
-        //     let enemyPosition = this.randomSpawn();
-        //     let options = {
-        //         name: enemyType.name,
-        //         health: enemyType.health,
-        //         player: enemyType.player,
-        //         speed: enemyType.speed,
-        //         weapon: enemyType.weapon,
-        //         range: enemyType.range,
-        //         experience: enemyType.experience,
-        //         positon: enemyPosition,
-        //         projectiles: this.createProjectiles(5 , "leaf"),
-        //         cooldown: 1000,
-        //         scene: this,
-        //         ai: this.enemyConstructorPairings.get(enemyType.name)
-        //     }
-        //     this.enemyArray.push(this.addEnemy(enemyType.name, options));
-        // }
+            if(this.currentNumEnemies < this.maxEnemies && !this.pauseFlag){
+                let enemyType = this.spawnableEnemies[Math.floor(Math.random() * this.spawnableEnemies.length)];
+    
+                let enemyPosition = this.randomSpawn();
+                let options = {
+                    name: enemyType.name,
+                    health: enemyType.health,
+                    player: enemyType.player,
+                    speed: enemyType.speed,
+                    weapon: enemyType.weapon,
+                    range: enemyType.range,
+                    experience: enemyType.experience,
+                    position: enemyPosition,
+                    projectiles: this.createProjectiles(5 , "leaf"),
+                    cooldown: 1000,
+                    scene: this,
+                    ai: this.enemyConstructorPairings.get(enemyType.name)
+                }
+                this.enemyArray.push(this.addEnemy(enemyType.name, options));
+            }
+        }
     }
 
     protected initPlayer() : void {
@@ -145,26 +156,13 @@ export default class level_z2 extends GameLevel {
             });
         this.player.animation.play("idle");
 
-        console.log((<PlayerController>this.player._ai).weapon);
-
         this.player.setGroup("player");
         // this.viewport.setCenter(this.playerSpawn);
         this.viewport.follow(this.player);
 
         this.battleManager.setPlayers([<BattlerAI>this.player._ai]);
         this.playerController = <PlayerController> this.player._ai;
-
-        const percentage = this.playerStats.stats.health/this.playerStats.stats.maxHealth;
-        // scale by percentage
-        this.healthBar.size = new Vec2(percentage*256, 8);
-        // rebalance position
-        this.healthBar.position = new Vec2(196 + (percentage-1)*128,16);
-
-        //Update the exp bar
-        let reqExp = Math.pow(this.playerStats.level, 1.5);
-        let expPercentage = this.playerStats.experience / (reqExp * 500);
-        this.expBar.size = new Vec2(expPercentage*216, 4);
-        this.expBar.position = new Vec2(108*expPercentage+(216/2), 32);
+        
     }
 
     protected initLayers() : void {

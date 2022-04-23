@@ -50,6 +50,7 @@ export default class level_z1 extends GameLevel {
         this.playerSpawn = new Vec2(32*32, 32*32);
         // this.viewport.setFocus(new Vec2(this.playerSpawn.x, this.playerSpawn.y));
         
+        
         this.maxEnemies = 15;
         
         super.startScene();
@@ -57,6 +58,17 @@ export default class level_z1 extends GameLevel {
         this.initializeWeapons();
         this.initPlayer();
         // this.initializeProjectile();
+                
+        //Health Bar 
+        this.healthBar = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(196, 16), 
+            size: new Vec2(256, 8)});
+        //Health Bar follows below character
+
+        //Experience bar
+        this.expBar = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(216, 32), 
+            size: new Vec2(0, 0)});
+        this.expBar.color = Color.BLUE;
+
 
         this.tilemap = this.player.getScene().getTilemap("Wall") as OrthogonalTilemap;
 
@@ -84,10 +96,11 @@ export default class level_z1 extends GameLevel {
 
         //Create how long players need to survive for
         this.gameTimer = new Timer(10000);
-        this.gameTimer.start();
 
         this.gameTime = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(this.viewport.getHalfSize().x, 16), text: `${this.parseTimeLeft(this.gameTimer.getTimeLeft())}`});
 
+        //Start spawning delay
+        this.startSceneTimer.start();
     }
     
     protected initLayers() : void {
@@ -138,72 +151,74 @@ export default class level_z1 extends GameLevel {
         super.updateScene(deltaT);
 
         // Spawn enemies in
-        if(this.currentNumEnemies < this.maxEnemies && !this.pauseFlag){
-            let enemyType = this.spawnableEnemies[Math.floor(Math.random() * this.spawnableEnemies.length)];
-
-            let enemyPosition = this.randomSpawn();
-            let options = {
-                name: enemyType.name,
-                health: enemyType.health,
-                player: enemyType.player,
-                speed: enemyType.speed,
-                weapon: enemyType.weapon,
-                range: enemyType.range,
-                experience: enemyType.experience,
-                positon: enemyPosition,
-                projectiles: this.createProjectiles(5 , "leaf"),
-                cooldown: 1000,
-                scene: this,
-                ai: this.enemyConstructorPairings.get(enemyType.name)
+        if(this.startSceneTimer.isStopped()){
+            if(!this.startedLevel){
+                this.gameTimer.start();
+                this.startedLevel = true;
             }
-            this.enemyArray.push(this.addEnemy(enemyType.name, options));
-        }
 
-        //Update game timer
-        this.gameTime.text = `${this.parseTimeLeft(this.gameTimer.getTimeLeft())}`;
-
-        //Half way through add harpies
-        // console.log(this.gameTimer.getTimeLeft() + " | " + this.gameTimer.getTotalTime()/2)
-        if(this.gameTimer.getTimeLeft() <= this.gameTimer.getTotalTime()/2 && !this.addedHarpy){
-            console.log("Adding harpy" + ` at ${this.parseTimeLeft(this.gameTimer.getTimeLeft())}`);
-            this.spawnableEnemies.push({
-                name: "harpy",
-                health: 3,
-                player: this.player,
-                speed: 10,
-                weapon: this.createWeapon("knife"),
-                range: 150,
-                experience: 250,
-            });
-            this.addedHarpy = true;
-        }
-
-        if(this.gameTimer.getTimeLeft() <= 0){
-            //end level and move to level z2
-            if(this.changeLevelTimer === undefined){
-                this.changeLevelTimer = new Timer(5000);
-                this.changeLevelTimer.start();
-            }
-            //Remove all enemies
-            
-            if(!this.removeEnemies){
-                this.removeEnemies = true;
-                this.maxEnemies = 0;
-                for(let enemy of this.enemyArray){
-                    this.battleManager.enemies.pop();
-                    enemy.destroy();
+            if(this.currentNumEnemies < this.maxEnemies && !this.pauseFlag){
+                let enemyType = this.spawnableEnemies[Math.floor(Math.random() * this.spawnableEnemies.length)];
+    
+                let enemyPosition = this.randomSpawn();
+                let options = {
+                    name: enemyType.name,
+                    health: enemyType.health,
+                    player: enemyType.player,
+                    speed: enemyType.speed,
+                    weapon: enemyType.weapon,
+                    range: enemyType.range,
+                    experience: enemyType.experience,
+                    position: enemyPosition,
+                    projectiles: this.createProjectiles(5 , "leaf"),
+                    cooldown: 1000,
+                    scene: this,
+                    ai: this.enemyConstructorPairings.get(enemyType.name)
                 }
+                this.enemyArray.push(this.addEnemy(enemyType.name, options));
             }
-            if(this.changeLevelTimer.getTimeLeft() <= 0){
-                this.viewport.setSize(1600, 900);
-                this.sceneManager.changeToScene(level_z2, {characterStats: this.playerStats, weapon: (<PlayerController>this.player._ai).weapon}, this.sceneOptions);
+    
+            //Update game timer
+            this.gameTime.text = `${this.parseTimeLeft(this.gameTimer.getTimeLeft())}`;
+    
+            //Half way through add harpies
+            // console.log(this.gameTimer.getTimeLeft() + " | " + this.gameTimer.getTotalTime()/2)
+            if(this.gameTimer.getTimeLeft() <= this.gameTimer.getTotalTime()/2 && !this.addedHarpy){
+                console.log("Adding harpy" + ` at ${this.parseTimeLeft(this.gameTimer.getTimeLeft())}`);
+                this.spawnableEnemies.push({
+                    name: "harpy",
+                    health: 3,
+                    player: this.player,
+                    speed: 10,
+                    weapon: this.createWeapon("knife"),
+                    range: 150,
+                    experience: 250,
+                });
+                this.addedHarpy = true;
+            }
+    
+            if(this.gameTimer.getTimeLeft() <= 0){
+                //end level and move to level z2
+                if(this.changeLevelTimer === undefined){
+                    this.changeLevelTimer = new Timer(5000);
+                    this.changeLevelTimer.start();
+                }
+                //Remove all enemies
+                
+                if(!this.removeEnemies){
+                    this.removeEnemies = true;
+                    this.maxEnemies = 0;
+                    for(let enemy of this.enemyArray){
+                        this.battleManager.enemies.pop();
+                        enemy.destroy();
+                    }
+                }
+                if(this.changeLevelTimer.getTimeLeft() <= 0){
+                    this.viewport.setSize(1600, 900);
+                    this.sceneManager.changeToScene(level_z2, {characterStats: this.playerStats, weapon: (<PlayerController>this.player._ai).weapon}, this.sceneOptions);
+                }
             }
         }
         
-        //Check if player died
-        if(this.playerStats.stats.health <= 0){
-            this.viewport.setSize(1600, 900);
-            this.sceneManager.changeToScene(DeathScreen);
-        }
     }
 }
