@@ -7,9 +7,11 @@ import BattleManager from "../BattleManager";
 import Item from "./Item";
 import WeaponType from "./WeaponTypes/WeaponType";
 
-export default class Weapon extends Item {
+export default class Weapon {
     /** The type of this weapon */
     type: WeaponType;
+
+    sprite: Sprite;
 
     /** A list of assets this weapon needs to be animated */
     assets: Array<any>;
@@ -24,7 +26,7 @@ export default class Weapon extends Item {
     cooldownTimer: Timer;
 
     constructor(sprite: Sprite, type: WeaponType, battleManager: BattleManager){
-        super(sprite);
+        this.sprite = sprite;
 
         // Set the weapon type
         this.type = type.clone();

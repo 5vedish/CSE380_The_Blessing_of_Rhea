@@ -47,6 +47,7 @@ export default class GameLevel extends Scene{
     //Timer for levels that require players to survive
     protected gameTimer: Timer;
     protected gameTime: Label;
+    protected changeLevelTimer: Timer;
 
     //Each level has a timer
     protected levelTimer: Timer;
@@ -127,6 +128,8 @@ export default class GameLevel extends Scene{
         this.enemySpawns.push(new Vec2(0, 275)); //Bottom of viewport      
     }
 
+    
+
     startScene(): void {
         this.battleManager = new BattleManager();
         this.levelReceiver = new Receiver();
@@ -145,6 +148,10 @@ export default class GameLevel extends Scene{
             size: new Vec2(256, 8)});
         healthBarBorder.alpha = .5;
 
+        //Health Bar top left
+        this.healthBar = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(196, 16), 
+            size: new Vec2(256, 8)});
+        //Health Bar follows below character
 
         //Experience bar
         this.expBar = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(216, 32), 
@@ -337,9 +344,9 @@ export default class GameLevel extends Scene{
         this.player.setAIActive(false, {});
         this.player.animation.stop();
 
-        // if(this.gameTimer != undefined){
-        //     this.gameTimer.pause();
-        // }
+        if(this.gameTimer != undefined){
+            this.gameTimer.pause();
+        }
     }
 
     protected unpauseEntities(){
@@ -352,9 +359,9 @@ export default class GameLevel extends Scene{
         this.player.setAIActive(true, {});
         this.player.animation.play("idle", true); 
 
-        // if(this.gameTimer != undefined){
-        //     this.gameTimer.st;
-        // }
+        if(this.gameTimer != undefined){
+            this.gameTimer.unpause();
+        }
     }
 
     // main events
@@ -515,6 +522,6 @@ export default class GameLevel extends Scene{
     protected parseTimeLeft(timeLeft: number): string{
         let seconds = Math.floor((timeLeft / 1000) % 60),
         minutes = Math.floor((timeLeft / (1000 * 60)) % 60)
-        return `${minutes}:${seconds}`
+        return `${minutes}:${(seconds < 10) ? "0" + seconds : seconds}`
     }
 }

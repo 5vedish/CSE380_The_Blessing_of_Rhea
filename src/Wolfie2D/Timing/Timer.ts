@@ -69,6 +69,11 @@ export default class Timer implements Updateable {
         this.state = TimerState.PAUSED;
     }
 
+    unpause(): void {
+        console.log("UNPAUSING");
+        this.state = TimerState.ACTIVE;
+    }
+
     update(deltaT: number){
         if(this.state === TimerState.ACTIVE){
             this.timeLeft -= deltaT*1000;

@@ -13,14 +13,19 @@ import CharacterStat from "../../PlayerStatus";
 import DeathScreen from "../DeathScreen";
 import RangeAI from "../../AI/RangeAI";
 import Timer from "../../../Wolfie2D/Timing/Timer";
+import level_z2 from "./Level_Z2";
 
 export default class level_z1 extends GameLevel {
+
+    protected removeEnemies: boolean = false;
+
+    private addedHarpy: boolean = false;
 
     loadScene(): void {
         //Load Zeus
         this.load.spritesheet("zeus", "project_assets/spritesheets/Zeus.json"); 
 
-        //Load Snake
+        //Load Enemies
         this.load.spritesheet("snake", "project_assets/spritesheets/Snake.json")
         this.load.spritesheet("harpy", "project_assets/spritesheets/harpy.json")
 
@@ -31,6 +36,7 @@ export default class level_z1 extends GameLevel {
 
         super.loadScene();
     }
+
 
     startScene(): void {
         // Add in the tilemap and get the wall layer
@@ -54,11 +60,6 @@ export default class level_z1 extends GameLevel {
 
         this.tilemap = this.player.getScene().getTilemap("Wall") as OrthogonalTilemap;
 
-        //Health Bar top left
-        this.healthBar = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(196, 16), 
-            size: new Vec2(256, 8)});
-        //Health Bar follows below character
-
         this.levelUI = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(86, 32), 
             text: "Lvl" + this.playerStats.level});
         this.levelUI.textColor = Color.BLACK;
@@ -79,20 +80,10 @@ export default class level_z1 extends GameLevel {
             experience: 200
         });
 
-        // this.spawnableEnemies.push({
-        //     name: "harpy",
-        //     health: 3,
-        //     player: this.player,
-        //     speed: 10,
-        //     weapon: this.createWeapon("knife"),
-        //     range: 150,
-        //     experience: 250,
-        // });
-
         this.enemyConstructorPairings = new Map([["snake" , EnemyAI], ["harpy", RangeAI]]);
 
         //Create how long players need to survive for
-        this.gameTimer = new Timer(60000);
+        this.gameTimer = new Timer(30000);
         this.gameTimer.start();
 
         this.gameTime = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(this.viewport.getHalfSize().x, 16), text: `${this.parseTimeLeft(this.gameTimer.getTimeLeft())}`});
@@ -172,8 +163,9 @@ export default class level_z1 extends GameLevel {
         this.gameTime.text = `${this.parseTimeLeft(this.gameTimer.getTimeLeft())}`;
 
         //Half way through add harpies
-        if(this.gameTimer.getTimeLeft() === this.gameTimer.getTotalTime()/2){
-            console.log("Adding harpy");
+        // console.log(this.gameTimer.getTimeLeft() + " | " + this.gameTimer.getTotalTime()/2)
+        if(this.gameTimer.getTimeLeft() <= this.gameTimer.getTotalTime()/2 && !this.addedHarpy){
+            console.log("Adding harpy" + ` at ${this.parseTimeLeft(this.gameTimer.getTimeLeft())}`);
             this.spawnableEnemies.push({
                 name: "harpy",
                 health: 3,
@@ -183,6 +175,28 @@ export default class level_z1 extends GameLevel {
                 range: 150,
                 experience: 250,
             });
+            this.addedHarpy = true;
+        }
+
+        if(this.gameTimer.getTimeLeft() <= 0){
+            //end level and move to level z2
+            if(this.changeLevelTimer === undefined){
+                this.changeLevelTimer = new Timer(5000);
+                this.changeLevelTimer.start();
+            }
+            //Remove all enemies
+            
+            if(!this.removeEnemies){
+                this.removeEnemies = true;
+                this.maxEnemies = 0;
+                for(let enemy of this.enemyArray){
+                    enemy.destroy();
+                }
+            }
+            if(this.changeLevelTimer.getTimeLeft() <= 0){
+                this.viewport.setSize(1600, 900);
+                this.sceneManager.changeToScene(level_z2, {characterStats: this.playerStats, weapon: (<PlayerController>this.player._ai).weapon}, this.sceneOptions);
+            }
         }
         
         //Check if player died

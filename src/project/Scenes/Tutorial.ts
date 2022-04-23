@@ -176,6 +176,7 @@ export default class Tutorial extends GameLevel {
         let endTutorialLabel = <Label>this.add.uiElement(UIElementType.LABEL, "tutorial", {position: new Vec2(32*32, 20*32), text: "Stand here! Good Luck on your adventure!"});
         this.tutorialTexts.push(endTutorialLabel);
     }
+
     
     protected initLayers() : void {
         // Add a layer for the UI
