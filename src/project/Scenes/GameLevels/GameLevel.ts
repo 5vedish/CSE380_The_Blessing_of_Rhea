@@ -255,8 +255,7 @@ export default class GameLevel extends Scene{
 
                 this.levelChanged--;
                 // accounting for multiple levels
-                this.selectionArray = [];
-                if (this.selectionArray.length < 3){
+                if (this.levelChanged){
                     this.rollItems();
                 }  
             }

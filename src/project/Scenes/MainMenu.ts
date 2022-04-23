@@ -173,8 +173,8 @@ export default class MainMenu extends Scene {
             }
         }
         //TO DO replace with tutorial stage
-        // this.sceneManager.changeToScene(Tutorial, {}, physicsOptions);
-        this.sceneManager.changeToScene(level_z1, {}, physicsOptions);
+        this.sceneManager.changeToScene(Tutorial, {}, physicsOptions);
+        // this.sceneManager.changeToScene(level_z1, {}, physicsOptions);
       }
 
       if (event.type === "select_levels") {
