@@ -38,6 +38,7 @@ import Lightning from "../../GameSystems/items/WeaponTypes/Primary/Lightning";
 import Layer from "../../../Wolfie2D/Scene/Layer";
 import UIElement from "../../../Wolfie2D/Nodes/UIElement";
 import Bolt from "../../GameSystems/items/Bolt";
+import ProjectileAI from "../../AI/ProjectileAI";
 
 export interface CustomEnemy {
     name: string,
@@ -89,6 +90,8 @@ export default class GameLevel extends Scene{
     protected itemsArray = ["hourglass", "hermes_sandals", "bolt"];
     protected selectionArray: Array<string> = [];
     protected itemConstructorPairings: Map<string,any> = new Map([["hourglass" , Hourglass], ["hermes_sandals", HermesSandals], ["bolt", Bolt]]);
+    protected maxProjectiles = 20;
+    protected projectiles : Array<AnimatedSprite> = new Array(this.maxProjectiles);
 
     //Sprite to hold weapon icon
     protected battleManager: BattleManager;
@@ -100,13 +103,19 @@ export default class GameLevel extends Scene{
     protected tilemap : OrthogonalTilemap;
 
     loadScene(): void {
-        this.load.spritesheet("slice", "project_assets/spritesheets/slice.json");
+        // Objects
         this.load.object("weaponData", "project_assets/data/weaponData.json");
+
+        // Spritesheets
+        this.load.spritesheet("slice", "project_assets/spritesheets/slice.json");
+        this.load.spritesheet("lightning", "project_assets/spritesheets/lightning.json");
+        this.load.spritesheet("leaf", "project_assets/spritesheets/Leaf.json")
+        
+        // Images
         this.load.image("knife", "project_assets/sprites/knife.png");
         this.load.image("laserGun", "project_assets/sprites/laserGun.png");
         this.load.image("pistol", "project_assets/sprites/pistol.png");
         this.load.image("lightning", "project_assets/sprites/lightning.png");
-        this.load.spritesheet("lightning", "project_assets/spritesheets/lightning.json");
         this.load.image("pause_screen", "project_assets/screens/pause.png");
         this.load.image("hourglass", "project_assets/sprites/hourglass.png")
         this.load.image("hermes_sandals", "project_assets/sprites/hermes_sandals.png");
@@ -191,7 +200,6 @@ export default class GameLevel extends Scene{
           this.button3.borderColor = Color.WHITE;
           this.button3.backgroundColor = Color.GRAYISH;
           this.button3.onClickEventId = "three";
-
     }
 
     updateScene(deltaT: number): void {
@@ -290,18 +298,21 @@ export default class GameLevel extends Scene{
                     this.healthBar.position = new Vec2(196 + (percentage-1)*128,16);
                     break;
 
-                    case Project_Events.LEVELUP:
+                case Project_Events.LEVELUP:
 
-                        this.pauseFlag = !this.pauseFlag;
-                        this.pauseEntities();
-                        //show layer
-                        this.getLayer("levelUp").enable();
-                        this.levelChanged = event.data.get("levelChange");
-                        this.levelUI.text = "Lvl" + this.playerStats.level;
-                        
-                        this.rollItems();
-                        break;
-
+                    this.pauseFlag = !this.pauseFlag;
+                    this.pauseEntities();
+                    //show layer
+                    this.getLayer("levelUp").enable();
+                    this.levelChanged = event.data.get("levelChange");
+                    this.levelUI.text = "Lvl" + this.playerStats.level;
+                    
+                    this.rollItems();
+                    break;
+                
+                case Project_Events.HARPYATTACK:
+                    this.shootProjectiles(event.data.get("position"));
+                    break;
                            
             }
         }    
@@ -348,7 +359,11 @@ export default class GameLevel extends Scene{
 
     // main events
     protected subscribeToEvents(): void {
-        this.receiver.subscribe ([Project_Events.ENEMYDIED, Project_Events.DAMAGED, Project_Events.LEVELUP
+        this.receiver.subscribe ([
+            Project_Events.ENEMYDIED, 
+            Project_Events.DAMAGED, 
+            Project_Events.LEVELUP,
+            Project_Events.HARPYATTACK
         ]);
     }
 
@@ -429,6 +444,35 @@ export default class GameLevel extends Scene{
 
             // Register the weapon type
             RegistryManager.getRegistry("weaponTypes").registerItem(weapon.name, weaponType)
+        }
+    }
+
+    initializeProjectile(): void {
+        for (let i = 0; i < this.projectiles.length; i++) {
+            this.projectiles[i] = this.add.animatedSprite("leaf", "primary");
+            this.projectiles[i].position = new Vec2(0, 0);
+            this.projectiles[i].visible = false;
+            this.projectiles[i].addAI(ProjectileAI, {speed: 75});
+            this.projectiles[i].addPhysics(new AABB(Vec2.ZERO, new Vec2(32, 32)));
+            this.projectiles[i].animation.playIfNotAlready("shoot", true);
+        }
+    }
+
+    shootProjectiles(position: Vec2): void {
+        let projectile: AnimatedSprite = null;
+        for (let p of this.projectiles) {
+            if (!p.visible) {
+                projectile = p;
+                break;
+            }
+        }
+
+        if (projectile !== null) {
+            let dir = this.player.position.clone().sub(position).normalize();
+            projectile.visible = true;
+            projectile.position = position.clone();
+            (<ProjectileAI> projectile._ai).setDirection(dir);
+            projectile.setAIActive(true, {speed: 75});
         }
     }
 

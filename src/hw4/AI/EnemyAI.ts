@@ -18,6 +18,7 @@ import Alert from "./EnemyStates/Alert";
 import Active from "./EnemyStates/Active";
 import Attack from "./EnemyStates/Attack";
 import { Project_Events } from "../project_constants";
+import Emitter from "../../Wolfie2D/Events/Emitter";
 
 
 
@@ -60,11 +61,13 @@ export default class EnemyAI extends StateMachineGoapAI implements BattlerAI {
 
     spriteFlipped: boolean = false;
 
+    emitter: Emitter;
+
     initializeAI(owner: AnimatedSprite, options: Record<string, any>): void {
         this.owner = owner;
-        
+        this.emitter = new Emitter();
         this.addState(EnemyStates.DEFAULT, new Active(this, owner, options.player, options.range));
-        this.addState(EnemyStates.ATTACK, new Attack(this, owner, options.player, options.name));
+        this.addState(EnemyStates.ATTACK, new Attack(this, owner, options.player, options.name, this.emitter));
 
         this.health = options.health;
         this.player = options.player;

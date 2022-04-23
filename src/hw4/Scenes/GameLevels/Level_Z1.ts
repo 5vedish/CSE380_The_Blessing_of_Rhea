@@ -71,6 +71,7 @@ export default class level_z1 extends GameLevel {
         this.initLayers();
         this.initializeWeapons();
         this.initPlayer();
+        this.initializeProjectile();
 
         this.tilemap = this.player.getScene().getTilemap("Wall") as OrthogonalTilemap;
 
@@ -89,15 +90,15 @@ export default class level_z1 extends GameLevel {
         this.weaponIconCoolDown.color = Color.GRAY;
         this.weaponIconCoolDown.alpha = 0;
         
-        this.spawnableEnemies.push({
-            name: "snake",
-            health: 2,
-            player: this.player,
-            speed: 8,
-            weapon: this.createWeapon("knife"),
-            range: 10,
-            experience: 200
-        });
+        // this.spawnableEnemies.push({
+        //     name: "snake",
+        //     health: 2,
+        //     player: this.player,
+        //     speed: 8,
+        //     weapon: this.createWeapon("knife"),
+        //     range: 10,
+        //     experience: 200
+        // });
             
         this.spawnableEnemies.push({
             name: "harpy",

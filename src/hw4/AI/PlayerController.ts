@@ -123,8 +123,6 @@ export default class PlayerController extends StateMachineAI implements BattlerA
                 this.weapon.use(this.owner, "player", Input.getGlobalMousePosition(), []);
             }
 
-            // TODO - WILL NEED TO IMPLEMENT PLAYER DIRECTION TO INDICATE WHICH IDLE ANIMATION WE ARE USING
-
             let movement = Vec2.UP.scaled(verticalAxis * this.speed);
             movement = movement.add(new Vec2(horizontalAxis * this.speed, 0));
             

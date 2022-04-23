@@ -3,4 +3,5 @@ export enum Project_Events {
     LEVELUP = "levelUp",
     ENEMYDIED = "enemyDied",
     PLAYERATTACKED = "playerAttacked",
+    HARPYATTACK = "harpyAttack"
 }
