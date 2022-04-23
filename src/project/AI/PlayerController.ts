@@ -80,7 +80,6 @@ export default class PlayerController extends StateMachineAI implements BattlerA
                     //handle removing attack sprite
                     let attackSpirte = event.data.get("owner");
                     attackSpirte.destroy();     
-                    console.log("Removing lightning sprite");
         }
     }
 

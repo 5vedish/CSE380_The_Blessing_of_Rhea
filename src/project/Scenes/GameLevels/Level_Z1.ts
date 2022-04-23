@@ -16,8 +16,6 @@ import Timer from "../../../Wolfie2D/Timing/Timer";
 
 export default class level_z1 extends GameLevel {
 
-    protected enemyConstructorPairings: Map<string,any> = new Map([["snake" , EnemyAI], ["harpy", RangeAI]]);
-
     loadScene(): void {
         //Load Zeus
         this.load.spritesheet("zeus", "project_assets/spritesheets/Zeus.json"); 
@@ -46,7 +44,7 @@ export default class level_z1 extends GameLevel {
         this.playerSpawn = new Vec2(32*32, 32*32);
         // this.viewport.setFocus(new Vec2(this.playerSpawn.x, this.playerSpawn.y));
         
-        this.maxEnemies = 1;
+        this.maxEnemies = 15;
         
         super.startScene();
         this.initLayers();
@@ -71,25 +69,27 @@ export default class level_z1 extends GameLevel {
         this.weaponIconCoolDown.color = Color.GRAY;
         this.weaponIconCoolDown.alpha = 0;
         
+        this.spawnableEnemies.push({
+            name: "snake",
+            health: 2,
+            player: this.player,
+            speed: 8,
+            weapon: this.createWeapon("knife"),
+            range: 10,
+            experience: 200
+        });
+
         // this.spawnableEnemies.push({
-        //     name: "snake",
-        //     health: 2,
+        //     name: "harpy",
+        //     health: 3,
         //     player: this.player,
-        //     speed: 8,
+        //     speed: 10,
         //     weapon: this.createWeapon("knife"),
-        //     range: 10,
-        //     experience: 200
+        //     range: 150,
+        //     experience: 250,
         // });
 
-        this.spawnableEnemies.push({
-            name: "harpy",
-            health: 1,
-            player: this.player,
-            speed: 10,
-            weapon: this.createWeapon("knife"),
-            range: 150,
-            experience: 250,
-        });
+        this.enemyConstructorPairings = new Map([["snake" , EnemyAI], ["harpy", RangeAI]]);
 
         //Create how long players need to survive for
         this.gameTimer = new Timer(60000);
@@ -121,7 +121,7 @@ export default class level_z1 extends GameLevel {
         // create weapon
         let weapon = this.createWeapon("lightning");
         
-        this.playerStats = new CharacterStat(1, 1, 10, 2);
+        this.playerStats = new CharacterStat(100, 1, 10, 2);
         // TODO - ADD PLAYER AI HERE
         this.player.addAI(PlayerController,
             {
@@ -172,18 +172,18 @@ export default class level_z1 extends GameLevel {
         this.gameTime.text = `${this.parseTimeLeft(this.gameTimer.getTimeLeft())}`;
 
         //Half way through add harpies
-        // if(this.gameTimer.getTimeLeft() === this.gameTimer.getTotalTime()/2){
-        //     console.log("Adding harpy");
-        //     this.spawnableEnemies.push({
-        //         name: "harpy",
-        //         health: 3,
-        //         player: this.player,
-        //         speed: 10,
-        //         weapon: this.createWeapon("knife"),
-        //         range: 150,
-        //         experience: 250,
-        //     });
-        // }
+        if(this.gameTimer.getTimeLeft() === this.gameTimer.getTotalTime()/2){
+            console.log("Adding harpy");
+            this.spawnableEnemies.push({
+                name: "harpy",
+                health: 3,
+                player: this.player,
+                speed: 10,
+                weapon: this.createWeapon("knife"),
+                range: 150,
+                experience: 250,
+            });
+        }
         
         //Check if player died
         if(this.playerStats.stats.health <= 0){

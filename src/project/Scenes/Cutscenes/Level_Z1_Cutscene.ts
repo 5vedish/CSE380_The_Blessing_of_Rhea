@@ -125,8 +125,6 @@ export default class Level_Z1_Cutscene extends Scene{
 
         if (Input.isMouseJustPressed()){
             
-            console.log(this.dialogueNumber);
-            console.log(this.lines.length);
 
             this.buffers = ["", "", "", ""]; // resetting everything
             this.subLen = 0;
@@ -140,20 +138,8 @@ export default class Level_Z1_Cutscene extends Scene{
 
             if (this.dialogueNumber === this.lines.length){
 
-                let physicsOptions = {
-                    physics: {
-                        groupNames: ["Wall", "player", "enemy"],
-                        collisions:
-                        [
-                            [0, 1, 1],
-                            [1, 0, 0],
-                            [1, 0, 1]
-                        ]
-                    }
-                }
-
                 this.viewport.setSize(1600, 900);
-                this.sceneManager.changeToScene(level_z1, {}, physicsOptions);
+                this.sceneManager.changeToScene(level_z1, {}, this.sceneOptions);
             } else {
 
                 if (this.speakerPositions[this.dialogueNumber] === "left"){
@@ -230,7 +216,6 @@ export default class Level_Z1_Cutscene extends Scene{
             }
         });
 
-        console.log(this.buffers);
     }
 
 }

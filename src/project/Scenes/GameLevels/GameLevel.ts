@@ -42,6 +42,8 @@ export interface CustomEnemy {
 
 export default class GameLevel extends Scene{
 
+    protected enemyConstructorPairings: Map<string,any>;
+
     //Timer for levels that require players to survive
     protected gameTimer: Timer;
     protected gameTime: Label;
@@ -392,7 +394,7 @@ export default class GameLevel extends Scene{
         let enemy = this.add.animatedSprite(spriteKey, "primary");
 
         enemy.scale.set(1,1);
-        enemy.addPhysics(new AABB(Vec2.ZERO, new Vec2(16,16))); //Monkey patched collision box, dynamic later
+        enemy.addPhysics(new AABB(Vec2.ZERO, new Vec2(8,8))); //Monkey patched collision box, dynamic later
         enemy.animation.play("moving");
         enemy.position = options.positon;
         enemy.addAI(options.ai, options);

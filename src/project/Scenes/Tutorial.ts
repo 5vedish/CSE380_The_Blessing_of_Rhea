@@ -75,6 +75,8 @@ export default class Tutorial extends GameLevel {
             range: 10,
             experience: 200
         });
+
+        this.enemyConstructorPairings = new Map([["snake" , EnemyAI]]);
         
         let firstEnemy = this.add.animatedSprite("snake", "primary");
         firstEnemy.scale.set(1,1);
@@ -264,13 +266,18 @@ export default class Tutorial extends GameLevel {
 
                 // TO DO - FIX ENEMY OPTIONS (AI)
                 let options = {
+                    name: enemyType.name,
                     health: enemyType.health,
                     player: enemyType.player,
                     speed: enemyType.speed,
                     weapon: enemyType.weapon,
                     range: enemyType.range,
                     experience: enemyType.experience,
-                    positon: enemyPosition
+                    positon: enemyPosition,
+                    projectiles: this.createProjectiles(5 , "leaf"),
+                    cooldown: 1000,
+                    scene: this,
+                    ai: this.enemyConstructorPairings.get(enemyType.name)
                 }
                 let enemy = this.addEnemy(enemyType.name, options);
                 this.enemyArray.push(enemy);
@@ -282,7 +289,8 @@ export default class Tutorial extends GameLevel {
         if(this.playerStats.stats.health <= 0){
             this.viewport.setSize(1600, 900);
             this.playerController.destroy();
-            this.sceneManager.changeToScene(Level_Z1_Cutscene);
+
+            this.sceneManager.changeToScene(Level_Z1_Cutscene,{} , this.sceneOptions);
         }
     }
 }
