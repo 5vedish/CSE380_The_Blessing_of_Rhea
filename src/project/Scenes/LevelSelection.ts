@@ -5,6 +5,7 @@ import Scene from "../../Wolfie2D/Scene/Scene";
 import Color from "../../Wolfie2D/Utils/Color";
 import MainMenu from "./MainMenu";
 import Sprite from "../../Wolfie2D/Nodes/Sprites/Sprite";
+import level_p1 from "./GameLevels/Level_P1";
 
 export default class LevelSelection extends Scene {
   private splashScreen: Layer;
@@ -137,6 +138,7 @@ export default class LevelSelection extends Scene {
     backLevel.onClickEventId = "back";
 
     this.receiver.subscribe("back");
+    this.receiver.subscribe("poseidon1");
   }
 
   updateScene() {
@@ -149,6 +151,22 @@ export default class LevelSelection extends Scene {
       }
 
       /* TODO - ADD REST OF STAGES */
+      if (event.type === "poseidon1") {
+        let physicsOptions = {
+            physics: {
+                groupNames: ["wall", "player", "enemy", "projectile"],
+                collisions:
+                [
+                    [0, 1, 1, 0],
+                    [1, 0, 0, 0],
+                    [1, 0, 1, 0],
+                    [0, 0, 0, 0]
+                ]
+            }
+        }
+        //TO DO replace with tutorial stage
+        this.sceneManager.changeToScene(level_p1, {}, physicsOptions);
+      }
     }
   }
 }

@@ -23,7 +23,7 @@ export default class Lightning extends WeaponType {
         // sliceSprite.position = attacker.position.clone().add(direction.scaled(16));
         
         // Play the slice animation w/o loop, but queue the normal animation
-        zapSprite.animation.play("lightning", false, Project_Events.PLAYERATTACKED);
+        zapSprite.animation.play("attack", false, Project_Events.PLAYERATTACKED);
         // zapSprite.animation.queue("normal");    
     }
 

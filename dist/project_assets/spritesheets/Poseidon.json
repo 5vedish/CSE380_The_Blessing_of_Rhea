@@ -37,8 +37,8 @@
 			]
 		},
         {
-            "name": "walk",
-			"repeat": false,
+            "name": "right",
+			"repeat": true,
 			"frames": [
 				{
 					"index": 3,

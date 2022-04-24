@@ -2,6 +2,7 @@ import Registry from "../../Wolfie2D/Registry/Registries/Registry";
 import ResourceManager from "../../Wolfie2D/ResourceManager/ResourceManager";
 import Lightning from "../GameSystems/items/WeaponTypes/Primary/Lightning";
 import Slice from "../GameSystems/items/WeaponTypes/Primary/Slice";
+import Trident from "../GameSystems/items/WeaponTypes/Primary/Trident";
 import WeaponType from "../GameSystems/items/WeaponTypes/WeaponType";
 
 export default class WeaponTemplateRegistry extends Registry<WeaponConstructor> {
@@ -11,16 +12,19 @@ export default class WeaponTemplateRegistry extends Registry<WeaponConstructor> 
 
         // Load sprites
         rm.image("knife", "project_assets/sprites/knife.png");
-        rm.image("lightning", "project_assets/sprites/lightning.png")
+        rm.image("lightning", "project_assets/sprites/lightning.png");
+        rm.image("trident", "project_assets/sprites/lightning.png");
 
         // Load spritesheets
         rm.spritesheet("slice", "project_assets/spritesheets/slice.json");
         rm.spritesheet("lightning", "project_assets/spritesheets/lightning.json");
         rm.spritesheet("lightningv2", "project_assets/spritesheets/lightningv2.json");
+        rm.spritesheet("trident", "project_assets/spritesheets/waterfall.json");
 
         // Register default types
         this.registerItem("slice", Slice);
         this.registerItem("lightning", Lightning);
+        this.registerItem("trident", Trident);
     }
 
     // We don't need this for this assignment
