@@ -11,6 +11,7 @@ export default class DeathScreen extends Scene{
 
     loadScene(): void {
         this.load.image("splash_screen", "project_assets/screens/Splash.png");
+        this.load.image("return", "project_assets/sprites/return_to_mm.png")
     }
 
     startScene(): void {
@@ -31,8 +32,9 @@ export default class DeathScreen extends Scene{
       returnToMainMenu.backgroundColor = Color.TRANSPARENT;
       returnToMainMenu.onClickEventId = "returnToMainMenu";
 
-      const returnLabel = <Label>this.add.uiElement(UIElementType.LABEL, "death", {position: new Vec2(800, 675), text: "Return to Main Menu"})
-      returnLabel.textColor = Color.GRAYISH;
+      const returnLabel = this.add.sprite("return", "death");
+      returnLabel.position = new Vec2(800, 675);
+      returnLabel.scale.set(2,2);
 
   
       this.receiver.subscribe("returnToMainMenu");

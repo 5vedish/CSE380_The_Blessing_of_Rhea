@@ -15,6 +15,9 @@ import RangeAI from "../../AI/RangeAI";
 import Timer from "../../../Wolfie2D/Timing/Timer";
 import level_z2 from "./Level_Z2";
 import Graphic from "../../../Wolfie2D/Nodes/Graphic";
+import { TweenableProperties } from "../../../Wolfie2D/Nodes/GameNode";
+import { EaseFunctionType } from "../../../Wolfie2D/Utils/EaseFunctions";
+import Sprite from "../../../Wolfie2D/Nodes/Sprites/Sprite";
 
 export default class level_z1 extends GameLevel {
 
@@ -22,7 +25,7 @@ export default class level_z1 extends GameLevel {
 
     private addedHarpy: boolean = false;
 
-    private challenge: Graphic;
+    private challenge: Sprite;
 
     loadScene(): void {
         //Load Zeus
@@ -35,7 +38,10 @@ export default class level_z1 extends GameLevel {
         //Load tilemap
         this.load.tilemap("levelZ1", "project_assets/tilemaps/LevelZ1.json");
 
-        this.load.image("lightningImg", "project_assets/sprites/lightning.png")
+        this.load.image("lightningImg", "project_assets/sprites/lightning.png");
+
+        //Load Challenge img
+        this.load.image("challenge", "project_assets/sprites/z1_challenge.png")
 
         super.loadScene();
     }
@@ -48,18 +54,50 @@ export default class level_z1 extends GameLevel {
         
         this.viewport.setBounds(0, 0, 64*32, 64*32);
         this.viewport.setSize(this.viewport.getHalfSize());
-
+        
         this.playerSpawn = new Vec2(32*32, 32*32);
         // this.viewport.setFocus(new Vec2(this.playerSpawn.x, this.playerSpawn.y));
-
+        
+        
         this.maxEnemies = 15;
         
         super.startScene();
         this.initLayers();
         this.initializeWeapons();
         this.initPlayer();
-        // this.initializeProjectile();
-                
+        
+        //Create how long players need to survive for
+        this.gameTimer = new Timer(120000);
+        this.gameTime = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(this.viewport.getHalfSize().x, 20), text: `${this.parseTimeLeft(this.gameTimer.getTotalTime())}`});
+        //make the challenge label
+        this.challenge = this.add.sprite("challenge", "gui");
+        this.challenge.position = new Vec2(this.viewport.getHalfSize().x, 100);
+        this.challenge.tweens.add("fadeIn",{
+            startDelay: 0,
+            duration: 2500,
+            effects: [
+                {
+                    property: TweenableProperties.alpha,
+                    start: 0,
+                    end: 1,
+                    ease: EaseFunctionType.OUT_SINE
+                }
+            ],
+        });
+        this.challenge.tweens.add("fadeOut",{
+            startDelay: 2500,
+            duration: 2500,
+            effects: [
+                {
+                    property: TweenableProperties.alpha,
+                    start: 1,
+                    end: 0,
+                    ease: EaseFunctionType.OUT_SINE
+                }
+            ],
+        });
+        this.challenge.tweens.play("fadeIn");
+        this.challenge.tweens.play("fadeOut");
 
         this.tilemap = this.player.getScene().getTilemap("Wall") as OrthogonalTilemap;
 
@@ -84,11 +122,7 @@ export default class level_z1 extends GameLevel {
         });
 
         this.enemyConstructorPairings = new Map([["snake" , EnemyAI], ["harpy", RangeAI]]);
-
-        //Create how long players need to survive for
-        this.gameTimer = new Timer(10000);
-
-        this.gameTime = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(this.viewport.getHalfSize().x, 16), text: `${this.parseTimeLeft(this.gameTimer.getTimeLeft())}`});
+        
 
         //Start spawning delay
         this.startSceneTimer.start();
@@ -136,6 +170,8 @@ export default class level_z1 extends GameLevel {
 
         this.battleManager.setPlayers([<BattlerAI>this.player._ai]);
         this.playerController = <PlayerController> this.player._ai;
+        this.player.freeze();
+        this.player.setAIActive(false, {});
     }
 
     updateScene(deltaT: number): void {
@@ -145,6 +181,8 @@ export default class level_z1 extends GameLevel {
         if(this.startSceneTimer.isStopped()){
             if(!this.startedLevel){
                 this.gameTimer.start();
+                this.player.unfreeze();
+                this.player.setAIActive(true, {});
                 this.startedLevel = true;
             }
 
