@@ -121,8 +121,6 @@ export default class GameLevel extends Scene{
         
         // Images
         this.load.image("knife", "project_assets/sprites/knife.png");
-        this.load.image("laserGun", "project_assets/sprites/laserGun.png");
-        this.load.image("pistol", "project_assets/sprites/pistol.png");
         this.load.image("pause_screen", "project_assets/screens/pause.png");
         //import upgrade icons
         this.load.image("lightning", "project_assets/sprites/lightning.png");
