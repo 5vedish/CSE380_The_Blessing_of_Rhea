@@ -33,6 +33,7 @@ import DeathScreen from "../DeathScreen";
 import { EaseFunctionType } from "../../../Wolfie2D/Utils/EaseFunctions";
 import HoneyJar from "../../GameSystems/items/Upgrades/HoneyJar";
 import Goblet from "../../GameSystems/items/Upgrades/Goblet";
+import Aegis from "../../GameSystems/items/Upgrades/Aegis";
 
 export interface CustomEnemy {
     name: string,
@@ -90,10 +91,10 @@ export default class GameLevel extends Scene{
     protected item3: Sprite;
 
     // items
-    protected itemsArray = ["hourglass", "hermes_sandals", "bolt", "honey_jar", "goblet_of_dionysus"];
+    protected itemsArray = ["hourglass_3", "hermes_sandals_3", "bolt_3", "honey_jar", "goblet_of_dionysus_3", "aegis_3"];
     protected selectionArray: Array<string> = [];
-    protected itemConstructorPairings: Map<string,any> = new Map([["hourglass" , Hourglass], 
-    ["hermes_sandals", HermesSandals], ["bolt", Bolt], ["honey_jar", HoneyJar], ["goblet_of_dionysus", Goblet]]);
+    protected itemConstructorPairings: Map<string,any> = new Map([["hourglass_3" , Hourglass], 
+    ["hermes_sandals_3", HermesSandals], ["bolt_3", Bolt], ["honey_jar", HoneyJar], ["goblet_of_dionysus_3", Goblet], ["aegis_3", Aegis]]);
     // protected maxProjectiles = 20;
     // protected projectiles : Array<AnimatedSprite> = new Array(this.maxProjectiles);
 
@@ -125,11 +126,12 @@ export default class GameLevel extends Scene{
         this.load.image("pause_screen", "project_assets/screens/pause.png");
         //import upgrade icons
         this.load.image("lightning", "project_assets/sprites/lightning.png");
-        this.load.image("hourglass", "project_assets/sprites/hourglass.png")
-        this.load.image("hermes_sandals", "project_assets/sprites/hermes_sandals.png");
-        this.load.image("bolt", "project_assets/sprites/Bolt.png");
-        this.load.image("honey_jar", "project_assets/sprites/HoneyJar.png");
-        this.load.image("goblet_of_dionysus", "project_assets/sprites/Goblet.png");
+        this.load.image("hourglass_3", "project_assets/sprites/hourglass_3.png")
+        this.load.image("hermes_sandals_3", "project_assets/sprites/hermes_sandals_3.png");
+        this.load.image("bolt_3", "project_assets/sprites/bolt_3.png");
+        this.load.image("honey_jar", "project_assets/sprites/honeyJar.png");
+        this.load.image("goblet_of_dionysus_3", "project_assets/sprites/goblet_3.png");
+        this.load.image("aegis_3", "project_assets/sprites/aegis_3.png");
         //Initialize the possible spawning areas for enemies
         //Each Vec2 holds the pixels that will be added to the center of the viewport so enemies spawn outside
         //View port is 800x450
