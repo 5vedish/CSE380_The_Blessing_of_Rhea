@@ -37,7 +37,7 @@ export default class level_p1 extends GameLevel {
         //Load tilemap
         this.load.tilemap("levelP1", "project_assets/tilemaps/LevelP1.json");
 
-        this.load.spritesheet("lightningv2", "project_assets/spritesheets/lightningv2.json");
+        this.load.spritesheet("waterfallv2", "project_assets/spritesheets/waterfallv2.json");
 
         this.load.image("lightningImg", "project_assets/sprites/lightning.png");
 
@@ -132,7 +132,7 @@ export default class level_p1 extends GameLevel {
                 range: 30,
                 playerStats: this.playerStats,
                 weapon: weapon,
-                weaponV2: "lightningv2"
+                weaponV2: "waterfallv2"
             });
         this.player.animation.play("idle");
 
