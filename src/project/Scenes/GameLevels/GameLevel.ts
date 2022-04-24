@@ -373,11 +373,13 @@ export default class GameLevel extends Scene{
     }
 
     protected pauseEntities(){
-        this.enemyArray.map((enemy) => {
-            enemy.freeze()
-            enemy.setAIActive(false, {});
-            enemy.animation.stop();
-        });
+        if(this.enemyArray.length > 0){
+            this.enemyArray.map((enemy) => {
+                enemy.freeze()
+                enemy.setAIActive(false, {});
+                enemy.animation.stop();
+            });
+        }
         this.player.freeze();
         this.player.setAIActive(false, {});
         this.player.animation.stop();
@@ -389,11 +391,14 @@ export default class GameLevel extends Scene{
     }
 
     protected unpauseEntities(){
-        this.enemyArray.map((enemy) => {
-            enemy.unfreeze();
-            enemy.setAIActive(true, {});
-            enemy.animation.play("moving", true);
-        });
+        if(this.enemyArray.length > 0){
+            this.enemyArray.map((enemy) => {
+                enemy.unfreeze();
+                enemy.setAIActive(true, {});
+                enemy.animation.play("moving", true);
+            });
+        }
+        
         this.player.unfreeze();
         this.player.setAIActive(true, {});
         this.player.animation.play("idle", true); 

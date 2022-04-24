@@ -67,7 +67,7 @@ export default class level_z1 extends GameLevel {
         this.initPlayer();
         
         //Create how long players need to survive for
-        this.gameTimer = new Timer(60000);
+        this.gameTimer = new Timer(5000);
         this.gameTime = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(this.viewport.getHalfSize().x, 20), text: `${this.parseTimeLeft(this.gameTimer.getTotalTime())}`});
     
         this.tilemap = this.player.getScene().getTilemap("Wall") as OrthogonalTilemap;
@@ -200,18 +200,8 @@ export default class level_z1 extends GameLevel {
             if(this.gameTimer.getTimeLeft() <= 0){
                 //end level and move to level z2
                 if(this.changeLevelTimer === undefined){
-                    this.changeLevelTimer = new Timer(5000);
+                    this.changeLevelTimer = new Timer(3000);
                     this.changeLevelTimer.start();
-                }
-                //Remove all enemies
-                
-                if(!this.removeEnemies){
-                    this.removeEnemies = true;
-                    this.maxEnemies = 0;
-                    for(let enemy of this.enemyArray){
-                        this.battleManager.enemies.pop();
-                        enemy.destroy();
-                    }
                 }
                 if(this.changeLevelTimer.getTimeLeft() <= 0){
                     this.viewport.setSize(1600, 900);
