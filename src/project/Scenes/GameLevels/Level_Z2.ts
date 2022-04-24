@@ -31,7 +31,10 @@ export default class level_z2 extends GameLevel {
         //Load tilemap
         this.load.tilemap("levelZ2", "project_assets/tilemaps/LevelZ2.json");
 
-        this.load.image("lightningImg", "project_assets/sprites/lightning.png")
+        this.load.image("lightningImg", "project_assets/sprites/lightning.png");
+
+        //Load Challenge img
+        this.load.image("objective", "project_assets/sprites/z2_challenge.png");
 
         super.loadScene();
     }
@@ -108,6 +111,8 @@ export default class level_z2 extends GameLevel {
         // Spawn enemies in
         if(this.startSceneTimer.isStopped()){
             if(!this.startedLevel){
+                this.player.unfreeze();
+                this.player.setAIActive(true, {});
                 this.startedLevel = true;
             }
 
@@ -165,7 +170,9 @@ export default class level_z2 extends GameLevel {
 
         this.battleManager.setPlayers([<BattlerAI>this.player._ai]);
         this.playerController = <PlayerController> this.player._ai;
-        
+
+        this.player.freeze();
+        this.player.setAIActive(false, {});
     }
 
     protected initLayers() : void {

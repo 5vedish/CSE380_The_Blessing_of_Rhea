@@ -30,6 +30,7 @@ import UIElement from "../../../Wolfie2D/Nodes/UIElement";
 import Bolt from "../../GameSystems/items/Bolt";
 import ProjectileAI from "../../AI/ProjectileAI";
 import DeathScreen from "../DeathScreen";
+import { EaseFunctionType } from "../../../Wolfie2D/Utils/EaseFunctions";
 
 export interface CustomEnemy {
     name: string,
@@ -101,6 +102,9 @@ export default class GameLevel extends Scene{
     // Tilemap walls
     protected walls: OrthogonalTilemap;
     protected tilemap : OrthogonalTilemap;
+
+    //Sprite to hold the challenge
+    protected challenge: Sprite;
 
     loadScene(): void {
         // Objects
@@ -201,6 +205,9 @@ export default class GameLevel extends Scene{
           this.button3.borderColor = Color.WHITE;
           this.button3.backgroundColor = Color.GRAYISH;
           this.button3.onClickEventId = "three";
+
+          
+          this.createChallengeLabel();
     }
 
     updateScene(deltaT: number): void {
@@ -532,5 +539,37 @@ export default class GameLevel extends Scene{
         let seconds = Math.floor((timeLeft / 1000) % 60),
         minutes = Math.floor((timeLeft / (1000 * 60)) % 60)
         return `${minutes}:${(seconds < 10) ? "0" + seconds : seconds}`
+    }
+
+    protected createChallengeLabel(): void{
+        //make the challenge label
+        this.challenge = this.add.sprite("objective", "gui");
+        this.challenge.position = new Vec2(this.viewport.getHalfSize().x, 100);
+        this.challenge.tweens.add("fadeIn",{
+            startDelay: 0,
+            duration: 2500,
+            effects: [
+                {
+                    property: TweenableProperties.alpha,
+                    start: 0,
+                    end: 1,
+                    ease: EaseFunctionType.OUT_SINE
+                }
+            ],
+        });
+        this.challenge.tweens.add("fadeOut",{
+            startDelay: 2500,
+            duration: 2500,
+            effects: [
+                {
+                    property: TweenableProperties.alpha,
+                    start: 1,
+                    end: 0,
+                    ease: EaseFunctionType.OUT_SINE
+                }
+            ],
+        });
+        this.challenge.tweens.play("fadeIn");
+        this.challenge.tweens.play("fadeOut");
     }
 }

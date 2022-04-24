@@ -25,8 +25,6 @@ export default class level_z1 extends GameLevel {
 
     private addedHarpy: boolean = false;
 
-    private challenge: Sprite;
-
     loadScene(): void {
         //Load Zeus
         this.load.spritesheet("zeus", "project_assets/spritesheets/Zeus.json"); 
@@ -41,7 +39,7 @@ export default class level_z1 extends GameLevel {
         this.load.image("lightningImg", "project_assets/sprites/lightning.png");
 
         //Load Challenge img
-        this.load.image("challenge", "project_assets/sprites/z1_challenge.png")
+        this.load.image("objective", "project_assets/sprites/z1_challenge.png");
 
         super.loadScene();
     }
@@ -69,36 +67,7 @@ export default class level_z1 extends GameLevel {
         //Create how long players need to survive for
         this.gameTimer = new Timer(120000);
         this.gameTime = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(this.viewport.getHalfSize().x, 20), text: `${this.parseTimeLeft(this.gameTimer.getTotalTime())}`});
-        //make the challenge label
-        this.challenge = this.add.sprite("challenge", "gui");
-        this.challenge.position = new Vec2(this.viewport.getHalfSize().x, 100);
-        this.challenge.tweens.add("fadeIn",{
-            startDelay: 0,
-            duration: 2500,
-            effects: [
-                {
-                    property: TweenableProperties.alpha,
-                    start: 0,
-                    end: 1,
-                    ease: EaseFunctionType.OUT_SINE
-                }
-            ],
-        });
-        this.challenge.tweens.add("fadeOut",{
-            startDelay: 2500,
-            duration: 2500,
-            effects: [
-                {
-                    property: TweenableProperties.alpha,
-                    start: 1,
-                    end: 0,
-                    ease: EaseFunctionType.OUT_SINE
-                }
-            ],
-        });
-        this.challenge.tweens.play("fadeIn");
-        this.challenge.tweens.play("fadeOut");
-
+    
         this.tilemap = this.player.getScene().getTilemap("Wall") as OrthogonalTilemap;
 
         this.levelUI = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(86, 32), 
