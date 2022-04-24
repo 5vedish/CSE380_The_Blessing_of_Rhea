@@ -126,6 +126,7 @@ export default class GameLevel extends Scene{
         // Spritesheets
         this.load.spritesheet("slice", "project_assets/spritesheets/slice.json");
         this.load.spritesheet("lightning", "project_assets/spritesheets/lightning.json");
+        this.load.spritesheet("lightningv2", "project_assets/spritesheets/lightningv2.json");
         this.load.spritesheet("trident", "project_assets/spritesheets/waterfall.json");
         this.load.spritesheet("leaf", "project_assets/spritesheets/Leaf.json");
         this.load.spritesheet("feather", "project_assets/spritesheets/Feather.json");
@@ -155,10 +156,10 @@ export default class GameLevel extends Scene{
         //View port is 800x450
         this.enemySpawns = new Array<Vec2>();
         this.enemyArray = new Array<AnimatedSprite>();
-        this.enemySpawns.push(new Vec2(-450, 0)); //Left of viewport
-        this.enemySpawns.push(new Vec2(450, 0)); //Right of viewport
-        this.enemySpawns.push(new Vec2(0, -275)); //Top of viewport
-        this.enemySpawns.push(new Vec2(0, 275)); //Bottom of viewport      
+        this.enemySpawns.push(new Vec2(-425, 0)); //Left of viewport
+        this.enemySpawns.push(new Vec2(425, 0)); //Right of viewport
+        this.enemySpawns.push(new Vec2(0, -245)); //Top of viewport
+        this.enemySpawns.push(new Vec2(0, 245)); //Bottom of viewport      
     }
 
     
@@ -549,13 +550,13 @@ export default class GameLevel extends Scene{
                     enemyPosition = new Vec2(viewportCenter.x + this.enemySpawns[spawnPointIndex].x,viewportCenter.y + yOffset);
                 }
                 // //Check if spawn positon is a wall
-                // let spawnTile = this.tilemap.getColRowAt(enemyPosition);
-                // let tile = this.tilemap.getTileAtRowCol(spawnTile);
-                // if(!this.tilemap.isTileCollidable(tile)){
-                //     // return enemyPosition;
-                //     console.log("yes");
-                    
-                // }
+                let spawnTile = this.tilemap.getColRowAt(enemyPosition);
+                let tile = this.tilemap.getTileAtRowCol(spawnTile);
+                if(tile === 0){
+                    return enemyPosition;                    
+                } else {
+                    spawnPointIndex = (spawnPointIndex + 1) % 4;
+                }
                 return enemyPosition;
             }
         }

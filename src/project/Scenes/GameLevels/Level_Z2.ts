@@ -160,7 +160,8 @@ export default class level_z2 extends GameLevel {
                 inputEnabled: true,
                 range: 30,
                 playerStats: this.playerStats,
-                weapon: this.weapon
+                weapon: this.weapon,
+                weaponV2: "lightningv2"
             });
         this.player.animation.play("idle");
 
