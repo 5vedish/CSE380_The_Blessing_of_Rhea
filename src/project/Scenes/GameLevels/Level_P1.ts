@@ -25,20 +25,21 @@ export default class level_p1 extends GameLevel {
     private currentWave: number = 0;
 
     loadScene(): void {
-        //Load Zeus
+        //Load Poseidon
         this.load.spritesheet("poseidon", "project_assets/spritesheets/Poseidon.json"); 
+        this.load.spritesheet("trident", "project_assets/spritesheets/waterfall.json");
+        this.load.spritesheet("waterfallv2", "project_assets/spritesheets/waterfallv2.json");
+        this.load.image("trident", "project_assets/sprites/lightning.png");
+        this.load.image("lightningImg", "project_assets/sprites/lightning.png");
 
         //Load Enemies
         this.load.spritesheet("crab", "project_assets/spritesheets/Crab.json");
         this.load.spritesheet("cyclops", "project_assets/spritesheets/Cyclops.json");
         this.load.spritesheet("octopus", "project_assets/spritesheets/Octopus.json");
+        this.load.spritesheet("ink", "project_assets/spritesheets/ink.json")
 
         //Load tilemap
         this.load.tilemap("levelP1", "project_assets/tilemaps/LevelP1.json");
-
-        this.load.spritesheet("waterfallv2", "project_assets/spritesheets/waterfallv2.json");
-
-        this.load.image("lightningImg", "project_assets/sprites/lightning.png");
 
         //Load Challenge img
         this.load.image("objective", "project_assets/sprites/p1_challenge.png");
@@ -216,7 +217,7 @@ export default class level_p1 extends GameLevel {
                             range: enemyType.range,
                             experience: enemyType.experience,
                             position: enemyPosition,
-                            projectiles: this.createProjectiles(2, "leaf"),
+                            projectiles: this.createProjectiles(2, "ink"),
                             cooldown: 2000,
                             scene: this,
                             ai: this.enemyConstructorPairings.get(enemyType.name)
