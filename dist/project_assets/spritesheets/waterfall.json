@@ -1,6 +1,6 @@
 {
-    "name": "Lightning",
-    "spriteSheetImage": "lightning.png",
+    "name": "Waterfall",
+    "spriteSheetImage": "waterfall.png",
     "spriteWidth": 32,
     "spriteHeight": 64,
     "leftBuffer": 0,
@@ -8,7 +8,7 @@
     "topBuffer": 0,
     "bottomBuffer": 0,
     "columns": 4,
-    "rows": 2,
+    "rows": 3,
     "animations": [
         {
             "name": "attack",
@@ -40,6 +40,18 @@
                 },
                 {
                     "index": 7,
+                    "duration": 10
+                },
+                {
+                    "index": 8,
+                    "duration": 10
+                },
+                {
+                    "index": 9,
+                    "duration": 10
+                },
+                {
+                    "index": 10,
                     "duration": 10
                 }
             ]

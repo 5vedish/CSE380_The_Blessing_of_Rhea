@@ -1,5 +1,5 @@
 {
-    "numWeapons": 2,
+    "numWeapons": 3,
     "weapons": [
         {
             "weaponType": "lightning",
@@ -7,6 +7,16 @@
             "displayName": "Lightning",
             "animationSprite": "Lightning",
             "spriteKey": "lightning",
+            "damage": 1,
+            "cooldown": 1500,
+            "useVolume": 10
+        },
+        {
+            "weaponType": "trident",
+            "name": "trident",
+            "displayName": "Trident",
+            "animationSprite": "Trident",
+            "spriteKey": "trident",
             "damage": 1,
             "cooldown": 1500,
             "useVolume": 10

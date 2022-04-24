@@ -126,13 +126,16 @@ export default class GameLevel extends Scene{
         // Spritesheets
         this.load.spritesheet("slice", "project_assets/spritesheets/slice.json");
         this.load.spritesheet("lightning", "project_assets/spritesheets/lightning.json");
+        this.load.spritesheet("trident", "project_assets/spritesheets/waterfall.json");
         this.load.spritesheet("leaf", "project_assets/spritesheets/Leaf.json")
         
         // Images
-        this.load.image("knife", "project_assets/sprites/knife.png");
         this.load.image("pause_screen", "project_assets/screens/pause.png");
-        //import upgrade icons
+        this.load.image("knife", "project_assets/sprites/knife.png");
         this.load.image("lightning", "project_assets/sprites/lightning.png");
+        this.load.image("trident", "project_assets/sprites/lightning.png");
+        
+        // Import upgrade icons
         this.load.image("honey_jar", "project_assets/sprites/honeyJar.png");
 
         this.load.image("aegis_2", "project_assets/sprites/aegis_2.png");
@@ -458,9 +461,8 @@ export default class GameLevel extends Scene{
      * @param type The weaponType of the weapon, as a string
      */
     createWeapon(type: string): Weapon {
-        
         let weaponType = <WeaponType>RegistryManager.getRegistry("weaponTypes").get(type);
-
+        
         let sprite = this.add.sprite(weaponType.spriteKey, "primary");
 
         return new Weapon(sprite, weaponType, this.battleManager);
@@ -474,7 +476,6 @@ export default class GameLevel extends Scene{
 
         for(let i = 0; i < weaponData.numWeapons; i++){
             let weapon = weaponData.weapons[i];
-
             // Get the constructor of the prototype
             let constr = RegistryManager.getRegistry("weaponTemplates").get(weapon.weaponType);
 
