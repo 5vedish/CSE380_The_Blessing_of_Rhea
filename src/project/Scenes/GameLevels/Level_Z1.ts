@@ -59,7 +59,7 @@ export default class level_z1 extends GameLevel {
         // this.viewport.setFocus(new Vec2(this.playerSpawn.x, this.playerSpawn.y));
         
         
-        this.maxEnemies = 1;
+        this.maxEnemies = 10;
         
         super.startScene();
         this.initLayers();
@@ -67,7 +67,7 @@ export default class level_z1 extends GameLevel {
         this.initPlayer();
         
         //Create how long players need to survive for
-        this.gameTimer = new Timer(120000);
+        this.gameTimer = new Timer(60000);
         this.gameTime = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(this.viewport.getHalfSize().x, 20), text: `${this.parseTimeLeft(this.gameTimer.getTotalTime())}`});
     
         this.tilemap = this.player.getScene().getTilemap("Wall") as OrthogonalTilemap;
@@ -171,7 +171,7 @@ export default class level_z1 extends GameLevel {
                     range: enemyType.range,
                     experience: enemyType.experience,
                     position: enemyPosition,
-                    projectiles: this.createProjectiles(1 , "leaf"),
+                    projectiles: this.createProjectiles(1 , "feather"),
                     cooldown: 1000,
                     scene: this,
                     ai: this.enemyConstructorPairings.get(enemyType.name)

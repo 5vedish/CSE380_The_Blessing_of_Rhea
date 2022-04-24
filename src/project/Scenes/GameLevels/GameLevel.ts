@@ -127,7 +127,8 @@ export default class GameLevel extends Scene{
         this.load.spritesheet("slice", "project_assets/spritesheets/slice.json");
         this.load.spritesheet("lightning", "project_assets/spritesheets/lightning.json");
         this.load.spritesheet("trident", "project_assets/spritesheets/waterfall.json");
-        this.load.spritesheet("leaf", "project_assets/spritesheets/Leaf.json")
+        this.load.spritesheet("leaf", "project_assets/spritesheets/Leaf.json");
+        this.load.spritesheet("feather", "project_assets/spritesheets/Feather.json");
         
         // Images
         this.load.image("pause_screen", "project_assets/screens/pause.png");
@@ -142,13 +143,13 @@ export default class GameLevel extends Scene{
         this.load.image("bolt_2", "project_assets/sprites/bolt_2.png");
         this.load.image("goblet_of_dionysus_2", "project_assets/sprites/goblet_2.png");
         this.load.image("hermes_sandals_2", "project_assets/sprites/hermes_sandals_2.png");
-        this.load.image("hourglass_2", "project_assets/sprites/hourglass_2.png")
+        this.load.image("hourglass_2", "project_assets/sprites/hourglass_2.png");
 
         this.load.image("aegis_3", "project_assets/sprites/aegis_3.png");
         this.load.image("bolt_3", "project_assets/sprites/bolt_3.png");
         this.load.image("goblet_of_dionysus_3", "project_assets/sprites/goblet_3.png");
         this.load.image("hermes_sandals_3", "project_assets/sprites/hermes_sandals_3.png");
-        this.load.image("hourglass_3", "project_assets/sprites/hourglass_3.png")
+        this.load.image("hourglass_3", "project_assets/sprites/hourglass_3.png");
         //Initialize the possible spawning areas for enemies
         //Each Vec2 holds the pixels that will be added to the center of the viewport so enemies spawn outside
         //View port is 800x450
@@ -498,7 +499,8 @@ export default class GameLevel extends Scene{
             projectiles[i].visible = false;
             projectiles[i].addAI(ProjectileAI, {speed: 4, player: this.player});
             projectiles[i].addPhysics(new AABB(Vec2.ZERO, new Vec2(32, 32)));
-            projectiles[i].animation.playIfNotAlready("shoot", true);
+            // Check direction of projectile before playing animation
+            projectiles[i].animation.playIfNotAlready("right", true);
             projectiles[i].setGroup("projectile");
         }
         return projectiles;
