@@ -14,12 +14,15 @@ import DeathScreen from "../DeathScreen";
 import RangeAI from "../../AI/RangeAI";
 import Timer from "../../../Wolfie2D/Timing/Timer";
 import level_z2 from "./Level_Z2";
+import Graphic from "../../../Wolfie2D/Nodes/Graphic";
 
 export default class level_z1 extends GameLevel {
 
     protected removeEnemies: boolean = false;
 
     private addedHarpy: boolean = false;
+
+    private challenge: Graphic;
 
     loadScene(): void {
         //Load Zeus
@@ -37,7 +40,6 @@ export default class level_z1 extends GameLevel {
         super.loadScene();
     }
 
-
     startScene(): void {
         // Add in the tilemap and get the wall layer
         let tilemapLayers = this.add.tilemap("levelZ1", new Vec2(1, 1));
@@ -49,8 +51,7 @@ export default class level_z1 extends GameLevel {
 
         this.playerSpawn = new Vec2(32*32, 32*32);
         // this.viewport.setFocus(new Vec2(this.playerSpawn.x, this.playerSpawn.y));
-        
-        
+
         this.maxEnemies = 15;
         
         super.startScene();
@@ -59,16 +60,6 @@ export default class level_z1 extends GameLevel {
         this.initPlayer();
         // this.initializeProjectile();
                 
-        //Health Bar 
-        this.healthBar = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(196, 16), 
-            size: new Vec2(256, 8)});
-        //Health Bar follows below character
-
-        //Experience bar
-        this.expBar = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(216, 32), 
-            size: new Vec2(0, 0)});
-        this.expBar.color = Color.BLUE;
-
 
         this.tilemap = this.player.getScene().getTilemap("Wall") as OrthogonalTilemap;
 
@@ -86,7 +77,7 @@ export default class level_z1 extends GameLevel {
             name: "snake",
             health: 2,
             player: this.player,
-            speed: 8,
+            speed: 100,
             weapon: this.createWeapon("knife"),
             range: 10,
             experience: 200
@@ -189,7 +180,7 @@ export default class level_z1 extends GameLevel {
                     name: "harpy",
                     health: 3,
                     player: this.player,
-                    speed: 10,
+                    speed: 150,
                     weapon: this.createWeapon("knife"),
                     range: 150,
                     experience: 250,

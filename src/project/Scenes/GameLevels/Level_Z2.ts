@@ -67,15 +67,18 @@ export default class level_z2 extends GameLevel {
         this.enemyConstructorPairings = new Map([["snake" , EnemyAI], ["harpy", RangeAI]]);
 
         //Add health bar and exp bar
+        // update health bar
         let percentage = this.playerStats.stats.health/this.playerStats.stats.maxHealth;
-        this.healthBar = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(196 + (percentage-1)*128,16), 
-        size: new Vec2(percentage*256, 8)});
-        //Experience bar
+        // scale by percentage
+        this.healthBar.size = new Vec2(percentage*256, 8);
+        // rebalance position
+        this.healthBar.position = new Vec2(196 + (percentage-1)*128,16);
+
+        //Update the exp bar
         let reqExp = Math.pow(this.playerStats.level, 1.5);
         let expPercentage = this.playerStats.experience / (reqExp * 500);
-        this.expBar = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(108*expPercentage+(216/2), 32), 
-            size: new Vec2(expPercentage*216, 4)});
-        this.expBar.color = Color.BLUE;
+        this.expBar.size = new Vec2(expPercentage*216, 4);
+        this.expBar.position = new Vec2(108*expPercentage+(216/2), 32);
 
         this.levelUI = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(86, 32), 
             text: "Lvl" + this.playerStats.level});
@@ -91,7 +94,7 @@ export default class level_z2 extends GameLevel {
             name: "snake",
             health: 2,
             player: this.player,
-            speed: 8,
+            speed: 200,
             weapon: this.createWeapon("knife"),
             range: 10,
             experience: 200

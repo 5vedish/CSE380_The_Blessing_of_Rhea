@@ -162,7 +162,15 @@ export default class GameLevel extends Scene{
             size: new Vec2(216, 4)});
         expBarBorder.color = Color.LIGHTBLUE;
         expBarBorder.alpha = .5;
-        
+        //Health Bar 
+        this.healthBar = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(196, 16), 
+            size: new Vec2(256, 8)});
+        //Health Bar follows below character
+
+        //Experience bar
+        this.expBar = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(216, 32), 
+            size: new Vec2(0, 0)});
+        this.expBar.color = Color.BLUE;
 
         this.button1 = this.add.uiElement(UIElementType.BUTTON, "levelUp", {
             position: new Vec2((this.viewport.getOrigin().x - this.viewport.getHalfSize().x/2), this.viewport.getOrigin().y), text: ""

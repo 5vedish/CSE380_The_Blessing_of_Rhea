@@ -44,7 +44,7 @@ export default class DeathScreen extends Scene{
             console.log(event);
       
             if (event.type === "returnToMainMenu") {
-              this.sceneManager.changeToScene(MainMenu, {});
+              this.sceneManager.changeToScene(MainMenu);
             }
           }
     }

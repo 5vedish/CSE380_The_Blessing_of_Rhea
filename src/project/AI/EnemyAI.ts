@@ -24,7 +24,7 @@ export default class EnemyAI extends StateMachineGoapAI implements BattlerAI {
     health: number;
 
     /** The default movement speed of this AI */
-    speed: number = 100;
+    speed: number;
 
     /** The weapon this AI has */
     weapon: Weapon;
@@ -67,6 +67,8 @@ export default class EnemyAI extends StateMachineGoapAI implements BattlerAI {
         this.player = options.player;
         this.weapon = options.weapon;
         this.experience = options.experience;
+
+        this.speed = options.speed;
 
         // Initialize to the default state
         this.initialize(EnemyStates.DEFAULT, options);

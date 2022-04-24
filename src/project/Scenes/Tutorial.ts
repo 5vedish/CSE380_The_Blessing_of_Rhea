@@ -11,6 +11,12 @@ import Color from "../../Wolfie2D/Utils/Color";
 import GameLevel from "./GameLevels/GameLevel";
 import CharacterStat from "../PlayerStatus";
 import Level_Z1_Cutscene from "./Cutscenes/Level_Z1_Cutscene";
+import Input from "../../Wolfie2D/Input/Input";
+import { Project_Events } from "../project_constants";
+import CanvasNode from "../../Wolfie2D/Nodes/CanvasNode";
+import Sprite from "../../Wolfie2D/Nodes/Sprites/Sprite";
+import ControlScreen from "./ControlScreen";
+import RangeAI from "../AI/RangeAI";
 
 export default class Tutorial extends GameLevel {
     protected tutorialTexts: Label[];
@@ -43,7 +49,7 @@ export default class Tutorial extends GameLevel {
         this.playerSpawn = new Vec2(32*32, 50*32);
         // this.viewport.setFocus(new Vec2(this.playerSpawn.x, this.playerSpawn.y));
         
-        this.maxEnemies = 40;
+        this.maxEnemies = 50;
         
         super.startScene();
         this.initLayers();
@@ -51,10 +57,10 @@ export default class Tutorial extends GameLevel {
         this.initPlayer();
         this.initTutorial();
 
-        //Health Bar top left
-        this.healthBar = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(196, 16), 
-            size: new Vec2(256, 8)});
-        //Health Bar follows below character
+        // //Health Bar top left
+        // this.healthBar = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(196, 16), 
+        //     size: new Vec2(256, 8)});
+        // //Health Bar follows below character
 
         this.levelUI = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(86, 32), 
             text: "Lvl" + this.playerStats.level});
@@ -70,12 +76,12 @@ export default class Tutorial extends GameLevel {
             name: "snake",
             health: 2,
             player: this.player,
-            speed: 8,
+            speed: 200,
             weapon: this.createWeapon("knife"),
             range: 10,
             experience: 200
         });
-
+        
         this.enemyConstructorPairings = new Map([["snake" , EnemyAI]]);
         
         let firstEnemy = this.add.animatedSprite("snake", "primary");
@@ -225,9 +231,141 @@ export default class Tutorial extends GameLevel {
         // this.player.freeze();
         // this.player.setAIActive(false, {});
     }
-
+    
     updateScene(deltaT: number): void {
-        super.updateScene(deltaT);
+        //Check if player died// pause via escape
+        if (Input.isKeyJustPressed("escape")){
+            this.pauseFlag = !this.pauseFlag;
+
+            if (this.pauseFlag){
+                this.pauseEntities();
+                this.getLayer("pause").enable();
+            } else {
+                this.unpauseEntities();
+                this.getLayer("pause").disable();
+            }
+
+        }
+
+        // handle leveling up
+        if (this.levelChanged) {
+            // level up events
+            while(this.levelReceiver.hasNextEvent()){
+
+                let event = this.levelReceiver.getNextEvent();
+                
+                switch (event.type) {
+                        
+                    case "one":
+
+                        let item = new (this.itemConstructorPairings.get(this.selectionArray[0]))(new Sprite(this.selectionArray[0]));
+                        item.use(this.player, this.playerController.weapon, this.playerStats, this.playerController);
+                        break;
+
+                    case "two":
+
+                        let item2 = new (this.itemConstructorPairings.get(this.selectionArray[1]))(new Sprite(this.selectionArray[1]));
+                        item2.use(this.player, this.playerController.weapon, this.playerStats, this.playerController);
+                        break;
+
+                    case "three":
+
+                        let item3 = new (this.itemConstructorPairings.get(this.selectionArray[2]))(new Sprite(this.selectionArray[2]));
+                        item3.use(this.player, this.playerController.weapon, this.playerStats, this.playerController);
+                        break;
+
+                }
+
+                this.getLayer("levelUp").removeNode(this.item1);
+                this.getLayer("levelUp").removeNode(this.item2);
+                this.getLayer("levelUp").removeNode(this.item3);
+
+                this.levelChanged--;
+                // accounting for multiple levels
+                if (this.levelChanged){
+                    this.rollItems();
+                }  
+            }
+
+            if (this.levelChanged === 0){
+                this.pauseFlag = !this.pauseFlag;
+                this.getLayer("levelUp").disable();
+                this.unpauseEntities();        
+            }
+            
+        }
+
+        // main events
+        while (this.receiver.hasNextEvent() && !this.pauseFlag) {
+            let event = this.receiver.getNextEvent();
+
+            switch (event.type) {
+
+                case Project_Events.ENEMYDIED:
+                    // remove enemy from both arrays
+                    const enemy = <CanvasNode>event.data.get("enemy");
+                    const enemyExperience = (<EnemyAI>enemy._ai).experience;
+                    this.battleManager.enemies = this.battleManager.enemies.filter(enemy => enemy !== <BattlerAI>(event.data.get("enemy")._ai));
+                    this.enemyArray = this.enemyArray.filter(enemy => enemy !== (event.data.get("enemy")));
+                    enemy.destroy();
+                    this.currentNumEnemies -= 1;
+                    this.playerStats.gainedExperience(enemyExperience); // to-do : scaling
+
+                    //Update the exp bar
+                    let reqExp = Math.pow(this.playerStats.level, 1.5);
+                    let expPercentage = this.playerStats.experience / (reqExp * 500);
+                    this.expBar.size = new Vec2(expPercentage*216, 4);
+                    this.expBar.position = new Vec2(108*expPercentage+(216/2), 32);
+                    break;
+
+                case Project_Events.DAMAGED:
+
+                    // update health bar
+                    let percentage = this.playerStats.stats.health/this.playerStats.stats.maxHealth;
+                    // scale by percentage
+                    this.healthBar.size = new Vec2(percentage*256, 8);
+                    // rebalance position
+                    this.healthBar.position = new Vec2(196 + (percentage-1)*128,16);
+                    break;
+
+                case Project_Events.LEVELUP:
+
+                    this.pauseFlag = !this.pauseFlag;
+                    this.pauseEntities();
+                    //show layer
+                    this.getLayer("levelUp").enable();
+                    this.levelChanged = event.data.get("levelChange");
+                    this.levelUI.text = "Lvl" + this.playerStats.level;
+                    
+                    this.rollItems();
+                    break;
+                           
+            }
+        }    
+        
+        //Update the weapon cooldown icon
+        let weaponTimeLeft = this.playerController.weapon.cooldownTimer.getTimeLeft();
+        let weaponTotalTime = this.playerController.weapon.cooldownTimer.getTotalTime();
+        let timePercentage = weaponTimeLeft/weaponTotalTime;
+        if(timePercentage > 0){
+            this.weaponIconCoolDown.alpha = 0.5;
+        } else {
+            this.weaponIconCoolDown.alpha = 0;
+        }
+        // this.weaponIconCoolDown.alpha = timePercentage;
+        this.weaponIconCoolDown.size = new Vec2(32, (1-timePercentage)*32);
+        this.weaponIconCoolDown.position = new Vec2(48, 24+(timePercentage*16));
+
+        // prevents the player from going out of bounds
+        this.lockPlayer();   
+
+        if(this.playerStats.stats.health <= 0){
+            this.viewport.setSize(1600, 900);
+            this.playerController.destroy();
+    
+            this.sceneManager.changeToScene(ControlScreen);
+        }
+
         for (let i = 0; i < this.tutorialZones.length; i++) {
             if(this.tutorialZones[i].overlapArea(this.player.boundary)) {
                 this.tutorialTexts[i].visible = true;
@@ -242,30 +380,8 @@ export default class Tutorial extends GameLevel {
             // Spawn enemies in
             if(this.currentNumEnemies < this.maxEnemies && !this.pauseFlag){
                 let enemyType = this.spawnableEnemies[Math.floor(Math.random() * this.spawnableEnemies.length)];
-
-                // randomly select one of the spawnpoints outside the viewport;
-                let spawnPointIndex = Math.floor(Math.random() * 4);
-                let viewportCenter = this.viewport.getCenter();
-                let enemyPosition;
-                //check if spawn position is out of bounds
-                while(true){
-                    if(this.boundaryCheck(viewportCenter, this.enemySpawns[spawnPointIndex])){
-                        spawnPointIndex = (spawnPointIndex + 1) % 4;
-                    } else {
-                        // find a random x or y of that side
-                        if(this.enemySpawns[spawnPointIndex].x === 0){
-                            //along top or bottom
-                            let xOffset = Math.floor(Math.random() * 736) - 368
-                            enemyPosition = new Vec2(viewportCenter.x + xOffset, viewportCenter.y + this.enemySpawns[spawnPointIndex].y);
-                        } else {
-                            let yOffset =Math.floor(Math.random() * 386) - 193
-                            enemyPosition = new Vec2(viewportCenter.x + this.enemySpawns[spawnPointIndex].x,viewportCenter.y + yOffset);
-                        }
-                        break;
-                    }
-                }
-
-                // TO DO - FIX ENEMY OPTIONS (AI)
+    
+                let enemyPosition = this.randomSpawn();
                 let options = {
                     name: enemyType.name,
                     health: enemyType.health,
@@ -274,24 +390,15 @@ export default class Tutorial extends GameLevel {
                     weapon: enemyType.weapon,
                     range: enemyType.range,
                     experience: enemyType.experience,
-                    positon: enemyPosition,
+                    position: enemyPosition,
                     projectiles: this.createProjectiles(5 , "leaf"),
                     cooldown: 1000,
                     scene: this,
                     ai: this.enemyConstructorPairings.get(enemyType.name)
                 }
-                let enemy = this.addEnemy(enemyType.name, options);
-                this.enemyArray.push(enemy);
+                this.enemyArray.push(this.addEnemy(enemyType.name, options));
             }
         }
 
-
-        //Check if player died
-        if(this.playerStats.stats.health <= 0){
-            this.viewport.setSize(1600, 900);
-            this.playerController.destroy();
-
-            this.sceneManager.changeToScene(Level_Z1_Cutscene,{} , this.sceneOptions);
-        }
     }
 }

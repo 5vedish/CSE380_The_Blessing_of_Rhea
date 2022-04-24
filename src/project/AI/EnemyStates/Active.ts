@@ -47,7 +47,6 @@ export default class Active extends EnemyState {
                 stack.push(this.player.position);
                 this.currentPath = new NavigationPath(stack);
             } else {
-                // console.log(this.distanceToPlayer());
                 let moveSpeed = (this.distanceToPlayer() < 196) ? this.parent.speed * deltaT : this.parent.speed * deltaT * 1.5;
                 this.owner.moveOnPath(moveSpeed, this.currentPath);
 
