@@ -67,7 +67,7 @@ export default class level_z1 extends GameLevel {
         this.initPlayer();
         
         //Create how long players need to survive for
-        this.gameTimer = new Timer(5000);
+        this.gameTimer = new Timer(120000);
         this.gameTime = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(this.viewport.getHalfSize().x, 20), text: `${this.parseTimeLeft(this.gameTimer.getTotalTime())}`});
     
         this.levelUI = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(86, 32), 
@@ -80,14 +80,24 @@ export default class level_z1 extends GameLevel {
         this.weaponIconCoolDown.color = Color.GRAY;
         this.weaponIconCoolDown.alpha = 0;
         
+        // this.spawnableEnemies.push({
+        //     name: "snake",
+        //     health: 2,
+        //     player: this.player,
+        //     speed: 100,
+        //     weapon: this.createWeapon("knife"),
+        //     range: 10,
+        //     experience: 200
+        // });
+
         this.spawnableEnemies.push({
-            name: "snake",
-            health: 2,
+            name: "harpy",
+            health: 3,
             player: this.player,
-            speed: 100,
+            speed: 150,
             weapon: this.createWeapon("knife"),
-            range: 10,
-            experience: 200
+            range: 150,
+            experience: 250,
         });
 
         this.enemyConstructorPairings = new Map([["snake" , EnemyAI], ["harpy", RangeAI]]);
@@ -181,19 +191,18 @@ export default class level_z1 extends GameLevel {
             this.gameTime.text = `${this.parseTimeLeft(this.gameTimer.getTimeLeft())}`;
     
             //Half way through add harpies
-            if(this.gameTimer.getTimeLeft() <= this.gameTimer.getTotalTime()/2 && !this.addedHarpy){
-                console.log("Adding harpy" + ` at ${this.parseTimeLeft(this.gameTimer.getTimeLeft())}`);
-                this.spawnableEnemies.push({
-                    name: "harpy",
-                    health: 3,
-                    player: this.player,
-                    speed: 150,
-                    weapon: this.createWeapon("knife"),
-                    range: 150,
-                    experience: 250,
-                });
-                this.addedHarpy = true;
-            }
+            // if(this.gameTimer.getTimeLeft() <= this.gameTimer.getTotalTime()/2 && !this.addedHarpy){
+            //     this.spawnableEnemies.push({
+            //         name: "harpy",
+            //         health: 3,
+            //         player: this.player,
+            //         speed: 150,
+            //         weapon: this.createWeapon("knife"),
+            //         range: 150,
+            //         experience: 250,
+            //     });
+            //     this.addedHarpy = true;
+            // }
     
             if(this.gameTimer.getTimeLeft() <= 0){
                 //end level and move to level z2

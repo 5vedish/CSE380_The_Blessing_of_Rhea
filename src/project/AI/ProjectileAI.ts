@@ -24,6 +24,8 @@ export default class ProjectileAI implements AI {
     private start_speed: number;
     private dir: Vec2;
 
+    private angle: number;
+
     private paused: boolean = true;
 
     private player: AnimatedSprite;
@@ -85,6 +87,7 @@ export default class ProjectileAI implements AI {
         
         if(this.owner.visible && !this.paused){
             // Update the position
+            this.owner.rotation = this.angle;
             this.owner.move(this.dir.scaled(this.current_speed));
 
             //Check if it hits the player
@@ -102,6 +105,10 @@ export default class ProjectileAI implements AI {
 
     setDirection(dir: Vec2): void {
         this.dir = dir;
+    }
+
+    setAngle(angle: number):void{
+        this.angle = angle;
     }
 
     destroy(): void {

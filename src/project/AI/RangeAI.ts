@@ -1,3 +1,4 @@
+import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
 import AnimatedSprite from "../../Wolfie2D/Nodes/Sprites/AnimatedSprite";
 import Scene from "../../Wolfie2D/Scene/Scene";
 import Timer from "../../Wolfie2D/Timing/Timer";
@@ -32,10 +33,11 @@ export default class RangeAI extends EnemyAI{
     
             if (projectile !== null) {
                 let dir = this.player.position.clone().sub(this.owner.position.clone()).normalize();
-                projectile.visible = true;
                 projectile.position = this.owner.position.clone();
                 (<ProjectileAI> projectile._ai).setDirection(dir);
+                (<ProjectileAI> projectile._ai).setAngle(Vec2.UP.angleToCCW(dir));
                 projectile.setAIActive(true, {speed: 4});
+                projectile.visible = true;
             }
             this.attackCooldown.start();
         }

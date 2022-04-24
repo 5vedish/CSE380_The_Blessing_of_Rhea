@@ -11,7 +11,7 @@
 	"rows": 3,
 	"animations": [
 		{
-			"name": "up",
+			"name": "shoot",
 			"repeat": true,
 			"frames": [
 				{
@@ -65,7 +65,7 @@
 			]
 		},
         {
-			"name": "shoot",
+			"name": "right",
 			"repeat": true,
 			"frames": [
 				{
