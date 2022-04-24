@@ -20,25 +20,25 @@ import BattlerAI from "../../AI/BattlerAI";
 import Graphic from "../../../Wolfie2D/Nodes/Graphic";
 import CharacterStat from "../../PlayerStatus";
 import CanvasNode from "../../../Wolfie2D/Nodes/CanvasNode";
-import Hourglass from "../../GameSystems/items/Upgrades/Hourglass";
-import HermesSandals from "../../GameSystems/items/Upgrades/HermesSandals";
+import Hourglass3 from "../../GameSystems/items/Upgrades/Hourglass3";
 import Sprite from "../../../Wolfie2D/Nodes/Sprites/Sprite";
 import PlayerController from "../../AI/PlayerController";
 import Receiver from "../../../Wolfie2D/Events/Receiver";
 import Layer from "../../../Wolfie2D/Scene/Layer";
 import UIElement from "../../../Wolfie2D/Nodes/UIElement";
-import Bolt from "../../GameSystems/items/Upgrades/Bolt";
+import Bolt from "../../GameSystems/items/Upgrades/Bolt3";
 import ProjectileAI from "../../AI/ProjectileAI";
 import DeathScreen from "../DeathScreen";
 import { EaseFunctionType } from "../../../Wolfie2D/Utils/EaseFunctions";
 import HoneyJar from "../../GameSystems/items/Upgrades/HoneyJar";
-import Goblet from "../../GameSystems/items/Upgrades/Goblet";
-import Aegis from "../../GameSystems/items/Upgrades/Aegis";
+import Goblet3 from "../../GameSystems/items/Upgrades/Goblet3";
+import Aegis3 from "../../GameSystems/items/Upgrades/Aegis3";
 import Hourglass2 from "../../GameSystems/items/Upgrades/Hourglass2";
 import HermesSandals2 from "../../GameSystems/items/Upgrades/HermesSandals2";
 import Bolt2 from "../../GameSystems/items/Upgrades/Bolt2";
 import Goblet2 from "../../GameSystems/items/Upgrades/Goblet2";
 import Aegis2 from "../../GameSystems/items/Upgrades/Aegis2";
+import HermesSandals3 from "../../GameSystems/items/Upgrades/HermesSandals3";
 
 export interface CustomEnemy {
     name: string,
@@ -102,7 +102,7 @@ export default class GameLevel extends Scene{
     protected selectionArray: Array<string> = [];
     protected itemConstructorPairings: Map<string,any> = new Map([["honey_jar", HoneyJar],
         ["hourglass_2" , Hourglass2], ["hermes_sandals_2", HermesSandals2], ["bolt_2", Bolt2], ["goblet_of_dionysus_2", Goblet2], ["aegis_2", Aegis2],
-        ["hourglass_3" , Hourglass], ["hermes_sandals_3", HermesSandals], ["bolt_3", Bolt], ["goblet_of_dionysus_3", Goblet], ["aegis_3", Aegis]
+        ["hourglass_3" , Hourglass3], ["hermes_sandals_3", HermesSandals3], ["bolt_3", Bolt], ["goblet_of_dionysus_3", Goblet3], ["aegis_3", Aegis3]
     ]);
     // protected maxProjectiles = 20;
     // protected projectiles : Array<AnimatedSprite> = new Array(this.maxProjectiles);
@@ -336,7 +336,6 @@ export default class GameLevel extends Scene{
                     this.getLayer("levelUp").enable();
                     this.levelChanged = event.data.get("levelChange");
                     this.levelUI.text = "Lvl" + this.playerStats.level;
-                    
                     this.rollItems();
                     break;
                            

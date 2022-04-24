@@ -16,6 +16,7 @@ export default class WeaponTemplateRegistry extends Registry<WeaponConstructor> 
         // Load spritesheets
         rm.spritesheet("slice", "project_assets/spritesheets/slice.json");
         rm.spritesheet("lightning", "project_assets/spritesheets/lightning.json");
+        rm.spritesheet("lightningv2", "project_assets/spritesheets/lightningv2.json");
 
         // Register default types
         this.registerItem("slice", Slice);

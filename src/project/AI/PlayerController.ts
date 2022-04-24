@@ -12,6 +12,7 @@ import StateMachineAI from "../../Wolfie2D/AI/StateMachineAI";
 import CharacterStat from "../PlayerStatus";
 import Emitter from "../../Wolfie2D/Events/Emitter";
 import { Project_Events } from "../project_constants";
+import Sprite from "../../Wolfie2D/Nodes/Sprites/Sprite";
 
 
 export default class PlayerController extends StateMachineAI implements BattlerAI {
@@ -23,6 +24,9 @@ export default class PlayerController extends StateMachineAI implements BattlerA
 
     // player primary weapon
     weapon: Weapon;
+
+    //Version 2 of weapon
+    weaponV2: string;
 
     // Attack range
     range: number;
@@ -62,13 +66,14 @@ export default class PlayerController extends StateMachineAI implements BattlerA
         this.range = options.range;
         this.playerStats = options.playerStats;
         this.weapon = options.weapon;
+        this.weaponV2 = options.weaponV2;
 
         this.items = options.items;
         this.inventory = options.inventory;
 
         this.receiver = new Receiver();
 
-        this.receiver.subscribe(Project_Events.PLAYERATTACKED);
+        this.receiver.subscribe([Project_Events.PLAYERATTACKED, Project_Events.LEVELUP]);// 
         this.emitter = new Emitter();
     }
 
@@ -80,6 +85,13 @@ export default class PlayerController extends StateMachineAI implements BattlerA
                     //handle removing attack sprite
                     let attackSpirte = event.data.get("owner");
                     attackSpirte.destroy();     
+                    break;
+            case Project_Events.LEVELUP:
+                //check if leveled up
+                if(this.playerStats.level === 2){
+                    this.weapon.type.spriteKey = this.weaponV2;
+                }
+            
         }
     }
 
@@ -87,6 +99,7 @@ export default class PlayerController extends StateMachineAI implements BattlerA
         while(this.receiver.hasNextEvent()){
             this.handleEvent(this.receiver.getNextEvent());
         }
+
 
         if (this.inputEnabled && this.health > 0) {
             // Handle input for player movement

@@ -1,11 +1,11 @@
 import GameNode from "../../../../Wolfie2D/Nodes/GameNode";
 import Timer from "../../../../Wolfie2D/Timing/Timer";
 import CharacterStat from "../../../PlayerStatus";
-import Item from ".././Item";
-import Weapon from ".././Weapon";
+import Item from "../Item";
+import Weapon from "../Weapon";
 import PlayerController from "../../../AI/PlayerController";
 
-export default class Hourglass extends Item {
+export default class Hourglass3 extends Item {
     
     use(user: GameNode, weapon: Weapon, playerStats: CharacterStat, playerController: PlayerController): void {
         weapon.type.cooldown *= .9;

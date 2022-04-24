@@ -36,6 +36,8 @@ export default class level_z1 extends GameLevel {
         //Load tilemap
         this.load.tilemap("levelZ1", "project_assets/tilemaps/LevelZ1.json");
 
+        this.load.spritesheet("lightningv2", "project_assets/spritesheets/lightningv2.json");
+
         this.load.image("lightningImg", "project_assets/sprites/lightning.png");
 
         //Load Challenge img
@@ -128,7 +130,8 @@ export default class level_z1 extends GameLevel {
                 inputEnabled: true,
                 range: 30,
                 playerStats: this.playerStats,
-                weapon: weapon
+                weapon: weapon,
+                weaponV2: "lightningv2"
             });
         this.player.animation.play("idle");
 
