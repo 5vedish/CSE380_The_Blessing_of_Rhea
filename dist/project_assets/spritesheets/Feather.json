@@ -1,0 +1,86 @@
+{
+	"name": "Feather",
+	"spriteSheetImage": "Feather.png",
+	"spriteWidth": 32,
+	"spriteHeight": 32,
+	"leftBuffer": 0,
+	"rightBuffer": 0,
+	"topBuffer": 0,
+	"bottomBuffer": 0,
+	"columns": 4,
+	"rows": 3,
+	"animations": [
+		{
+			"name": "up",
+			"repeat": true,
+			"frames": [
+				{
+					"index": 0,
+					"duration": 20
+				},
+				{
+					"index": 1,
+					"duration": 20
+				},
+                {
+                    "index": 2,
+					"duration": 20
+                }
+			]
+		},
+        {
+			"name": "left",
+			"repeat": true,
+			"frames": [
+				{
+					"index": 3,
+					"duration": 20
+				},
+				{
+					"index": 4,
+					"duration": 20
+				},
+                {
+                    "index": 5,
+					"duration": 20
+                }
+			]
+		},
+        {
+			"name": "down",
+			"repeat": true,
+			"frames": [
+				{
+					"index": 6,
+					"duration": 20
+				},
+				{
+					"index": 7,
+					"duration": 20
+				},
+                {
+                    "index": 8,
+					"duration": 20
+                }
+			]
+		},
+        {
+			"name": "right",
+			"repeat": true,
+			"frames": [
+				{
+					"index": 9,
+					"duration": 20
+				},
+				{
+					"index": 10,
+					"duration": 20
+				},
+                {
+                    "index": 11,
+					"duration": 20
+                }
+			]
+		}
+	]
+}
