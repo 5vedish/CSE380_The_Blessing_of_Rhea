@@ -13,16 +13,16 @@ import CharacterStat from "../../PlayerStatus";
 import DeathScreen from "../DeathScreen";
 import RangeAI from "../../AI/RangeAI";
 import Timer from "../../../Wolfie2D/Timing/Timer";
+import level_z2 from "./Level_Z2";
 import Graphic from "../../../Wolfie2D/Nodes/Graphic";
 import { TweenableProperties } from "../../../Wolfie2D/Nodes/GameNode";
 import { EaseFunctionType } from "../../../Wolfie2D/Utils/EaseFunctions";
 import Sprite from "../../../Wolfie2D/Nodes/Sprites/Sprite";
-import level_p2 from "./Level_P2";
+import Weapon from "../../GameSystems/items/Weapon";
 
-export default class level_p1 extends GameLevel {
-    private prep: boolean = false;
-    private midWave: boolean;
-    private currentWave: number = 0;
+export default class level_p2 extends GameLevel {
+    private halfway: boolean = false;
+    private weapon: Weapon;
 
     loadScene(): void {
         //Load Poseidon
@@ -39,13 +39,10 @@ export default class level_p1 extends GameLevel {
         this.load.spritesheet("ink", "project_assets/spritesheets/ink.json")
 
         //Load tilemap
-        this.load.tilemap("levelP1", "project_assets/tilemaps/LevelP1.json");
+        this.load.tilemap("levelP1", "project_assets/tilemaps/LevelP2.json");
 
         //Load Challenge img
         this.load.image("objective", "project_assets/sprites/p1_challenge.png");
-        this.load.image("wave_one", "project_assets/sprites/p1_wave1.png");
-        this.load.image("wave_two", "project_assets/sprites/p1_wave2.png");
-        this.load.image("wave_three", "project_assets/sprites/p1_wave3.png");
 
         super.loadScene();
     }
@@ -62,7 +59,6 @@ export default class level_p1 extends GameLevel {
         this.playerSpawn = new Vec2(32*32, 32*32);
         // this.viewport.setFocus(new Vec2(this.playerSpawn.x, this.playerSpawn.y));
         
-        
         this.maxEnemies = 15;
         
         super.startScene();
@@ -71,7 +67,7 @@ export default class level_p1 extends GameLevel {
         this.initPlayer();
         
         //Create how long players need to survive for
-        this.gameTimer = new Timer(5000);
+        this.gameTimer = new Timer(60000);
         this.gameTime = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(this.viewport.getHalfSize().x, 20), text: `${this.parseTimeLeft(this.gameTimer.getTotalTime())}`});
     
         this.levelUI = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(86, 32), 
@@ -104,16 +100,6 @@ export default class level_p1 extends GameLevel {
             experience: 250,
         });
 
-        this.spawnableEnemies.push({
-            name: "octopus",
-            health: 2,
-            player: this.player,
-            speed: 150,
-            weapon: this.createWeapon("knife"),
-            range: 125,
-            experience: 250,
-        });
-
         this.enemyConstructorPairings = new Map([["crab" , EnemyAI], ["cyclops", EnemyAI], ["octopus", RangeAI]]);
         
 
@@ -129,6 +115,14 @@ export default class level_p1 extends GameLevel {
         this.addLayer("primary", 10);
     }
 
+    initScene(init: Record<string, any>): void {
+        this.playerStats = init.characterStats;
+        let weapon = <Weapon>init.weapon;
+        weapon.cooldownTimer = new Timer(this.playerStats.weaponCoolDown);
+        weapon.sprite.setScene(this);
+        this.weapon = weapon;
+    }
+
     protected initPlayer() : void {
         this.player = this.add.animatedSprite("poseidon", "primary");
         this.player.scale.set(1, 1);
@@ -141,9 +135,7 @@ export default class level_p1 extends GameLevel {
         //this.player.colliderOffset.set(0, 2);
 
         // create weapon
-        let weapon = this.createWeapon("trident");
-        
-        this.playerStats = new CharacterStat(100, 1, 10, 2, weapon.cooldownTimer.getTotalTime());
+        this.weapon.battleManager = this.battleManager;
         // TODO - ADD PLAYER AI HERE
         this.player.addAI(PlayerController,
             {
@@ -152,7 +144,7 @@ export default class level_p1 extends GameLevel {
                 inputEnabled: true,
                 range: 30,
                 playerStats: this.playerStats,
-                weapon: weapon,
+                weapon: this.weapon,
                 weaponV2: "waterfallv2"
             });
         this.player.animation.play("idle");
@@ -174,73 +166,64 @@ export default class level_p1 extends GameLevel {
         // Spawn enemies in
         if(this.startSceneTimer.isStopped()){
             if(!this.startedLevel){
+                this.gameTimer.start();
                 this.player.unfreeze();
                 this.player.setAIActive(true, {});
                 this.startedLevel = true;
             }
 
-            if (this.currentWave < 3 && this.currentNumEnemies === 0 && !this.prep) {
-                this.midWave = false;
-                switch (this.currentWave) {
-                    case 0:
-                        this.createChallengeLabel("wave_one");
-                        break;
-                    case 1:
-                        this.createChallengeLabel("wave_two");
-                        break;
-                    case 2:
-                        this.createChallengeLabel("wave_three");
-                        break;
-                    default:
-                        break;
+            if(this.currentNumEnemies < this.maxEnemies && !this.pauseFlag){
+                let enemyType = this.spawnableEnemies[Math.floor(Math.random() * this.spawnableEnemies.length)];
+    
+                let enemyPosition = this.randomSpawn();
+                let options = {
+                    name: enemyType.name,
+                    health: enemyType.health,
+                    player: enemyType.player,
+                    speed: enemyType.speed,
+                    weapon: enemyType.weapon,
+                    range: enemyType.range,
+                    experience: enemyType.experience,
+                    position: enemyPosition,
+                    projectiles: this.createProjectiles(2, "ink"),
+                    cooldown: 2000,
+                    scene: this,
+                    ai: this.enemyConstructorPairings.get(enemyType.name)
                 }
-                this.gameTimer.start();
-                this.prep = true;
+                
+                this.enemyArray.push(this.addEnemy(enemyType.name, options));
             }
-            
-            if (!this.gameTimer.isStopped()) {
-                this.gameTime.text = `${this.parseTimeLeft(this.gameTimer.getTimeLeft())}`;
-            } else this.midWave = true;
+    
+            //Update game timer
+            this.gameTime.text = `${this.parseTimeLeft(this.gameTimer.getTimeLeft())}`;
 
-            if(this.currentWave < 3 && this.currentNumEnemies === 0 && !this.pauseFlag){
-                if (this.midWave) {
-                    for (let i = 0; i < this.maxEnemies; i++) {
-                        let enemyType = this.spawnableEnemies[Math.floor(Math.random() * this.spawnableEnemies.length)];
-        
-                        let enemyPosition = this.randomSpawn();
-                        let options = {
-                            name: enemyType.name,
-                            health: enemyType.health,
-                            player: enemyType.player,
-                            speed: enemyType.speed,
-                            weapon: enemyType.weapon,
-                            range: enemyType.range,
-                            experience: enemyType.experience,
-                            position: enemyPosition,
-                            projectiles: this.createProjectiles(2, "ink"),
-                            cooldown: 2000,
-                            scene: this,
-                            ai: this.enemyConstructorPairings.get(enemyType.name)
-                        }
-                        this.enemyArray.push(this.addEnemy(enemyType.name, options));
-                    }
-    
-                    this.currentWave += 1;
-                    this.prep = false;
-                }
+            if(this.gameTimer.getTimeLeft() <= this.gameTimer.getTotalTime()/2 && !this.halfway){
+                this.spawnableEnemies.push({
+                    name: "octopus",
+                    health: 2,
+                    player: this.player,
+                    speed: 125,
+                    weapon: this.createWeapon("knife"),
+                    range: 150,
+                    experience: 250,
+                });
+                this.halfway = true;
             }
     
-            if(this.currentWave >= 3 && this.currentNumEnemies === 0) {
+            //Half way through add harpies
+            // console.log(this.gameTimer.getTimeLeft() + " | " + this.gameTimer.getTotalTime()/2)
+    
+            if(this.gameTimer.getTimeLeft() <= 0) {
                 //end level and move to level z2
                 if(this.changeLevelTimer === undefined){
                     this.changeLevelTimer = new Timer(5000);
                     this.changeLevelTimer.start();
                 }
-
-                if(this.changeLevelTimer.getTimeLeft() <= 0){
-                    this.viewport.setSize(1600, 900);
-                    this.sceneManager.changeToScene(level_p2, {characterStats: this.playerStats, weapon: (<PlayerController>this.player._ai).weapon}, this.sceneOptions);
-                }
+                
+                // if(this.changeLevelTimer.getTimeLeft() <= 0){
+                //     this.viewport.setSize(1600, 900);
+                //     this.sceneManager.changeToScene(level_z2, {characterStats: this.playerStats, weapon: (<PlayerController>this.player._ai).weapon}, this.sceneOptions);
+                // }
             }
         }
         
