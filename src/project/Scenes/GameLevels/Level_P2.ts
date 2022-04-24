@@ -57,7 +57,7 @@ export default class level_p2 extends GameLevel {
         this.viewport.setBounds(0, 0, 64*32, 64*32);
         this.viewport.setSize(this.viewport.getHalfSize());
         
-        this.playerSpawn = new Vec2(32*32, 32*32);
+        this.playerSpawn = new Vec2((32*32) + 16, (32*32) + 16);
         // this.viewport.setFocus(new Vec2(this.playerSpawn.x, this.playerSpawn.y));
         
         this.maxEnemies = 15;
@@ -85,7 +85,7 @@ export default class level_p2 extends GameLevel {
             name: "crab",
             health: 2,
             player: this.player,
-            speed: 100,
+            speed: 125,
             weapon: this.createWeapon("knife"),
             range: 10,
             experience: 200
@@ -95,7 +95,7 @@ export default class level_p2 extends GameLevel {
             name: "cyclops",
             health: 3,
             player: this.player,
-            speed: 75,
+            speed: 100,
             weapon: this.createWeapon("knife"),
             range: 10,
             experience: 250,

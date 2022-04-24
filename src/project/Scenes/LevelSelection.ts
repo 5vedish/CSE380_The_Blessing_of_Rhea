@@ -10,13 +10,27 @@ import level_p1 from "./GameLevels/Level_P1";
 export default class LevelSelection extends Scene {
   private splashScreen: Layer;
   private bg: Sprite;
+  private poseidon1 : Sprite;
+  private poseidon2: Sprite;
+  private poseidon3: Sprite;
+
   private zeus1 : Sprite;
+  private zeus2: Sprite;
+  private zeus3: Sprite;
 
   private levelSelect: Layer;
 
   loadScene() {
     this.load.image("splash_screen", "project_assets/screens/Splash.png");
-    this.load.image("level_z1", "project_assets/tilemaps/LevelZ1Preview.png");
+    // Poseidon previews
+    this.load.image("level_p1", "project_assets/tilemaps/p1_preview.png");
+    this.load.image("level_p2", "project_assets/tilemaps/p2_preview.png");
+    this.load.image("level_p3", "project_assets/tilemaps/p3_preview.png");
+
+    // Zeus previews
+    this.load.image("level_z1", "project_assets/tilemaps/z1_preview.png");
+    this.load.image("level_z2", "project_assets/tilemaps/z2_preview.png");
+    this.load.image("level_z3", "project_assets/tilemaps/z3_preview.png");
   }
 
   startScene() {
@@ -40,6 +54,9 @@ export default class LevelSelection extends Scene {
     levelp1.backgroundColor = Color.TRANSPARENT;
     levelp1.onClickEventId = "poseidon1";
 
+    this.poseidon1 = this.add.sprite("level_p1", "splashScreen");
+    this.poseidon1.position.copy(levelp1.position);
+
     const levelp2 = this.add.uiElement(UIElementType.BUTTON, "levelSelect", {
       position: new Vec2(400, origin.y + 361),
       text: "Level 2",
@@ -50,6 +67,9 @@ export default class LevelSelection extends Scene {
     levelp2.backgroundColor = Color.TRANSPARENT;
     levelp2.onClickEventId = "poseidon2";
 
+    this.poseidon2 = this.add.sprite("level_p2", "splashScreen");
+    this.poseidon2.position.copy(levelp2.position);
+
     const levelp3 = this.add.uiElement(UIElementType.BUTTON, "levelSelect", {
       position: new Vec2(400, origin.y + 587),
       text: "Level 3",
@@ -59,6 +79,9 @@ export default class LevelSelection extends Scene {
     levelp3.borderColor = Color.WHITE;
     levelp3.backgroundColor = Color.TRANSPARENT;
     levelp3.onClickEventId = "poseidon3";
+
+    this.poseidon3 = this.add.sprite("level_p3", "splashScreen");
+    this.poseidon3.position.copy(levelp3.position);
 
     // Add Zeus level buttons
     const levelz1 = this.add.uiElement(UIElementType.BUTTON, "levelSelect", {
@@ -85,6 +108,9 @@ export default class LevelSelection extends Scene {
     levelz2.backgroundColor = Color.TRANSPARENT;
     levelz2.onClickEventId = "zeus2";
 
+    this.zeus2 = this.add.sprite("level_z2", "splashScreen");
+    this.zeus2.position.copy(levelz2.position);
+
     const levelz3 = this.add.uiElement(UIElementType.BUTTON, "levelSelect", {
       position: new Vec2(800, origin.y + 587),
       text: "Level 3",
@@ -94,6 +120,9 @@ export default class LevelSelection extends Scene {
     levelz3.borderColor = Color.WHITE;
     levelz3.backgroundColor = Color.TRANSPARENT;
     levelz3.onClickEventId = "zeus3";
+
+    this.zeus3 = this.add.sprite("level_z3", "splashScreen");
+    this.zeus3.position.copy(levelz3.position);
 
     // Add Hades level buttons
     const levelh1 = this.add.uiElement(UIElementType.BUTTON, "levelSelect", {
