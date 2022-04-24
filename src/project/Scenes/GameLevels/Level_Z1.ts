@@ -59,7 +59,7 @@ export default class level_z1 extends GameLevel {
         // this.viewport.setFocus(new Vec2(this.playerSpawn.x, this.playerSpawn.y));
         
         
-        this.maxEnemies = 15;
+        this.maxEnemies = 1;
         
         super.startScene();
         this.initLayers();
@@ -171,7 +171,7 @@ export default class level_z1 extends GameLevel {
                     range: enemyType.range,
                     experience: enemyType.experience,
                     position: enemyPosition,
-                    projectiles: this.createProjectiles(5 , "leaf"),
+                    projectiles: this.createProjectiles(1 , "leaf"),
                     cooldown: 1000,
                     scene: this,
                     ai: this.enemyConstructorPairings.get(enemyType.name)
@@ -183,7 +183,6 @@ export default class level_z1 extends GameLevel {
             this.gameTime.text = `${this.parseTimeLeft(this.gameTimer.getTimeLeft())}`;
     
             //Half way through add harpies
-            // console.log(this.gameTimer.getTimeLeft() + " | " + this.gameTimer.getTotalTime()/2)
             if(this.gameTimer.getTimeLeft() <= this.gameTimer.getTotalTime()/2 && !this.addedHarpy){
                 console.log("Adding harpy" + ` at ${this.parseTimeLeft(this.gameTimer.getTimeLeft())}`);
                 this.spawnableEnemies.push({

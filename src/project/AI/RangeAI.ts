@@ -6,9 +6,9 @@ import ProjectileAI from "./ProjectileAI";
 
 export default class RangeAI extends EnemyAI{
     
-    private projectiles: Array<AnimatedSprite>;
+     projectiles: Array<AnimatedSprite>;
 
-    private attackCooldown: Timer;
+    protected attackCooldown: Timer;
 
     initializeAI(owner: AnimatedSprite, options: Record<string, any>){
         super.initializeAI(owner, options);

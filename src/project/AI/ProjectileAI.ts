@@ -24,6 +24,8 @@ export default class ProjectileAI implements AI {
     private start_speed: number;
     private dir: Vec2;
 
+    private paused: boolean = true;
+
     private player: AnimatedSprite;
 
     // Stats
@@ -45,6 +47,7 @@ export default class ProjectileAI implements AI {
 
         
         this.receiver = new Receiver();
+        this.receiver.subscribe([Project_Events.GAMEPAUSE, Project_Events.GAMEUNPAUSE]);
 
         this.player = options.player;
 
@@ -57,26 +60,30 @@ export default class ProjectileAI implements AI {
     }
 
     activate(options: Record<string, any>): void {
-        this.start_speed = options.speed;
-        this.current_speed = this.start_speed;
         this.timeToLive.start();
+        this.paused = false;
     }
 
 
     handleEvent(event: GameEvent): void {
-        // If the bullet used was the same as this bullet, then reset the speed
-        if (event.data.get("id") == this.owner.id) {
-            this.current_speed = this.start_speed;
+        switch (event.type){
+            case Project_Events.GAMEPAUSE:
+                this.timeToLive.pause();
+                this.paused = true;
+                break;
+            case Project_Events.GAMEUNPAUSE:
+                this.paused = false;
+                this.timeToLive.unpause();
+                break;
         }
     }
 
     update(deltaT: number): void {
         while(this.receiver.hasNextEvent()){
-			this.handleEvent(this.receiver.getNextEvent());
+            this.handleEvent(this.receiver.getNextEvent());
 		}
         
-        if(this.owner.visible){
-
+        if(this.owner.visible && !this.paused){
             // Update the position
             this.owner.move(this.dir.scaled(this.current_speed));
 
@@ -98,6 +105,7 @@ export default class ProjectileAI implements AI {
     }
 
     destroy(): void {
+        this.receiver.destroy();
     }
 
 }

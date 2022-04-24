@@ -28,7 +28,6 @@ export default class Lightning extends WeaponType {
     }
 
     createRequiredAssets(scene: Scene): [AnimatedSprite] {
-        console.log("CREATE LIGHJTNING SPRITE");
         let zap = scene.add.animatedSprite(this.spriteKey, "primary");
 
         return [zap];

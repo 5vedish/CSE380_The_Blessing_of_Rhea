@@ -380,6 +380,7 @@ export default class GameLevel extends Scene{
         if(this.gameTimer != undefined){
             this.gameTimer.pause();
         }
+        this.emitter.fireEvent(Project_Events.GAMEPAUSE);
     }
 
     protected unpauseEntities(){
@@ -395,6 +396,7 @@ export default class GameLevel extends Scene{
         if(this.gameTimer != undefined){
             this.gameTimer.unpause();
         }
+        this.emitter.fireEvent(Project_Events.GAMEUNPAUSE);
     }
 
     // main events
