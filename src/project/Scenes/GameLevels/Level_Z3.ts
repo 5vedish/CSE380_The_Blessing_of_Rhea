@@ -15,15 +15,10 @@ import RangeAI from "../../AI/RangeAI";
 import Timer from "../../../Wolfie2D/Timing/Timer";
 import Weapon from "../../GameSystems/items/Weapon";
 import Lightning from "../../GameSystems/items/WeaponTypes/Primary/Lightning";
-import level_z3 from "./Level_Z3";
 
-export default class level_z2 extends GameLevel {
+export default class level_z3 extends GameLevel {
 
     private weapon: Weapon;
-
-    private prep: boolean = false;
-    private midWave: boolean;
-    private currentWave: number = 0;
 
     loadScene(): void {
         //Load Zeus
@@ -32,7 +27,8 @@ export default class level_z2 extends GameLevel {
         //Load Enemies
         this.load.spritesheet("snake", "project_assets/spritesheets/Snake.json");
         this.load.spritesheet("harpy", "project_assets/spritesheets/harpy.json");
-        this.load.spritesheet("giant", "project_assets/spritesheets/Giant.json")
+        this.load.spritesheet("giant", "project_assets/spritesheets/Giant.json");
+        this.load.spritesheet("echidna", "project_assets/spritesheets/echidna.json")
 
         //Load tilemap
         this.load.tilemap("levelZ2", "project_assets/tilemaps/LevelZ2.json");
@@ -45,10 +41,7 @@ export default class level_z2 extends GameLevel {
         this.load.image("lightningImg", "project_assets/sprites/lightning.png");
 
         //Load Challenge img
-        this.load.image("objective", "project_assets/sprites/z2_challenge.png");
-        this.load.image("wave_one", "project_assets/sprites/p1_wave1.png");
-        this.load.image("wave_two", "project_assets/sprites/p1_wave2.png");
-        this.load.image("wave_three", "project_assets/sprites/p1_wave3.png");
+        this.load.image("objective", "project_assets/sprites/z3_challenge.png");
 
         super.loadScene();
     }
@@ -60,7 +53,7 @@ export default class level_z2 extends GameLevel {
         weapon.sprite.setScene(this);
         this.weapon = weapon;
     }
-    
+
     startScene(): void {
         // Add in the tilemap and get the wall layer
         let tilemapLayers = this.add.tilemap("levelZ2", new Vec2(1, 1));
@@ -70,9 +63,9 @@ export default class level_z2 extends GameLevel {
         this.viewport.setBounds(0, 0, 64*32, 64*32);
         this.viewport.setSize(this.viewport.getHalfSize());
         
-        this.playerSpawn = new Vec2(32*32, 32*32);
-        // this.viewport.setFocus(new Vec2(this.playerSpawn.x, this.playerSpawn.y));
-        
+        this.playerSpawn = new Vec2(32*32, 49*32);
+
+
         this.maxEnemies = 15;
         
         super.startScene();
@@ -81,9 +74,6 @@ export default class level_z2 extends GameLevel {
         this.initPlayer();
 
         this.enemyConstructorPairings = new Map([["snake" , EnemyAI], ["harpy", RangeAI], ["giant", EnemyAI]]);
-
-        this.gameTimer = new Timer(5000);
-        this.gameTime = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(this.viewport.getHalfSize().x, 20), text: `${this.parseTimeLeft(this.gameTimer.getTotalTime())}`});
     
         //Add health bar and exp bar
         // update health bar
@@ -151,71 +141,7 @@ export default class level_z2 extends GameLevel {
                 this.player.setAIActive(true, {});
                 this.startedLevel = true;
             }
-
-            if (this.currentWave < 3 && this.currentNumEnemies === 0 && !this.prep) {
-                this.midWave = false;
-                switch (this.currentWave) {
-                    case 0:
-                        this.createChallengeLabel("wave_one");
-                        break;
-                    case 1:
-                        this.createChallengeLabel("wave_two");
-                        break;
-                    case 2:
-                        this.createChallengeLabel("wave_three");
-                        break;
-                    default:
-                        break;
-                }
-                this.gameTimer.start();
-                this.prep = true;
-            }
-            
-            if (!this.gameTimer.isStopped()) {
-                this.gameTime.text = `${this.parseTimeLeft(this.gameTimer.getTimeLeft())}`;
-            } else this.midWave = true;
-
-            if(this.currentWave < 3 && this.currentNumEnemies === 0 && !this.pauseFlag){
-                if (this.midWave) {
-                    for (let i = 0; i < this.maxEnemies; i++) {
-                        let enemyType = this.spawnableEnemies[Math.floor(Math.random() * this.spawnableEnemies.length)];
         
-                        let enemyPosition = this.randomSpawn();
-                        let options = {
-                            name: enemyType.name,
-                            health: enemyType.health,
-                            player: enemyType.player,
-                            speed: enemyType.speed,
-                            weapon: enemyType.weapon,
-                            range: enemyType.range,
-                            experience: enemyType.experience,
-                            position: enemyPosition,
-                            projectiles: this.createProjectiles(3, "feather"),
-                            cooldown: 2000,
-                            scene: this,
-                            ai: this.enemyConstructorPairings.get(enemyType.name)
-                        }
-                        this.enemyArray.push(this.addEnemy(enemyType.name, options));
-                    }
-    
-                    this.currentWave += 1;
-                    this.maxEnemies = Math.floor(this.maxEnemies * 1.75);
-                    this.prep = false;
-                }
-            }
-    
-            if(this.currentWave >= 3 && this.currentNumEnemies === 0) {
-                //end level and move to level z3
-                if(this.changeLevelTimer === undefined){
-                    this.changeLevelTimer = new Timer(5000);
-                    this.changeLevelTimer.start();
-                }
-
-                if(this.changeLevelTimer.getTimeLeft() <= 0){
-                    this.viewport.setSize(1600, 900);
-                    this.sceneManager.changeToScene(level_z3, {characterStats: this.playerStats, weapon: (<PlayerController>this.player._ai).weapon}, this.sceneOptions);
-                }
-            }
         }
     }
 
@@ -261,6 +187,5 @@ export default class level_z2 extends GameLevel {
         // Add the primary layer for players and enemies
         this.addLayer("primary", 10);
     }
-
 
 }

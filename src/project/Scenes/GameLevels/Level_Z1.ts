@@ -71,7 +71,7 @@ export default class level_z1 extends GameLevel {
         this.initPlayer();
         
         //Create how long players need to survive for
-        this.gameTimer = new Timer(120000);
+        this.gameTimer = new Timer(1000);
         this.gameTime = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(this.viewport.getHalfSize().x, 20), text: `${this.parseTimeLeft(this.gameTimer.getTotalTime())}`});
     
         this.levelUI = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(86, 32), 
@@ -88,7 +88,7 @@ export default class level_z1 extends GameLevel {
             name: "snake",
             health: 2,
             player: this.player,
-            speed: 100,
+            speed: 125,
             weapon: this.createWeapon("knife"),
             range: 10,
             experience: 200
