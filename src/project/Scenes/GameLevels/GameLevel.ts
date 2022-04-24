@@ -124,15 +124,11 @@ export default class GameLevel extends Scene{
 
         // Spritesheets
         this.load.spritesheet("slice", "project_assets/spritesheets/slice.json");
-        this.load.spritesheet("lightning", "project_assets/spritesheets/lightning.json");
-        this.load.spritesheet("lightningv2", "project_assets/spritesheets/lightningv2.json");
         this.load.spritesheet("leaf", "project_assets/spritesheets/Leaf.json");
-        this.load.spritesheet("feather", "project_assets/spritesheets/Feather.json");
         
         // Images
         this.load.image("pause_screen", "project_assets/screens/pause.png");
         this.load.image("knife", "project_assets/sprites/knife.png");
-        this.load.image("lightning", "project_assets/sprites/lightning.png");
         
         // Import upgrade icons
         this.load.image("honey_jar", "project_assets/sprites/honeyJar.png");
