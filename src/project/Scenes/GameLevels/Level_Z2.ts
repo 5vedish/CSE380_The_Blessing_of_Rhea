@@ -97,7 +97,7 @@ export default class level_z2 extends GameLevel {
             name: "snake",
             health: 2,
             player: this.player,
-            speed: 200,
+            speed: 100,
             weapon: this.createWeapon("knife"),
             range: 10,
             experience: 200

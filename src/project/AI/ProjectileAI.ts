@@ -86,7 +86,7 @@ export default class ProjectileAI implements AI {
                 this.owner.position = Vec2.ZERO;
                 this.owner.visible = false;
                 this.owner.setAIActive(false, {});
-                this.emitter.fireEvent(Project_Events.DAMAGED);
+                this.emitter.fireEvent(Project_Events.HEALTHCHANGED);
             }
 
         }

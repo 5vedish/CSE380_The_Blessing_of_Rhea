@@ -1,9 +1,8 @@
-import GameNode from "../../../Wolfie2D/Nodes/GameNode";
-import BattlerAI from "../../AI/BattlerAI";
-import CharacterStat from "../../PlayerStatus";
-import PlayerController from "../../AI/PlayerController";
-import Item from "./Item";
-import Weapon from "./Weapon";
+import GameNode from "../../../../Wolfie2D/Nodes/GameNode";
+import CharacterStat from "../../../PlayerStatus";
+import PlayerController from "../../../AI/PlayerController";
+import Item from ".././Item";
+import Weapon from ".././Weapon";
 
 export default class HermesSandals extends Item {
     

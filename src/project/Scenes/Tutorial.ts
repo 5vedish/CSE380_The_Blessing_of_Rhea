@@ -35,6 +35,8 @@ export default class Tutorial extends GameLevel {
 
         this.load.image("lightningImg", "project_assets/sprites/lightning.png")
 
+        this.load.image("objective", "project_assets/sprites/tutorial.png")
+
         super.loadScene();
     }
 
@@ -318,7 +320,7 @@ export default class Tutorial extends GameLevel {
                     this.expBar.position = new Vec2(108*expPercentage+(216/2), 32);
                     break;
 
-                case Project_Events.DAMAGED:
+                case Project_Events.HEALTHCHANGED:
 
                     // update health bar
                     let percentage = this.playerStats.stats.health/this.playerStats.stats.maxHealth;

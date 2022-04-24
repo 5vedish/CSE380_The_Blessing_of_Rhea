@@ -20,17 +20,19 @@ import BattlerAI from "../../AI/BattlerAI";
 import Graphic from "../../../Wolfie2D/Nodes/Graphic";
 import CharacterStat from "../../PlayerStatus";
 import CanvasNode from "../../../Wolfie2D/Nodes/CanvasNode";
-import Hourglass from "../../GameSystems/items/Hourglass";
-import HermesSandals from "../../GameSystems/items/HermesSandals";
+import Hourglass from "../../GameSystems/items/Upgrades/Hourglass";
+import HermesSandals from "../../GameSystems/items/Upgrades/HermesSandals";
 import Sprite from "../../../Wolfie2D/Nodes/Sprites/Sprite";
 import PlayerController from "../../AI/PlayerController";
 import Receiver from "../../../Wolfie2D/Events/Receiver";
 import Layer from "../../../Wolfie2D/Scene/Layer";
 import UIElement from "../../../Wolfie2D/Nodes/UIElement";
-import Bolt from "../../GameSystems/items/Bolt";
+import Bolt from "../../GameSystems/items/Upgrades/Bolt";
 import ProjectileAI from "../../AI/ProjectileAI";
 import DeathScreen from "../DeathScreen";
 import { EaseFunctionType } from "../../../Wolfie2D/Utils/EaseFunctions";
+import HoneyJar from "../../GameSystems/items/Upgrades/HoneyJar";
+import Goblet from "../../GameSystems/items/Upgrades/Goblet";
 
 export interface CustomEnemy {
     name: string,
@@ -88,9 +90,10 @@ export default class GameLevel extends Scene{
     protected item3: Sprite;
 
     // items
-    protected itemsArray = ["hourglass", "hermes_sandals", "bolt"];
+    protected itemsArray = ["hourglass", "hermes_sandals", "bolt", "honey_jar", "goblet_of_dionysus"];
     protected selectionArray: Array<string> = [];
-    protected itemConstructorPairings: Map<string,any> = new Map([["hourglass" , Hourglass], ["hermes_sandals", HermesSandals], ["bolt", Bolt]]);
+    protected itemConstructorPairings: Map<string,any> = new Map([["hourglass" , Hourglass], 
+    ["hermes_sandals", HermesSandals], ["bolt", Bolt], ["honey_jar", HoneyJar], ["goblet_of_dionysus", Goblet]]);
     // protected maxProjectiles = 20;
     // protected projectiles : Array<AnimatedSprite> = new Array(this.maxProjectiles);
 
@@ -119,11 +122,14 @@ export default class GameLevel extends Scene{
         this.load.image("knife", "project_assets/sprites/knife.png");
         this.load.image("laserGun", "project_assets/sprites/laserGun.png");
         this.load.image("pistol", "project_assets/sprites/pistol.png");
-        this.load.image("lightning", "project_assets/sprites/lightning.png");
         this.load.image("pause_screen", "project_assets/screens/pause.png");
+        //import upgrade icons
+        this.load.image("lightning", "project_assets/sprites/lightning.png");
         this.load.image("hourglass", "project_assets/sprites/hourglass.png")
         this.load.image("hermes_sandals", "project_assets/sprites/hermes_sandals.png");
-        this.load.image("bolt", "project_assets/sprites/Bolt.png")
+        this.load.image("bolt", "project_assets/sprites/Bolt.png");
+        this.load.image("honey_jar", "project_assets/sprites/HoneyJar.png");
+        this.load.image("goblet_of_dionysus", "project_assets/sprites/Goblet.png");
         //Initialize the possible spawning areas for enemies
         //Each Vec2 holds the pixels that will be added to the center of the viewport so enemies spawn outside
         //View port is 800x450
@@ -206,7 +212,7 @@ export default class GameLevel extends Scene{
           this.button3.backgroundColor = Color.GRAYISH;
           this.button3.onClickEventId = "three";
 
-          
+
           this.createChallengeLabel();
     }
 
@@ -296,7 +302,7 @@ export default class GameLevel extends Scene{
                     this.expBar.position = new Vec2(108*expPercentage+(216/2), 32);
                     break;
 
-                case Project_Events.DAMAGED:
+                case Project_Events.HEALTHCHANGED:
 
                     // update health bar
                     let percentage = this.playerStats.stats.health/this.playerStats.stats.maxHealth;
@@ -380,7 +386,7 @@ export default class GameLevel extends Scene{
     protected subscribeToEvents(): void {
         this.receiver.subscribe ([
             Project_Events.ENEMYDIED, 
-            Project_Events.DAMAGED, 
+            Project_Events.HEALTHCHANGED, 
             Project_Events.LEVELUP,
             // Project_Events.HARPYATTACK
         ]);

@@ -1,5 +1,5 @@
 export enum Project_Events {
-    DAMAGED = "damaged",
+    HEALTHCHANGED = "healthChanged",
     LEVELUP = "levelUp",
     ENEMYDIED = "enemyDied",
     PLAYERATTACKED = "playerAttacked"
