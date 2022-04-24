@@ -70,8 +70,6 @@ export default class level_z1 extends GameLevel {
         this.gameTimer = new Timer(5000);
         this.gameTime = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(this.viewport.getHalfSize().x, 20), text: `${this.parseTimeLeft(this.gameTimer.getTotalTime())}`});
     
-        this.tilemap = this.player.getScene().getTilemap("Wall") as OrthogonalTilemap;
-
         this.levelUI = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(86, 32), 
             text: "Lvl" + this.playerStats.level});
         this.levelUI.textColor = Color.BLACK;

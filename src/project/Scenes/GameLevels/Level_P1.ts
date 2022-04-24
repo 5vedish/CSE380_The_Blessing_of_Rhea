@@ -20,10 +20,9 @@ import { EaseFunctionType } from "../../../Wolfie2D/Utils/EaseFunctions";
 import Sprite from "../../../Wolfie2D/Nodes/Sprites/Sprite";
 
 export default class level_p1 extends GameLevel {
-
-    protected removeEnemies: boolean = false;
-
-    private addedMonsters: boolean = false;
+    private prep: boolean = false;
+    private midWave: boolean;
+    private currentWave: number = 0;
 
     loadScene(): void {
         //Load Zeus
@@ -42,7 +41,10 @@ export default class level_p1 extends GameLevel {
         this.load.image("lightningImg", "project_assets/sprites/lightning.png");
 
         //Load Challenge img
-        this.load.image("objective", "project_assets/sprites/z1_challenge.png");
+        this.load.image("objective", "project_assets/sprites/p1_challenge.png");
+        this.load.image("wave_one", "project_assets/sprites/p1_wave1.png");
+        this.load.image("wave_two", "project_assets/sprites/p1_wave2.png");
+        this.load.image("wave_three", "project_assets/sprites/p1_wave3.png");
 
         super.loadScene();
     }
@@ -68,11 +70,9 @@ export default class level_p1 extends GameLevel {
         this.initPlayer();
         
         //Create how long players need to survive for
-        this.gameTimer = new Timer(60000);
+        this.gameTimer = new Timer(5000);
         this.gameTime = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(this.viewport.getHalfSize().x, 20), text: `${this.parseTimeLeft(this.gameTimer.getTotalTime())}`});
     
-        this.tilemap = this.player.getScene().getTilemap("Wall") as OrthogonalTilemap;
-
         this.levelUI = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(86, 32), 
             text: "Lvl" + this.playerStats.level});
         this.levelUI.textColor = Color.BLACK;
@@ -91,6 +91,26 @@ export default class level_p1 extends GameLevel {
             weapon: this.createWeapon("knife"),
             range: 10,
             experience: 200
+        });
+
+        this.spawnableEnemies.push({
+            name: "cyclops",
+            health: 3,
+            player: this.player,
+            speed: 75,
+            weapon: this.createWeapon("knife"),
+            range: 32,
+            experience: 250,
+        });
+
+        this.spawnableEnemies.push({
+            name: "octopus",
+            health: 2,
+            player: this.player,
+            speed: 150,
+            weapon: this.createWeapon("knife"),
+            range: 125,
+            experience: 250,
         });
 
         this.enemyConstructorPairings = new Map([["crab" , EnemyAI], ["cyclops", EnemyAI], ["octopus", RangeAI]]);
@@ -153,77 +173,73 @@ export default class level_p1 extends GameLevel {
         // Spawn enemies in
         if(this.startSceneTimer.isStopped()){
             if(!this.startedLevel){
-                this.gameTimer.start();
                 this.player.unfreeze();
                 this.player.setAIActive(true, {});
                 this.startedLevel = true;
             }
 
-            if(this.currentNumEnemies < this.maxEnemies && !this.pauseFlag){
-                let enemyType = this.spawnableEnemies[Math.floor(Math.random() * this.spawnableEnemies.length)];
-    
-                let enemyPosition = this.randomSpawn();
-                let options = {
-                    name: enemyType.name,
-                    health: enemyType.health,
-                    player: enemyType.player,
-                    speed: enemyType.speed,
-                    weapon: enemyType.weapon,
-                    range: enemyType.range,
-                    experience: enemyType.experience,
-                    position: enemyPosition,
-                    projectiles: this.createProjectiles(5 , "leaf"),
-                    cooldown: 1000,
-                    scene: this,
-                    ai: this.enemyConstructorPairings.get(enemyType.name)
+            if (this.currentWave < 3 && this.currentNumEnemies === 0 && !this.prep) {
+                this.midWave = false;
+                switch (this.currentWave) {
+                    case 0:
+                        this.createChallengeLabel("wave_one");
+                        break;
+                    case 1:
+                        this.createChallengeLabel("wave_two");
+                        break;
+                    case 2:
+                        this.createChallengeLabel("wave_three");
+                        break;
+                    default:
+                        break;
                 }
-                this.enemyArray.push(this.addEnemy(enemyType.name, options));
+                this.gameTimer.start();
+                this.prep = true;
+            }
+            
+            if (!this.gameTimer.isStopped()) {
+                this.gameTime.text = `${this.parseTimeLeft(this.gameTimer.getTimeLeft())}`;
+            } else this.midWave = true;
+
+            if(this.currentWave < 3 && this.currentNumEnemies === 0 && !this.pauseFlag){
+                if (this.midWave) {
+                    for (let i = 0; i < this.maxEnemies; i++) {
+                        let enemyType = this.spawnableEnemies[Math.floor(Math.random() * this.spawnableEnemies.length)];
+        
+                        let enemyPosition = this.randomSpawn();
+                        let options = {
+                            name: enemyType.name,
+                            health: enemyType.health,
+                            player: enemyType.player,
+                            speed: enemyType.speed,
+                            weapon: enemyType.weapon,
+                            range: enemyType.range,
+                            experience: enemyType.experience,
+                            position: enemyPosition,
+                            projectiles: this.createProjectiles(2, "leaf"),
+                            cooldown: 2000,
+                            scene: this,
+                            ai: this.enemyConstructorPairings.get(enemyType.name)
+                        }
+                        this.enemyArray.push(this.addEnemy(enemyType.name, options));
+                    }
+    
+                    this.currentWave += 1;
+                    this.prep = false;
+                }
             }
     
             //Update game timer
-            this.gameTime.text = `${this.parseTimeLeft(this.gameTimer.getTimeLeft())}`;
+            // this.gameTime.text = `${this.parseTimeLeft(this.gameTimer.getTimeLeft())}`;
     
             //Half way through add harpies
             // console.log(this.gameTimer.getTimeLeft() + " | " + this.gameTimer.getTotalTime()/2)
-            if(this.gameTimer.getTimeLeft() <= this.gameTimer.getTotalTime()/2 && !this.addedMonsters){
-                this.spawnableEnemies.push({
-                    name: "cyclops",
-                    health: 3,
-                    player: this.player,
-                    speed: 100,
-                    weapon: this.createWeapon("knife"),
-                    range: 32,
-                    experience: 250,
-                });
-
-                this.spawnableEnemies.push({
-                    name: "octopus",
-                    health: 2,
-                    player: this.player,
-                    speed: 150,
-                    weapon: this.createWeapon("knife"),
-                    range: 150,
-                    experience: 250,
-                });
-
-                this.addedMonsters = true;
-            }
     
-            if(this.gameTimer.getTimeLeft() <= 0){
+            if(this.currentWave >= 3 && this.currentNumEnemies === 0) {
                 //end level and move to level z2
                 if(this.changeLevelTimer === undefined){
                     this.changeLevelTimer = new Timer(5000);
                     this.changeLevelTimer.start();
-                }
-                //Remove all enemies
-                
-                if(!this.removeEnemies){
-                    this.removeEnemies = true;
-                    this.maxEnemies = 0;
-                    for(let enemy of this.enemyArray){
-                        this.battleManager.enemies.pop();
-                        enemy.destroy();
-                    }
                 }
                 // if(this.changeLevelTimer.getTimeLeft() <= 0){
                 //     this.viewport.setSize(1600, 900);

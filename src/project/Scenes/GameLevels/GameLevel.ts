@@ -114,7 +114,6 @@ export default class GameLevel extends Scene{
 
     // Tilemap walls
     protected walls: OrthogonalTilemap;
-    protected tilemap : OrthogonalTilemap;
 
     //Sprite to hold the challenge
     protected challenge: Sprite;
@@ -234,7 +233,7 @@ export default class GameLevel extends Scene{
           this.button3.onClickEventId = "three";
 
 
-          this.createChallengeLabel();
+          this.createChallengeLabel("objective");
     }
 
     updateScene(deltaT: number): void {
@@ -506,7 +505,7 @@ export default class GameLevel extends Scene{
             projectiles[i].addAI(ProjectileAI, {speed: 4, player: this.player});
             projectiles[i].addPhysics(new AABB(Vec2.ZERO, new Vec2(32, 32)));
             // Check direction of projectile before playing animation
-            projectiles[i].animation.playIfNotAlready("right", true);
+            projectiles[i].animation.playIfNotAlready("shoot", true);
             projectiles[i].setGroup("projectile");
         }
         return projectiles;
@@ -555,8 +554,8 @@ export default class GameLevel extends Scene{
                     enemyPosition = new Vec2(viewportCenter.x + this.enemySpawns[spawnPointIndex].x,viewportCenter.y + yOffset);
                 }
                 // //Check if spawn positon is a wall
-                let spawnTile = this.tilemap.getColRowAt(enemyPosition);
-                let tile = this.tilemap.getTileAtRowCol(spawnTile);
+                let spawnTile = this.walls.getColRowAt(enemyPosition);
+                let tile = this.walls.getTileAtRowCol(spawnTile);
                 if(tile === 0){
                     return enemyPosition;                    
                 } else {
@@ -573,9 +572,9 @@ export default class GameLevel extends Scene{
         return `${minutes}:${(seconds < 10) ? "0" + seconds : seconds}`
     }
 
-    protected createChallengeLabel(): void{
+    protected createChallengeLabel(key: string): void{
         //make the challenge label
-        this.challenge = this.add.sprite("objective", "gui");
+        this.challenge = this.add.sprite(key, "gui");
         this.challenge.position = new Vec2(this.viewport.getHalfSize().x, 100);
         this.challenge.tweens.add("fadeIn",{
             startDelay: 0,

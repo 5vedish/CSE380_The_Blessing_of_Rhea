@@ -65,7 +65,6 @@ export default class level_z2 extends GameLevel {
         this.initLayers();
         this.initializeWeapons();
         this.initPlayer();
-        this.tilemap = this.player.getScene().getTilemap("Wall") as OrthogonalTilemap;
 
         this.enemyConstructorPairings = new Map([["snake" , EnemyAI], ["harpy", RangeAI]]);
 

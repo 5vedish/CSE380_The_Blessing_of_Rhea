@@ -65,7 +65,7 @@
 			]
 		},
         {
-			"name": "right",
+			"name": "shoot",
 			"repeat": true,
 			"frames": [
 				{
