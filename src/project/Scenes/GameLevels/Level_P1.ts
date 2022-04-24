@@ -29,8 +29,8 @@ export default class level_p1 extends GameLevel {
         this.load.spritesheet("poseidon", "project_assets/spritesheets/Poseidon.json"); 
         this.load.spritesheet("trident", "project_assets/spritesheets/waterfall.json");
         this.load.spritesheet("waterfallv2", "project_assets/spritesheets/waterfallv2.json");
-        this.load.image("trident", "project_assets/sprites/lightning.png");
-        this.load.image("lightningImg", "project_assets/sprites/lightning.png");
+        this.load.image("trident", "project_assets/sprites/trident.png");
+        this.load.image("tridentImg", "project_assets/sprites/trident.png");
 
         //Load Enemies
         this.load.spritesheet("crab", "project_assets/spritesheets/Crab.json");
@@ -46,6 +46,7 @@ export default class level_p1 extends GameLevel {
         this.load.image("wave_one", "project_assets/sprites/p1_wave1.png");
         this.load.image("wave_two", "project_assets/sprites/p1_wave2.png");
         this.load.image("wave_three", "project_assets/sprites/p1_wave3.png");
+        this.load.image("end", "project_assets/sprites/p1_end.png");
 
         super.loadScene();
     }
@@ -78,7 +79,7 @@ export default class level_p1 extends GameLevel {
             text: "Lvl" + this.playerStats.level});
         this.levelUI.textColor = Color.BLACK;
 
-        this.weaponIcon = this.add.sprite("lightningImg", "gui");
+        this.weaponIcon = this.add.sprite("tridentImg", "gui");
         this.weaponIcon.position = new Vec2(48, 24);
         this.weaponIconCoolDown = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(48, 24), size: new Vec2(32,32)});
         this.weaponIconCoolDown.color = Color.GRAY;
@@ -100,7 +101,7 @@ export default class level_p1 extends GameLevel {
             player: this.player,
             speed: 75,
             weapon: this.createWeapon("knife"),
-            range: 32,
+            range: 10,
             experience: 250,
         });
 
@@ -234,6 +235,7 @@ export default class level_p1 extends GameLevel {
                 //end level and move to level z2
                 if(this.changeLevelTimer === undefined){
                     this.changeLevelTimer = new Timer(5000);
+                    this.createChallengeLabel("end");
                     this.changeLevelTimer.start();
                 }
 
