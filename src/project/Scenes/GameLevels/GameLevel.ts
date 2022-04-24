@@ -556,12 +556,12 @@ export default class GameLevel extends Scene{
                 // //Check if spawn positon is a wall
                 let spawnTile = this.walls.getColRowAt(enemyPosition);
                 let tile = this.walls.getTileAtRowCol(spawnTile);
+                console.log(tile);
                 if(tile === 0){
                     return enemyPosition;                    
                 } else {
                     spawnPointIndex = (spawnPointIndex + 1) % 4;
                 }
-                return enemyPosition;
             }
         }
     }
