@@ -6,6 +6,7 @@ import Color from "../../Wolfie2D/Utils/Color";
 import Label from "../../Wolfie2D/Nodes/UIElements/Label";
 import MainMenu from "./MainMenu";
 import Sprite from "../../Wolfie2D/Nodes/Sprites/Sprite";
+import UIElement from "../../Wolfie2D/Nodes/UIElement";
 
 export default class HelpScreen extends Scene {
   private splashScreen: Layer;
@@ -17,6 +18,8 @@ export default class HelpScreen extends Scene {
   private unlockAll: boolean;
   private instant_kill: boolean;
   private speedUp: boolean;
+
+  private unlockLevels: UIElement
 
   loadScene() {
     this.load.image("splash_screen", "project_assets/screens/Splash.png");
@@ -231,16 +234,16 @@ export default class HelpScreen extends Scene {
     invincible.backgroundColor = Color.GRAYISH;
     invincible.onClickEventId = "invincible";
 
-    const unlockLevels = this.add.uiElement(
+    this.unlockLevels = this.add.uiElement(
       UIElementType.BUTTON,
       "helpScreen",
       { position: new Vec2(1106, 424), text: "Unlock All Levels" }
     );
-    unlockLevels.size.set(384, 128);
-    unlockLevels.borderWidth = 5;
-    unlockLevels.borderColor = Color.BORDERCOLOR;
-    unlockLevels.backgroundColor = Color.GRAYISH;
-    unlockLevels.onClickEventId = "unlock";
+    this.unlockLevels.size.set(384, 128);
+    this.unlockLevels.borderWidth = 5;
+    this.unlockLevels.borderColor = Color.BORDERCOLOR;
+    this.unlockLevels.backgroundColor = Color.GRAYISH;
+    this.unlockLevels.onClickEventId = "unlock";
 
     const instantKill = this.add.uiElement(UIElementType.BUTTON, "helpScreen", {
       position: new Vec2(1106, 580),
@@ -295,8 +298,14 @@ export default class HelpScreen extends Scene {
       }
 
       if (event.type === "unlock") {
-        if (this.unlockAll) this.unlockAll = false;
-        else this.unlockAll = true;
+        if (this.unlockAll) {
+          this.unlockAll = false;
+          this.unlockLevels.backgroundColor = Color.GRAYISH;
+        }
+        else {
+          this.unlockAll = true;
+          this.unlockLevels.backgroundColor = Color.RED;
+        }
       }
     }
   }

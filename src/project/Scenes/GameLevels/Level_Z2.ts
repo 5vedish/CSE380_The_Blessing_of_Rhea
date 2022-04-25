@@ -54,11 +54,18 @@ export default class level_z2 extends GameLevel {
     }
 
     initScene(init: Record<string, any>): void {
-        this.playerStats = init.characterStats;
-        let weapon = <Weapon>init.weapon;
-        weapon.cooldownTimer = new Timer(this.playerStats.weaponCoolDown);
-        weapon.sprite.setScene(this);
-        this.weapon = weapon;
+        if (init.characterStats) {
+            this.playerStats = init.characterStats;
+            let weapon = <Weapon>init.weapon;
+            weapon.cooldownTimer = new Timer(this.playerStats.weaponCoolDown);
+            weapon.sprite.setScene(this);
+            this.weapon = weapon;
+        } 
+        
+        this.invincible = init.invincible;
+        this.unlockAll = init.unlockAll;
+        this.instant_kill = init.instant_kill;
+        this.speedUp = init.speedUp;
     }
     
     startScene(): void {
@@ -229,7 +236,14 @@ export default class level_z2 extends GameLevel {
         this.player.position = this.playerSpawn;
         this.player.addPhysics(new AABB(Vec2.ZERO, new Vec2(16, 16)));
 
-        this.weapon.battleManager = this.battleManager;
+        if (this.playerStats === undefined) {
+            // create weapon
+            this.weapon = this.createWeapon("lightning");
+            this.playerStats = new CharacterStat(100, 100, 10, 2, this.weapon.cooldownTimer.getTotalTime());
+        } else {
+            this.weapon.battleManager = this.battleManager;
+        }
+
         // TODO - ADD PLAYER AI HERE
         this.player.addAI(PlayerController,
             {
