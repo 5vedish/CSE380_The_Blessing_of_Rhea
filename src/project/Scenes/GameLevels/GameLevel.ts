@@ -78,6 +78,7 @@ export default class GameLevel extends Scene{
     protected currentNumEnemies: number = 0;
     protected enemyArray: Array<AnimatedSprite>;
     protected spawnableEnemies: CustomEnemy[] = []; //List of possible enemies that can be spawned
+    protected bossDefeated: boolean = false;
 
     // guis
     protected healthBar: Graphic;
@@ -337,6 +338,14 @@ export default class GameLevel extends Scene{
                     this.levelUI.text = "Lvl" + this.playerStats.level;
                     this.rollItems();
                     break;
+
+                case Project_Events.BOSSDIED:
+                    const boss = <CanvasNode>event.data.get("enemy");
+                    this.battleManager.enemies = this.battleManager.enemies.filter(enemy => enemy !== <BattlerAI>(boss._ai));
+                    this.enemyArray = this.enemyArray.filter(enemy => enemy !== boss);
+                    this.bossDefeated = true;
+                    boss.destroy();
+                    break;
                            
             }
         }    
@@ -409,7 +418,7 @@ export default class GameLevel extends Scene{
             Project_Events.ENEMYDIED, 
             Project_Events.HEALTHCHANGED, 
             Project_Events.LEVELUP,
-            // Project_Events.HARPYATTACK
+            Project_Events.BOSSDIED
         ]);
     }
 

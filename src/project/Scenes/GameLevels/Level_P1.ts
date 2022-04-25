@@ -64,7 +64,7 @@ export default class level_p1 extends GameLevel {
         // this.viewport.setFocus(new Vec2(this.playerSpawn.x, this.playerSpawn.y));
         
         
-        this.maxEnemies = 15;
+        this.maxEnemies = 1;
         
         super.startScene();
         this.initLayers();
@@ -144,7 +144,7 @@ export default class level_p1 extends GameLevel {
         // create weapon
         let weapon = this.createWeapon("trident");
         
-        this.playerStats = new CharacterStat(100, 1, 10, 2, weapon.cooldownTimer.getTotalTime());
+        this.playerStats = new CharacterStat(1000, 100, 10, 2, weapon.cooldownTimer.getTotalTime());
         // TODO - ADD PLAYER AI HERE
         this.player.addAI(PlayerController,
             {
