@@ -63,7 +63,7 @@ export default class level_z1 extends GameLevel {
         // this.viewport.setFocus(new Vec2(this.playerSpawn.x, this.playerSpawn.y));
         
         
-        this.maxEnemies = 15;
+        this.maxEnemies = 20;
         
         super.startScene();
         this.initLayers();
@@ -71,7 +71,7 @@ export default class level_z1 extends GameLevel {
         this.initPlayer();
         
         //Create how long players need to survive for
-        this.gameTimer = new Timer(1000);
+        this.gameTimer = new Timer(120000);
         this.gameTime = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(this.viewport.getHalfSize().x, 20), text: `${this.parseTimeLeft(this.gameTimer.getTotalTime())}`});
     
         this.levelUI = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(86, 32), 

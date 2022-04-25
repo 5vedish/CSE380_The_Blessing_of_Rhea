@@ -6,5 +6,6 @@ export enum Project_Events {
     PLAYERATTACKED = "playerAttacked",
     GAMEPAUSE = "GAMEPAUSE",
     GAMEUNPAUSE = "GAMEUNPAUSE",
-    MELEEATTACK = "meleeAttacked"
+    MELEEATTACK = "meleeAttacked",
+    BOSSSPAWNENEMIES = "bossSpawnEnemies"
 }

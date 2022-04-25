@@ -18,6 +18,9 @@ import Lightning from "../../GameSystems/items/WeaponTypes/Primary/Lightning";
 import AnimatedSprite from "../../../Wolfie2D/Nodes/Sprites/AnimatedSprite";
 import EchidnaAI from "../../AI/EchidnaAI";
 import Graphic from "../../../Wolfie2D/Nodes/Graphic";
+import Receiver from "../../../Wolfie2D/Events/Receiver";
+import { Project_Events } from "../../project_constants";
+import GameEvent from "../../../Wolfie2D/Events/GameEvent";
 
 export default class level_z3 extends GameLevel {
 
@@ -28,6 +31,8 @@ export default class level_z3 extends GameLevel {
     private fightStarted: boolean = false;
 
     private bossHealthBar: Graphic;
+
+    private bossReceiver: Receiver;
 
     loadScene(): void {
         //Load Zeus
@@ -77,6 +82,8 @@ export default class level_z3 extends GameLevel {
         
         this.playerSpawn = new Vec2(32*32, 49*32);
 
+        this.bossReceiver = new Receiver();
+        this.bossReceiver.subscribe(Project_Events.BOSSSPAWNENEMIES);
 
         this.maxEnemies = 15;
         
@@ -113,7 +120,7 @@ export default class level_z3 extends GameLevel {
         
         this.spawnableEnemies.push({
             name: "snake",
-            health: 2,
+            health: 3,
             player: this.player,
             speed: 125,
             weapon: this.createWeapon("knife"),
@@ -123,7 +130,7 @@ export default class level_z3 extends GameLevel {
 
         this.spawnableEnemies.push({
             name: "harpy",
-            health: 3,
+            health: 4,
             player: this.player,
             speed: 150,
             weapon: this.createWeapon("knife"),
@@ -133,7 +140,7 @@ export default class level_z3 extends GameLevel {
 
         this.spawnableEnemies.push({
             name: "giant",
-            health: 5,
+            health: 6,
             player: this.player,
             speed: 100,
             weapon: this.createWeapon("knife"),
@@ -181,8 +188,48 @@ export default class level_z3 extends GameLevel {
         
     }
 
+    handleEvent(event: GameEvent){
+        switch (event.type) {
+            case Project_Events.BOSSSPAWNENEMIES:
+                //Spawn two enemies next to the boss
+                for(let i = 0; i < 2; i++){
+                    let enemyType = this.spawnableEnemies[Math.floor(Math.random() * this.spawnableEnemies.length)]
+                    let enemy = this.add.animatedSprite(enemyType.name, "primary");
+                    enemy.scale.set(1.5,1.5);
+                    enemy.addPhysics(new AABB(Vec2.ZERO, new Vec2(8,8))); //Monkey patched collision box, dynamic later
+                    enemy.animation.play("moving");
+                    enemy.position = new Vec2((this.echidna.position.clone().x + (i===0? -32 : 32)), this.echidna.position.y);
+                    let options = {
+                        health: enemyType.health,
+                        player: enemyType.player,
+                        speed: enemyType.speed,
+                        weapon: enemyType.weapon,
+                        range: enemyType.range,
+                        experience: enemyType.experience,
+                        projectiles: this.createProjectiles(3 , "feather"),
+                        cooldown: 1000,
+                        scene: this,
+                    }
+                    enemy.addAI(this.enemyConstructorPairings.get(enemyType.name), options);
+                    enemy.setGroup("enemy");
+                    this.currentNumEnemies += 1;
+
+                    if(this.battleManager.enemies === undefined){
+                        this.battleManager.setEnemies([<BattlerAI>enemy._ai])
+                    } else {
+                        this.battleManager.enemies.push(<BattlerAI>enemy._ai);
+                    }
+                }
+                break;
+        }
+    }
+
     updateScene(deltaT: number): void {
         super.updateScene(deltaT);
+
+        while(this.bossReceiver.hasNextEvent()){
+            this.handleEvent(this.bossReceiver.getNextEvent());
+        }
         // Spawn enemies in
         if(this.startSceneTimer.isStopped()){
             if(!this.startedLevel){
