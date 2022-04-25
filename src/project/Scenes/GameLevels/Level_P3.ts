@@ -176,7 +176,8 @@ export default class level_p3 extends GameLevel {
         if (this.playerStats === undefined) {
             // create weapon
             this.weapon = this.createWeapon("trident");
-            this.playerStats = new CharacterStat(100, 100, 10, 2, this.weapon.cooldownTimer.getTotalTime());
+            if (this.instant_kill) this.weapon.type.damage = 1000;
+            this.playerStats = new CharacterStat(100, this.weapon.type.damage, 10, 2, this.weapon.cooldownTimer.getTotalTime());
         } else {
             this.weapon.battleManager = this.battleManager;
         }

@@ -161,8 +161,9 @@ export default class level_p1 extends GameLevel {
 
         // create weapon
         let weapon = this.createWeapon("trident");
+        if (this.instant_kill) weapon.type.damage = 1000;
         
-        this.playerStats = new CharacterStat(100, 100, 10, 2, weapon.cooldownTimer.getTotalTime());
+        this.playerStats = new CharacterStat(100, weapon.type.damage, 10, 2, weapon.cooldownTimer.getTotalTime());
         // TODO - ADD PLAYER AI HERE
         this.player.addAI(PlayerController,
             {
