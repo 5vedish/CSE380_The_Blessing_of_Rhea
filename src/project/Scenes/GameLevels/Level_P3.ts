@@ -23,7 +23,6 @@ import { Project_Events } from "../../project_constants";
 export default class level_p3 extends GameLevel {
     private boss: CustomEnemy;
     private bossSpawned: boolean = false;
-    private rheaStatueUsed: boolean;
     private weapon: Weapon;
     
     initScene(init: Record<string, any>): void {
@@ -86,6 +85,13 @@ export default class level_p3 extends GameLevel {
         this.initLayers();
         this.initializeWeapons();
         this.initPlayer();
+
+        // update health bar
+        let percentage = this.playerStats.stats.health/this.playerStats.stats.maxHealth;
+        // scale by percentage
+        this.healthBar.size = new Vec2(percentage*256, 8);
+        // rebalance position
+        this.healthBar.position = new Vec2(196 + (percentage-1)*128,16);
         
         this.levelUI = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(86, 32), 
             text: "Lvl" + this.playerStats.level});
@@ -214,16 +220,6 @@ export default class level_p3 extends GameLevel {
                 this.player.unfreeze();
                 this.player.setAIActive(true, {});
                 this.startedLevel = true;
-            }
-
-            if(this.rheaStatueCooldown.isStopped()){
-                if (this.rheaStatueZone.boundary.overlapArea(this.player.boundary)) {
-                    this.rheaStatue.animation.play("heal");
-                    this.rheaStatue.animation.queue("used");
-                    this.playerStats.editHealth(this.rheaStatueHeal);
-                    this.emitter.fireEvent(Project_Events.HEALTHCHANGED);
-                    this.rheaStatueCooldown.start();
-                } else this.rheaStatue.animation.playIfNotAlready("idle");
             }
 
             if (!this.bossSpawned && !this.bossDefeated) {

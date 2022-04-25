@@ -101,7 +101,13 @@ export default class level_z1 extends GameLevel {
         });
 
         this.enemyConstructorPairings = new Map([["snake" , EnemyAI], ["harpy", RangeAI]]);
-        
+        //Position the rhea statue and zone
+        this.rheaStatue = this.add.animatedSprite("rheaStatue", "primary");
+        this.rheaStatue.position = new Vec2(33*32, 61*32);
+        this.rheaStatue.animation.play("idle");
+
+        this.rheaStatueZone = this.add.graphic(GraphicType.RECT, "primary",{position: new Vec2(33*32, 61*32), size: new Vec2(6*32,6*32)});
+        this.rheaStatueZone.color = Color.TRANSPARENT;
 
         //Start spawning delay
         this.startSceneTimer.start();
