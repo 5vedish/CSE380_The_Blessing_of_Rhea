@@ -419,6 +419,10 @@ export default class GameLevel extends Scene{
         if(this.gameTimer != undefined){
             this.gameTimer.pause();
         }
+
+        if(this.rheaStatueCooldown != undefined) {
+            this.rheaStatueCooldown.pause();
+        }
         this.emitter.fireEvent(Project_Events.GAMEPAUSE);
     }
 
@@ -437,6 +441,10 @@ export default class GameLevel extends Scene{
 
         if(this.gameTimer != undefined){
             this.gameTimer.unpause();
+        }
+
+        if(this.rheaStatueCooldown != undefined) {
+            this.rheaStatueCooldown.unpause();
         }
         this.emitter.fireEvent(Project_Events.GAMEUNPAUSE);
     }

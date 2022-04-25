@@ -17,9 +17,11 @@ import Sprite from "../../../Wolfie2D/Nodes/Sprites/Sprite";
 import Weapon from "../../GameSystems/items/Weapon";
 import level_p3 from "./Level_P3";
 import CharacterStat from "../../PlayerStatus";
+import { Project_Events } from "../../project_constants";
 
 export default class level_p2 extends GameLevel {
     private halfway: boolean = false;
+    private rheaStatueUsed: boolean;
     private weapon: Weapon;
 
     initScene(init: Record<string, any>): void {
@@ -81,7 +83,7 @@ export default class level_p2 extends GameLevel {
         this.initPlayer();
         
         //Create how long players need to survive for
-        this.gameTimer = new Timer(10000);
+        this.gameTimer = new Timer(120000);
         this.gameTime = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(this.viewport.getHalfSize().x, 20), text: `${this.parseTimeLeft(this.gameTimer.getTotalTime())}`});
     
         this.levelUI = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(86, 32), 
@@ -116,6 +118,16 @@ export default class level_p2 extends GameLevel {
 
         this.enemyConstructorPairings = new Map([["crab" , EnemyAI], ["cyclops", EnemyAI], ["octopus", RangeAI]]);
         
+        //Position the rhea statue and zone
+        this.rheaStatue = this.add.animatedSprite("rheaStatue", "primary");
+        this.rheaStatue.position = new Vec2((61*32) + 32, (36*32) + 32);
+        this.rheaStatue.addPhysics(new AABB(Vec2.ZERO, new Vec2(24, 40)));
+        this.rheaStatue.setGroup("wall");
+        this.rheaStatue.animation.play("idle");
+        
+        this.rheaStatueZone = this.add.graphic(GraphicType.RECT, "primary",{position: this.rheaStatue.position, size: new Vec2(3*32,3*32)});
+        this.rheaStatueZone.color = Color.TRANSPARENT;
+        this.rheaStatueCooldown = new Timer(30000);
 
         //Start spawning delay
         this.startSceneTimer.start();
@@ -142,7 +154,7 @@ export default class level_p2 extends GameLevel {
         if (this.playerStats === undefined) {
             // create weapon
             this.weapon = this.createWeapon("trident");
-            this.playerStats = new CharacterStat(1000, 100, 10, 2, this.weapon.cooldownTimer.getTotalTime());
+            this.playerStats = new CharacterStat(100, 100, 10, 2, this.weapon.cooldownTimer.getTotalTime());
         } else {
             this.weapon.battleManager = this.battleManager;
         }
@@ -181,6 +193,16 @@ export default class level_p2 extends GameLevel {
                 this.player.unfreeze();
                 this.player.setAIActive(true, {});
                 this.startedLevel = true;
+            }
+
+            if(this.rheaStatueCooldown.isStopped()){
+                if (this.rheaStatueZone.boundary.overlapArea(this.player.boundary)) {
+                    this.rheaStatue.animation.play("heal");
+                    this.rheaStatue.animation.queue("used");
+                    this.playerStats.editHealth(this.rheaStatueHeal);
+                    this.emitter.fireEvent(Project_Events.HEALTHCHANGED);
+                    this.rheaStatueCooldown.start();
+                } else this.rheaStatue.animation.playIfNotAlready("idle");
             }
 
             if(!this.gameTimer.isStopped() && this.currentNumEnemies < this.maxEnemies && !this.pauseFlag){

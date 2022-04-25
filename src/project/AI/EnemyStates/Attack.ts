@@ -37,7 +37,6 @@ export default class Attack extends EnemyState {
 
      update(deltaT: number): void {
         // Gets the direction to attack
-        console.log("ATTACKING");
         this.dir = this.player.position.clone().sub(this.owner.position).normalize();
         if (this.parent.weapon.use(this.owner, "enemy", this.dir, [])) {
             // Play attack animation here

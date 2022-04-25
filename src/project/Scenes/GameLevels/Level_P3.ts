@@ -18,10 +18,12 @@ import Weapon from "../../GameSystems/items/Weapon";
 import LeviathanAI from "../../AI/LeviathanAI";
 import MainMenu from "../MainMenu";
 import CharacterStat from "../../PlayerStatus";
+import { Project_Events } from "../../project_constants";
 
 export default class level_p3 extends GameLevel {
     private boss: CustomEnemy;
     private bossSpawned: boolean = false;
+    private rheaStatueUsed: boolean;
     private weapon: Weapon;
     
     initScene(init: Record<string, any>): void {
@@ -137,6 +139,16 @@ export default class level_p3 extends GameLevel {
 
         this.enemyConstructorPairings = new Map([["crab" , EnemyAI], ["cyclops", EnemyAI], ["octopus", RangeAI]]);
         
+         //Position the rhea statue and zone
+         this.rheaStatue = this.add.animatedSprite("rheaStatue", "primary");
+         this.rheaStatue.position = new Vec2((48*32) + 32, (5*32) + 32);
+         this.rheaStatue.addPhysics(new AABB(Vec2.ZERO, new Vec2(24, 40)));
+         this.rheaStatue.setGroup("wall");
+         this.rheaStatue.animation.play("idle");
+         
+         this.rheaStatueZone = this.add.graphic(GraphicType.RECT, "primary",{position: this.rheaStatue.position, size: new Vec2(3*32,3*32)});
+         this.rheaStatueZone.color = Color.TRANSPARENT;
+         this.rheaStatueCooldown = new Timer(30000);
 
         //Start spawning delay
         this.startSceneTimer.start();
@@ -164,7 +176,7 @@ export default class level_p3 extends GameLevel {
         if (this.playerStats === undefined) {
             // create weapon
             this.weapon = this.createWeapon("trident");
-            this.playerStats = new CharacterStat(1000, 100, 10, 2, this.weapon.cooldownTimer.getTotalTime());
+            this.playerStats = new CharacterStat(100, 100, 10, 2, this.weapon.cooldownTimer.getTotalTime());
         } else {
             this.weapon.battleManager = this.battleManager;
         }
@@ -201,6 +213,16 @@ export default class level_p3 extends GameLevel {
                 this.player.unfreeze();
                 this.player.setAIActive(true, {});
                 this.startedLevel = true;
+            }
+
+            if(this.rheaStatueCooldown.isStopped()){
+                if (this.rheaStatueZone.boundary.overlapArea(this.player.boundary)) {
+                    this.rheaStatue.animation.play("heal");
+                    this.rheaStatue.animation.queue("used");
+                    this.playerStats.editHealth(this.rheaStatueHeal);
+                    this.emitter.fireEvent(Project_Events.HEALTHCHANGED);
+                    this.rheaStatueCooldown.start();
+                } else this.rheaStatue.animation.playIfNotAlready("idle");
             }
 
             if (!this.bossSpawned && !this.bossDefeated) {
