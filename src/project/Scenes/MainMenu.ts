@@ -27,6 +27,18 @@ export default class MainMenu extends Scene {
   private controlsButton: Sprite;
   private helpButton: Sprite;
 
+  private invincible: boolean;
+  private unlockAll: boolean;
+  private instant_kill: boolean;
+  private speedUp: boolean;
+
+  initScene(init: Record<string, any>): void {
+    this.invincible = init.invincible;
+    this.unlockAll = init.unlockAll;
+    this.instant_kill = init.instant_kill;
+    this.speedUp = init.speedUp;
+  }
+
   loadScene() {
     this.load.image("rhea", "project_assets/screens/Rhea.png");
     this.load.image("logo", "project_assets/screens/Logo.png");
@@ -158,7 +170,12 @@ export default class MainMenu extends Scene {
     while (this.receiver.hasNextEvent()) {
       let event = this.receiver.getNextEvent();
       
-
+      let options = {
+          invincible: this.invincible, 
+          unlockAll: this.unlockAll,
+          instant_kill: this.instant_kill,
+          speedUp: this.speedUp
+      }
 
       /* TODO - CHANGE TO SPECIFIED SCENE */
       if (event.type === "play") {
@@ -175,19 +192,19 @@ export default class MainMenu extends Scene {
             }
         }
         //TO DO replace with tutorial stage
-        this.sceneManager.changeToScene(Level_Z1_Cutscene, {}, physicsOptions);
+        this.sceneManager.changeToScene(Level_Z1_Cutscene, options, physicsOptions);
       }
 
       if (event.type === "select_levels") {
-        this.sceneManager.changeToScene(LevelSelection, {});
+        this.sceneManager.changeToScene(LevelSelection, options);
       }
 
       if (event.type === "control") {
-        this.sceneManager.changeToScene(ControlScreen, {});
+        this.sceneManager.changeToScene(ControlScreen, options);
       }
 
       if (event.type === "help") {
-        this.sceneManager.changeToScene(HelpScreen, {});
+        this.sceneManager.changeToScene(HelpScreen, options);
       }
       
     }

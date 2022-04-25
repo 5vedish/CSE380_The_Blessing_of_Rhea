@@ -21,6 +21,13 @@ import RangeAI from "../AI/RangeAI";
 export default class Tutorial extends GameLevel {
     protected tutorialTexts: Label[];
     protected tutorialZones: AABB[];
+  
+    initScene(init: Record<string, any>): void {
+      this.invincible = init.invincible;
+      this.unlockAll = init.unlockAll;
+      this.instant_kill = init.instant_kill;
+      this.speedUp = init.speedUp;
+    }
 
     loadScene(): void {
         //Load Zeus
@@ -32,8 +39,10 @@ export default class Tutorial extends GameLevel {
 
         //Load tilemap
         this.load.tilemap("tutorial", "project_assets/tilemaps/tutorial.json");
-
-        this.load.image("lightningImg", "project_assets/sprites/lightning.png")
+        this.load.spritesheet("lightning", "project_assets/spritesheets/lightning.json");
+        this.load.spritesheet("lightningv2", "project_assets/spritesheets/lightningv2.json");
+        this.load.image("lightning", "project_assets/sprites/lightning.png");
+        this.load.image("lightningImg", "project_assets/sprites/lightning.png");
 
         this.load.image("objective", "project_assets/sprites/tutorial.png")
 
@@ -365,7 +374,12 @@ export default class Tutorial extends GameLevel {
             this.viewport.setSize(1600, 900);
             this.playerController.destroy();
     
-            this.sceneManager.changeToScene(ControlScreen);
+            this.sceneManager.changeToScene(ControlScreen, {
+                invincible: this.invincible, 
+                unlockAll: this.unlockAll,
+                instant_kill: this.instant_kill,
+                speedUp: this.speedUp
+            });
         }
 
         for (let i = 0; i < this.tutorialZones.length; i++) {

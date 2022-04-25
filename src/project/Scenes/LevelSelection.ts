@@ -6,6 +6,11 @@ import Color from "../../Wolfie2D/Utils/Color";
 import MainMenu from "./MainMenu";
 import Sprite from "../../Wolfie2D/Nodes/Sprites/Sprite";
 import level_p1 from "./GameLevels/Level_P1";
+import level_p2 from "./GameLevels/Level_P2";
+import level_p3 from "./GameLevels/Level_P3";
+import level_z1 from "./GameLevels/Level_Z1";
+import level_z3 from "./GameLevels/Level_Z3";
+import level_z2 from "./GameLevels/Level_Z2";
 
 export default class LevelSelection extends Scene {
   private splashScreen: Layer;
@@ -19,6 +24,18 @@ export default class LevelSelection extends Scene {
   private zeus3: Sprite;
 
   private levelSelect: Layer;
+  private invincible: boolean;
+  private unlockAll: boolean;
+  private instant_kill: boolean;
+  private speedUp: boolean;
+
+  initScene(init: Record<string, any>): void {
+    console.log("LEVEL SELECT INIT: ", init)
+    this.invincible = init.invincible;
+    this.unlockAll = init.unlockAll;
+    this.instant_kill = init.instant_kill;
+    this.speedUp = init.speedUp;
+  }
 
   loadScene() {
     this.load.image("splash_screen", "project_assets/screens/Splash.png");
@@ -168,6 +185,14 @@ export default class LevelSelection extends Scene {
 
     this.receiver.subscribe("back");
     this.receiver.subscribe("poseidon1");
+    this.receiver.subscribe("poseidon2");
+    this.receiver.subscribe("poseidon3");
+    this.receiver.subscribe("zeus1");
+    this.receiver.subscribe("zeus2");
+    this.receiver.subscribe("zeus3");
+    this.receiver.subscribe("hades1");
+    this.receiver.subscribe("hades2");
+    this.receiver.subscribe("hades3");
   }
 
   updateScene() {
@@ -175,26 +200,59 @@ export default class LevelSelection extends Scene {
       let event = this.receiver.getNextEvent();
       console.log(event);
 
+      let options = {
+        invincible: this.invincible, 
+        unlockAll: this.unlockAll,
+        instant_kill: this.instant_kill,
+        speedUp: this.speedUp
+      }
+      
+      
       if (event.type === "back") {
         this.sceneManager.changeToScene(MainMenu, {});
       }
 
+      let physicsOptions = {
+        physics: {
+          groupNames: ["wall", "player", "enemy", "projectile"],
+          collisions:
+          [
+            [0, 1, 1, 0],
+            [1, 0, 0, 0],
+            [1, 0, 1, 0],
+            [0, 0, 0, 0]
+          ]
+        }
+      }
+
       /* TODO - ADD REST OF STAGES */
       if (event.type === "poseidon1") {
-        let physicsOptions = {
-            physics: {
-                groupNames: ["wall", "player", "enemy", "projectile"],
-                collisions:
-                [
-                    [0, 1, 1, 0],
-                    [1, 0, 0, 0],
-                    [1, 0, 1, 0],
-                    [0, 0, 0, 0]
-                ]
-            }
-        }
-        //TO DO replace with tutorial stage
-        this.sceneManager.changeToScene(level_p1, {}, physicsOptions);
+        if (this.unlockAll) this.sceneManager.changeToScene(level_p1, options, physicsOptions);
+        else console.log("STAGE NOT UNLOCKED YET");
+      }
+
+      if (event.type === "poseidon2") {
+        if (this.unlockAll) this.sceneManager.changeToScene(level_p2, options, physicsOptions);
+        else console.log("STAGE NOT UNLOCKED YET");
+      }
+
+      if (event.type === "poseidon3") {
+        if (this.unlockAll) this.sceneManager.changeToScene(level_p3, options, physicsOptions);
+        else console.log("STAGE NOT UNLOCKED YET");
+      }
+
+      if (event.type === "zeus1") {
+        this.sceneManager.changeToScene(level_z1, options, physicsOptions);
+      }
+
+      if (event.type === "zeus2") {
+        if (this.unlockAll) this.sceneManager.changeToScene(level_z2, options, physicsOptions);
+        else console.log("STAGE NOT UNLOCKED YET");
+      }
+
+      if (event.type === "zeus3") {
+        if (this.unlockAll) this.sceneManager.changeToScene(level_z3, options, physicsOptions);
+        else console.log("STAGE NOT UNLOCKED YET");
       }
     }
   }

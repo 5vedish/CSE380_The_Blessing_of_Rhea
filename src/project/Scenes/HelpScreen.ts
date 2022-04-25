@@ -13,6 +13,11 @@ export default class HelpScreen extends Scene {
 
   private helpScreen: Layer;
 
+  private invincible: boolean;
+  private unlockAll: boolean;
+  private instant_kill: boolean;
+  private speedUp: boolean;
+
   loadScene() {
     this.load.image("splash_screen", "project_assets/screens/Splash.png");
   }
@@ -281,7 +286,17 @@ export default class HelpScreen extends Scene {
       console.log(event);
 
       if (event.type === "back") {
-        this.sceneManager.changeToScene(MainMenu, {});
+        this.sceneManager.changeToScene(MainMenu, {
+          invincible: this.invincible, 
+          unlockAll: this.unlockAll,
+          instant_kill: this.instant_kill,
+          speedUp: this.speedUp
+        }, {});
+      }
+
+      if (event.type === "unlock") {
+        if (this.unlockAll) this.unlockAll = false;
+        else this.unlockAll = true;
       }
     }
   }

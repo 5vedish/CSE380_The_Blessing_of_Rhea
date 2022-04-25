@@ -17,11 +17,27 @@ import Sprite from "../../../Wolfie2D/Nodes/Sprites/Sprite";
 import Weapon from "../../GameSystems/items/Weapon";
 import LeviathanAI from "../../AI/LeviathanAI";
 import MainMenu from "../MainMenu";
+import CharacterStat from "../../PlayerStatus";
 
 export default class level_p3 extends GameLevel {
     private boss: CustomEnemy;
     private bossSpawned: boolean = false;
     private weapon: Weapon;
+    
+    initScene(init: Record<string, any>): void {
+        if (init.characterStats) {
+            this.playerStats = init.characterStats;
+            let weapon = <Weapon>init.weapon;
+            weapon.cooldownTimer = new Timer(this.playerStats.weaponCoolDown);
+            weapon.sprite.setScene(this);
+            this.weapon = weapon;
+        } 
+        
+        this.invincible = init.invincible;
+        this.unlockAll = init.unlockAll;
+        this.instant_kill = init.instant_kill;
+        this.speedUp = init.speedUp;
+    }
 
     loadScene(): void {
         //Load Poseidon
@@ -134,14 +150,6 @@ export default class level_p3 extends GameLevel {
         this.addLayer("primary", 10);
     }
 
-    initScene(init: Record<string, any>): void {
-        this.playerStats = init.characterStats;
-        let weapon = <Weapon>init.weapon;
-        weapon.cooldownTimer = new Timer(this.playerStats.weaponCoolDown);
-        weapon.sprite.setScene(this);
-        this.weapon = weapon;
-    }
-
     protected initPlayer() : void {
         this.player = this.add.animatedSprite("poseidon", "primary");
         this.player.scale.set(1, 1);
@@ -153,8 +161,13 @@ export default class level_p3 extends GameLevel {
         this.player.addPhysics(new AABB(Vec2.ZERO, new Vec2(12, 12)));
         //this.player.colliderOffset.set(0, 2);
 
-        // create weapon
-        this.weapon.battleManager = this.battleManager;
+        if (this.playerStats === undefined) {
+            // create weapon
+            this.weapon = this.createWeapon("trident");
+            this.playerStats = new CharacterStat(1000, 100, 10, 2, this.weapon.cooldownTimer.getTotalTime());
+        } else {
+            this.weapon.battleManager = this.battleManager;
+        }
         // TODO - ADD PLAYER AI HERE
         this.player.addAI(PlayerController,
             {

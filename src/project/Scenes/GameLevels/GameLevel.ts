@@ -119,6 +119,12 @@ export default class GameLevel extends Scene{
     //Sprite to hold the challenge
     protected challenge: Sprite;
 
+    // Cheats
+    protected invincible: boolean;
+    protected unlockAll: boolean;
+    protected instant_kill: boolean;
+    protected speedUp: boolean;
+
     loadScene(): void {
         // Objects
         this.load.object("weaponData", "project_assets/data/weaponData.json");

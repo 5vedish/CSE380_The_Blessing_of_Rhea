@@ -13,6 +13,17 @@ export default class ControlScreen extends Scene {
   private bg: Sprite;
 
   private controlScreen: Layer;
+  private invincible: boolean;
+  private unlockAll: boolean;
+  private instant_kill: boolean;
+  private speedUp: boolean;
+
+  initScene(init: Record<string, any>): void {
+    this.invincible = init.invincible;
+    this.unlockAll = init.unlockAll;
+    this.instant_kill = init.instant_kill;
+    this.speedUp = init.speedUp;
+  }
 
   loadScene() {
     this.load.image("splash_screen", "project_assets/screens/Splash.png");
@@ -113,9 +124,17 @@ export default class ControlScreen extends Scene {
       let event = this.receiver.getNextEvent();
       console.log(event);
 
-      if (event.type === "back") {
-        this.sceneManager.changeToScene(MainMenu, {});
+      let options = {
+        invincible: this.invincible, 
+        unlockAll: this.unlockAll,
+        instant_kill: this.instant_kill,
+        speedUp: this.speedUp
       }
+
+      if (event.type === "back") {
+        this.sceneManager.changeToScene(MainMenu, options);
+      }
+      
       if (event.type === "tutorial") {
         let physicsOptions = {
           physics: {
@@ -129,7 +148,7 @@ export default class ControlScreen extends Scene {
               ]
           }
         } 
-        this.sceneManager.changeToScene(Tutorial, {}, physicsOptions);
+        this.sceneManager.changeToScene(Tutorial, options, physicsOptions);
       }
     }
   }

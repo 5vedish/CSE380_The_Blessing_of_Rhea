@@ -15,11 +15,27 @@ import { TweenableProperties } from "../../../Wolfie2D/Nodes/GameNode";
 import { EaseFunctionType } from "../../../Wolfie2D/Utils/EaseFunctions";
 import Sprite from "../../../Wolfie2D/Nodes/Sprites/Sprite";
 import Weapon from "../../GameSystems/items/Weapon";
-import level_p3 from "./LevelP3";
+import level_p3 from "./Level_P3";
+import CharacterStat from "../../PlayerStatus";
 
 export default class level_p2 extends GameLevel {
     private halfway: boolean = false;
     private weapon: Weapon;
+
+    initScene(init: Record<string, any>): void {
+        if (init.characterStats) {
+            this.playerStats = init.characterStats;
+            let weapon = <Weapon>init.weapon;
+            weapon.cooldownTimer = new Timer(this.playerStats.weaponCoolDown);
+            weapon.sprite.setScene(this);
+            this.weapon = weapon;
+        } 
+        
+        this.invincible = init.invincible;
+        this.unlockAll = init.unlockAll;
+        this.instant_kill = init.instant_kill;
+        this.speedUp = init.speedUp;
+    }
 
     loadScene(): void {
         //Load Poseidon
@@ -113,14 +129,6 @@ export default class level_p2 extends GameLevel {
         this.addLayer("primary", 10);
     }
 
-    initScene(init: Record<string, any>): void {
-        this.playerStats = init.characterStats;
-        let weapon = <Weapon>init.weapon;
-        weapon.cooldownTimer = new Timer(this.playerStats.weaponCoolDown);
-        weapon.sprite.setScene(this);
-        this.weapon = weapon;
-    }
-
     protected initPlayer() : void {
         this.player = this.add.animatedSprite("poseidon", "primary");
         this.player.scale.set(1, 1);
@@ -131,10 +139,15 @@ export default class level_p2 extends GameLevel {
         this.player.position = this.playerSpawn;
         this.player.addPhysics(new AABB(Vec2.ZERO, new Vec2(12, 12)));
         //this.player.colliderOffset.set(0, 2);
+        if (this.playerStats === undefined) {
+            // create weapon
+            this.weapon = this.createWeapon("trident");
+            this.playerStats = new CharacterStat(1000, 100, 10, 2, this.weapon.cooldownTimer.getTotalTime());
+        } else {
+            this.weapon.battleManager = this.battleManager;
+        }
 
-        // create weapon
-        this.weapon.battleManager = this.battleManager;
-        // TODO - ADD PLAYER AI HERE
+        console.log("INIT PLAYER: ", this.playerStats);
         this.player.addAI(PlayerController,
             {
                 speed: this.playerStats.stats.speed,
@@ -221,7 +234,14 @@ export default class level_p2 extends GameLevel {
                 
                 if(this.changeLevelTimer.getTimeLeft() <= 0){
                     this.viewport.setSize(1600, 900);
-                    this.sceneManager.changeToScene(level_p3, {characterStats: this.playerStats, weapon: (<PlayerController>this.player._ai).weapon}, this.sceneOptions);
+                    this.sceneManager.changeToScene(level_p3, {
+                        characterStats: this.playerStats, 
+                        weapon: (<PlayerController>this.player._ai).weapon,
+                        invincible: this.invincible, 
+                        unlockAll: this.unlockAll,
+                        instant_kill: this.instant_kill,
+                        speedUp: this.speedUp
+                    }, this.sceneOptions);
                 }
             }
         }

@@ -24,6 +24,13 @@ export default class level_p1 extends GameLevel {
     private midWave: boolean;
     private currentWave: number = 0;
 
+    initScene(init: Record<string, any>): void {
+        this.invincible = init.invincible;
+        this.unlockAll = init.unlockAll;
+        this.instant_kill = init.instant_kill;
+        this.speedUp = init.speedUp;
+    }
+
     loadScene(): void {
         //Load Poseidon
         this.load.spritesheet("poseidon", "project_assets/spritesheets/Poseidon.json"); 
@@ -241,7 +248,14 @@ export default class level_p1 extends GameLevel {
 
                 if(this.changeLevelTimer.getTimeLeft() <= 0){
                     this.viewport.setSize(1600, 900);
-                    this.sceneManager.changeToScene(level_p2, {characterStats: this.playerStats, weapon: (<PlayerController>this.player._ai).weapon}, this.sceneOptions);
+                    this.sceneManager.changeToScene(level_p2, {
+                        characterStats: this.playerStats, 
+                        weapon: (<PlayerController>this.player._ai).weapon,
+                        invincible: this.invincible, 
+                        unlockAll: this.unlockAll,
+                        instant_kill: this.instant_kill,
+                        speedUp: this.speedUp
+                    }, this.sceneOptions);
                 }
             }
         }
