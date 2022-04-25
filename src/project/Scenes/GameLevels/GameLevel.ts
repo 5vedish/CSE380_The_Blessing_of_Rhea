@@ -39,6 +39,7 @@ import Bolt2 from "../../GameSystems/items/Upgrades/Bolt2";
 import Goblet2 from "../../GameSystems/items/Upgrades/Goblet2";
 import Aegis2 from "../../GameSystems/items/Upgrades/Aegis2";
 import HermesSandals3 from "../../GameSystems/items/Upgrades/HermesSandals3";
+import { GameEventType } from "../../../Wolfie2D/Events/GameEventType";
 
 export interface CustomEnemy {
     name: string,
@@ -164,6 +165,7 @@ export default class GameLevel extends Scene{
 
         //Load sound effect and music
         this.load.audio("enemyDamaged", "project_assets/sounds/lightning.wav");
+        this.load.audio("levelup", "project_assets/sounds/levelup.wav");
     }
     
     
@@ -569,7 +571,7 @@ export default class GameLevel extends Scene{
     }
 
     protected rollItems() : void{
-
+        this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "levelup", loop: false, holdReference: false});
         this.selectionArray = [];
         while (this.selectionArray.length < 3){
             this.selectionArray.push(this.itemsArray[Math.floor(Math.random() * this.itemsArray.length)]);
