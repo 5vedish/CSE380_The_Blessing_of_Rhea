@@ -64,6 +64,11 @@ export default class level_p3 extends GameLevel {
         this.load.image("objective", "project_assets/sprites/p3_challenge.png");
         this.load.image("end", "project_assets/sprites/p3_end.png");
 
+        //Load sound effect and music
+        this.load.audio("weapon", "project_assets/sounds/waterfall.wav");
+        this.load.audio("weaponv2", "project_assets/sounds/waterfallv2.wav");
+        this.load.audio("projectile", "project_assets/sounds/blast.wav");
+
         super.loadScene();
     }
 
