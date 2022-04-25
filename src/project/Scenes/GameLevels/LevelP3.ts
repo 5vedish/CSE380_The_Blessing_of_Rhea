@@ -16,6 +16,7 @@ import { EaseFunctionType } from "../../../Wolfie2D/Utils/EaseFunctions";
 import Sprite from "../../../Wolfie2D/Nodes/Sprites/Sprite";
 import Weapon from "../../GameSystems/items/Weapon";
 import LeviathanAI from "../../AI/LeviathanAI";
+import MainMenu from "../MainMenu";
 
 export default class level_p3 extends GameLevel {
     private boss: CustomEnemy;
@@ -255,10 +256,10 @@ export default class level_p3 extends GameLevel {
                     this.changeLevelTimer.start();
                 }
                 
-                // if(this.changeLevelTimer.getTimeLeft() <= 0){
-                //     this.viewport.setSize(1600, 900);
-                //     this.sceneManager.changeToScene(level_z2, {characterStats: this.playerStats, weapon: (<PlayerController>this.player._ai).weapon}, this.sceneOptions);
-                // }
+                if(this.changeLevelTimer.getTimeLeft() <= 0){
+                    this.viewport.setSize(1600, 900);
+                    this.sceneManager.changeToScene(MainMenu, {});
+                }
             }
         }
         
