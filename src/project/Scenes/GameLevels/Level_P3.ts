@@ -271,7 +271,12 @@ export default class level_p3 extends GameLevel {
                 
                 if(this.changeLevelTimer.getTimeLeft() <= 0){
                     this.viewport.setSize(1600, 900);
-                    this.sceneManager.changeToScene(MainMenu, {});
+                    this.sceneManager.changeToScene(MainMenu, {
+                        invincible: this.invincible, 
+                        unlockAll: this.unlockAll,
+                        instant_kill: this.instant_kill,
+                        speedUp: this.speedUp
+                    });
                 }
             }
         }
