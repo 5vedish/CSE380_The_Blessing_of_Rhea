@@ -7,6 +7,7 @@ import Label from "../../Wolfie2D/Nodes/UIElements/Label";
 import MainMenu from "./MainMenu";
 import Sprite from "../../Wolfie2D/Nodes/Sprites/Sprite";
 import Tutorial from "./Tutorial";
+import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 
 export default class ControlScreen extends Scene {
   private splashScreen: Layer;
@@ -27,9 +28,11 @@ export default class ControlScreen extends Scene {
 
   loadScene() {
     this.load.image("splash_screen", "project_assets/screens/Splash.png");
+    this.load.audio("click", "project_assets/sounds/click.wav");
   }
 
   startScene() {
+    this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "click", loop: false, holdReference: false});
     // add splash (filler)
     this.splashScreen = this.addUILayer("splashScreen");
     this.bg = this.add.sprite("splash_screen", "splashScreen");

@@ -7,6 +7,7 @@ import Label from "../../Wolfie2D/Nodes/UIElements/Label";
 import MainMenu from "./MainMenu";
 import Sprite from "../../Wolfie2D/Nodes/Sprites/Sprite";
 import Timer from "../../Wolfie2D/Timing/Timer";
+import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 
 export default class SplashScreen extends Scene {
 
@@ -17,8 +18,7 @@ export default class SplashScreen extends Scene {
 
   loadScene() {
     this.load.image("splash_screen", "project_assets/screens/Splash.png");
-    this.load.image("start_label", "project_assets/sprites/start_label.png");
-  }
+    this.load.image("start_label", "project_assets/sprites/start_label.png");  }
 
   startScene() {
     this.splashScreen = this.addUILayer("splashScreen");
