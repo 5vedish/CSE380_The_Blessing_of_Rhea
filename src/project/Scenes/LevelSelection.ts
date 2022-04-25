@@ -11,6 +11,7 @@ import level_p3 from "./GameLevels/Level_P3";
 import level_z1 from "./GameLevels/Level_Z1";
 import level_z3 from "./GameLevels/Level_Z3";
 import level_z2 from "./GameLevels/Level_Z2";
+import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 
 export default class LevelSelection extends Scene {
   private splashScreen: Layer;
@@ -48,9 +49,13 @@ export default class LevelSelection extends Scene {
     this.load.image("level_z1", "project_assets/tilemaps/z1_preview.png");
     this.load.image("level_z2", "project_assets/tilemaps/z2_preview.png");
     this.load.image("level_z3", "project_assets/tilemaps/z3_preview.png");
+
+    this.load.audio("click", "project_assets/sounds/click.wav");
   }
 
   startScene() {
+    this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "click", loop: false, holdReference: false});
+
     const origin = new Vec2(192, 64);
 
     // add splash (filler)

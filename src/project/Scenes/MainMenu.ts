@@ -13,6 +13,7 @@ import Level_Z1_Cutscene from "./Cutscenes/Level_Z1_Cutscene";
 import Tutorial from "./Tutorial";
 import level_z2 from "./GameLevels/Level_Z2";
 import CharacterStat from "../PlayerStatus";
+import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 
 export default class MainMenu extends Scene {
   private splashScreen: Layer;
@@ -46,9 +47,11 @@ export default class MainMenu extends Scene {
     this.load.image("select", "project_assets/sprites/select.png");
     this.load.image("controls", "project_assets/sprites/controls.png");
     this.load.image("help", "project_assets/sprites/help.png");
+    this.load.audio("click", "project_assets/sounds/click.wav");
   }
-
+  
   startScene() {
+    this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "click", loop: false, holdReference: false});
     const origin = new Vec2(192, 64);
     this.flash = new Timer(1000, null, true);
     this.flash.start(); 
