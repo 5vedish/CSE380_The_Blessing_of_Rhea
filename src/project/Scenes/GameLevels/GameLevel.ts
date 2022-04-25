@@ -352,6 +352,11 @@ export default class GameLevel extends Scene{
                     this.bossDefeated = true;
                     boss.destroy();
                     break;
+                case Project_Events.MELEEATTACK:
+                        //handle removing attack sprite
+                        let attackSpirte = event.data.get("owner");
+                        attackSpirte.destroy();     
+                        break;
                            
             }
         }    
@@ -424,7 +429,8 @@ export default class GameLevel extends Scene{
             Project_Events.ENEMYDIED, 
             Project_Events.HEALTHCHANGED, 
             Project_Events.LEVELUP,
-            Project_Events.BOSSDIED
+            Project_Events.BOSSDIED,
+            Project_Events.MELEEATTACK
         ]);
     }
 

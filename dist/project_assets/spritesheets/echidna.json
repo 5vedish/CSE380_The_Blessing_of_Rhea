@@ -38,7 +38,7 @@
 		},
         {
 			"name": "spawn_attack",
-			"repeat": true,
+			"repeat": false,
 			"frames": [
 				{
 					"index": 5,
@@ -59,8 +59,8 @@
 			]
 		},
         {
-			"name": "attacking",
-			"repeat": true,
+			"name": "attack",
+			"repeat": false,
 			"frames": [
 				{
 					"index": 9,
@@ -94,7 +94,7 @@
 		},
         {
 			"name": "damage",
-			"repeat": true,
+			"repeat": false,
 			"frames": [
 				{
 					"index": 16,

@@ -15,21 +15,18 @@ export default class EchidnaTailWhip extends WeaponType {
         this.useVolume = options.useVolume;
     }
 
-    doAnimation(attacker: GameNode, position: Vec2, zapSprite: AnimatedSprite, options: Record<string,any>): void {
-
-        zapSprite.position = position;
-        (<AnimatedSprite>attacker).animation.play("attacking");
+    doAnimation(attacker: GameNode, direction: Vec2, tailSprite: AnimatedSprite): void {
+        // (<AnimatedSprite>attacker).animation.play("attack");
         // Move the slice out from the player
-        // sliceSprite.position = attacker.position.clone().add(direction.scaled(16));
+        tailSprite.position = attacker.position.clone().add(direction.scaled(32));
+        tailSprite.rotation = Vec2.UP.angleToCCW(direction);
         
-        // Play the slice animation w/o loop, but queue the normal animation
-        zapSprite.animation.play("WHIP", false, Project_Events.PLAYERATTACKED);
-        // zapSprite.animation.queue("normal");    
+        tailSprite.animation.play("WHIP", false, Project_Events.MELEEATTACK);
     }
 
     createRequiredAssets(scene: Scene): [AnimatedSprite] {
         let whip = scene.add.animatedSprite(this.spriteKey, "primary");
-
+        whip.scale.set(2,2);
         return [whip];
     }
 
