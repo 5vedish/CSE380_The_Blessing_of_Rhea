@@ -163,7 +163,7 @@ export default class GameLevel extends Scene{
         this.load.image("hourglass_3", "project_assets/sprites/hourglass_3.png");
 
         //Load sound effect and music
-        this.load.audio("enemyDamaged", "project_assets/sounds/lightning.wav");
+        this.load.audio("enemyDamaged", "project_assets/sounds/enemyDamage.wav");
     }
     
     

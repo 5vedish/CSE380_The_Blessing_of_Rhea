@@ -62,6 +62,7 @@ export default class level_p2 extends GameLevel {
         //Load sound effect and music
         this.load.audio("weapon", "project_assets/sounds/waterfall.wav");
         this.load.audio("weaponv2", "project_assets/sounds/waterfallv2.wav");
+        this.load.audio("projectile", "project_assets/sounds/blast.wav");
 
         super.loadScene();
     }
