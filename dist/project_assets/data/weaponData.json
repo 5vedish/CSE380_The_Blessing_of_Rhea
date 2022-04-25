@@ -30,6 +30,16 @@
             "damage": 5,
             "cooldown": 350,
             "useVolume": 0
+        },
+        {
+            "weaponType": "tailwhip",
+            "name": "tailwhip",
+            "displayName": "Echidna_tailwhip",
+            "animationSprite": "tailwhip",
+            "spriteKey": "tailwhip",
+            "damage": 15,
+            "cooldown": 1500,
+            "useVolume": 0
         }
     ]
 }
