@@ -9,6 +9,18 @@ import Sprite from "../../Wolfie2D/Nodes/Sprites/Sprite";
 export default class DeathScreen extends Scene{
     private bg: Sprite;
 
+    private invincible: boolean;
+    private unlockAll: boolean;
+    private instant_kill: boolean;
+    private speedUp: boolean;
+
+    initScene(init: Record<string, any>): void {
+      this.invincible = init.invincible;
+      this.unlockAll = init.unlockAll;
+      this.instant_kill = init.instant_kill;
+      this.speedUp = init.speedUp;
+  }
+
     loadScene(): void {
         this.load.image("splash_screen", "project_assets/screens/Splash.png");
         this.load.image("return", "project_assets/sprites/return_to_mm.png")
@@ -46,7 +58,12 @@ export default class DeathScreen extends Scene{
             console.log(event);
       
             if (event.type === "returnToMainMenu") {
-              this.sceneManager.changeToScene(MainMenu);
+              this.sceneManager.changeToScene(MainMenu, {
+                invincible: this.invincible, 
+                unlockAll: this.unlockAll,
+                instant_kill: this.instant_kill,
+                speedUp: this.speedUp
+              });
             }
           }
     }

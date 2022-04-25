@@ -46,9 +46,9 @@ export default class level_z2 extends GameLevel {
 
         //Load Challenge img
         this.load.image("objective", "project_assets/sprites/z2_challenge.png");
-        this.load.image("wave_one", "project_assets/sprites/p1_wave1.png");
-        this.load.image("wave_two", "project_assets/sprites/p1_wave2.png");
-        this.load.image("wave_three", "project_assets/sprites/p1_wave3.png");
+        this.load.image("wave_one", "project_assets/sprites/z2_wave1.png");
+        this.load.image("wave_two", "project_assets/sprites/z2_wave2.png");
+        this.load.image("wave_three", "project_assets/sprites/z2_wave3.png");
 
         super.loadScene();
     }
@@ -220,7 +220,13 @@ export default class level_z2 extends GameLevel {
 
                 if(this.changeLevelTimer.getTimeLeft() <= 0){
                     this.viewport.setSize(1600, 900);
-                    this.sceneManager.changeToScene(level_z3, {characterStats: this.playerStats, weapon: (<PlayerController>this.player._ai).weapon}, this.sceneOptions);
+                    this.sceneManager.changeToScene(level_z3, {characterStats: this.playerStats, 
+                        weapon: (<PlayerController>this.player._ai).weapon,
+                        invincible: this.invincible, 
+                        unlockAll: this.unlockAll,
+                        instant_kill: this.instant_kill,
+                        speedUp: this.speedUp
+                    }, this.sceneOptions);
                 }
             }
         }

@@ -146,6 +146,8 @@ export default class GameLevel extends Scene{
         this.load.image("hermes_sandals_2", "project_assets/sprites/hermes_sandals_2.png");
         this.load.image("hourglass_2", "project_assets/sprites/hourglass_2.png");
 
+        this.load.image("evolvedWeapon", "project_assets/sprites/evolved_weapon.png");
+
         this.load.image("aegis_3", "project_assets/sprites/aegis_3.png");
         this.load.image("bolt_3", "project_assets/sprites/bolt_3.png");
         this.load.image("goblet_of_dionysus_3", "project_assets/sprites/goblet_3.png");
@@ -343,6 +345,10 @@ export default class GameLevel extends Scene{
                     this.levelChanged = event.data.get("levelChange");
                     this.levelUI.text = "Lvl" + this.playerStats.level;
                     this.rollItems();
+
+                    if(this.playerStats.level === 2){
+                        this.createChallengeLabel("evolvedWeapon");
+                    }
                     break;
 
                 case Project_Events.BOSSDIED:
@@ -382,7 +388,12 @@ export default class GameLevel extends Scene{
             this.viewport.setSize(1600, 900);
             this.healthBar.destroy();
             this.expBar.destroy();
-            this.sceneManager.changeToScene(DeathScreen);
+            this.sceneManager.changeToScene(DeathScreen, {
+                invincible: this.invincible, 
+                unlockAll: this.unlockAll,
+                instant_kill: this.instant_kill,
+                speedUp: this.speedUp
+            });
         }
     }
 

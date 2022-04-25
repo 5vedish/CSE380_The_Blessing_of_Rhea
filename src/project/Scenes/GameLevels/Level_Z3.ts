@@ -21,6 +21,8 @@ import Graphic from "../../../Wolfie2D/Nodes/Graphic";
 import Receiver from "../../../Wolfie2D/Events/Receiver";
 import { Project_Events } from "../../project_constants";
 import GameEvent from "../../../Wolfie2D/Events/GameEvent";
+import MainMenu from "../MainMenu";
+import level_p1 from "./Level_P1";
 
 export default class level_z3 extends GameLevel {
 
@@ -52,6 +54,7 @@ export default class level_z3 extends GameLevel {
         this.load.spritesheet("feather", "project_assets/spritesheets/Feather.json");
         this.load.spritesheet("tailwhip", "project_assets/spritesheets/tailwhip.json")
         this.load.image("lightning", "project_assets/sprites/lightning.png");
+        this.load.image("end", "project_assets/sprites/z3_end.png");
 
         this.load.spritesheet("venom", "project_assets/spritesheets/venom.json")
 
@@ -62,13 +65,21 @@ export default class level_z3 extends GameLevel {
 
         super.loadScene();
     }
+    
 
     initScene(init: Record<string, any>): void {
-        this.playerStats = init.characterStats;
-        let weapon = <Weapon>init.weapon;
-        weapon.cooldownTimer = new Timer(this.playerStats.weaponCoolDown);
-        weapon.sprite.setScene(this);
-        this.weapon = weapon;
+        if (init.characterStats) {
+            this.playerStats = init.characterStats;
+            let weapon = <Weapon>init.weapon;
+            weapon.cooldownTimer = new Timer(this.playerStats.weaponCoolDown);
+            weapon.sprite.setScene(this);
+            this.weapon = weapon;
+        } 
+        
+        this.invincible = init.invincible;
+        this.unlockAll = init.unlockAll;
+        this.instant_kill = init.instant_kill;
+        this.speedUp = init.speedUp;
     }
 
     startScene(): void {
@@ -155,13 +166,14 @@ export default class level_z3 extends GameLevel {
         this.echidna.scale.set(2,2);
         let options = {
             name: "echidna",
-            health: 20,
+            health: 1,
             player: this.player,
             speed: 30,
             weapon: echidnaTailWhip,
             range: 50,
             venomRange: 200,
             experience: 1000,
+            scene: this,
             projectiles: this.createProjectiles(3, "venom") 
 
         }
@@ -227,6 +239,24 @@ export default class level_z3 extends GameLevel {
     updateScene(deltaT: number): void {
         super.updateScene(deltaT);
 
+        if(this.bossDefeated && this.currentNumEnemies === 0) {
+            if(this.changeLevelTimer === undefined){
+                this.changeLevelTimer = new Timer(5000);
+                this.createChallengeLabel("end");
+                this.changeLevelTimer.start();
+            }
+            
+            if(this.changeLevelTimer.getTimeLeft() <= 0){
+                this.viewport.setSize(1600, 900);
+                this.sceneManager.changeToScene(level_p1, {
+                    invincible: this.invincible, 
+                    unlockAll: this.unlockAll,
+                    instant_kill: this.instant_kill,
+                    speedUp: this.speedUp
+                });
+            }
+        }
+
         while(this.bossReceiver.hasNextEvent()){
             this.handleEvent(this.bossReceiver.getNextEvent());
         }
@@ -246,8 +276,10 @@ export default class level_z3 extends GameLevel {
         }
 
         //Update boss health bar
-        let bossPercentage = (<EchidnaAI>this.echidna._ai).health/(<EchidnaAI>this.echidna._ai).maxHealth;
-        this.bossHealthBar.size = new Vec2(600*bossPercentage, 16);
+        if(this.echidna._ai !== undefined){
+            let bossPercentage = (<EchidnaAI>this.echidna._ai).health/(<EchidnaAI>this.echidna._ai).maxHealth;
+            this.bossHealthBar.size = new Vec2(600*bossPercentage, 16);
+        }
     }
 
     protected initPlayer() : void {
@@ -260,7 +292,13 @@ export default class level_z3 extends GameLevel {
         this.player.position = this.playerSpawn;
         this.player.addPhysics(new AABB(Vec2.ZERO, new Vec2(16, 16)));
 
-        this.weapon.battleManager = this.battleManager;
+        if (this.playerStats === undefined) {
+            // create weapon
+            this.weapon = this.createWeapon("lightning");
+            this.playerStats = new CharacterStat(100, 100, 10, 2, this.weapon.cooldownTimer.getTotalTime());
+        } else {
+            this.weapon.battleManager = this.battleManager;
+        }
         // TODO - ADD PLAYER AI HERE
         this.player.addAI(PlayerController,
             {

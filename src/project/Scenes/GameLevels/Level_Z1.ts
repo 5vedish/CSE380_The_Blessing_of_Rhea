@@ -41,13 +41,19 @@ export default class level_z1 extends GameLevel {
         this.load.spritesheet("lightningv2", "project_assets/spritesheets/lightningv2.json");
         this.load.spritesheet("feather", "project_assets/spritesheets/Feather.json");
         this.load.image("lightning", "project_assets/sprites/lightning.png");
-
         this.load.image("lightningImg", "project_assets/sprites/lightning.png");
 
         //Load Challenge img
         this.load.image("objective", "project_assets/sprites/z1_challenge.png");
 
         super.loadScene();
+    }
+
+    initScene(init: Record<string, any>): void {
+        this.invincible = init.invincible;
+        this.unlockAll = init.unlockAll;
+        this.instant_kill = init.instant_kill;
+        this.speedUp = init.speedUp;
     }
 
     startScene(): void {
@@ -206,7 +212,12 @@ export default class level_z1 extends GameLevel {
                 }
                 if(this.changeLevelTimer.getTimeLeft() <= 0){
                     this.viewport.setSize(1600, 900);
-                    this.sceneManager.changeToScene(level_z2, {characterStats: this.playerStats, weapon: (<PlayerController>this.player._ai).weapon}, this.sceneOptions);
+                    this.sceneManager.changeToScene(level_z2, {characterStats: this.playerStats, 
+                        weapon: (<PlayerController>this.player._ai).weapon,
+                        invincible: this.invincible, 
+                        unlockAll: this.unlockAll,
+                        instant_kill: this.instant_kill,
+                        speedUp: this.speedUp}, this.sceneOptions);
                 }
             }
         }

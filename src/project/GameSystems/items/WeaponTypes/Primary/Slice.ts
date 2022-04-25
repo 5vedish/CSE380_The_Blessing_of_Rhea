@@ -24,8 +24,7 @@ export default class Slice extends WeaponType {
         sliceSprite.rotation = Vec2.UP.angleToCCW(direction);
         
         // Play the slice animation w/o loop, but queue the normal animation
-        sliceSprite.animation.play("SLICE");
-        sliceSprite.animation.queue("NORMAL", true, Project_Events.MELEEATTACK);
+        sliceSprite.animation.play("SLICE", false, Project_Events.MELEEATTACK);
     }
 
     createRequiredAssets(scene: Scene): [AnimatedSprite] {

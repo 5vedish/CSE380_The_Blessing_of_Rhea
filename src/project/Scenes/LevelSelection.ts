@@ -209,7 +209,7 @@ export default class LevelSelection extends Scene {
       
       
       if (event.type === "back") {
-        this.sceneManager.changeToScene(MainMenu, {});
+        this.sceneManager.changeToScene(MainMenu, options);
       }
 
       let physicsOptions = {

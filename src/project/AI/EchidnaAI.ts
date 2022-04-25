@@ -28,17 +28,9 @@ export default class EchidnaAI extends EnemyAI {
     initializeAI(owner: AnimatedSprite, options: Record<string, any>): void {
         super.initializeAI(owner, options);
         this.venomRange = options.venomRange;
-
-        // this.addState(EnemyStates.DEFAULT, new Active(this, owner, options.player, options.meleeRange));
-        // this.addState(EnemyStates.ATTACK, new Attack(this, owner, options.player, options.name, this.emitter));
-
-        // this.health = options.health;
-        // this.player = options.player;
-        // this.weapon = options.tailWhip;
-        // this.experience = options.experience;
+        this.scene = options.scene;
 
         this.speed = options.speed;
-
 
         //Create three venoms that will be shot
         this.projectiles = options.projectiles;
@@ -64,7 +56,9 @@ export default class EchidnaAI extends EnemyAI {
                     ease: EaseFunctionType.IN_OUT_QUAD
                 }
 
-            ]
+            ],
+            onEnd: Project_Events.BOSSDIED,
+            onEndData: {enemy: this.owner}
         });
 
     }
@@ -122,6 +116,7 @@ export default class EchidnaAI extends EnemyAI {
             this.emitter.fireEvent(Project_Events.BOSSSPAWNENEMIES);
             this.minionsCooldown.start();
         }
+
     }
 
     destroy(): void {
