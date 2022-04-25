@@ -60,7 +60,7 @@ export default class GameLevel extends Scene{
     protected startedLevel: boolean = false;
     protected gameTimer: Timer;
     protected gameTime: Label;
-    protected changeLevelTimer: Timer;
+    protected changeLevelTimer: Timer = new Timer(5000);
 
     //Each level has a timer
     protected levelTimer: Timer;
@@ -96,6 +96,8 @@ export default class GameLevel extends Scene{
     protected item1: Sprite;
     protected item2: Sprite;
     protected item3: Sprite;
+
+    protected playerDied: boolean = false;
 
     //Rhea statue
     protected rheaStatue: AnimatedSprite;
@@ -166,6 +168,7 @@ export default class GameLevel extends Scene{
         //Load sound effect and music
         this.load.audio("enemyDamaged", "project_assets/sounds/lightning.wav");
         this.load.audio("levelup", "project_assets/sounds/levelup.wav");
+        this.load.audio("death", "project_assets/sounds/death.wav");
     }
     
     
@@ -409,15 +412,59 @@ export default class GameLevel extends Scene{
 
         //Check if player died
         if(this.playerStats.stats.health <= 0){
-            this.viewport.setSize(1600, 900);
-            this.healthBar.destroy();
-            this.expBar.destroy();
-            this.sceneManager.changeToScene(DeathScreen, {
-                invincible: this.invincible, 
-                unlockAll: this.unlockAll,
-                instant_kill: this.instant_kill,
-                speedUp: this.speedUp
-            });
+            if(this.changeLevelTimer.isStopped() && !this.playerDied) {
+                this.changeLevelTimer.start();
+                this.playerDied = true;
+                this.pauseEntities();
+                this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "death", loop: false, holdReference: false});
+                this.player.tweens.add("flyup", {
+                    startDelay: 0,
+                    duration: 2000,
+                    effects: [
+                        {
+                            property: TweenableProperties.posY,
+                            start: this.player.position.y,
+                            end: this.player.position.y-64,
+                            ease: EaseFunctionType.OUT_SINE
+                        }, 
+                    ],
+                });
+                this.player.tweens.add("spin", {
+                    startDelay: 2000,
+                    duration: 2500,
+                    effects: [
+                        {
+                            property: TweenableProperties.alpha,
+                            start: 1,
+                            end: 0,
+                            ease: EaseFunctionType.OUT_SINE
+                        },
+                        {
+                            property: "rotation",
+                            resetOnComplete: false,
+                            start: 0,
+                            end: 16*Math.PI,
+                            ease: EaseFunctionType.IN_OUT_QUAD
+                        }
+
+                    ]
+                });
+                this.player.tweens.play("flyup");
+                this.player.tweens.play("spin");
+
+            }
+            
+            if(this.changeLevelTimer.getTimeLeft() <= 0) {
+                this.viewport.setSize(1600, 900);
+                this.healthBar.destroy();
+                this.expBar.destroy();
+                this.sceneManager.changeToScene(DeathScreen, {
+                    invincible: this.invincible, 
+                    unlockAll: this.unlockAll,
+                    instant_kill: this.instant_kill,
+                    speedUp: this.speedUp
+                });
+            }
         }
     }
 
