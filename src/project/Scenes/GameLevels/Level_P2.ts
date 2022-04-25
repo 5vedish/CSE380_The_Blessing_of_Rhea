@@ -9,16 +9,13 @@ import Label from "../../../Wolfie2D/Nodes/UIElements/Label";
 import { UIElementType } from "../../../Wolfie2D/Nodes/UIElements/UIElementTypes";
 import Color from "../../../Wolfie2D/Utils/Color";
 import GameLevel, { CustomEnemy } from "./GameLevel";
-import CharacterStat from "../../PlayerStatus";
-import DeathScreen from "../DeathScreen";
 import RangeAI from "../../AI/RangeAI";
 import Timer from "../../../Wolfie2D/Timing/Timer";
-import level_z2 from "./Level_Z2";
-import Graphic from "../../../Wolfie2D/Nodes/Graphic";
 import { TweenableProperties } from "../../../Wolfie2D/Nodes/GameNode";
 import { EaseFunctionType } from "../../../Wolfie2D/Utils/EaseFunctions";
 import Sprite from "../../../Wolfie2D/Nodes/Sprites/Sprite";
 import Weapon from "../../GameSystems/items/Weapon";
+import level_p3 from "./LevelP3";
 
 export default class level_p2 extends GameLevel {
     private halfway: boolean = false;
@@ -68,7 +65,7 @@ export default class level_p2 extends GameLevel {
         this.initPlayer();
         
         //Create how long players need to survive for
-        this.gameTimer = new Timer(60000);
+        this.gameTimer = new Timer(10000);
         this.gameTime = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(this.viewport.getHalfSize().x, 20), text: `${this.parseTimeLeft(this.gameTimer.getTotalTime())}`});
     
         this.levelUI = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(86, 32), 
@@ -222,10 +219,10 @@ export default class level_p2 extends GameLevel {
                     this.changeLevelTimer.start();
                 }
                 
-                // if(this.changeLevelTimer.getTimeLeft() <= 0){
-                //     this.viewport.setSize(1600, 900);
-                //     this.sceneManager.changeToScene(level_z2, {characterStats: this.playerStats, weapon: (<PlayerController>this.player._ai).weapon}, this.sceneOptions);
-                // }
+                if(this.changeLevelTimer.getTimeLeft() <= 0){
+                    this.viewport.setSize(1600, 900);
+                    this.sceneManager.changeToScene(level_p3, {characterStats: this.playerStats, weapon: (<PlayerController>this.player._ai).weapon}, this.sceneOptions);
+                }
             }
         }
         
