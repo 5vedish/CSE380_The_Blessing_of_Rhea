@@ -38,7 +38,7 @@
             "animationSprite": "tailwhip",
             "spriteKey": "tailwhip",
             "damage": 15,
-            "cooldown": 1500,
+            "cooldown": 3000,
             "useVolume": 0
         },
         {

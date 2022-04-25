@@ -6,6 +6,7 @@ import Timer from "../../../Wolfie2D/Timing/Timer";
 import EnemyAI, { EnemyStates } from "../EnemyAI";
 import EnemyState from "./EnemyState";
 import Stack from "../../../Wolfie2D/DataTypes/Stack";
+import AnimatedSprite from "../../../Wolfie2D/Nodes/Sprites/AnimatedSprite";
 
 export default class Active extends EnemyState {
     // Timers for managing this state
@@ -41,7 +42,6 @@ export default class Active extends EnemyState {
         if (Math.sqrt(Math.pow(this.player.position.x - this.owner.position.x, 2) + Math.pow(this.player.position.y - this.owner.position.y, 2)) <= this.range) {
             this.finished(EnemyStates.ATTACK);
         } else {
-            console.log(this.distanceToPlayer() + " | " + this.range );
             if (this.currentPath.isDone()){
                 // if current path is empty
                 let stack = new Stack<Vec2>();
@@ -50,6 +50,10 @@ export default class Active extends EnemyState {
             } else {
                 let moveSpeed = (this.distanceToPlayer() < 196) ? this.parent.speed * deltaT : this.parent.speed * deltaT * 1.5;
                 this.owner.moveOnPath(moveSpeed, this.currentPath);
+                if(!(<AnimatedSprite>this.owner).animation.isPlaying("attack") && !(<AnimatedSprite>this.owner).animation.isPlaying("damage")){
+                    (<AnimatedSprite>this.owner).animation.playIfNotAlready("moving", true);
+                }
+                
 
             }
         }

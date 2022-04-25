@@ -58,6 +58,7 @@ export default class EnemyAI extends StateMachineGoapAI implements BattlerAI {
         this.addState(EnemyStates.DEFAULT, new Active(this, owner, options.player, options.range));
         this.addState(EnemyStates.ATTACK, new Attack(this, owner, options.player, options.name, this.emitter));
 
+        this.maxHealth = options.health;
         this.health = options.health;
         this.player = options.player;
         this.weapon = options.weapon;

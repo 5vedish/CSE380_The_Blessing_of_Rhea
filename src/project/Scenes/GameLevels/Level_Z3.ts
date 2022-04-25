@@ -17,6 +17,7 @@ import Weapon from "../../GameSystems/items/Weapon";
 import Lightning from "../../GameSystems/items/WeaponTypes/Primary/Lightning";
 import AnimatedSprite from "../../../Wolfie2D/Nodes/Sprites/AnimatedSprite";
 import EchidnaAI from "../../AI/EchidnaAI";
+import Graphic from "../../../Wolfie2D/Nodes/Graphic";
 
 export default class level_z3 extends GameLevel {
 
@@ -25,6 +26,8 @@ export default class level_z3 extends GameLevel {
     private echidna: AnimatedSprite;
 
     private fightStarted: boolean = false;
+
+    private bossHealthBar: Graphic;
 
     loadScene(): void {
         //Load Zeus
@@ -139,6 +142,7 @@ export default class level_z3 extends GameLevel {
         });
         
         let echidnaTailWhip = this.createWeapon("tailwhip");
+        // console.log(echidnaTailWhip);
         this.echidna = this.add.animatedSprite("echidna", "primary");
         this.echidna.position = new Vec2(32*32 , 24*32);
         this.echidna.scale.set(2,2);
@@ -148,7 +152,7 @@ export default class level_z3 extends GameLevel {
             player: this.player,
             speed: 30,
             weapon: echidnaTailWhip,
-            meleeRange: 30,
+            range: 50,
             venomRange: 200,
             experience: 1000,
             projectiles: this.createProjectiles(3, "venom") 
@@ -157,10 +161,21 @@ export default class level_z3 extends GameLevel {
         this.echidna.addAI(EchidnaAI, options);
         this.echidna.addPhysics(new AABB(Vec2.ZERO, new Vec2(48,48)));
         this.echidna.animation.play("moving");
-        // this.echidna.freeze();
+        this.echidna.freeze();
         this.echidna.setAIActive(false, {});
         this.echidna.setGroup("enemy");
         this.enemyArray.push(this.echidna);
+
+        //Add boss health bar
+        this.bossHealthBar = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(400, 425), size: new Vec2(600, 16)});
+        let bossHealthBarBorder = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(400, 425), size: new Vec2(600, 16)});
+        bossHealthBarBorder.alpha = 0.5;
+
+        if(this.battleManager.enemies === undefined){
+            this.battleManager.setEnemies([<BattlerAI>this.echidna._ai])
+        } else {
+            this.battleManager.enemies.push(<BattlerAI>this.echidna._ai);
+        }
         this.startSceneTimer.start();
 
         
@@ -182,6 +197,10 @@ export default class level_z3 extends GameLevel {
             this.echidna.unfreeze();
             this.echidna.setAIActive(true, {});
         }
+
+        //Update boss health bar
+        let bossPercentage = (<EchidnaAI>this.echidna._ai).health/(<EchidnaAI>this.echidna._ai).maxHealth;
+        this.bossHealthBar.size = new Vec2(600*bossPercentage, 16);
     }
 
     protected initPlayer() : void {
@@ -199,7 +218,7 @@ export default class level_z3 extends GameLevel {
         this.player.addAI(PlayerController,
             {
                 speed: this.playerStats.stats.speed,
-                health: 1000,
+                health: this.playerStats.stats.health,
                 inputEnabled: true,
                 range: 30,
                 playerStats: this.playerStats,

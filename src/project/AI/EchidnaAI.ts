@@ -23,21 +23,19 @@ export default class EchidnaAI extends EnemyAI {
 
     protected minions: Array<AnimatedSprite>;
 
-    protected meleeRange: number;
+    protected venomRange: number;
 
     initializeAI(owner: AnimatedSprite, options: Record<string, any>): void {
-        this.owner = owner;
-        this.emitter = new Emitter();
-        this.inRange = options.venomRange;
-        this.meleeRange = options.meleeRange;
+        super.initializeAI(owner, options);
+        this.venomRange = options.venomRange;
 
-        this.addState(EnemyStates.DEFAULT, new Active(this, owner, options.player, options.meleeRange));
-        this.addState(EnemyStates.ATTACK, new Attack(this, owner, options.player, options.name, this.emitter));
+        // this.addState(EnemyStates.DEFAULT, new Active(this, owner, options.player, options.meleeRange));
+        // this.addState(EnemyStates.ATTACK, new Attack(this, owner, options.player, options.name, this.emitter));
 
-        this.health = options.health;
-        this.player = options.player;
-        this.weapon = options.tailWhip;
-        this.experience = options.experience;
+        // this.health = options.health;
+        // this.player = options.player;
+        // this.weapon = options.tailWhip;
+        // this.experience = options.experience;
 
         this.speed = options.speed;
 
@@ -87,11 +85,9 @@ export default class EchidnaAI extends EnemyAI {
 
     update(deltaT: number): void {
         //Flip enemy sprites towards the player on the x-axis
-        if(this.owner._velocity.x !== 0)
-            (this.owner._velocity.x >= 0.01) ? (this.spriteFlipped = false):(this.spriteFlipped = true);
-        (this.spriteFlipped) ? ((<AnimatedSprite>this.owner).invertX = false):((<AnimatedSprite>this.owner).invertX = true);
+        super.update(deltaT);
 
-        if(this.distanceToPlayer() <= this.inRange && this.venomAttackCooldown.isStopped()){
+        if(this.distanceToPlayer() <= this.venomRange && this.venomAttackCooldown.isStopped()){
             let dir  = this.player.position.clone().sub(this.owner.position.clone()).normalize();
             let angelLeft = Vec2.UP.angleToCCW(dir) - Math.PI/16;
             let angelStraight = Vec2.UP.angleToCCW(dir);
