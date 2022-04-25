@@ -1,0 +1,70 @@
+{
+	"name": "RheaStatue",
+	"spriteSheetImage": "RheaStatue.png",
+	"spriteWidth": 64,
+	"spriteHeight": 96,
+	"leftBuffer": 0,
+	"rightBuffer": 0,
+	"topBuffer": 0,
+	"bottomBuffer": 0,
+	"columns": 3,
+	"rows": 4,
+    "animations": [
+		{
+			"name": "heal",
+			"repeat": false,
+			"frames": [
+				{
+					"index": 1,
+					"duration": 15
+				},
+				{
+					"index": 2,
+					"duration": 15
+				},
+				{
+					"index": 3,
+					"duration": 15
+				},
+				{
+					"index": 4,
+					"duration": 15
+				}
+			]
+		},
+		{
+			"name": "idle",
+			"repeat": true,
+			"frames": [
+				{
+					"index": 1,
+					"duration": 10
+				},
+				{
+					"index": 2,
+					"duration": 10
+				},
+				{
+					"index": 2,
+					"duration": 10
+				},
+				{
+					"index": 1,
+					"duration": 10
+				}
+			]
+		},
+		{
+			"name": "used",
+			"repeat": false,
+			"frames": [
+				{
+					"index": 0,
+					"duration": 10
+				}
+			]
+		}
+
+	]
+
+}

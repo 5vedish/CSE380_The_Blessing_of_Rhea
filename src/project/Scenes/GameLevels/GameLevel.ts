@@ -96,6 +96,12 @@ export default class GameLevel extends Scene{
     protected item2: Sprite;
     protected item3: Sprite;
 
+    //Rhea statue
+    protected rheaStatue: AnimatedSprite;
+    protected rheaStatueCooldown: Timer = new Timer(5000);
+    protected rheaStatueZone: Graphic;
+    protected rheaStatueHeal: number = 10;
+
     // items
     protected itemsArray = ["honey_jar", 
         "hourglass_2", "hermes_sandals_2", "bolt_2", "goblet_of_dionysus_2", "aegis_2", 
@@ -132,6 +138,7 @@ export default class GameLevel extends Scene{
         // Spritesheets
         this.load.spritesheet("slice", "project_assets/spritesheets/slice.json");
         this.load.spritesheet("leaf", "project_assets/spritesheets/Leaf.json");
+        this.load.spritesheet("rheaStatue", "project_assets/spritesheets/RheaStatue.json");
         
         // Images
         this.load.image("pause_screen", "project_assets/screens/pause.png");

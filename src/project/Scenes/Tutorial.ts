@@ -17,10 +17,15 @@ import CanvasNode from "../../Wolfie2D/Nodes/CanvasNode";
 import Sprite from "../../Wolfie2D/Nodes/Sprites/Sprite";
 import ControlScreen from "./ControlScreen";
 import RangeAI from "../AI/RangeAI";
+import Timer from "../../Wolfie2D/Timing/Timer";
 
 export default class Tutorial extends GameLevel {
     protected tutorialTexts: Label[];
     protected tutorialZones: AABB[];
+
+    protected endTutorial: boolean = false;
+
+    protected healedOnce: boolean = false;
   
     initScene(init: Record<string, any>): void {
       this.invincible = init.invincible;
@@ -44,7 +49,8 @@ export default class Tutorial extends GameLevel {
         this.load.image("lightning", "project_assets/sprites/lightning.png");
         this.load.image("lightningImg", "project_assets/sprites/lightning.png");
 
-        this.load.image("objective", "project_assets/sprites/tutorial.png")
+        this.load.image("objective", "project_assets/sprites/tutorial.png");
+        this.load.image("end", "project_assets/sprites/end_tutorial.png")
 
         super.loadScene();
     }
@@ -152,8 +158,7 @@ export default class Tutorial extends GameLevel {
             this.battleManager.enemies.push(<BattlerAI>thirdEnemy._ai);
         }
 
-        // this.enemyArray.push(enemy);
-        // this.getLayer("movement").disable();
+        this.changeLevelTimer = new Timer(3000);
         
     }
 
@@ -186,12 +191,20 @@ export default class Tutorial extends GameLevel {
         this.tutorialTexts.push(levelupLabel);
 
         //end of tutorial
-        let endTutorialZone = this.add.graphic(GraphicType.RECT, "tutorial",{position: new Vec2(32*32, 19*32), size: new Vec2(40*32,18*32)});
-        endTutorialZone.color = Color.TRANSPARENT;
-        this.tutorialZones.push(endTutorialZone.boundary);
+        let rheaTutorial = this.add.graphic(GraphicType.RECT, "tutorial",{position: new Vec2(32*32, 24*32), size: new Vec2(8*32,8*32)});
+        rheaTutorial.color = Color.TRANSPARENT;
+        this.tutorialZones.push(rheaTutorial.boundary);
 
-        let endTutorialLabel = <Label>this.add.uiElement(UIElementType.LABEL, "tutorial", {position: new Vec2(32*32, 20*32), text: "Stand here! Good Luck on your adventure!"});
-        this.tutorialTexts.push(endTutorialLabel);
+        let rheaTutorialLabel = <Label>this.add.uiElement(UIElementType.LABEL, "tutorial", {position: new Vec2(32*32, 24*32), text: "Stand near a Rhea statue to heal"});
+        this.tutorialTexts.push(rheaTutorialLabel);
+
+        //Position the rhea statue and zone
+        this.rheaStatue = this.add.animatedSprite("rheaStatue", "primary");
+        this.rheaStatue.position = new Vec2(32*32, 20*32);
+        this.rheaStatue.animation.play("idle");
+
+        this.rheaStatueZone = this.add.graphic(GraphicType.RECT, "tutorial",{position: new Vec2(32*32, 20*32), size: new Vec2(6*32,6*32)});
+        this.rheaStatueZone.color = Color.TRANSPARENT;
     }
 
     
@@ -220,6 +233,7 @@ export default class Tutorial extends GameLevel {
         let weapon = this.createWeapon("lightning");
         
         this.playerStats = new CharacterStat(50, 1, 10, 2, weapon.cooldownTimer.getTotalTime());
+        this.playerStats.stats.health = 30;
         // TODO - ADD PLAYER AI HERE
         this.player.addAI(PlayerController,
             {
@@ -239,8 +253,13 @@ export default class Tutorial extends GameLevel {
 
         this.battleManager.setPlayers([<BattlerAI>this.player._ai]);
         this.playerController = <PlayerController> this.player._ai;
-        // this.player.freeze();
-        // this.player.setAIActive(false, {});
+
+        // update health bar to damaged health
+        let percentage = this.playerStats.stats.health/this.playerStats.stats.maxHealth;
+        // scale by percentage
+        this.healthBar.size = new Vec2(percentage*256, 8);
+        // rebalance position
+        this.healthBar.position = new Vec2(196 + (percentage-1)*128,16);
     }
     
     updateScene(deltaT: number): void {
@@ -257,6 +276,20 @@ export default class Tutorial extends GameLevel {
             }
 
         }
+
+        //Check if player is near rhea to heal
+        if(this.rheaStatueZone.boundary.overlapArea(this.player.boundary) && this.rheaStatueCooldown.isStopped() && !this.healedOnce){
+            console.log("HEAL");
+            this.rheaStatue.animation.play("heal");
+            this.rheaStatue.animation.queue("used");
+            this.playerStats.editHealth(this.rheaStatueHeal);
+            this.emitter.fireEvent(Project_Events.HEALTHCHANGED);
+            this.healedOnce = true;
+            this.rheaStatueCooldown.start();
+            this.changeLevelTimer.start();
+            this.endTutorial = true;
+            this.createChallengeLabel("end");
+        } 
 
         // handle leveling up
         if (this.levelChanged) {
@@ -390,7 +423,7 @@ export default class Tutorial extends GameLevel {
             }
         }
 
-        if(this.player.position.y < 20*32){
+        if(this.changeLevelTimer.isStopped() && this.endTutorial){
             this.player.freeze();
             this.player.setAIActive(false, {});
             // Spawn enemies in
