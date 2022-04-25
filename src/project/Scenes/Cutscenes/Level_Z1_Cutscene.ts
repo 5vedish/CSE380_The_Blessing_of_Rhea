@@ -30,6 +30,18 @@ export default class Level_Z1_Cutscene extends Scene{
     private leftSprite: AnimatedSprite;
     private rightSprite: AnimatedSprite;
 
+    private invincible: boolean;
+    private unlockAll: boolean;
+    private instant_kill: boolean;
+    private speedUp: boolean;
+
+    initScene(init: Record<string, any>): void {
+        this.invincible = init.invincible;
+        this.unlockAll = init.unlockAll;
+        this.instant_kill = init.instant_kill;
+        this.speedUp = init.speedUp;
+    }
+
     loadScene(): void {
         this.load.tilemap("levelZ1", "project_assets/tilemaps/LevelZ1.json");
         this.load.spritesheet("zeus", "project_assets/spritesheets/Zeus.json"); 
@@ -40,7 +52,6 @@ export default class Level_Z1_Cutscene extends Scene{
         this.load.spritesheet("harpy", "project_assets/spritesheets/harpy.json");
 
         this.load.object("dialogue", "project_assets/data/level_z1_dialogue.json");
-
     }
 
     startScene(): void {
@@ -139,7 +150,14 @@ export default class Level_Z1_Cutscene extends Scene{
             if (this.dialogueNumber === this.lines.length){
 
                 this.viewport.setSize(1600, 900);
-                this.sceneManager.changeToScene(level_z1, {}, this.sceneOptions);
+                let options = {
+                    invincible: this.invincible, 
+                    unlockAll: this.unlockAll,
+                    instant_kill: this.instant_kill,
+                    speedUp: this.speedUp
+                }
+                
+                this.sceneManager.changeToScene(level_z1, options, this.sceneOptions);
             } else {
 
                 if (this.speakerPositions[this.dialogueNumber] === "left"){
