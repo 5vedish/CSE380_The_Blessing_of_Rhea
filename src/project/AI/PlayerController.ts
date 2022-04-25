@@ -13,6 +13,7 @@ import CharacterStat from "../PlayerStatus";
 import Emitter from "../../Wolfie2D/Events/Emitter";
 import { Project_Events } from "../project_constants";
 import Sprite from "../../Wolfie2D/Nodes/Sprites/Sprite";
+import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 
 
 export default class PlayerController extends StateMachineAI implements BattlerAI {

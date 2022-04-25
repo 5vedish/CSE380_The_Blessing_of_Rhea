@@ -46,6 +46,10 @@ export default class level_z1 extends GameLevel {
         //Load Challenge img
         this.load.image("objective", "project_assets/sprites/z1_challenge.png");
 
+        //Load sound effect and music
+        this.load.audio("weapon", "project_assets/sounds/lightning.wav");
+        this.load.audio("weaponv2", "project_assets/sounds/lightningv2.wav");
+
         super.loadScene();
     }
 
