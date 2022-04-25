@@ -56,6 +56,7 @@ export default class PlayerController extends StateMachineAI implements BattlerA
 
     protected flipSprite: boolean;
 
+    protected invincible: boolean = false;
 
     initializeAI(owner: AnimatedSprite, options: Record<string, any>): void {
         this.owner = owner;
@@ -67,6 +68,7 @@ export default class PlayerController extends StateMachineAI implements BattlerA
         this.playerStats = options.playerStats;
         this.weapon = options.weapon;
         this.weaponV2 = options.weaponV2;
+        this.invincible = options.invincible;
 
         this.items = options.items;
         this.inventory = options.inventory;
@@ -133,11 +135,13 @@ export default class PlayerController extends StateMachineAI implements BattlerA
     }
 
     damage(damage: number): void {
-        this.health -= damage;
-        this.playerStats.editHealth(damage * -1);
-        this.owner.animation.play("damage");
-        
-        this.emitter.fireEvent(Project_Events.HEALTHCHANGED);
+        if(!this.invincible){
+            this.health -= damage;
+            this.playerStats.editHealth(damage * -1);
+            this.owner.animation.play("damage");
+            
+            this.emitter.fireEvent(Project_Events.HEALTHCHANGED);
+        }
     }
 
     destroy() {

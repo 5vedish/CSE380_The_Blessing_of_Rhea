@@ -173,7 +173,8 @@ export default class level_p1 extends GameLevel {
                 range: 30,
                 playerStats: this.playerStats,
                 weapon: weapon,
-                weaponV2: "waterfallv2"
+                weaponV2: "waterfallv2",
+                invincible: this.invincible
             });
         this.player.animation.play("idle");
 
