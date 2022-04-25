@@ -41,6 +41,7 @@ export default class Active extends EnemyState {
         if (Math.sqrt(Math.pow(this.player.position.x - this.owner.position.x, 2) + Math.pow(this.player.position.y - this.owner.position.y, 2)) <= this.range) {
             this.finished(EnemyStates.ATTACK);
         } else {
+            console.log(this.distanceToPlayer() + " | " + this.range );
             if (this.currentPath.isDone()){
                 // if current path is empty
                 let stack = new Stack<Vec2>();

@@ -24,6 +24,8 @@ export default class level_z3 extends GameLevel {
 
     private echidna: AnimatedSprite;
 
+    private fightStarted: boolean = false;
+
     loadScene(): void {
         //Load Zeus
         this.load.spritesheet("zeus", "project_assets/spritesheets/Zeus.json"); 
@@ -42,6 +44,8 @@ export default class level_z3 extends GameLevel {
         this.load.spritesheet("feather", "project_assets/spritesheets/Feather.json");
         this.load.spritesheet("tailwhip", "project_assets/spritesheets/tailwhip.json")
         this.load.image("lightning", "project_assets/sprites/lightning.png");
+
+        this.load.spritesheet("venom", "project_assets/spritesheets/venom.json")
 
         this.load.image("lightningImg", "project_assets/sprites/lightning.png");
 
@@ -147,13 +151,16 @@ export default class level_z3 extends GameLevel {
             meleeRange: 30,
             venomRange: 200,
             experience: 1000,
+            projectiles: this.createProjectiles(3, "venom") 
 
         }
         this.echidna.addAI(EchidnaAI, options);
         this.echidna.addPhysics(new AABB(Vec2.ZERO, new Vec2(48,48)));
         this.echidna.animation.play("moving");
-        this.echidna.freeze();
+        // this.echidna.freeze();
         this.echidna.setAIActive(false, {});
+        this.echidna.setGroup("enemy");
+        this.enemyArray.push(this.echidna);
         this.startSceneTimer.start();
 
         
@@ -168,7 +175,12 @@ export default class level_z3 extends GameLevel {
                 this.player.setAIActive(true, {});
                 this.startedLevel = true;
             }
-        
+        }
+
+        if(this.player.position.y < 34*32 && !this.fightStarted){
+            this.fightStarted = true;
+            this.echidna.unfreeze();
+            this.echidna.setAIActive(true, {});
         }
     }
 

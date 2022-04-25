@@ -144,6 +144,11 @@ export default class GameLevel extends Scene{
         this.load.image("goblet_of_dionysus_3", "project_assets/sprites/goblet_3.png");
         this.load.image("hermes_sandals_3", "project_assets/sprites/hermes_sandals_3.png");
         this.load.image("hourglass_3", "project_assets/sprites/hourglass_3.png");
+    }
+    
+    
+    
+    startScene(): void {
         //Initialize the possible spawning areas for enemies
         //Each Vec2 holds the pixels that will be added to the center of the viewport so enemies spawn outside
         //View port is 800x450
@@ -153,11 +158,7 @@ export default class GameLevel extends Scene{
         this.enemySpawns.push(new Vec2(425, 0)); //Right of viewport
         this.enemySpawns.push(new Vec2(0, -245)); //Top of viewport
         this.enemySpawns.push(new Vec2(0, 245)); //Bottom of viewport      
-    }
-
-    
-
-    startScene(): void {
+        
         this.battleManager = new BattleManager();
         this.levelReceiver = new Receiver();
         this.levelReceiver.subscribe(["one", "two", "three"]);
