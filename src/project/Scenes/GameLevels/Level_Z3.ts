@@ -15,10 +15,14 @@ import RangeAI from "../../AI/RangeAI";
 import Timer from "../../../Wolfie2D/Timing/Timer";
 import Weapon from "../../GameSystems/items/Weapon";
 import Lightning from "../../GameSystems/items/WeaponTypes/Primary/Lightning";
+import AnimatedSprite from "../../../Wolfie2D/Nodes/Sprites/AnimatedSprite";
+import EchidnaAI from "../../AI/EchidnaAI";
 
 export default class level_z3 extends GameLevel {
 
     private weapon: Weapon;
+
+    private echidna: AnimatedSprite;
 
     loadScene(): void {
         //Load Zeus
@@ -31,11 +35,12 @@ export default class level_z3 extends GameLevel {
         this.load.spritesheet("echidna", "project_assets/spritesheets/echidna.json")
 
         //Load tilemap
-        this.load.tilemap("levelZ2", "project_assets/tilemaps/LevelZ2.json");
+        this.load.tilemap("levelZ3", "project_assets/tilemaps/LevelZ3.json");
 
         this.load.spritesheet("lightning", "project_assets/spritesheets/lightning.json");
         this.load.spritesheet("lightningv2", "project_assets/spritesheets/lightningv2.json");
         this.load.spritesheet("feather", "project_assets/spritesheets/Feather.json");
+        this.load.spritesheet("tailwhip", "project_assets/spritesheets/tailwhip.json")
         this.load.image("lightning", "project_assets/sprites/lightning.png");
 
         this.load.image("lightningImg", "project_assets/sprites/lightning.png");
@@ -56,7 +61,7 @@ export default class level_z3 extends GameLevel {
 
     startScene(): void {
         // Add in the tilemap and get the wall layer
-        let tilemapLayers = this.add.tilemap("levelZ2", new Vec2(1, 1));
+        let tilemapLayers = this.add.tilemap("levelZ3", new Vec2(1, 1));
         this.walls = <OrthogonalTilemap>tilemapLayers[1].getItems()[0];
         this.walls.setGroup("wall");
         
@@ -129,7 +134,29 @@ export default class level_z3 extends GameLevel {
             experience: 320,
         });
         
+        let echidnaTailWhip = this.createWeapon("tailwhip");
+        this.echidna = this.add.animatedSprite("echidna", "primary");
+        this.echidna.position = new Vec2(32*32 , 24*32);
+        this.echidna.scale.set(2,2);
+        let options = {
+            name: "echidna",
+            health: 20,
+            player: this.player,
+            speed: 30,
+            weapon: echidnaTailWhip,
+            meleeRange: 30,
+            venomRange: 200,
+            experience: 1000,
+
+        }
+        this.echidna.addAI(EchidnaAI, options);
+        this.echidna.addPhysics(new AABB(Vec2.ZERO, new Vec2(48,48)));
+        this.echidna.animation.play("moving");
+        this.echidna.freeze();
+        this.echidna.setAIActive(false, {});
         this.startSceneTimer.start();
+
+        
     }
 
     updateScene(deltaT: number): void {
@@ -160,7 +187,7 @@ export default class level_z3 extends GameLevel {
         this.player.addAI(PlayerController,
             {
                 speed: this.playerStats.stats.speed,
-                health: this.playerStats.stats.health,
+                health: 1000,
                 inputEnabled: true,
                 range: 30,
                 playerStats: this.playerStats,

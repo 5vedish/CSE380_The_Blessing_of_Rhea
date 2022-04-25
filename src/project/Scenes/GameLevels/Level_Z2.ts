@@ -73,7 +73,7 @@ export default class level_z2 extends GameLevel {
         this.playerSpawn = new Vec2(32*32, 32*32);
         // this.viewport.setFocus(new Vec2(this.playerSpawn.x, this.playerSpawn.y));
         
-        this.maxEnemies = 15;
+        this.maxEnemies = 1;
         
         super.startScene();
         this.initLayers();
@@ -199,7 +199,7 @@ export default class level_z2 extends GameLevel {
                     }
     
                     this.currentWave += 1;
-                    this.maxEnemies = Math.floor(this.maxEnemies * 1.75);
+                    // this.maxEnemies = Math.floor(this.maxEnemies * 1.75);
                     this.prep = false;
                 }
             }

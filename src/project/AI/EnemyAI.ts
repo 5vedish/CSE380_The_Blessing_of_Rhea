@@ -47,12 +47,6 @@ export default class EnemyAI extends StateMachineGoapAI implements BattlerAI {
     // Attack range
     inRange: number;
 
-    // Path to player
-    path: NavigationPath;
-
-    // Path away from player
-    retreatPath: NavigationPath;
-
     spriteFlipped: boolean = false;
 
     emitter: Emitter;

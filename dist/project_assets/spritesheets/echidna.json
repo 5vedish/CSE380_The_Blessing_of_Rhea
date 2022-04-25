@@ -59,7 +59,7 @@
 			]
 		},
         {
-			"name": "attack",
+			"name": "attacking",
 			"repeat": true,
 			"frames": [
 				{

@@ -15,6 +15,7 @@ export default class WeaponTemplateRegistry extends Registry<WeaponConstructor> 
         rm.image("knife", "project_assets/sprites/knife.png");
         rm.image("lightning", "project_assets/sprites/lightning.png");
         rm.image("trident", "project_assets/sprites/lightning.png");
+        rm.image("tailwhip", "project_assets/sprites/knife.png");
 
         // Load spritesheets
         rm.spritesheet("slice", "project_assets/spritesheets/slice.json");
@@ -27,7 +28,7 @@ export default class WeaponTemplateRegistry extends Registry<WeaponConstructor> 
         this.registerItem("slice", Slice);
         this.registerItem("lightning", Lightning);
         this.registerItem("trident", Trident);
-        this.registerItem("tailwhip", EchidnaTailWhip)
+        this.registerItem("tailwhip", EchidnaTailWhip);
     }
 
     // We don't need this for this assignment
