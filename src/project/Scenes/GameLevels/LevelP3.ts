@@ -43,8 +43,8 @@ export default class level_p3 extends GameLevel {
         this.load.tilemap("levelP1", "project_assets/tilemaps/LevelP3.json");
 
         //Load Challenge img
-        this.load.image("objective", "project_assets/sprites/p1_challenge.png");
-        this.load.image("end", "project_assets/sprites/p2_end.png");
+        this.load.image("objective", "project_assets/sprites/p3_challenge.png");
+        this.load.image("end", "project_assets/sprites/p3_end.png");
 
         super.loadScene();
     }
