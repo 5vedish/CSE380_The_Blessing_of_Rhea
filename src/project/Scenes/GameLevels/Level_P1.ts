@@ -198,16 +198,6 @@ export default class level_p1 extends GameLevel {
                 this.startedLevel = true;
             }
 
-            if(this.rheaStatueCooldown.isStopped()){
-                if (this.rheaStatueZone.boundary.overlapArea(this.player.boundary)) {
-                    this.rheaStatue.animation.play("heal");
-                    this.rheaStatue.animation.queue("used");
-                    this.playerStats.editHealth(this.rheaStatueHeal);
-                    this.emitter.fireEvent(Project_Events.HEALTHCHANGED);
-                    this.rheaStatueCooldown.start();
-                } else this.rheaStatue.animation.playIfNotAlready("idle");
-            }
-
             if (this.currentWave < 3 && this.currentNumEnemies === 0 && !this.prep) {
                 this.midWave = false;
                 switch (this.currentWave) {

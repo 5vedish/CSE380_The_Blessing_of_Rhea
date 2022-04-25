@@ -100,7 +100,8 @@ export default class GameLevel extends Scene{
     protected rheaStatue: AnimatedSprite;
     protected rheaStatueCooldown: Timer = new Timer(5000);
     protected rheaStatueZone: Graphic;
-    protected rheaStatueHeal: number = 10;
+    protected rheaStatueHeal: number = 25;
+    protected rheaStatueUsed: boolean = false;
 
     // items
     protected itemsArray = ["honey_jar", 
@@ -373,6 +374,17 @@ export default class GameLevel extends Scene{
                            
             }
         }    
+
+        //Rhea statue
+        if(this.rheaStatueCooldown.isStopped() && !this.rheaStatueUsed){
+            if (this.rheaStatueZone.boundary.overlapArea(this.player.boundary) && this.playerStats.stats.health < this.playerStats.stats.maxHealth) {
+                this.rheaStatue.animation.play("heal");
+                this.rheaStatue.animation.queue("used");
+                this.playerStats.editHealth(this.rheaStatueHeal);
+                this.emitter.fireEvent(Project_Events.HEALTHCHANGED);
+                this.rheaStatueCooldown.start();
+            } else this.rheaStatue.animation.playIfNotAlready("idle");
+        }
         
         //Update the weapon cooldown icon
         let weaponTimeLeft = this.playerController.weapon.cooldownTimer.getTimeLeft();

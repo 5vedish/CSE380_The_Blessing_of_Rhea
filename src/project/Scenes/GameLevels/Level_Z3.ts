@@ -23,6 +23,8 @@ import { Project_Events } from "../../project_constants";
 import GameEvent from "../../../Wolfie2D/Events/GameEvent";
 import MainMenu from "../MainMenu";
 import level_p1 from "./Level_P1";
+import { TweenableProperties } from "../../../Wolfie2D/Nodes/GameNode";
+import { EaseFunctionType } from "../../../Wolfie2D/Utils/EaseFunctions";
 
 export default class level_z3 extends GameLevel {
 
@@ -166,7 +168,7 @@ export default class level_z3 extends GameLevel {
         this.echidna.scale.set(2,2);
         let options = {
             name: "echidna",
-            health: 1,
+            health: 30,
             player: this.player,
             speed: 30,
             weapon: echidnaTailWhip,
@@ -195,6 +197,27 @@ export default class level_z3 extends GameLevel {
         } else {
             this.battleManager.enemies.push(<BattlerAI>this.echidna._ai);
         }
+
+        //Position the rhea statue and zone
+        this.rheaStatue = this.add.animatedSprite("rheaStatue", "primary");
+        this.rheaStatue.position = new Vec2(32*32, 44*32);
+        this.rheaStatue.animation.play("idle");
+        this.rheaStatue.tweens.add("fadeOut", {
+                startDelay: 0,
+                duration: 3000,
+                effects: [
+                    {
+                        property: TweenableProperties.alpha,
+                        start: 1,
+                        end: 0,
+                        ease: EaseFunctionType.OUT_SINE
+                    }
+                ],
+        })
+
+        this.rheaStatueZone = this.add.graphic(GraphicType.RECT, "primary",{position: new Vec2(32*32, 44*32), size: new Vec2(6*32,6*32)});
+        this.rheaStatueZone.color = Color.TRANSPARENT;
+
         this.startSceneTimer.start();
 
         
@@ -238,6 +261,14 @@ export default class level_z3 extends GameLevel {
 
     updateScene(deltaT: number): void {
         super.updateScene(deltaT);
+
+        //Rhea statue
+        if(!this.rheaStatueUsed){
+            if (this.rheaStatueZone.boundary.overlapArea(this.player.boundary) && this.playerStats.stats.health < this.playerStats.stats.maxHealth) {
+                this.rheaStatueUsed = true;
+                this.rheaStatue.tweens.play("fadeOut");                               
+            } 
+        }
 
         if(this.bossDefeated && this.currentNumEnemies === 0) {
             if(this.changeLevelTimer === undefined){
