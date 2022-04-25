@@ -50,6 +50,10 @@ export default class level_z2 extends GameLevel {
         this.load.image("wave_two", "project_assets/sprites/z2_wave2.png");
         this.load.image("wave_three", "project_assets/sprites/z2_wave3.png");
 
+        //Load sound effect and music
+        this.load.audio("weapon", "project_assets/sounds/lightning.wav");
+        this.load.audio("weaponv2", "project_assets/sounds/lightningv2.wav");
+
         super.loadScene();
     }
 

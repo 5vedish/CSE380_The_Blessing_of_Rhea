@@ -161,6 +161,9 @@ export default class GameLevel extends Scene{
         this.load.image("goblet_of_dionysus_3", "project_assets/sprites/goblet_3.png");
         this.load.image("hermes_sandals_3", "project_assets/sprites/hermes_sandals_3.png");
         this.load.image("hourglass_3", "project_assets/sprites/hourglass_3.png");
+
+        //Load sound effect and music
+        this.load.audio("enemyDamaged", "project_assets/sounds/lightning.wav");
     }
     
     
