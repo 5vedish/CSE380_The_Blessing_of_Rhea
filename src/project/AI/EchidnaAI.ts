@@ -14,6 +14,7 @@ import EnemyAI, { EnemyStates } from "./EnemyAI";
 import { EaseFunctionType } from "../../Wolfie2D/Utils/EaseFunctions";
 import Timer from "../../Wolfie2D/Timing/Timer";
 import ProjectileAI from "./ProjectileAI";
+import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 
 export default class EchidnaAI extends EnemyAI {
 
@@ -111,6 +112,7 @@ export default class EchidnaAI extends EnemyAI {
                     (<ProjectileAI> projectile._ai).setAngle(angelRight);
                 }
                 projectile.setAIActive(true, {speed: 4});
+                this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "shoot", loop: false, holdReference: false});
                 projectile.visible = true;
 
             }

@@ -170,6 +170,7 @@ export default class GameLevel extends Scene{
         this.load.audio("levelup", "project_assets/sounds/levelup.wav");
         this.load.audio("death", "project_assets/sounds/death.wav");
         this.load.audio("heal", "project_assets/sounds/heal.wav");
+        this.load.audio("shoot", "project_assets/sounds/shoot.wav")
     }
     
     

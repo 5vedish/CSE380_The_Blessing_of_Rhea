@@ -1,4 +1,5 @@
 import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
+import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 import { TweenableProperties } from "../../Wolfie2D/Nodes/GameNode";
 import AnimatedSprite from "../../Wolfie2D/Nodes/Sprites/AnimatedSprite";
 import Scene from "../../Wolfie2D/Scene/Scene";
@@ -41,6 +42,7 @@ export default class LeviathanAI extends EnemyAI{
                 (<ProjectileAI> projectile._ai).setDirection(dir);
                 (<ProjectileAI> projectile._ai).setAngle(Vec2.UP.angleToCCW(dir));
                 projectile.setAIActive(true, {speed: 4});
+                this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "shoot", loop: false, holdReference: false});
                 projectile.visible = true;
             }
             this.attackCooldown.start();
