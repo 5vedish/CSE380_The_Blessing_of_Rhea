@@ -48,7 +48,8 @@ export default class LeviathanAI extends EnemyAI{
     }
 
     damage(damage: number): void {
-        this.health -= damage;
+        if (this.health - damage <= 0) this.health = 0; 
+        else this.health -= damage;
         this.owner.animation.play("damage");
         this.owner.animation.queue("moving", true);
         // If health goes below 0, disable AI and fire enemyDied event
