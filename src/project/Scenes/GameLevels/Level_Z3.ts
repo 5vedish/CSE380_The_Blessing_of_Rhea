@@ -256,7 +256,58 @@ export default class level_z3 extends GameLevel {
                     }
                 }
                 break;
+            }
         }
+
+    protected initPlayer() : void {
+        this.player = this.add.animatedSprite("zeus", "primary");
+        this.player.scale.set(1, 1);
+        if(!this.playerSpawn){
+            console.warn("Player spawn was never set - setting spawn to (0, 0)");
+            this.playerSpawn = Vec2.ZERO;
+        }
+        this.player.position = this.playerSpawn;
+        this.player.addPhysics(new AABB(Vec2.ZERO, new Vec2(16, 16)));
+
+        if (this.playerStats === undefined) {
+            // create weapon
+            this.weapon = this.createWeapon("lightning");
+            if (this.instant_kill) this.weapon.type.damage = 1000;
+            this.playerStats = new CharacterStat(100, 100, 10, 2, this.weapon.cooldownTimer.getTotalTime());
+        } else {
+            this.weapon.battleManager = this.battleManager;
+        }
+        // TODO - ADD PLAYER AI HERE
+        this.player.addAI(PlayerController,
+            {
+                speed: this.playerStats.stats.speed,
+                health: this.playerStats.stats.health,
+                inputEnabled: true,
+                range: 30,
+                playerStats: this.playerStats,
+                weapon: this.weapon,
+                weaponV2: "lightningv2",
+                invincible: this.invincible
+            });
+        this.player.animation.play("idle");
+
+        this.player.setGroup("player");
+        // this.viewport.setCenter(this.playerSpawn);
+        this.viewport.follow(this.player);
+
+        this.battleManager.setPlayers([<BattlerAI>this.player._ai]);
+        this.playerController = <PlayerController> this.player._ai;
+
+        this.player.freeze();
+        this.player.setAIActive(false, {});
+    }
+
+    protected initLayers() : void {
+        // Add a layer for the UI
+        this.addUILayer("UI");
+        
+        // Add the primary layer for players and enemies
+        this.addLayer("primary", 10);
     }
 
     updateScene(deltaT: number): void {
@@ -313,53 +364,5 @@ export default class level_z3 extends GameLevel {
         }
     }
 
-    protected initPlayer() : void {
-        this.player = this.add.animatedSprite("zeus", "primary");
-        this.player.scale.set(1, 1);
-        if(!this.playerSpawn){
-            console.warn("Player spawn was never set - setting spawn to (0, 0)");
-            this.playerSpawn = Vec2.ZERO;
-        }
-        this.player.position = this.playerSpawn;
-        this.player.addPhysics(new AABB(Vec2.ZERO, new Vec2(16, 16)));
-
-        if (this.playerStats === undefined) {
-            // create weapon
-            this.weapon = this.createWeapon("lightning");
-            this.playerStats = new CharacterStat(100, 100, 10, 2, this.weapon.cooldownTimer.getTotalTime());
-        } else {
-            this.weapon.battleManager = this.battleManager;
-        }
-        // TODO - ADD PLAYER AI HERE
-        this.player.addAI(PlayerController,
-            {
-                speed: this.playerStats.stats.speed,
-                health: this.playerStats.stats.health,
-                inputEnabled: true,
-                range: 30,
-                playerStats: this.playerStats,
-                weapon: this.weapon,
-                weaponV2: "lightningv2"
-            });
-        this.player.animation.play("idle");
-
-        this.player.setGroup("player");
-        // this.viewport.setCenter(this.playerSpawn);
-        this.viewport.follow(this.player);
-
-        this.battleManager.setPlayers([<BattlerAI>this.player._ai]);
-        this.playerController = <PlayerController> this.player._ai;
-
-        this.player.freeze();
-        this.player.setAIActive(false, {});
-    }
-
-    protected initLayers() : void {
-        // Add a layer for the UI
-        this.addUILayer("UI");
-        
-        // Add the primary layer for players and enemies
-        this.addLayer("primary", 10);
-    }
 
 }

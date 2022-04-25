@@ -25,6 +25,8 @@ export default class EchidnaAI extends EnemyAI {
 
     protected venomRange: number;
 
+    protected bossDead: boolean = false;
+
     initializeAI(owner: AnimatedSprite, options: Record<string, any>): void {
         super.initializeAI(owner, options);
         this.venomRange = options.venomRange;
@@ -68,12 +70,17 @@ export default class EchidnaAI extends EnemyAI {
     }
 
     damage(damage: number): void {
-        this.health -= damage;
+        if(this.health - damage <= 0){
+            this.health = 0;
+        } else {
+            this.health -= damage;
+        }
         this.owner.animation.play("damage");
         this.owner.animation.queue("moving", true);
 
-        if(this.health <= 0){
+        if(this.health <= 0 && !this.bossDead){
             this.owner.tweens.play("death");
+            this.bossDead = true;
         }
     }
 

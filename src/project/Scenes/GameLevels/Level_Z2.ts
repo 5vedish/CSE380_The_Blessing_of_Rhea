@@ -252,6 +252,7 @@ export default class level_z2 extends GameLevel {
         if (this.playerStats === undefined) {
             // create weapon
             this.weapon = this.createWeapon("lightning");
+            if (this.instant_kill) this.weapon.type.damage = 1000;
             this.playerStats = new CharacterStat(100, 100, 10, 2, this.weapon.cooldownTimer.getTotalTime());
         } else {
             this.weapon.battleManager = this.battleManager;
@@ -266,7 +267,8 @@ export default class level_z2 extends GameLevel {
                 range: 30,
                 playerStats: this.playerStats,
                 weapon: this.weapon,
-                weaponV2: "lightningv2"
+                weaponV2: "lightningv2",
+                invincible: this.invincible
             });
         this.player.animation.play("idle");
 
