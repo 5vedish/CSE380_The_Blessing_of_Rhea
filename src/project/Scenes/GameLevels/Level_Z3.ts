@@ -273,7 +273,7 @@ export default class level_z3 extends GameLevel {
             // create weapon
             this.weapon = this.createWeapon("lightning");
             if (this.instant_kill) this.weapon.type.damage = 1000;
-            this.playerStats = new CharacterStat(100, 100, 10, 2, this.weapon.cooldownTimer.getTotalTime());
+            this.playerStats = new CharacterStat(100, 100, 10, (this.speedUp) ? 15 : 2, this.weapon.cooldownTimer.getTotalTime());
         } else {
             this.weapon.battleManager = this.battleManager;
         }

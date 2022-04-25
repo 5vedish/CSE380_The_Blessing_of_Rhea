@@ -136,11 +136,11 @@ export default class level_z1 extends GameLevel {
         let weapon = this.createWeapon("lightning");
         if (this.instant_kill) weapon.type.damage = 1000;
         
-        this.playerStats = new CharacterStat(100, 1, 10, 2, weapon.cooldownTimer.getTotalTime());
+        this.playerStats = new CharacterStat(100, 1, 10, (this.speedUp) ? 15 : 2, weapon.cooldownTimer.getTotalTime());
         // TODO - ADD PLAYER AI HERE
         this.player.addAI(PlayerController,
             {
-                speed: this.playerStats.stats.speed,
+                speed:  this.playerStats.stats.speed,
                 health: this.playerStats.stats.health,
                 inputEnabled: true,
                 range: 30,
