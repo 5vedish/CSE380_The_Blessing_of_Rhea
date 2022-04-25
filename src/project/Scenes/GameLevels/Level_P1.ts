@@ -133,8 +133,8 @@ export default class level_p1 extends GameLevel {
         //Position the rhea statue and zone
         this.rheaStatue = this.add.animatedSprite("rheaStatue", "primary");
         this.rheaStatue.position = new Vec2((29*32) + 32, (4*32) + 32);
-        this.rheaStatue.addPhysics(new AABB(Vec2.ZERO, new Vec2(24, 40)));
-        this.rheaStatue.setGroup("wall");
+        // this.rheaStatue.addPhysics(new AABB(Vec2.ZERO, new Vec2(24, 20)));
+        // this.rheaStatue.setGroup("wall");
         this.rheaStatue.animation.play("idle");
         
         this.rheaStatueZone = this.add.graphic(GraphicType.RECT, "primary",{position: this.rheaStatue.position, size: new Vec2(3*32,3*32)});

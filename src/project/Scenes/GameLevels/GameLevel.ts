@@ -166,9 +166,10 @@ export default class GameLevel extends Scene{
         this.load.image("hourglass_3", "project_assets/sprites/hourglass_3.png");
 
         //Load sound effect and music
-        this.load.audio("enemyDamaged", "project_assets/sounds/lightning.wav");
+        this.load.audio("enemyDamaged", "project_assets/sounds/enemyDamage.wav");
         this.load.audio("levelup", "project_assets/sounds/levelup.wav");
         this.load.audio("death", "project_assets/sounds/death.wav");
+        this.load.audio("heal", "project_assets/sounds/heal.wav");
     }
     
     
@@ -390,6 +391,7 @@ export default class GameLevel extends Scene{
                 this.rheaStatue.animation.queue("used");
                 this.playerStats.editHealth(this.rheaStatueHeal);
                 this.emitter.fireEvent(Project_Events.HEALTHCHANGED);
+                this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "heal", loop: false, holdReference: false});
                 this.rheaStatueCooldown.start();
             } else this.rheaStatue.animation.playIfNotAlready("idle");
         }
