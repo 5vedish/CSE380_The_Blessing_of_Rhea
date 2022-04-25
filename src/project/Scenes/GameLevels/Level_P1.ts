@@ -109,7 +109,7 @@ export default class level_p1 extends GameLevel {
             player: this.player,
             speed: 100,
             weapon: this.createWeapon("knife"),
-            range: 10,
+            range: 32,
             experience: 250,
         });
 

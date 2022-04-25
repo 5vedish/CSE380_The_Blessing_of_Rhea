@@ -40,7 +40,8 @@ export default class Attack extends EnemyState {
         this.dir = this.player.position.clone().sub(this.owner.position).normalize();
         if (this.parent.weapon.use(this.owner, "enemy", this.dir, [])) {
             // Play attack animation here
-            (<AnimatedSprite> this.owner).animation.playIfNotAlready("attack");
+            (<AnimatedSprite> this.owner).animation.stop();
+            (<AnimatedSprite> this.owner).animation.play("attack");
         } else this.finished(EnemyStates.DEFAULT);
      }
 
