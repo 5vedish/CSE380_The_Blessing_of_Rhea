@@ -20,6 +20,7 @@ import MainMenu from "../MainMenu";
 import CharacterStat from "../../PlayerStatus";
 import { Project_Events } from "../../project_constants";
 import { GameEventType } from "../../../Wolfie2D/Events/GameEventType";
+import level_h1 from "./Level_H1";
 
 export default class level_p3 extends GameLevel {
     private boss: CustomEnemy;
@@ -325,7 +326,6 @@ export default class level_p3 extends GameLevel {
             if(this.bossDefeated && this.currentNumEnemies === 0) {
                 if(this.changeLevelTimer === undefined){
                     this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "leviathan"});
-                    this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "main_menu", loop: true, holdReference: true});
                     this.changeLevelTimer = new Timer(5000);
                     this.createChallengeLabel("end");
                     this.changeLevelTimer.start();
@@ -333,13 +333,14 @@ export default class level_p3 extends GameLevel {
                 
                 if(this.changeLevelTimer.getTimeLeft() <= 0){
                     this.viewport.setSize(1600, 900);
-                    this.sceneManager.changeToScene(MainMenu, {
+                    this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "leviathan"});
+                    this.sceneManager.changeToScene(level_h1, {
                         invincible: this.invincible, 
                         unlockAll: this.unlockAll,
                         instant_kill: this.instant_kill,
                         speedUp: this.speedUp, 
                         unlockedLevels: this.unlockedLevels
-                    });
+                    }, this.sceneOptions);
                 }
             }
         }
