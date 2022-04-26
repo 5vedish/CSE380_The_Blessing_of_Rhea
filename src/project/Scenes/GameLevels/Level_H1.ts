@@ -15,6 +15,7 @@ import RangeAI from "../../AI/RangeAI";
 import Timer from "../../../Wolfie2D/Timing/Timer";
 import HadesController from "../../AI/HadesController";
 import FireballAI from "../../AI/FireballAI";
+import level_h2 from "./Level_H2";
 
 export default class level_h1 extends GameLevel {
 
@@ -60,7 +61,6 @@ export default class level_h1 extends GameLevel {
         this.walls.setGroup("wall");
 
         // get the floor layer
-        console.log(tilemapLayers[0].getItems()[0]);
         this.floorCheck = <OrthogonalTilemap>tilemapLayers[0].getItems()[0];
         
         this.viewport.setBounds(0, 0, 64*32, 64*32);
@@ -76,7 +76,7 @@ export default class level_h1 extends GameLevel {
         this.initPlayer();
         
         // level timer and UI
-        this.gameTimer = new Timer(300000);
+        this.gameTimer = new Timer(30000);
         this.gameTime = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(this.viewport.getHalfSize().x, 20), text: `${this.parseTimeLeft(this.gameTimer.getTotalTime())}`});
     
         // player stat UI
@@ -219,14 +219,12 @@ export default class level_h1 extends GameLevel {
                     this.changeLevelTimer.start();
                 }
                 if(this.changeLevelTimer.getTimeLeft() <= 0){
-                    console.log("FINISHED");
                     this.viewport.setSize(1600, 900); // switch to H2
-                    // this.sceneManager.changeToScene(level_z2, {characterStats: this.playerStats, 
-                    //     weapon: (<PlayerController>this.player._ai).weapon,
-                    //     invincible: this.invincible, 
-                    //     unlockAll: this.unlockAll,
-                    //     instant_kill: this.instant_kill,
-                    //     speedUp: this.speedUp}, this.sceneOptions);
+                    this.sceneManager.changeToScene(level_h2, {characterStats: this.playerStats,
+                        invincible: this.invincible, 
+                        unlockAll: this.unlockAll,
+                        instant_kill: this.instant_kill,
+                        speedUp: this.speedUp}, this.sceneOptions);
                 }
             }
         }
