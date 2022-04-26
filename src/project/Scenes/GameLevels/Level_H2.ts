@@ -132,30 +132,30 @@ export default class level_h2 extends GameLevel {
             name: "Skull",
             health: 1,
             player: this.player,
-            speed: 125,
+            speed: 200,
             weapon: this.createWeapon("knife"),
-            range: 10,
-            experience: 200
+            range: 16,
+            experience: 50
         });
 
         this.spawnableEnemies.push({
             name: "Witch",
-            health: 1,
+            health: 25,
             player: this.player,
-            speed: 150,
+            speed: 100,
             weapon: this.createWeapon("knife"),
-            range: 150,
+            range: 400,
             experience: 250,
         });
 
         this.spawnableEnemies.push({
             name: "Hellhound",
-            health: 1,
+            health: 50,
             player: this.player,
-            speed: 100,
+            speed: 125,
             weapon: this.createWeapon("knife"),
             range: 20,
-            experience: 320,
+            experience: 1000,
         });
 
         //Position the rhea statue and zone
@@ -276,12 +276,42 @@ export default class level_h2 extends GameLevel {
        
        // if fresh incoming
        // last argument is arbitrary because Hades will not use the weapon system, health was 75
+       let enemy;
        if (!this.playerStats){
-        this.playerStats = new CharacterStat(75000, 5, 5, 3, 1);
-       }
+           this.playerStats = new CharacterStat(75, 5, 5, 3, 1);
+           //Create an enemy for players to get exp
+           enemy = this.add.animatedSprite("Skull", "primary");
+           enemy.scale.set(1,1);
+           enemy.addPhysics(new AABB(Vec2.ZERO, new Vec2(8,8))); //Monkey patched collision box, dynamic later
+           enemy.animation.play("moving");
+           enemy.position = new Vec2(this.player.position.x , this.player.position.y - 32);
+           let options = {
+               health: 1,
+               player: this.player,    
+               speed: 0,
+               weapon: this.createWeapon("knife"),
+               range: 0,
+               experience: 3000,
+               projectiles: this.createProjectiles(3 , "fireball"),
+               cooldown: 1000,
+               scene: this,
+           }
+           enemy.addAI(EnemyAI, options);
+           enemy.setGroup("enemy");
+           enemy.freeze();
+           this.currentNumEnemies += 1;
 
-       // add player AI: range/weapon is arbitrary ... weaponV2 will possible be an updated sprite
-       this.player.addAI(HadesController,
+           if(this.battleManager.enemies === undefined){
+               this.battleManager.setEnemies([<BattlerAI>enemy._ai])
+           } else {
+               this.battleManager.enemies.push(<BattlerAI>enemy._ai);
+           }
+           
+           this.enemyArray.push(enemy);
+        }
+        
+        // add player AI: range/weapon is arbitrary ... weaponV2 will possible be an updated sprite
+        this.player.addAI(HadesController,
            {
                speed: this.playerStats.stats.speed,
                health: this.playerStats.stats.health,
@@ -312,6 +342,15 @@ export default class level_h2 extends GameLevel {
                    (<FireballAI> f._ai).setDamage(1000);
                }
            }
+
+           if (enemy !== undefined) {
+                // tailored to update enemy array
+                const fireballs = (<HadesController> this.playerController).projectiles
+   
+                for (let f of fireballs){
+                    (<FireballAI> f._ai).setEnemies(this.enemyArray);
+                }
+            }
         }
 
     protected initLayers() : void {

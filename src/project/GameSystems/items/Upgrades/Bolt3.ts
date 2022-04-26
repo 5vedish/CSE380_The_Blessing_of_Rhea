@@ -16,7 +16,7 @@ export default class Bolt extends Item {
 
             for (let f of fireballs){
                 const castedF = (<ProjectileAI> f._ai);
-                castedF.setDamage(castedF.getDamage() * 2);
+                castedF.setDamage(castedF.getDamage() * 1.1);
             }
         }
     }
