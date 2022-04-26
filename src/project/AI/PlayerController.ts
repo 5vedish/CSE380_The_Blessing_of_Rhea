@@ -91,7 +91,7 @@ export default class PlayerController extends StateMachineAI implements BattlerA
                     break;
             case Project_Events.LEVELUP:
                 //check if leveled up
-                if(this.playerStats.level >= 2 && !this.weapon.type.spriteKey.includes("v2")) {
+                if(this.playerStats.level >= 5 && !this.weapon.type.spriteKey.includes("v2")) {
                     this.weapon.type.spriteKey = this.weaponV2;
                 }
             

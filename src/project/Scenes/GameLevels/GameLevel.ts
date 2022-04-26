@@ -60,6 +60,8 @@ export default class GameLevel extends Scene{
 
     protected enemyConstructorPairings: Map<string,any>;
 
+    protected upgradedWeapon: boolean = false;
+
     //Timer for levels that require players to survive
     protected startSceneTimer: Timer = new Timer(5000);
     protected startedLevel: boolean = false;
@@ -379,7 +381,8 @@ export default class GameLevel extends Scene{
                     this.levelUI.text = "Lvl" + this.playerStats.level;
                     this.rollItems();
 
-                    if(this.playerStats.level === 2){
+                    if(this.playerStats.level >= 5 && !this.upgradedWeapon){
+                        this.upgradedWeapon = true;
                         this.createChallengeLabel("evolvedWeapon");
                     }
                     break;

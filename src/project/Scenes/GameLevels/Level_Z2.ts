@@ -66,6 +66,7 @@ export default class level_z2 extends GameLevel {
             weapon.cooldownTimer = new Timer(this.playerStats.weaponCoolDown);
             weapon.sprite.setScene(this);
             this.weapon = weapon;
+            this.upgradedWeapon = init.upgradedWeapon;
         } 
         
         this.invincible = init.invincible;
@@ -244,7 +245,8 @@ export default class level_z2 extends GameLevel {
                         unlockAll: this.unlockAll,
                         instant_kill: this.instant_kill,
                         speedUp: this.speedUp, 
-                        unlockedLevels: this.unlockedLevels
+                        unlockedLevels: this.unlockedLevels,
+                        upgradedWeapon: this.upgradedWeapon
                     }, this.sceneOptions);
                 }
             }

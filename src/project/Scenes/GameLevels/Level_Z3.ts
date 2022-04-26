@@ -84,6 +84,7 @@ export default class level_z3 extends GameLevel {
             weapon.cooldownTimer = new Timer(this.playerStats.weaponCoolDown);
             weapon.sprite.setScene(this);
             this.weapon = weapon;
+            this.upgradedWeapon = init.upgradedWeapon;
         } 
         
         this.invincible = init.invincible;

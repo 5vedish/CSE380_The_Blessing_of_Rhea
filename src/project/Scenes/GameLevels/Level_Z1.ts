@@ -237,7 +237,8 @@ export default class level_z1 extends GameLevel {
                         unlockAll: this.unlockAll,
                         instant_kill: this.instant_kill,
                         speedUp: this.speedUp, 
-                        unlockedLevels: this.unlockedLevels
+                        unlockedLevels: this.unlockedLevels,
+                        upgradedWeapon: this.upgradedWeapon
                     }, this.sceneOptions);
                 }
             }
