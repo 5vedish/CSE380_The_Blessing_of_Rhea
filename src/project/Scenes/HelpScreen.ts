@@ -313,7 +313,7 @@ export default class HelpScreen extends Scene {
           unlockAll: this.unlockAll,
           instant_kill: this.instant_kill,
           speedUp: this.speedUp, 
-          unlcokedLevels: this.unlockedLevels
+          unlockedLevels: this.unlockedLevels
         }, {});
       }
 

@@ -185,7 +185,7 @@ export default class MainMenu extends Scene {
           unlockAll: this.unlockAll,
           instant_kill: this.instant_kill,
           speedUp: this.speedUp, 
-          unlcokedLevels: this.unlockedLevels
+          unlockedLevels: this.unlockedLevels
       }
 
       /* TODO - CHANGE TO SPECIFIED SCENE */

@@ -90,6 +90,8 @@ export default class level_z3 extends GameLevel {
         this.unlockAll = init.unlockAll;
         this.instant_kill = init.instant_kill;
         this.speedUp = init.speedUp;
+        this.unlockedLevels = init.unlockedLevels;
+        this.unlockedLevels[2] = true;
     }
 
     startScene(): void {
@@ -346,7 +348,8 @@ export default class level_z3 extends GameLevel {
                     invincible: this.invincible, 
                     unlockAll: this.unlockAll,
                     instant_kill: this.instant_kill,
-                    speedUp: this.speedUp
+                    speedUp: this.speedUp, 
+                    unlockedLevels: this.unlockedLevels
                 });
             }
         }
