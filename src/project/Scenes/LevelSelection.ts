@@ -298,13 +298,13 @@ export default class LevelSelection extends Scene {
 
       if (event.type === "hades1") {
         this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "main_menu"});
-        if (this.unlockedLevels[2] || this.unlockAll) this.sceneManager.changeToScene(level_h1, options, physicsOptions);
+        if (this.unlockedLevels[6] || this.unlockAll) this.sceneManager.changeToScene(level_h1, options, physicsOptions);
         else console.log("STAGE NOT UNLOCKED YET");
       }
 
       if (event.type === "hades2") {
         this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "main_menu"});
-        if (this.unlockedLevels[2] || this.unlockAll) this.sceneManager.changeToScene(level_h2, options, physicsOptions);
+        if (this.unlockedLevels[7] || this.unlockAll) this.sceneManager.changeToScene(level_h2, options, physicsOptions);
         else console.log("STAGE NOT UNLOCKED YET");
       }
 
