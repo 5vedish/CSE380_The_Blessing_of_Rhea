@@ -17,28 +17,28 @@ import PlayerController from "./PlayerController";
  */
 export default class ProjectileAI implements AI {
     // The owner of this AI
-    private owner: AnimatedSprite;
+    protected owner: AnimatedSprite;
 
     // The velocity
-    private current_speed: number;
+    protected current_speed: number;
     private start_speed: number;
-    private dir: Vec2;
+    protected dir: Vec2;
 
-    private angle: number;
+    protected angle: number;
 
-    private paused: boolean = true;
+    protected paused: boolean = true;
 
     private player: AnimatedSprite;
 
     // Stats
-    private damage: number = 5;
+    protected damage: number = 5;
 
-    private emitter: Emitter;
+    protected emitter: Emitter;
 
     private timeToLive: Timer;
 
     // An event emitter and receiver to hook into the event system
-    private receiver: Receiver
+    protected receiver: Receiver
 
     initializeAI(owner: AnimatedSprite, options: Record<string, any>): void {
         this.owner = owner;
@@ -113,6 +113,14 @@ export default class ProjectileAI implements AI {
 
     destroy(): void {
         this.receiver.destroy();
+    }
+
+    getDamage(): number{
+        return this.damage;
+    }
+
+    setDamage(damage: number): void{
+        this.damage = damage;
     }
 
 }

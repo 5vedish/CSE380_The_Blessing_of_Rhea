@@ -13,6 +13,7 @@ import Level_Z1_Cutscene from "./Cutscenes/Level_Z1_Cutscene";
 import Tutorial from "./Tutorial";
 import level_z2 from "./GameLevels/Level_Z2";
 import CharacterStat from "../PlayerStatus";
+import level_h1 from "./GameLevels/Level_H1";
 
 export default class MainMenu extends Scene {
   private splashScreen: Layer;
@@ -192,7 +193,8 @@ export default class MainMenu extends Scene {
             }
         }
         //TO DO replace with tutorial stage
-        this.sceneManager.changeToScene(Level_Z1_Cutscene, options, physicsOptions);
+        // this.sceneManager.changeToScene(Level_Z1_Cutscene, options, physicsOptions);
+        this.sceneManager.changeToScene(level_h1, options, physicsOptions);
       }
 
       if (event.type === "select_levels") {

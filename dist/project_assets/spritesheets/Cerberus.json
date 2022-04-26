@@ -1,0 +1,76 @@
+{
+	"name": "Cerberus",
+	"spriteSheetImage": "Cerberus.png",
+	"spriteWidth": 128,
+	"spriteHeight": 128,
+	"leftBuffer": 0,
+	"rightBuffer": 0,
+	"topBuffer": 0,
+	"bottomBuffer": 0,
+	"columns": 3,
+	"rows": 3,
+	"animations": [
+        {
+            "name": "moving",
+			"repeat": true,
+			"frames": [
+				{
+					"index": 0,
+					"duration": 10
+				},
+				{
+					"index": 1,
+					"duration": 10
+				},
+				{
+					"index": 2,
+					"duration": 10
+				},
+				{
+					"index": 3,
+					"duration": 10
+				}
+			]
+        },
+        {
+            "name": "attack",
+			"repeat": false,
+			"frames": [
+				{
+					"index": 5,
+					"duration": 10
+				},
+				{
+					"index": 6,
+					"duration": 10
+				},
+				{
+					"index": 7,
+					"duration": 10
+				},
+				{
+					"index": 8,
+					"duration": 10
+				}
+			]
+        },
+        {
+            "name": "damage",
+			"repeat": false,
+			"frames": [
+				{
+					"index": 8,
+					"duration": 7
+				},
+				{
+					"index": 0,
+					"duration": 15
+				},
+				{
+					"index": 8,
+					"duration": 7
+				}
+			]
+        }
+	]
+}

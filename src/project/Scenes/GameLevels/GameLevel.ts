@@ -39,6 +39,8 @@ import Bolt2 from "../../GameSystems/items/Upgrades/Bolt2";
 import Goblet2 from "../../GameSystems/items/Upgrades/Goblet2";
 import Aegis2 from "../../GameSystems/items/Upgrades/Aegis2";
 import HermesSandals3 from "../../GameSystems/items/Upgrades/HermesSandals3";
+import HadesController from "../../AI/HadesController";
+import FireballAI from "../../AI/FireballAI";
 
 export interface CustomEnemy {
     name: string,
@@ -111,8 +113,6 @@ export default class GameLevel extends Scene{
         ["hourglass_2" , Hourglass2], ["hermes_sandals_2", HermesSandals2], ["bolt_2", Bolt2], ["goblet_of_dionysus_2", Goblet2], ["aegis_2", Aegis2],
         ["hourglass_3" , Hourglass3], ["hermes_sandals_3", HermesSandals3], ["bolt_3", Bolt], ["goblet_of_dionysus_3", Goblet3], ["aegis_3", Aegis3]
     ]);
-    // protected maxProjectiles = 20;
-    // protected projectiles : Array<AnimatedSprite> = new Array(this.maxProjectiles);
 
     //Sprite to hold weapon icon
     protected battleManager: BattleManager;
@@ -318,7 +318,11 @@ export default class GameLevel extends Scene{
 
                 case Project_Events.ENEMYDIED:
                     // remove enemy from both arrays
+
                     const enemy = <CanvasNode>event.data.get("enemy");
+                    if (!enemy._ai){
+                        break;
+                    }
                     const enemyExperience = (<EnemyAI>enemy._ai).experience;
                     this.battleManager.enemies = this.battleManager.enemies.filter(enemy => enemy !== <BattlerAI>(event.data.get("enemy")._ai));
                     this.enemyArray = this.enemyArray.filter(enemy => enemy !== (event.data.get("enemy")));
@@ -374,16 +378,17 @@ export default class GameLevel extends Scene{
             }
         }    
         
-        //Update the weapon cooldown icon
-        let weaponTimeLeft = this.playerController.weapon.cooldownTimer.getTimeLeft();
-        let weaponTotalTime = this.playerController.weapon.cooldownTimer.getTotalTime();
-        let timePercentage = weaponTimeLeft/weaponTotalTime;
+        //Update the weapon cooldown icon *** Hades will use a different timer ***
+        let timer = this.playerController.weapon === null ? (<HadesController> this.playerController).attackCooldown : this.playerController.weapon.cooldownTimer;
+        const weaponTimeLeft = timer.getTimeLeft();
+        const weaponTotalTime = timer.getTotalTime();
+        const timePercentage = weaponTimeLeft/weaponTotalTime;
         if(timePercentage > 0){
             this.weaponIconCoolDown.alpha = 0.5;
         } else {
             this.weaponIconCoolDown.alpha = 0;
         }
-        // this.weaponIconCoolDown.alpha = timePercentage;
+
         this.weaponIconCoolDown.size = new Vec2(32, (1-timePercentage)*32);
         this.weaponIconCoolDown.position = new Vec2(48, 24+(timePercentage*16));
 
@@ -536,7 +541,8 @@ export default class GameLevel extends Scene{
             projectiles[i] = this.add.animatedSprite(sprite, "primary");
             projectiles[i].position = new Vec2(0, 0);
             projectiles[i].visible = false;
-            projectiles[i].addAI(ProjectileAI, {speed: 4, player: this.player});
+            const ai = (sprite === "fireball") ? FireballAI : ProjectileAI;
+            projectiles[i].addAI(ai, {speed: 4, player: this.player, enemies: this.enemyArray});
             projectiles[i].addPhysics(new AABB(Vec2.ZERO, new Vec2(32, 32)));
             // Check direction of projectile before playing animation
             projectiles[i].animation.playIfNotAlready("shoot", true);

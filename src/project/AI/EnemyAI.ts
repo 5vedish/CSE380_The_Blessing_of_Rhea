@@ -82,7 +82,6 @@ export default class EnemyAI extends StateMachineGoapAI implements BattlerAI {
         if (this.health <= 0) {
             this.owner.setAIActive(false, {});
             this.owner.isCollidable = false;
-            // this.owner.visible = false;
 
             this.emitter.fireEvent(Project_Events.ENEMYDIED, {enemy: this.owner})
         }
