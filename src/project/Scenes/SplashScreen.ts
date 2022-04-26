@@ -18,9 +18,12 @@ export default class SplashScreen extends Scene {
 
   loadScene() {
     this.load.image("splash_screen", "project_assets/screens/Splash.png");
-    this.load.image("start_label", "project_assets/sprites/start_label.png");  }
+    this.load.image("start_label", "project_assets/sprites/start_label.png");  
+    this.load.audio("main_menu", "project_assets/music/main_menu.mp3");
+  }
 
   startScene() {
+    this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "main_menu", loop: true, holdReference: true});
     this.splashScreen = this.addUILayer("splashScreen");
     this.bg = this.add.sprite("splash_screen", "splashScreen");
     this.bg.position.copy(this.viewport.getCenter());

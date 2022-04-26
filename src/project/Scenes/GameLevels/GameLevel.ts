@@ -106,6 +106,8 @@ export default class GameLevel extends Scene{
     protected rheaStatueHeal: number = 25;
     protected rheaStatueUsed: boolean = false;
 
+    protected levelMusic: string;
+
     // items
     protected itemsArray = ["honey_jar", 
         "hourglass_2", "hermes_sandals_2", "bolt_2", "goblet_of_dionysus_2", "aegis_2", 
@@ -458,6 +460,7 @@ export default class GameLevel extends Scene{
             }
             
             if(this.changeLevelTimer.getTimeLeft() <= 0) {
+                this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: this.levelMusic});
                 this.viewport.setSize(1600, 900);
                 this.healthBar.destroy();
                 this.expBar.destroy();
@@ -616,6 +619,7 @@ export default class GameLevel extends Scene{
             // Check direction of projectile before playing animation
             projectiles[i].animation.playIfNotAlready("shoot", true);
             projectiles[i].setGroup("projectile");
+            console.log("PROJECTILE ID: " + projectiles[i].id);
         }
         return projectiles;
     }

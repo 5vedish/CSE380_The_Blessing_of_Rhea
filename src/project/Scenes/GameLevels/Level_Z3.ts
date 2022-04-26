@@ -25,6 +25,7 @@ import MainMenu from "../MainMenu";
 import level_p1 from "./Level_P1";
 import { TweenableProperties } from "../../../Wolfie2D/Nodes/GameNode";
 import { EaseFunctionType } from "../../../Wolfie2D/Utils/EaseFunctions";
+import { GameEventType } from "../../../Wolfie2D/Events/GameEventType";
 
 export default class level_z3 extends GameLevel {
 
@@ -69,6 +70,9 @@ export default class level_z3 extends GameLevel {
         this.load.audio("weapon", "project_assets/sounds/lightning.wav");
         this.load.audio("weaponv2", "project_assets/sounds/lightningv2.wav");
 
+        this.load.audio("echidnaStart", "project_assets/music/echidnaStart.mp3");
+        this.load.audio("echidna", "project_assets/music/echidna.mp3");
+
         super.loadScene();
     }
     
@@ -90,6 +94,9 @@ export default class level_z3 extends GameLevel {
 
     startScene(): void {
         // Add in the tilemap and get the wall layer
+        this.levelMusic = "echidna";
+        this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "echidnaStart", loop: false, holdReference: true});
+        this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "main_menu", loop: true, holdReference: true});
         let tilemapLayers = this.add.tilemap("levelZ3", new Vec2(1, 1));
         this.walls = <OrthogonalTilemap>tilemapLayers[1].getItems()[0];
         this.walls.setGroup("wall");
@@ -206,18 +213,19 @@ export default class level_z3 extends GameLevel {
         this.rheaStatue = this.add.animatedSprite("rheaStatue", "primary");
         this.rheaStatue.position = new Vec2(32*32, 44*32);
         this.rheaStatue.animation.play("idle");
-        this.rheaStatue.tweens.add("fadeOut", {
-                startDelay: 0,
-                duration: 3000,
-                effects: [
-                    {
-                        property: TweenableProperties.alpha,
-                        start: 1,
-                        end: 0,
-                        ease: EaseFunctionType.OUT_SINE
-                    }
-                ],
-        })
+
+        // this.rheaStatue.tweens.add("fadeOut", {
+        //         startDelay: 0,
+        //         duration: 3000,
+        //         effects: [
+        //             {
+        //                 property: TweenableProperties.alpha,
+        //                 start: 1,
+        //                 end: 0,
+        //                 ease: EaseFunctionType.OUT_SINE
+        //             }
+        //         ],
+        // })
 
         this.rheaStatueZone = this.add.graphic(GraphicType.RECT, "primary",{position: new Vec2(32*32, 44*32), size: new Vec2(6*32,6*32)});
         this.rheaStatueZone.color = Color.TRANSPARENT;
@@ -277,7 +285,7 @@ export default class level_z3 extends GameLevel {
             // create weapon
             this.weapon = this.createWeapon("lightning");
             if (this.instant_kill) this.weapon.type.damage = 1000;
-            this.playerStats = new CharacterStat(100, 100, 10, (this.speedUp) ? 15 : 2, this.weapon.cooldownTimer.getTotalTime());
+            this.playerStats = new CharacterStat(1, 100, 10, (this.speedUp) ? 15 : 2, this.weapon.cooldownTimer.getTotalTime());
         } else {
             this.weapon.battleManager = this.battleManager;
         }
@@ -320,8 +328,7 @@ export default class level_z3 extends GameLevel {
         //Rhea statue
         if(!this.rheaStatueUsed){
             if (this.rheaStatueZone.boundary.overlapArea(this.player.boundary) && this.playerStats.stats.health < this.playerStats.stats.maxHealth) {
-                this.rheaStatueUsed = true;
-                this.rheaStatue.tweens.play("fadeOut");                               
+                this.rheaStatueUsed = true;                       
             } 
         }
 
@@ -349,6 +356,8 @@ export default class level_z3 extends GameLevel {
         // Spawn enemies in
         if(this.startSceneTimer.isStopped()){
             if(!this.startedLevel){
+                this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "echidnaStart"});
+                this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "echidna", loop: true, holdReference: true});
                 this.player.unfreeze();
                 this.player.setAIActive(true, {});
                 this.startedLevel = true;

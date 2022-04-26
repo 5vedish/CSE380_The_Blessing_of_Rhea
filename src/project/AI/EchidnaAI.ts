@@ -128,17 +128,6 @@ export default class EchidnaAI extends EnemyAI {
 
     }
 
-    destroy(): void {
-        for(let p of this.projectiles){
-            if(this.scene.getSceneGraph().getNode(p.id) === undefined){
-                continue;
-            } else {
-                p.destroy();
-            }
-        }
-        super.destroy();
-    }
-
     distanceToPlayer(): number{
         return Math.sqrt(Math.pow(this.player.position.x - this.owner.position.x, 2) + Math.pow(this.player.position.y - this.owner.position.y, 2));
     }

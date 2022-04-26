@@ -18,6 +18,7 @@ import Graphic from "../../../Wolfie2D/Nodes/Graphic";
 import { TweenableProperties } from "../../../Wolfie2D/Nodes/GameNode";
 import { EaseFunctionType } from "../../../Wolfie2D/Utils/EaseFunctions";
 import Sprite from "../../../Wolfie2D/Nodes/Sprites/Sprite";
+import { GameEventType } from "../../../Wolfie2D/Events/GameEventType";
 
 export default class level_z1 extends GameLevel {
 
@@ -49,6 +50,7 @@ export default class level_z1 extends GameLevel {
         //Load sound effect and music
         this.load.audio("weapon", "project_assets/sounds/lightning.wav");
         this.load.audio("weaponv2", "project_assets/sounds/lightningv2.wav");
+        this.load.audio("zeus", "project_assets/music/zeus.mp3");
 
         super.loadScene();
     }
@@ -62,6 +64,8 @@ export default class level_z1 extends GameLevel {
 
     startScene(): void {
         // Add in the tilemap and get the wall layer
+        this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "zeus", loop: true, holdReference: true});
+        this.levelMusic = "zeus";
         let tilemapLayers = this.add.tilemap("levelZ1", new Vec2(1, 1));
         this.walls = <OrthogonalTilemap>tilemapLayers[1].getItems()[0];
         this.walls.setGroup("wall");
@@ -223,6 +227,7 @@ export default class level_z1 extends GameLevel {
                     this.changeLevelTimer.start();
                 }
                 if(this.changeLevelTimer.getTimeLeft() <= 0){
+                    this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "zeus"});
                     this.viewport.setSize(1600, 900);
                     this.sceneManager.changeToScene(level_z2, {characterStats: this.playerStats, 
                         weapon: (<PlayerController>this.player._ai).weapon,

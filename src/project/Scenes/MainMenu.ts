@@ -195,6 +195,7 @@ export default class MainMenu extends Scene {
             }
         }
         //TO DO replace with tutorial stage
+        this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "main_menu"});
         this.sceneManager.changeToScene(Level_Z1_Cutscene, options, physicsOptions);
       }
 

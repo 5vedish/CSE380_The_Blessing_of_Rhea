@@ -232,30 +232,36 @@ export default class LevelSelection extends Scene {
 
       /* TODO - ADD REST OF STAGES */
       if (event.type === "poseidon1") {
+        this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "main_menu"});
         if (this.unlockAll) this.sceneManager.changeToScene(level_p1, options, physicsOptions);
         else console.log("STAGE NOT UNLOCKED YET");
       }
 
       if (event.type === "poseidon2") {
+        this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "main_menu"});
         if (this.unlockAll) this.sceneManager.changeToScene(level_p2, options, physicsOptions);
         else console.log("STAGE NOT UNLOCKED YET");
       }
 
       if (event.type === "poseidon3") {
+        this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "main_menu"});
         if (this.unlockAll) this.sceneManager.changeToScene(level_p3, options, physicsOptions);
         else console.log("STAGE NOT UNLOCKED YET");
       }
 
       if (event.type === "zeus1") {
+        this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "main_menu"});
         this.sceneManager.changeToScene(level_z1, options, physicsOptions);
       }
 
       if (event.type === "zeus2") {
+        this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "main_menu"});
         if (this.unlockAll) this.sceneManager.changeToScene(level_z2, options, physicsOptions);
         else console.log("STAGE NOT UNLOCKED YET");
       }
 
       if (event.type === "zeus3") {
+        this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "main_menu"});
         if (this.unlockAll) this.sceneManager.changeToScene(level_z3, options, physicsOptions);
         else console.log("STAGE NOT UNLOCKED YET");
       }
