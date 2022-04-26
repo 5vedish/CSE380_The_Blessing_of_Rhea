@@ -149,6 +149,10 @@ export default class PlayerController extends StateMachineAI implements BattlerA
         this.receiver.destroy();
     }
 
+    getSpeed(): number{
+        return this.speed;
+    }
+
     setSpeed(speed: number) {
         this.speed = speed;
     }
