@@ -7,6 +7,7 @@ import Label from "../../Wolfie2D/Nodes/UIElements/Label";
 import MainMenu from "./MainMenu";
 import Sprite from "../../Wolfie2D/Nodes/Sprites/Sprite";
 import UIElement from "../../Wolfie2D/Nodes/UIElement";
+import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 
 export default class HelpScreen extends Scene {
   private splashScreen: Layer;
@@ -19,13 +20,27 @@ export default class HelpScreen extends Scene {
   private instant_kill: boolean;
   private speedUp: boolean;
 
-  private unlockLevels: UIElement
+  private inv: UIElement;
+  private unlockLevels: UIElement;
+  private instantKill: UIElement;
+  private doubleSpeed: UIElement;
+  private unlockedLevels: boolean[];
+
+  initScene(init: Record<string, any>): void {
+    this.invincible = init.invincible;
+    this.unlockAll = init.unlockAll;
+    this.instant_kill = init.instant_kill;
+    this.speedUp = init.speedUp;
+    this.unlockedLevels = init.unlockedLevels;
+  }
 
   loadScene() {
     this.load.image("splash_screen", "project_assets/screens/Splash.png");
+    this.load.audio("click", "project_assets/sounds/click.wav");
   }
 
   startScene() {
+    this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "click", loop: false, holdReference: false});
     // add splash (filler)
     this.splashScreen = this.addUILayer("splashScreen");
     this.bg = this.add.sprite("splash_screen", "splashScreen");
@@ -224,15 +239,16 @@ export default class HelpScreen extends Scene {
     cheatHeader.fontSize = 48;
     cheatHeader.textColor = Color.WHITE;
 
-    const invincible = this.add.uiElement(UIElementType.BUTTON, "helpScreen", {
+    this.inv = this.add.uiElement(UIElementType.BUTTON, "helpScreen", {
       position: new Vec2(1106, 268),
       text: "Invincibility",
     });
-    invincible.size.set(384, 128);
-    invincible.borderWidth = 5;
-    invincible.borderColor = Color.BORDERCOLOR;
-    invincible.backgroundColor = Color.GRAYISH;
-    invincible.onClickEventId = "invincible";
+    this.inv.size.set(384, 128);
+    this.inv.borderWidth = 5;
+    this.inv.borderColor = Color.BORDERCOLOR;
+    if (this.invincible) this.inv.backgroundColor = Color.BROWN;
+    else this.inv.backgroundColor = Color.GRAYISH;
+    this.inv.onClickEventId = "invincible";
 
     this.unlockLevels = this.add.uiElement(
       UIElementType.BUTTON,
@@ -242,28 +258,31 @@ export default class HelpScreen extends Scene {
     this.unlockLevels.size.set(384, 128);
     this.unlockLevels.borderWidth = 5;
     this.unlockLevels.borderColor = Color.BORDERCOLOR;
-    this.unlockLevels.backgroundColor = Color.GRAYISH;
+    if (this.unlockAll) this.unlockLevels.backgroundColor = Color.BROWN;
+    else this.unlockLevels.backgroundColor = Color.GRAYISH;
     this.unlockLevels.onClickEventId = "unlock";
 
-    const instantKill = this.add.uiElement(UIElementType.BUTTON, "helpScreen", {
+    this.instantKill = this.add.uiElement(UIElementType.BUTTON, "helpScreen", {
       position: new Vec2(1106, 580),
       text: "Instant Kill",
     });
-    instantKill.size.set(384, 128);
-    instantKill.borderWidth = 5;
-    instantKill.borderColor = Color.BORDERCOLOR;
-    instantKill.backgroundColor = Color.GRAYISH;
-    instantKill.onClickEventId = "kill";
+    this.instantKill.size.set(384, 128);
+    this.instantKill.borderWidth = 5;
+    this.instantKill.borderColor = Color.BORDERCOLOR;
+    if (this.instant_kill) this.instantKill.backgroundColor = Color.BROWN;
+    else this.instantKill.backgroundColor = Color.GRAYISH;
+    this.instantKill.onClickEventId = "kill";
 
-    const doubleSpeed = this.add.uiElement(UIElementType.BUTTON, "helpScreen", {
+    this.doubleSpeed = this.add.uiElement(UIElementType.BUTTON, "helpScreen", {
       position: new Vec2(1106, 736),
       text: "Double Speed",
     });
-    doubleSpeed.size.set(384, 128);
-    doubleSpeed.borderWidth = 5;
-    doubleSpeed.borderColor = Color.BORDERCOLOR;
-    doubleSpeed.backgroundColor = Color.GRAYISH;
-    doubleSpeed.onClickEventId = "speed";
+    this.doubleSpeed.size.set(384, 128);
+    this.doubleSpeed.borderWidth = 5;
+    this.doubleSpeed.borderColor = Color.BORDERCOLOR;
+    if (this.speedUp) this.doubleSpeed.backgroundColor = Color.BROWN;
+    else this.doubleSpeed.backgroundColor = Color.GRAYISH;
+    this.doubleSpeed.onClickEventId = "speed";
 
     // Back button
     const backHelp = this.add.uiElement(UIElementType.BUTTON, "helpScreen", {
@@ -287,24 +306,56 @@ export default class HelpScreen extends Scene {
     while (this.receiver.hasNextEvent()) {
       let event = this.receiver.getNextEvent();
       console.log(event);
-
+      
       if (event.type === "back") {
         this.sceneManager.changeToScene(MainMenu, {
           invincible: this.invincible, 
           unlockAll: this.unlockAll,
           instant_kill: this.instant_kill,
-          speedUp: this.speedUp
+          speedUp: this.speedUp, 
+          unlockedLevels: this.unlockedLevels
         }, {});
+      }
+
+      this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "click", loop: false, holdReference: false});
+      
+      if (event.type === "invincible") {
+        if (this.invincible) {
+          this.invincible = false;
+          this.inv.backgroundColor = Color.GRAYISH;
+        } else {
+          this.invincible = true;
+          this.inv.backgroundColor = Color.BROWN;
+        }
       }
 
       if (event.type === "unlock") {
         if (this.unlockAll) {
           this.unlockAll = false;
           this.unlockLevels.backgroundColor = Color.GRAYISH;
-        }
-        else {
+        } else {
           this.unlockAll = true;
-          this.unlockLevels.backgroundColor = Color.RED;
+          this.unlockLevels.backgroundColor = Color.BROWN;
+        }
+      }
+
+      if (event.type === "kill") {
+        if (this.instant_kill) {
+          this.instant_kill = false;
+          this.instantKill.backgroundColor = Color.GRAYISH;
+        } else {
+          this.instant_kill = true;
+          this.instantKill.backgroundColor = Color.BROWN;
+        }
+      }
+
+      if (event.type === "speed") {
+        if (this.speedUp) {
+          this.speedUp = false;
+          this.doubleSpeed.backgroundColor = Color.GRAYISH;
+        } else {
+          this.speedUp = true;
+          this.doubleSpeed.backgroundColor = Color.BROWN;
         }
       }
     }

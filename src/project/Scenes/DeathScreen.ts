@@ -5,6 +5,7 @@ import Color from "../../Wolfie2D/Utils/Color";
 import Label from "../../Wolfie2D/Nodes/UIElements/Label";
 import MainMenu from "./MainMenu";
 import Sprite from "../../Wolfie2D/Nodes/Sprites/Sprite";
+import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 
 export default class DeathScreen extends Scene{
     private bg: Sprite;
@@ -13,20 +14,24 @@ export default class DeathScreen extends Scene{
     private unlockAll: boolean;
     private instant_kill: boolean;
     private speedUp: boolean;
+    private unlockedLevels: boolean[];
 
     initScene(init: Record<string, any>): void {
       this.invincible = init.invincible;
       this.unlockAll = init.unlockAll;
       this.instant_kill = init.instant_kill;
       this.speedUp = init.speedUp;
+      this.unlockedLevels = init.unlockedLevels;
   }
 
     loadScene(): void {
         this.load.image("splash_screen", "project_assets/screens/Splash.png");
-        this.load.image("return", "project_assets/sprites/return_to_mm.png")
+        this.load.image("return", "project_assets/sprites/return_to_mm.png");
+        this.load.audio("main_menu", "project_assets/music/main_menu.mp3");
     }
 
     startScene(): void {
+    this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "main_menu", loop: true, holdReference: true});
     this.addUILayer("death");
     this.bg = this.add.sprite("splash_screen", "death");
     this.viewport.setSize(1600, 900);
@@ -62,7 +67,8 @@ export default class DeathScreen extends Scene{
                 invincible: this.invincible, 
                 unlockAll: this.unlockAll,
                 instant_kill: this.instant_kill,
-                speedUp: this.speedUp
+                speedUp: this.speedUp, 
+                unlockedLevels: this.unlockedLevels
               });
             }
           }

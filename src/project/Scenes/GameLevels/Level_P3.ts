@@ -18,6 +18,8 @@ import Weapon from "../../GameSystems/items/Weapon";
 import LeviathanAI from "../../AI/LeviathanAI";
 import MainMenu from "../MainMenu";
 import CharacterStat from "../../PlayerStatus";
+import { Project_Events } from "../../project_constants";
+import { GameEventType } from "../../../Wolfie2D/Events/GameEventType";
 
 export default class level_p3 extends GameLevel {
     private boss: CustomEnemy;
@@ -37,6 +39,8 @@ export default class level_p3 extends GameLevel {
         this.unlockAll = init.unlockAll;
         this.instant_kill = init.instant_kill;
         this.speedUp = init.speedUp;
+        this.unlockedLevels = init.unlockedLevels;
+        this.unlockedLevels[5] = true;
     }
 
     loadScene(): void {
@@ -63,10 +67,19 @@ export default class level_p3 extends GameLevel {
         this.load.image("objective", "project_assets/sprites/p3_challenge.png");
         this.load.image("end", "project_assets/sprites/p3_end.png");
 
+        //Load sound effect and music
+        this.load.audio("weapon", "project_assets/sounds/waterfall.wav");
+        this.load.audio("weaponv2", "project_assets/sounds/waterfallv2.wav");
+        this.load.audio("projectile", "project_assets/sounds/blast.wav");
+        this.load.audio("leviathan", "project_assets/music/leviathan.mp3");
+        this.load.audio("main_menu", "project_assets/music/main_menu.mp3");
+
         super.loadScene();
     }
 
     startScene(): void {
+        this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "leviathan", loop: true, holdReference: true});
+        this.levelMusic = "leviathan";
         // Add in the tilemap and get the wall layer
         let tilemapLayers = this.add.tilemap("levelP1", new Vec2(1, 1));
         this.walls = <OrthogonalTilemap>tilemapLayers[1].getItems()[0];
@@ -84,6 +97,13 @@ export default class level_p3 extends GameLevel {
         this.initLayers();
         this.initializeWeapons();
         this.initPlayer();
+
+        // update health bar
+        let percentage = this.playerStats.stats.health/this.playerStats.stats.maxHealth;
+        // scale by percentage
+        this.healthBar.size = new Vec2(percentage*256, 8);
+        // rebalance position
+        this.healthBar.position = new Vec2(196 + (percentage-1)*128,16);
         
         this.levelUI = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(86, 32), 
             text: "Lvl" + this.playerStats.level});
@@ -121,7 +141,7 @@ export default class level_p3 extends GameLevel {
             player: this.player,
             speed: 100,
             weapon: this.createWeapon("knife"),
-            range: 10,
+            range: 32,
             experience: 250,
         });
 
@@ -137,6 +157,16 @@ export default class level_p3 extends GameLevel {
 
         this.enemyConstructorPairings = new Map([["crab" , EnemyAI], ["cyclops", EnemyAI], ["octopus", RangeAI]]);
         
+         //Position the rhea statue and zone
+         this.rheaStatue = this.add.animatedSprite("rheaStatue", "primary");
+         this.rheaStatue.position = new Vec2((48*32) + 32, (5*32) + 32);
+        //  this.rheaStatue.addPhysics(new AABB(Vec2.ZERO, new Vec2(24, 40)));
+        //  this.rheaStatue.setGroup("wall");
+         this.rheaStatue.animation.play("idle");
+         
+         this.rheaStatueZone = this.add.graphic(GraphicType.RECT, "primary",{position: this.rheaStatue.position, size: new Vec2(3*32,3*32)});
+         this.rheaStatueZone.color = Color.TRANSPARENT;
+         this.rheaStatueCooldown = new Timer(30000);
 
         //Start spawning delay
         this.startSceneTimer.start();
@@ -164,7 +194,36 @@ export default class level_p3 extends GameLevel {
         if (this.playerStats === undefined) {
             // create weapon
             this.weapon = this.createWeapon("trident");
-            this.playerStats = new CharacterStat(1000, 100, 10, 2, this.weapon.cooldownTimer.getTotalTime());
+            if (this.instant_kill) this.weapon.type.damage = 1000;
+            this.playerStats = new CharacterStat(100, this.weapon.type.damage, 10, (this.speedUp) ? 15 : 2, this.weapon.cooldownTimer.getTotalTime());
+
+            //Create an enemy for players to get exp
+            let enemy = this.add.animatedSprite("crab", "primary");
+            enemy.scale.set(1,1);
+            enemy.addPhysics(new AABB(Vec2.ZERO, new Vec2(8,8))); //Monkey patched collision box, dynamic later
+            enemy.animation.play("moving");
+            enemy.position = new Vec2(this.player.position.x , this.player.position.y - 32);
+            let options = {
+                health: 1,
+                player: this.player,    
+                speed: 0,
+                weapon: this.createWeapon("knife"),
+                range: 0,
+                experience: 4500,
+                projectiles: this.createProjectiles(3 , "ink"),
+                cooldown: 1000,
+                scene: this,
+            }
+            enemy.addAI(EnemyAI, options);
+            enemy.setGroup("enemy");
+            enemy.freeze();
+            this.currentNumEnemies += 1;
+
+            if(this.battleManager.enemies === undefined){
+                this.battleManager.setEnemies([<BattlerAI>enemy._ai])
+            } else {
+                this.battleManager.enemies.push(<BattlerAI>enemy._ai);
+            }
         } else {
             this.weapon.battleManager = this.battleManager;
         }
@@ -177,7 +236,8 @@ export default class level_p3 extends GameLevel {
                 range: 30,
                 playerStats: this.playerStats,
                 weapon: this.weapon,
-                weaponV2: "waterfallv2"
+                weaponV2: "waterfallv2",
+                invincible: this.invincible
             });
         this.player.animation.play("idle");
 
@@ -264,6 +324,8 @@ export default class level_p3 extends GameLevel {
     
             if(this.bossDefeated && this.currentNumEnemies === 0) {
                 if(this.changeLevelTimer === undefined){
+                    this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "leviathan"});
+                    this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "main_menu", loop: true, holdReference: true});
                     this.changeLevelTimer = new Timer(5000);
                     this.createChallengeLabel("end");
                     this.changeLevelTimer.start();
@@ -275,7 +337,8 @@ export default class level_p3 extends GameLevel {
                         invincible: this.invincible, 
                         unlockAll: this.unlockAll,
                         instant_kill: this.instant_kill,
-                        speedUp: this.speedUp
+                        speedUp: this.speedUp, 
+                        unlockedLevels: this.unlockedLevels
                     });
                 }
             }

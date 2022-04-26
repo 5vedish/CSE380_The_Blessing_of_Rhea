@@ -23,6 +23,9 @@ import { Project_Events } from "../../project_constants";
 import GameEvent from "../../../Wolfie2D/Events/GameEvent";
 import MainMenu from "../MainMenu";
 import level_p1 from "./Level_P1";
+import { TweenableProperties } from "../../../Wolfie2D/Nodes/GameNode";
+import { EaseFunctionType } from "../../../Wolfie2D/Utils/EaseFunctions";
+import { GameEventType } from "../../../Wolfie2D/Events/GameEventType";
 
 export default class level_z3 extends GameLevel {
 
@@ -63,6 +66,13 @@ export default class level_z3 extends GameLevel {
         //Load Challenge img
         this.load.image("objective", "project_assets/sprites/z3_challenge.png");
 
+        //Load sound effect and music
+        this.load.audio("weapon", "project_assets/sounds/lightning.wav");
+        this.load.audio("weaponv2", "project_assets/sounds/lightningv2.wav");
+
+        this.load.audio("echidnaStart", "project_assets/music/echidnaStart.mp3");
+        this.load.audio("echidna", "project_assets/music/echidna.mp3");
+
         super.loadScene();
     }
     
@@ -80,10 +90,14 @@ export default class level_z3 extends GameLevel {
         this.unlockAll = init.unlockAll;
         this.instant_kill = init.instant_kill;
         this.speedUp = init.speedUp;
+        this.unlockedLevels = init.unlockedLevels;
+        this.unlockedLevels[2] = true;
     }
 
     startScene(): void {
         // Add in the tilemap and get the wall layer
+        this.levelMusic = "echidna";
+        this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "echidnaStart", loop: false, holdReference: true});
         let tilemapLayers = this.add.tilemap("levelZ3", new Vec2(1, 1));
         this.walls = <OrthogonalTilemap>tilemapLayers[1].getItems()[0];
         this.walls.setGroup("wall");
@@ -166,7 +180,7 @@ export default class level_z3 extends GameLevel {
         this.echidna.scale.set(2,2);
         let options = {
             name: "echidna",
-            health: 1,
+            health: 30,
             player: this.player,
             speed: 30,
             weapon: echidnaTailWhip,
@@ -195,6 +209,28 @@ export default class level_z3 extends GameLevel {
         } else {
             this.battleManager.enemies.push(<BattlerAI>this.echidna._ai);
         }
+
+        //Position the rhea statue and zone
+        this.rheaStatue = this.add.animatedSprite("rheaStatue", "primary");
+        this.rheaStatue.position = new Vec2(32*32, 44*32);
+        this.rheaStatue.animation.play("idle");
+
+        this.rheaStatue.tweens.add("fadeOut", {
+                startDelay: 0,
+                duration: 3000,
+                effects: [
+                    {
+                        property: TweenableProperties.alpha,
+                        start: 1,
+                        end: 0,
+                        ease: EaseFunctionType.OUT_SINE
+                    }
+                ],
+        })
+
+        this.rheaStatueZone = this.add.graphic(GraphicType.RECT, "primary",{position: new Vec2(32*32, 44*32), size: new Vec2(6*32,6*32)});
+        this.rheaStatueZone.color = Color.TRANSPARENT;
+
         this.startSceneTimer.start();
 
         
@@ -233,54 +269,8 @@ export default class level_z3 extends GameLevel {
                     }
                 }
                 break;
-        }
-    }
-
-    updateScene(deltaT: number): void {
-        super.updateScene(deltaT);
-
-        if(this.bossDefeated && this.currentNumEnemies === 0) {
-            if(this.changeLevelTimer === undefined){
-                this.changeLevelTimer = new Timer(5000);
-                this.createChallengeLabel("end");
-                this.changeLevelTimer.start();
-            }
-            
-            if(this.changeLevelTimer.getTimeLeft() <= 0){
-                this.viewport.setSize(1600, 900);
-                this.sceneManager.changeToScene(level_p1, {
-                    invincible: this.invincible, 
-                    unlockAll: this.unlockAll,
-                    instant_kill: this.instant_kill,
-                    speedUp: this.speedUp
-                });
             }
         }
-
-        while(this.bossReceiver.hasNextEvent()){
-            this.handleEvent(this.bossReceiver.getNextEvent());
-        }
-        // Spawn enemies in
-        if(this.startSceneTimer.isStopped()){
-            if(!this.startedLevel){
-                this.player.unfreeze();
-                this.player.setAIActive(true, {});
-                this.startedLevel = true;
-            }
-        }
-
-        if(this.player.position.y < 34*32 && !this.fightStarted){
-            this.fightStarted = true;
-            this.echidna.unfreeze();
-            this.echidna.setAIActive(true, {});
-        }
-
-        //Update boss health bar
-        if(this.echidna._ai !== undefined){
-            let bossPercentage = (<EchidnaAI>this.echidna._ai).health/(<EchidnaAI>this.echidna._ai).maxHealth;
-            this.bossHealthBar.size = new Vec2(600*bossPercentage, 16);
-        }
-    }
 
     protected initPlayer() : void {
         this.player = this.add.animatedSprite("zeus", "primary");
@@ -295,7 +285,35 @@ export default class level_z3 extends GameLevel {
         if (this.playerStats === undefined) {
             // create weapon
             this.weapon = this.createWeapon("lightning");
-            this.playerStats = new CharacterStat(100, 100, 10, 2, this.weapon.cooldownTimer.getTotalTime());
+            if (this.instant_kill) this.weapon.type.damage = 1000;
+            this.playerStats = new CharacterStat(100, 100, 10, (this.speedUp) ? 15 : 2, this.weapon.cooldownTimer.getTotalTime());
+            //Create an enemy for players to get exp
+            let enemy = this.add.animatedSprite("snake", "primary");
+            enemy.scale.set(1,1);
+            enemy.addPhysics(new AABB(Vec2.ZERO, new Vec2(8,8))); //Monkey patched collision box, dynamic later
+            enemy.animation.play("moving");
+            enemy.position = new Vec2(this.player.position.x , this.player.position.y - 32);
+            let options = {
+                health: 1,
+                player: this.player,    
+                speed: 0,
+                weapon: this.createWeapon("knife"),
+                range: 0,
+                experience: 4500,
+                projectiles: this.createProjectiles(3 , "feather"),
+                cooldown: 1000,
+                scene: this,
+            }
+            enemy.addAI(EnemyAI, options);
+            enemy.setGroup("enemy");
+            enemy.freeze();
+            this.currentNumEnemies += 1;
+
+            if(this.battleManager.enemies === undefined){
+                this.battleManager.setEnemies([<BattlerAI>enemy._ai])
+            } else {
+                this.battleManager.enemies.push(<BattlerAI>enemy._ai);
+            }
         } else {
             this.weapon.battleManager = this.battleManager;
         }
@@ -308,7 +326,8 @@ export default class level_z3 extends GameLevel {
                 range: 30,
                 playerStats: this.playerStats,
                 weapon: this.weapon,
-                weaponV2: "lightningv2"
+                weaponV2: "lightningv2",
+                invincible: this.invincible
             });
         this.player.animation.play("idle");
 
@@ -330,5 +349,64 @@ export default class level_z3 extends GameLevel {
         // Add the primary layer for players and enemies
         this.addLayer("primary", 10);
     }
+
+    updateScene(deltaT: number): void {
+        super.updateScene(deltaT);
+
+        //Rhea statue
+        if(!this.rheaStatueUsed){
+            if (this.rheaStatueZone.boundary.overlapArea(this.player.boundary) && this.playerStats.stats.health < this.playerStats.stats.maxHealth) {
+                this.rheaStatueUsed = true; 
+                this.rheaStatue.tweens.play("fadeOut");                      
+            } 
+        }
+
+        if(this.bossDefeated && this.currentNumEnemies === 0) {
+            if(this.changeLevelTimer === undefined){
+                this.changeLevelTimer = new Timer(5000);
+                this.createChallengeLabel("end");
+                this.changeLevelTimer.start();
+            }
+            
+            if(this.changeLevelTimer.getTimeLeft() <= 0){
+                this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "echidna"});
+                this.viewport.setSize(1600, 900);
+                this.sceneManager.changeToScene(level_p1, {
+                    invincible: this.invincible, 
+                    unlockAll: this.unlockAll,
+                    instant_kill: this.instant_kill,
+                    speedUp: this.speedUp, 
+                    unlockedLevels: this.unlockedLevels
+                });
+            }
+        }
+
+        while(this.bossReceiver.hasNextEvent()){
+            this.handleEvent(this.bossReceiver.getNextEvent());
+        }
+        // Spawn enemies in
+        if(this.startSceneTimer.isStopped()){
+            if(!this.startedLevel){
+                this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "echidnaStart"});
+                this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "echidna", loop: true, holdReference: true});
+                this.player.unfreeze();
+                this.player.setAIActive(true, {});
+                this.startedLevel = true;
+            }
+        }
+
+        if(this.player.position.y < 34*32 && !this.fightStarted){
+            this.fightStarted = true;
+            this.echidna.unfreeze();
+            this.echidna.setAIActive(true, {});
+        }
+
+        //Update boss health bar
+        if(this.echidna._ai !== undefined){
+            let bossPercentage = (<EchidnaAI>this.echidna._ai).health/(<EchidnaAI>this.echidna._ai).maxHealth;
+            this.bossHealthBar.size = new Vec2(600*bossPercentage, 16);
+        }
+    }
+
 
 }

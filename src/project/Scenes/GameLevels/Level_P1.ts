@@ -18,6 +18,8 @@ import { TweenableProperties } from "../../../Wolfie2D/Nodes/GameNode";
 import { EaseFunctionType } from "../../../Wolfie2D/Utils/EaseFunctions";
 import Sprite from "../../../Wolfie2D/Nodes/Sprites/Sprite";
 import level_p2 from "./Level_P2";
+import { Project_Events } from "../../project_constants";
+import { GameEventType } from "../../../Wolfie2D/Events/GameEventType";
 
 export default class level_p1 extends GameLevel {
     private prep: boolean = false;
@@ -29,6 +31,8 @@ export default class level_p1 extends GameLevel {
         this.unlockAll = init.unlockAll;
         this.instant_kill = init.instant_kill;
         this.speedUp = init.speedUp;
+        this.unlockedLevels = init.unlockedLevels;
+        this.unlockedLevels[3] = true;
     }
 
     loadScene(): void {
@@ -55,10 +59,18 @@ export default class level_p1 extends GameLevel {
         this.load.image("wave_three", "project_assets/sprites/p1_wave3.png");
         this.load.image("end", "project_assets/sprites/p1_end.png");
 
+        //Load sound effect and music
+        this.load.audio("weapon", "project_assets/sounds/waterfall.wav");
+        this.load.audio("weaponv2", "project_assets/sounds/waterfallv2.wav");
+        this.load.audio("projectile", "project_assets/sounds/blast.wav");
+        this.load.audio("poseidon", "project_assets/music/poseidon.mp3");
+
         super.loadScene();
     }
 
     startScene(): void {
+        this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "poseidon", loop: true, holdReference: true});
+        this.levelMusic = "poseidon";
         // Add in the tilemap and get the wall layer
         let tilemapLayers = this.add.tilemap("levelP1", new Vec2(1, 1));
         this.walls = <OrthogonalTilemap>tilemapLayers[1].getItems()[0];
@@ -71,7 +83,7 @@ export default class level_p1 extends GameLevel {
         // this.viewport.setFocus(new Vec2(this.playerSpawn.x, this.playerSpawn.y));
         
         
-        this.maxEnemies = 1;
+        this.maxEnemies = 12;
         
         super.startScene();
         this.initLayers();
@@ -108,7 +120,7 @@ export default class level_p1 extends GameLevel {
             player: this.player,
             speed: 100,
             weapon: this.createWeapon("knife"),
-            range: 10,
+            range: 32,
             experience: 250,
         });
 
@@ -124,7 +136,17 @@ export default class level_p1 extends GameLevel {
 
         this.enemyConstructorPairings = new Map([["crab" , EnemyAI], ["cyclops", EnemyAI], ["octopus", RangeAI]]);
         
-
+        //Position the rhea statue and zone
+        this.rheaStatue = this.add.animatedSprite("rheaStatue", "primary");
+        this.rheaStatue.position = new Vec2((29*32) + 32, (4*32) + 32);
+        // this.rheaStatue.addPhysics(new AABB(Vec2.ZERO, new Vec2(24, 20)));
+        // this.rheaStatue.setGroup("wall");
+        this.rheaStatue.animation.play("idle");
+        
+        this.rheaStatueZone = this.add.graphic(GraphicType.RECT, "primary",{position: this.rheaStatue.position, size: new Vec2(3*32,3*32)});
+        this.rheaStatueZone.color = Color.TRANSPARENT;
+        this.rheaStatueCooldown = new Timer(30000);
+        
         //Start spawning delay
         this.startSceneTimer.start();
     }
@@ -150,8 +172,9 @@ export default class level_p1 extends GameLevel {
 
         // create weapon
         let weapon = this.createWeapon("trident");
+        if (this.instant_kill) weapon.type.damage = 1000;
         
-        this.playerStats = new CharacterStat(1000, 100, 10, 2, weapon.cooldownTimer.getTotalTime());
+        this.playerStats = new CharacterStat(100, weapon.type.damage, 10,(this.speedUp) ? 15 :  2, weapon.cooldownTimer.getTotalTime());
         // TODO - ADD PLAYER AI HERE
         this.player.addAI(PlayerController,
             {
@@ -161,7 +184,8 @@ export default class level_p1 extends GameLevel {
                 range: 30,
                 playerStats: this.playerStats,
                 weapon: weapon,
-                weaponV2: "waterfallv2"
+                weaponV2: "waterfallv2",
+                invincible: this.invincible
             });
         this.player.animation.play("idle");
 
@@ -247,6 +271,7 @@ export default class level_p1 extends GameLevel {
                 }
 
                 if(this.changeLevelTimer.getTimeLeft() <= 0){
+                    this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "poseidon"});
                     this.viewport.setSize(1600, 900);
                     this.sceneManager.changeToScene(level_p2, {
                         characterStats: this.playerStats, 
@@ -254,7 +279,8 @@ export default class level_p1 extends GameLevel {
                         invincible: this.invincible, 
                         unlockAll: this.unlockAll,
                         instant_kill: this.instant_kill,
-                        speedUp: this.speedUp
+                        speedUp: this.speedUp, 
+                        unlockedLevels: this.unlockedLevels
                     }, this.sceneOptions);
                 }
             }

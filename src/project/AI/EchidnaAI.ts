@@ -14,6 +14,7 @@ import EnemyAI, { EnemyStates } from "./EnemyAI";
 import { EaseFunctionType } from "../../Wolfie2D/Utils/EaseFunctions";
 import Timer from "../../Wolfie2D/Timing/Timer";
 import ProjectileAI from "./ProjectileAI";
+import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 
 export default class EchidnaAI extends EnemyAI {
 
@@ -24,6 +25,8 @@ export default class EchidnaAI extends EnemyAI {
     protected minionsCooldown: Timer = new Timer(3000);
 
     protected venomRange: number;
+
+    protected bossDead: boolean = false;
 
     initializeAI(owner: AnimatedSprite, options: Record<string, any>): void {
         super.initializeAI(owner, options);
@@ -68,12 +71,17 @@ export default class EchidnaAI extends EnemyAI {
     }
 
     damage(damage: number): void {
-        this.health -= damage;
+        if(this.health - damage <= 0){
+            this.health = 0;
+        } else {
+            this.health -= damage;
+        }
         this.owner.animation.play("damage");
         this.owner.animation.queue("moving", true);
 
-        if(this.health <= 0){
+        if(this.health <= 0 && !this.bossDead){
             this.owner.tweens.play("death");
+            this.bossDead = true;
         }
     }
 
@@ -104,6 +112,7 @@ export default class EchidnaAI extends EnemyAI {
                     (<ProjectileAI> projectile._ai).setAngle(angelRight);
                 }
                 projectile.setAIActive(true, {speed: 4});
+                this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "shoot", loop: false, holdReference: false});
                 projectile.visible = true;
 
             }
@@ -117,17 +126,6 @@ export default class EchidnaAI extends EnemyAI {
             this.minionsCooldown.start();
         }
 
-    }
-
-    destroy(): void {
-        for(let p of this.projectiles){
-            if(this.scene.getSceneGraph().getNode(p.id) === undefined){
-                continue;
-            } else {
-                p.destroy();
-            }
-        }
-        super.destroy();
     }
 
     distanceToPlayer(): number{

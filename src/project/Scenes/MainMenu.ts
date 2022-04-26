@@ -13,7 +13,7 @@ import Level_Z1_Cutscene from "./Cutscenes/Level_Z1_Cutscene";
 import Tutorial from "./Tutorial";
 import level_z2 from "./GameLevels/Level_Z2";
 import CharacterStat from "../PlayerStatus";
-import level_h1 from "./GameLevels/Level_H1";
+import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 
 export default class MainMenu extends Scene {
   private splashScreen: Layer;
@@ -32,12 +32,14 @@ export default class MainMenu extends Scene {
   private unlockAll: boolean;
   private instant_kill: boolean;
   private speedUp: boolean;
+  private unlockedLevels: boolean[];
 
   initScene(init: Record<string, any>): void {
     this.invincible = init.invincible;
     this.unlockAll = init.unlockAll;
     this.instant_kill = init.instant_kill;
     this.speedUp = init.speedUp;
+    this.unlockedLevels = init.unlockedLevels;
   }
 
   loadScene() {
@@ -47,9 +49,16 @@ export default class MainMenu extends Scene {
     this.load.image("select", "project_assets/sprites/select.png");
     this.load.image("controls", "project_assets/sprites/controls.png");
     this.load.image("help", "project_assets/sprites/help.png");
+    this.load.audio("click", "project_assets/sounds/click.wav");
   }
-
+  
   startScene() {
+    // Came from splash screen
+    if (this.unlockedLevels === undefined) {
+      this.unlockedLevels = [true, false, false, false, false, false, false, false, false];
+    }
+
+    this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "click", loop: false, holdReference: false});
     const origin = new Vec2(192, 64);
     this.flash = new Timer(1000, null, true);
     this.flash.start(); 
@@ -175,11 +184,13 @@ export default class MainMenu extends Scene {
           invincible: this.invincible, 
           unlockAll: this.unlockAll,
           instant_kill: this.instant_kill,
-          speedUp: this.speedUp
+          speedUp: this.speedUp, 
+          unlockedLevels: this.unlockedLevels
       }
 
       /* TODO - CHANGE TO SPECIFIED SCENE */
       if (event.type === "play") {
+        
         let physicsOptions = {
             physics: {
                 groupNames: ["wall", "player", "enemy", "projectile"],
@@ -193,8 +204,10 @@ export default class MainMenu extends Scene {
             }
         }
         //TO DO replace with tutorial stage
+        this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "main_menu"});
         // this.sceneManager.changeToScene(Level_Z1_Cutscene, options, physicsOptions);
-        this.sceneManager.changeToScene(level_h1, options, physicsOptions);
+        this.sceneManager.changeToScene(level_z1, options, physicsOptions);
+
       }
 
       if (event.type === "select_levels") {

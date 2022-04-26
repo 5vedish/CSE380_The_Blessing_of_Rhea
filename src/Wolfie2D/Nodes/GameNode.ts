@@ -89,6 +89,7 @@ export default abstract class GameNode implements Positioned, Unique, Updateable
 	}
 
 	destroy(){
+		console.log(this.id);
 		this.tweens.destroy();
 		this.receiver.destroy();
 

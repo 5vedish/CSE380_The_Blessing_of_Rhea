@@ -16,6 +16,7 @@ import Timer from "../../../Wolfie2D/Timing/Timer";
 import Weapon from "../../GameSystems/items/Weapon";
 import Lightning from "../../GameSystems/items/WeaponTypes/Primary/Lightning";
 import level_z3 from "./Level_Z3";
+import { GameEventType } from "../../../Wolfie2D/Events/GameEventType";
 
 export default class level_z2 extends GameLevel {
 
@@ -50,6 +51,11 @@ export default class level_z2 extends GameLevel {
         this.load.image("wave_two", "project_assets/sprites/z2_wave2.png");
         this.load.image("wave_three", "project_assets/sprites/z2_wave3.png");
 
+        //Load sound effect and music
+        this.load.audio("weapon", "project_assets/sounds/lightning.wav");
+        this.load.audio("weaponv2", "project_assets/sounds/lightningv2.wav");
+        this.load.audio("zeus", "project_assets/music/zeus.mp3");
+
         super.loadScene();
     }
 
@@ -66,10 +72,14 @@ export default class level_z2 extends GameLevel {
         this.unlockAll = init.unlockAll;
         this.instant_kill = init.instant_kill;
         this.speedUp = init.speedUp;
+        this.unlockedLevels = init.unlockedLevels;
+        this.unlockedLevels[1] = true;
     }
     
     startScene(): void {
         // Add in the tilemap and get the wall layer
+        this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "zeus", loop: true, holdReference: true});
+        this.levelMusic = "zeus";
         let tilemapLayers = this.add.tilemap("levelZ2", new Vec2(1, 1));
         this.walls = <OrthogonalTilemap>tilemapLayers[1].getItems()[0];
         this.walls.setGroup("wall");
@@ -145,6 +155,13 @@ export default class level_z2 extends GameLevel {
             range: 20,
             experience: 320,
         });
+        //Position the rhea statue and zone
+        this.rheaStatue = this.add.animatedSprite("rheaStatue", "primary");
+        this.rheaStatue.position = new Vec2(35*32, 20*32);
+        this.rheaStatue.animation.play("idle");
+
+        this.rheaStatueZone = this.add.graphic(GraphicType.RECT, "primary",{position: new Vec2(35*32, 20*32), size: new Vec2(6*32,6*32)});
+        this.rheaStatueZone.color = Color.TRANSPARENT;
         
         this.startSceneTimer.start();
     }
@@ -220,12 +237,14 @@ export default class level_z2 extends GameLevel {
 
                 if(this.changeLevelTimer.getTimeLeft() <= 0){
                     this.viewport.setSize(1600, 900);
+                    this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "zeus"});
                     this.sceneManager.changeToScene(level_z3, {characterStats: this.playerStats, 
                         weapon: (<PlayerController>this.player._ai).weapon,
                         invincible: this.invincible, 
                         unlockAll: this.unlockAll,
                         instant_kill: this.instant_kill,
-                        speedUp: this.speedUp
+                        speedUp: this.speedUp, 
+                        unlockedLevels: this.unlockedLevels
                     }, this.sceneOptions);
                 }
             }
@@ -245,7 +264,35 @@ export default class level_z2 extends GameLevel {
         if (this.playerStats === undefined) {
             // create weapon
             this.weapon = this.createWeapon("lightning");
-            this.playerStats = new CharacterStat(100, 100, 10, 2, this.weapon.cooldownTimer.getTotalTime());
+            if (this.instant_kill) this.weapon.type.damage = 1000;
+            this.playerStats = new CharacterStat(100, 100, 10, (this.speedUp) ? 15 : 2, this.weapon.cooldownTimer.getTotalTime());
+            //Create an enemy for players to get exp
+            let enemy = this.add.animatedSprite("snake", "primary");
+            enemy.scale.set(1,1);
+            enemy.addPhysics(new AABB(Vec2.ZERO, new Vec2(8,8))); //Monkey patched collision box, dynamic later
+            enemy.animation.play("moving");
+            enemy.position = new Vec2(this.player.position.x , this.player.position.y - 32);
+            let options = {
+                health: 1,
+                player: this.player,    
+                speed: 0,
+                weapon: this.createWeapon("knife"),
+                range: 0,
+                experience: 3000,
+                projectiles: this.createProjectiles(3 , "feather"),
+                cooldown: 1000,
+                scene: this,
+            }
+            enemy.addAI(EnemyAI, options);
+            enemy.setGroup("enemy");
+            enemy.freeze();
+            this.currentNumEnemies += 1;
+
+            if(this.battleManager.enemies === undefined){
+                this.battleManager.setEnemies([<BattlerAI>enemy._ai])
+            } else {
+                this.battleManager.enemies.push(<BattlerAI>enemy._ai);
+            }
         } else {
             this.weapon.battleManager = this.battleManager;
         }
@@ -259,7 +306,8 @@ export default class level_z2 extends GameLevel {
                 range: 30,
                 playerStats: this.playerStats,
                 weapon: this.weapon,
-                weaponV2: "lightningv2"
+                weaponV2: "lightningv2",
+                invincible: this.invincible
             });
         this.player.animation.play("idle");
 

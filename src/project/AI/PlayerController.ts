@@ -13,6 +13,7 @@ import CharacterStat from "../PlayerStatus";
 import Emitter from "../../Wolfie2D/Events/Emitter";
 import { Project_Events } from "../project_constants";
 import Sprite from "../../Wolfie2D/Nodes/Sprites/Sprite";
+import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 
 
 export default class PlayerController extends StateMachineAI implements BattlerAI {
@@ -56,6 +57,7 @@ export default class PlayerController extends StateMachineAI implements BattlerA
 
     protected flipSprite: boolean;
 
+    protected invincible: boolean = false;
 
     initializeAI(owner: AnimatedSprite, options: Record<string, any>): void {
         this.owner = owner;
@@ -67,6 +69,7 @@ export default class PlayerController extends StateMachineAI implements BattlerA
         this.playerStats = options.playerStats;
         this.weapon = options.weapon;
         this.weaponV2 = options.weaponV2;
+        this.invincible = options.invincible;
 
         this.items = options.items;
         this.inventory = options.inventory;
@@ -88,7 +91,7 @@ export default class PlayerController extends StateMachineAI implements BattlerA
                     break;
             case Project_Events.LEVELUP:
                 //check if leveled up
-                if(this.playerStats.level === 2){
+                if(this.playerStats.level >= 2 && !this.weapon.type.spriteKey.includes("v2")) {
                     this.weapon.type.spriteKey = this.weaponV2;
                 }
             
@@ -133,11 +136,13 @@ export default class PlayerController extends StateMachineAI implements BattlerA
     }
 
     damage(damage: number): void {
-        this.health -= damage;
-        this.playerStats.editHealth(damage * -1);
-        this.owner.animation.play("damage");
-        
-        this.emitter.fireEvent(Project_Events.HEALTHCHANGED);
+        if(!this.invincible){
+            this.health -= damage;
+            this.playerStats.editHealth(damage * -1);
+            this.owner.animation.play("damage");
+            
+            this.emitter.fireEvent(Project_Events.HEALTHCHANGED);
+        }
     }
 
     destroy() {

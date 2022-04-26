@@ -10,6 +10,7 @@ import Attack from "./EnemyStates/Attack";
 import { Project_Events } from "../project_constants";
 import Emitter from "../../Wolfie2D/Events/Emitter";
 import Scene from "../../Wolfie2D/Scene/Scene";
+import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 
 
 
@@ -79,6 +80,7 @@ export default class EnemyAI extends StateMachineGoapAI implements BattlerAI {
         this.owner.animation.play("damage");
         this.owner.animation.queue("moving", true);
         // If health goes below 0, disable AI and fire enemyDied event
+        this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "enemyDamaged", loop: false, holdReference: false});
         if (this.health <= 0) {
             this.owner.setAIActive(false, {});
             this.owner.isCollidable = false;

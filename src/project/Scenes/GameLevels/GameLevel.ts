@@ -39,6 +39,12 @@ import Bolt2 from "../../GameSystems/items/Upgrades/Bolt2";
 import Goblet2 from "../../GameSystems/items/Upgrades/Goblet2";
 import Aegis2 from "../../GameSystems/items/Upgrades/Aegis2";
 import HermesSandals3 from "../../GameSystems/items/Upgrades/HermesSandals3";
+import { GameEventType } from "../../../Wolfie2D/Events/GameEventType";
+import Aegis1 from "../../GameSystems/items/Upgrades/Aegis1";
+import Goblet1 from "../../GameSystems/items/Upgrades/Goblet1";
+import Bolt1 from "../../GameSystems/items/Upgrades/Bolt1";
+import HermesSandals1 from "../../GameSystems/items/Upgrades/HermesSandals1";
+import Hourglass1 from "../../GameSystems/items/Upgrades/Hourglass1";
 import HadesController from "../../AI/HadesController";
 import FireballAI from "../../AI/FireballAI";
 
@@ -61,7 +67,7 @@ export default class GameLevel extends Scene{
     protected startedLevel: boolean = false;
     protected gameTimer: Timer;
     protected gameTime: Label;
-    protected changeLevelTimer: Timer;
+    protected changeLevelTimer: Timer = new Timer(5000);
 
     //Each level has a timer
     protected levelTimer: Timer;
@@ -98,18 +104,25 @@ export default class GameLevel extends Scene{
     protected item2: Sprite;
     protected item3: Sprite;
 
+    protected playerDied: boolean = false;
+
     //Rhea statue
     protected rheaStatue: AnimatedSprite;
     protected rheaStatueCooldown: Timer = new Timer(5000);
     protected rheaStatueZone: Graphic;
-    protected rheaStatueHeal: number = 10;
+    protected rheaStatueHeal: number = 25;
+    protected rheaStatueUsed: boolean = false;
+
+    protected levelMusic: string;
 
     // items
     protected itemsArray = ["honey_jar", 
+        "hourglass_1", "hermes_sandals_1", "bolt_1", "goblet_of_dionysus_1", "aegis_1",
         "hourglass_2", "hermes_sandals_2", "bolt_2", "goblet_of_dionysus_2", "aegis_2", 
         "hourglass_3", "hermes_sandals_3", "bolt_3", "goblet_of_dionysus_3", "aegis_3"];
     protected selectionArray: Array<string> = [];
     protected itemConstructorPairings: Map<string,any> = new Map([["honey_jar", HoneyJar],
+        ["hourglass_1" , Hourglass1], ["hermes_sandals_1", HermesSandals1], ["bolt_1", Bolt1], ["goblet_of_dionysus_1", Goblet1], ["aegis_1", Aegis1],
         ["hourglass_2" , Hourglass2], ["hermes_sandals_2", HermesSandals2], ["bolt_2", Bolt2], ["goblet_of_dionysus_2", Goblet2], ["aegis_2", Aegis2],
         ["hourglass_3" , Hourglass3], ["hermes_sandals_3", HermesSandals3], ["bolt_3", Bolt], ["goblet_of_dionysus_3", Goblet3], ["aegis_3", Aegis3]
     ]);
@@ -130,6 +143,7 @@ export default class GameLevel extends Scene{
     protected unlockAll: boolean;
     protected instant_kill: boolean;
     protected speedUp: boolean;
+    protected unlockedLevels: boolean[];
 
     loadScene(): void {
         // Objects
@@ -147,6 +161,12 @@ export default class GameLevel extends Scene{
         // Import upgrade icons
         this.load.image("honey_jar", "project_assets/sprites/honeyJar.png");
 
+        this.load.image("aegis_1", "project_assets/sprites/aegis_1.png");
+        this.load.image("bolt_1", "project_assets/sprites/bolt_1.png");
+        this.load.image("goblet_of_dionysus_1", "project_assets/sprites/goblet_1.png");
+        this.load.image("hermes_sandals_1", "project_assets/sprites/hermes_sandals_1.png");
+        this.load.image("hourglass_1", "project_assets/sprites/hourglass_1.png");
+
         this.load.image("aegis_2", "project_assets/sprites/aegis_2.png");
         this.load.image("bolt_2", "project_assets/sprites/bolt_2.png");
         this.load.image("goblet_of_dionysus_2", "project_assets/sprites/goblet_2.png");
@@ -160,8 +180,14 @@ export default class GameLevel extends Scene{
         this.load.image("goblet_of_dionysus_3", "project_assets/sprites/goblet_3.png");
         this.load.image("hermes_sandals_3", "project_assets/sprites/hermes_sandals_3.png");
         this.load.image("hourglass_3", "project_assets/sprites/hourglass_3.png");
+
+        //Load sound effect and music
+        this.load.audio("enemyDamaged", "project_assets/sounds/enemyDamage.wav");
+        this.load.audio("levelup", "project_assets/sounds/levelup.wav");
+        this.load.audio("death", "project_assets/sounds/death.wav");
+        this.load.audio("heal", "project_assets/sounds/heal.wav");
+        this.load.audio("shoot", "project_assets/sounds/shoot.wav")
     }
-    
     
     
     startScene(): void {
@@ -377,6 +403,18 @@ export default class GameLevel extends Scene{
                            
             }
         }    
+
+        //Rhea statue
+        if(this.rheaStatueCooldown.isStopped() && !this.rheaStatueUsed){
+            if (this.rheaStatueZone.boundary.overlapArea(this.player.boundary) && this.playerStats.stats.health < this.playerStats.stats.maxHealth) {
+                this.rheaStatue.animation.play("heal");
+                this.rheaStatue.animation.queue("used");
+                this.playerStats.editHealth(this.rheaStatueHeal);
+                this.emitter.fireEvent(Project_Events.HEALTHCHANGED);
+                this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "heal", loop: false, holdReference: false});
+                this.rheaStatueCooldown.start();
+            } else this.rheaStatue.animation.playIfNotAlready("idle");
+        }
         
         //Update the weapon cooldown icon *** Hades will use a different timer ***
         let timer = this.playerController.weapon === null ? (<HadesController> this.playerController).attackCooldown : this.playerController.weapon.cooldownTimer;
@@ -397,15 +435,61 @@ export default class GameLevel extends Scene{
 
         //Check if player died
         if(this.playerStats.stats.health <= 0){
-            this.viewport.setSize(1600, 900);
-            this.healthBar.destroy();
-            this.expBar.destroy();
-            this.sceneManager.changeToScene(DeathScreen, {
-                invincible: this.invincible, 
-                unlockAll: this.unlockAll,
-                instant_kill: this.instant_kill,
-                speedUp: this.speedUp
-            });
+            if(this.changeLevelTimer.isStopped() && !this.playerDied) {
+                this.changeLevelTimer.start();
+                this.playerDied = true;
+                this.pauseEntities();
+                this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "death", loop: false, holdReference: false});
+                this.player.tweens.add("flyup", {
+                    startDelay: 0,
+                    duration: 2000,
+                    effects: [
+                        {
+                            property: TweenableProperties.posY,
+                            start: this.player.position.y,
+                            end: this.player.position.y-64,
+                            ease: EaseFunctionType.OUT_SINE
+                        }, 
+                    ],
+                });
+                this.player.tweens.add("spin", {
+                    startDelay: 2000,
+                    duration: 2500,
+                    effects: [
+                        {
+                            property: TweenableProperties.alpha,
+                            start: 1,
+                            end: 0,
+                            ease: EaseFunctionType.OUT_SINE
+                        },
+                        {
+                            property: "rotation",
+                            resetOnComplete: false,
+                            start: 0,
+                            end: 16*Math.PI,
+                            ease: EaseFunctionType.IN_OUT_QUAD
+                        }
+
+                    ]
+                });
+                this.player.tweens.play("flyup");
+                this.player.tweens.play("spin");
+
+            }
+            
+            if(this.changeLevelTimer.getTimeLeft() <= 0) {
+                this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: this.levelMusic});
+                this.viewport.setSize(1600, 900);
+                this.healthBar.destroy();
+                this.expBar.destroy();
+                this.sceneManager.changeToScene(DeathScreen, {
+                    invincible: this.invincible, 
+                    unlockAll: this.unlockAll,
+                    instant_kill: this.instant_kill,
+                    speedUp: this.speedUp,
+                    unlockedLevels: this.unlockedLevels
+                });
+            }
         }
     }
 
@@ -423,6 +507,10 @@ export default class GameLevel extends Scene{
 
         if(this.gameTimer != undefined){
             this.gameTimer.pause();
+        }
+
+        if(this.rheaStatueCooldown != undefined) {
+            this.rheaStatueCooldown.pause();
         }
         this.emitter.fireEvent(Project_Events.GAMEPAUSE);
     }
@@ -442,6 +530,10 @@ export default class GameLevel extends Scene{
 
         if(this.gameTimer != undefined){
             this.gameTimer.unpause();
+        }
+
+        if(this.rheaStatueCooldown != undefined) {
+            this.rheaStatueCooldown.unpause();
         }
         this.emitter.fireEvent(Project_Events.GAMEUNPAUSE);
     }
@@ -547,12 +639,13 @@ export default class GameLevel extends Scene{
             // Check direction of projectile before playing animation
             projectiles[i].animation.playIfNotAlready("shoot", true);
             projectiles[i].setGroup("projectile");
+            console.log("PROJECTILE ID: " + projectiles[i].id);
         }
         return projectiles;
     }
 
     protected rollItems() : void{
-
+        this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "levelup", loop: false, holdReference: false});
         this.selectionArray = [];
         while (this.selectionArray.length < 3){
             this.selectionArray.push(this.itemsArray[Math.floor(Math.random() * this.itemsArray.length)]);

@@ -7,6 +7,7 @@ import Label from "../../Wolfie2D/Nodes/UIElements/Label";
 import MainMenu from "./MainMenu";
 import Sprite from "../../Wolfie2D/Nodes/Sprites/Sprite";
 import Tutorial from "./Tutorial";
+import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 
 export default class ControlScreen extends Scene {
   private splashScreen: Layer;
@@ -17,19 +18,23 @@ export default class ControlScreen extends Scene {
   private unlockAll: boolean;
   private instant_kill: boolean;
   private speedUp: boolean;
+  private unlockedLevels: boolean[];
 
   initScene(init: Record<string, any>): void {
     this.invincible = init.invincible;
     this.unlockAll = init.unlockAll;
     this.instant_kill = init.instant_kill;
     this.speedUp = init.speedUp;
+    this.unlockedLevels = init.unlockedLevels;
   }
 
   loadScene() {
     this.load.image("splash_screen", "project_assets/screens/Splash.png");
+    this.load.audio("click", "project_assets/sounds/click.wav");
   }
 
   startScene() {
+    this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "click", loop: false, holdReference: false});
     // add splash (filler)
     this.splashScreen = this.addUILayer("splashScreen");
     this.bg = this.add.sprite("splash_screen", "splashScreen");
@@ -128,8 +133,9 @@ export default class ControlScreen extends Scene {
         invincible: this.invincible, 
         unlockAll: this.unlockAll,
         instant_kill: this.instant_kill,
-        speedUp: this.speedUp
-      }
+        speedUp: this.speedUp, 
+        unlockedLevels: this.unlockedLevels
+    }
 
       if (event.type === "back") {
         this.sceneManager.changeToScene(MainMenu, options);

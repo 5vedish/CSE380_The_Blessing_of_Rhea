@@ -18,6 +18,7 @@ import Graphic from "../../../Wolfie2D/Nodes/Graphic";
 import { TweenableProperties } from "../../../Wolfie2D/Nodes/GameNode";
 import { EaseFunctionType } from "../../../Wolfie2D/Utils/EaseFunctions";
 import Sprite from "../../../Wolfie2D/Nodes/Sprites/Sprite";
+import { GameEventType } from "../../../Wolfie2D/Events/GameEventType";
 
 export default class level_z1 extends GameLevel {
 
@@ -46,6 +47,11 @@ export default class level_z1 extends GameLevel {
         //Load Challenge img
         this.load.image("objective", "project_assets/sprites/z1_challenge.png");
 
+        //Load sound effect and music
+        this.load.audio("weapon", "project_assets/sounds/lightning.wav");
+        this.load.audio("weaponv2", "project_assets/sounds/lightningv2.wav");
+        this.load.audio("zeus", "project_assets/music/zeus.mp3");
+
         super.loadScene();
     }
 
@@ -54,10 +60,13 @@ export default class level_z1 extends GameLevel {
         this.unlockAll = init.unlockAll;
         this.instant_kill = init.instant_kill;
         this.speedUp = init.speedUp;
+        this.unlockedLevels = init.unlockedLevels;
     }
 
     startScene(): void {
         // Add in the tilemap and get the wall layer
+        this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "zeus", loop: true, holdReference: true});
+        this.levelMusic = "zeus";
         let tilemapLayers = this.add.tilemap("levelZ1", new Vec2(1, 1));
         this.walls = <OrthogonalTilemap>tilemapLayers[1].getItems()[0];
         this.walls.setGroup("wall");
@@ -77,7 +86,7 @@ export default class level_z1 extends GameLevel {
         this.initPlayer();
         
         //Create how long players need to survive for
-        this.gameTimer = new Timer(120000);
+        this.gameTimer = new Timer(1000);
         this.gameTime = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(this.viewport.getHalfSize().x, 20), text: `${this.parseTimeLeft(this.gameTimer.getTotalTime())}`});
     
         this.levelUI = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(86, 32), 
@@ -101,7 +110,13 @@ export default class level_z1 extends GameLevel {
         });
 
         this.enemyConstructorPairings = new Map([["snake" , EnemyAI], ["harpy", RangeAI]]);
-        
+        //Position the rhea statue and zone
+        this.rheaStatue = this.add.animatedSprite("rheaStatue", "primary");
+        this.rheaStatue.position = new Vec2(33*32, 61*32);
+        this.rheaStatue.animation.play("idle");
+
+        this.rheaStatueZone = this.add.graphic(GraphicType.RECT, "primary",{position: new Vec2(33*32, 61*32), size: new Vec2(6*32,6*32)});
+        this.rheaStatueZone.color = Color.TRANSPARENT;
 
         //Start spawning delay
         this.startSceneTimer.start();
@@ -128,18 +143,20 @@ export default class level_z1 extends GameLevel {
 
         // create weapon
         let weapon = this.createWeapon("lightning");
+        if (this.instant_kill) weapon.type.damage = 1000;
         
-        this.playerStats = new CharacterStat(100, 1, 10, 2, weapon.cooldownTimer.getTotalTime());
+        this.playerStats = new CharacterStat(100, 1, 10, (this.speedUp) ? 15 : 2, weapon.cooldownTimer.getTotalTime());
         // TODO - ADD PLAYER AI HERE
         this.player.addAI(PlayerController,
             {
-                speed: this.playerStats.stats.speed,
+                speed:  this.playerStats.stats.speed,
                 health: this.playerStats.stats.health,
                 inputEnabled: true,
                 range: 30,
                 playerStats: this.playerStats,
                 weapon: weapon,
-                weaponV2: "lightningv2"
+                weaponV2: "lightningv2",
+                invincible: this.invincible
             });
         this.player.animation.play("idle");
 
@@ -211,13 +228,17 @@ export default class level_z1 extends GameLevel {
                     this.changeLevelTimer.start();
                 }
                 if(this.changeLevelTimer.getTimeLeft() <= 0){
+                    this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "zeus"});
+                    this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "main_menu", loop: true, holdReference: true});
                     this.viewport.setSize(1600, 900);
                     this.sceneManager.changeToScene(level_z2, {characterStats: this.playerStats, 
                         weapon: (<PlayerController>this.player._ai).weapon,
                         invincible: this.invincible, 
                         unlockAll: this.unlockAll,
                         instant_kill: this.instant_kill,
-                        speedUp: this.speedUp}, this.sceneOptions);
+                        speedUp: this.speedUp, 
+                        unlockedLevels: this.unlockedLevels
+                    }, this.sceneOptions);
                 }
             }
         }
