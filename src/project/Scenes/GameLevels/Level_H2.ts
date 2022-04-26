@@ -15,6 +15,8 @@ import Timer from "../../../Wolfie2D/Timing/Timer";
 import level_z3 from "./Level_Z3";
 import HadesController from "../../AI/HadesController";
 import FireballAI from "../../AI/FireballAI";
+import MainMenu from "../MainMenu";
+import { GameEventType } from "../../../Wolfie2D/Events/GameEventType";
 
 export default class level_h2 extends GameLevel {
 
@@ -47,6 +49,11 @@ export default class level_h2 extends GameLevel {
         this.load.image("wave_two", "project_assets/sprites/h2_wave2.png");
         this.load.image("wave_three", "project_assets/sprites/h2_wave3.png");
 
+        // Load audio and music
+        this.load.audio("hades", "project_assets/music/main_menu.mp3");
+        this.load.audio("main_menu", "project_assets/music/main_menu.mp3");
+
+
         super.loadScene();
     }
 
@@ -62,10 +69,15 @@ export default class level_h2 extends GameLevel {
         this.unlockAll = init.unlockAll;
         this.instant_kill = init.instant_kill;
         this.speedUp = init.speedUp;
+        this.unlockedLevels = init.unlockedLevels;
+
+        this.unlockedLevels[7] = true;
     }
     
     startScene(): void {
         // add in the tilemap and get the wall layer
+        this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "hades", loop: true, holdReference: true});
+        this.levelMusic = "hades";
         let tilemapLayers = this.add.tilemap("levelH2", new Vec2(1, 1));
         this.walls = <OrthogonalTilemap>tilemapLayers[2].getItems()[0];
         this.walls.setGroup("wall");
@@ -145,6 +157,15 @@ export default class level_h2 extends GameLevel {
             range: 20,
             experience: 320,
         });
+
+        //Position the rhea statue and zone
+        this.rheaStatue = this.add.animatedSprite("rheaStatue", "primary");
+        this.rheaStatue.position = new Vec2((32*32) + 32, (57*32) + 32);
+        this.rheaStatue.animation.play("idle");
+        
+        this.rheaStatueZone = this.add.graphic(GraphicType.RECT, "primary",{position: this.rheaStatue.position, size: new Vec2(3*32,3*32)});
+        this.rheaStatueZone.color = Color.TRANSPARENT;
+        this.rheaStatueCooldown = new Timer(30000);
         
         this.startSceneTimer.start();
     }
@@ -222,21 +243,21 @@ export default class level_h2 extends GameLevel {
             if(this.currentWave >= 3 && this.currentNumEnemies === 0) {
                 //end level and move to level z3
                 if(this.changeLevelTimer === undefined){
+                    this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "hades"});
+                    this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "main_menu", loop: true, holdReference: true});
                     this.changeLevelTimer = new Timer(5000);
                     this.changeLevelTimer.start();
                 }
 
                 if(this.changeLevelTimer.getTimeLeft() <= 0){
-
-                    console.log("YOU WIN");
                     this.viewport.setSize(1600, 900);
-                    // this.sceneManager.changeToScene(level_z3, {characterStats: this.playerStats, 
-                    //     weapon: (<PlayerController>this.player._ai).weapon,
-                    //     invincible: this.invincible, 
-                    //     unlockAll: this.unlockAll,
-                    //     instant_kill: this.instant_kill,
-                    //     speedUp: this.speedUp
-                    // }, this.sceneOptions);
+                    this.sceneManager.changeToScene(MainMenu, {
+                        invincible: this.invincible, 
+                        unlockAll: this.unlockAll,
+                        instant_kill: this.instant_kill,
+                        speedUp: this.speedUp,
+                        unlockedLevels: this.unlockedLevels
+                    }, this.sceneOptions);
                 }
             }
         }
@@ -273,17 +294,25 @@ export default class level_h2 extends GameLevel {
                floor: this.floorCheck
            });
 
-       // setup player and viewport tracking
-       this.player.animation.play("idle");
-       this.player.setGroup("player");
-       this.player.freeze();
-       this.player.setAIActive(false, {});
-       this.viewport.follow(this.player);
-
-       // place player in battle manager and pass player controller back into parent
-       this.battleManager.setPlayers([<BattlerAI>this.player._ai]);
-       this.playerController = <PlayerController> this.player._ai;
-    }
+           
+           // setup player and viewport tracking
+           this.player.animation.play("idle");
+           this.player.setGroup("player");
+           this.player.freeze();
+           this.player.setAIActive(false, {});
+           this.viewport.follow(this.player);
+           
+           // place player in battle manager and pass player controller back into parent
+           this.battleManager.setPlayers([<BattlerAI>this.player._ai]);
+           this.playerController = <PlayerController> this.player._ai;
+           if (this.instant_kill) {
+               const fireballs = (<HadesController> this.playerController).projectiles
+   
+               for (let f of fireballs){
+                   (<FireballAI> f._ai).setDamage(1000);
+               }
+           }
+        }
 
     protected initLayers() : void {
         // Add a layer for the UI

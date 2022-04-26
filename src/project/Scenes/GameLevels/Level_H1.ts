@@ -16,6 +16,7 @@ import Timer from "../../../Wolfie2D/Timing/Timer";
 import HadesController from "../../AI/HadesController";
 import FireballAI from "../../AI/FireballAI";
 import level_h2 from "./Level_H2";
+import { GameEventType } from "../../../Wolfie2D/Events/GameEventType";
 
 export default class level_h1 extends GameLevel {
 
@@ -44,6 +45,9 @@ export default class level_h1 extends GameLevel {
         //Load Challenge img
         this.load.image("objective", "project_assets/sprites/h1_challenge.png");
 
+        // Load audio and music
+        this.load.audio("hades", "project_assets/music/main_menu.mp3");
+
         super.loadScene();
     }
 
@@ -52,10 +56,15 @@ export default class level_h1 extends GameLevel {
         this.unlockAll = init.unlockAll;
         this.instant_kill = init.instant_kill;
         this.speedUp = init.speedUp;
+        this.unlockedLevels = init.unlockedLevels;
+
+        this.unlockedLevels[6] = true;
     }
 
     startScene(): void {
         // add in the tilemap and get the wall layer
+        this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "hades", loop: true, holdReference: true});
+        this.levelMusic = "hades";
         let tilemapLayers = this.add.tilemap("levelH1", new Vec2(1, 1));
         this.walls = <OrthogonalTilemap>tilemapLayers[2].getItems()[0];
         this.walls.setGroup("wall");
@@ -103,6 +112,14 @@ export default class level_h1 extends GameLevel {
 
         this.enemyConstructorPairings = new Map([["Skull" , EnemyAI], ["Witch", RangeAI]]);
         
+        //Position the rhea statue and zone
+        this.rheaStatue = this.add.animatedSprite("rheaStatue", "primary");
+        this.rheaStatue.position = new Vec2((37*32) + 32, (40*32) + 32);
+        this.rheaStatue.animation.play("idle");
+        
+        this.rheaStatueZone = this.add.graphic(GraphicType.RECT, "primary",{position: this.rheaStatue.position, size: new Vec2(3*32,3*32)});
+        this.rheaStatueZone.color = Color.TRANSPARENT;
+        this.rheaStatueCooldown = new Timer(30000);
 
         // start spawning delay
         this.startSceneTimer.start();
@@ -142,18 +159,26 @@ export default class level_h1 extends GameLevel {
                 projectiles: this.createProjectiles(5, "fireball"),
                 floor: this.floorCheck
             });
-
-        // setup player and viewport tracking
-        this.player.animation.play("idle");
-        this.player.setGroup("player");
-        this.player.freeze();
-        this.player.setAIActive(false, {});
-        this.viewport.follow(this.player);
-
-        // place player in battle manager and pass player controller back into parent
-        this.battleManager.setPlayers([<BattlerAI>this.player._ai]);
-        this.playerController = <PlayerController> this.player._ai;
-    }
+        
+            
+            // setup player and viewport tracking
+            this.player.animation.play("idle");
+            this.player.setGroup("player");
+            this.player.freeze();
+            this.player.setAIActive(false, {});
+            this.viewport.follow(this.player);
+            
+            // place player in battle manager and pass player controller back into parent
+            this.battleManager.setPlayers([<BattlerAI>this.player._ai]);
+            this.playerController = <PlayerController> this.player._ai;
+            if (this.instant_kill) {
+                const fireballs = (<HadesController> this.playerController).projectiles
+    
+                for (let f of fireballs){
+                    (<FireballAI> f._ai).setDamage(1000);
+                }
+            }
+        }
 
     updateScene(deltaT: number): void {
         super.updateScene(deltaT);
@@ -215,6 +240,7 @@ export default class level_h1 extends GameLevel {
             if(this.gameTimer.getTimeLeft() <= 0){
                 // end level and move to level 2
                 if(this.changeLevelTimer === undefined){
+                    this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "hades"});
                     this.changeLevelTimer = new Timer(3000);
                     this.changeLevelTimer.start();
                 }
@@ -224,7 +250,9 @@ export default class level_h1 extends GameLevel {
                         invincible: this.invincible, 
                         unlockAll: this.unlockAll,
                         instant_kill: this.instant_kill,
-                        speedUp: this.speedUp}, this.sceneOptions);
+                        speedUp: this.speedUp,
+                        unlockedLevels: this.unlockedLevels
+                    }, this.sceneOptions);
                 }
             }
         }
