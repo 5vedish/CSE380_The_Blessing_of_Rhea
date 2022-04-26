@@ -10,7 +10,7 @@ import OrthogonalTilemap from "../../Wolfie2D/Nodes/Tilemaps/OrthogonalTilemap";
 
 export default class HadesController extends PlayerController {
 
-    static HADESCD: number = 1000; // 1s
+    static HADESCD: number = 2000; // 1s
 
     public projectiles: Array<AnimatedSprite>;
     public attackCooldown: Timer;
@@ -49,7 +49,7 @@ export default class HadesController extends PlayerController {
         if (this.lavaCD.isStopped()){
             const tileNum = this.floor.getTileAtRowCol(this.floor.getColRowAt(this.owner.position));
             if (tileNum === 4 || tileNum === 5){
-                super.damage(1000);
+                super.damage(10);
                 this.lavaCD.start();
             }
         }

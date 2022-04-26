@@ -77,7 +77,7 @@ export default class level_h1 extends GameLevel {
         
         this.playerSpawn = new Vec2(32*32, 32*32);        
         
-        this.maxEnemies = 2;
+        this.maxEnemies = 30;
         
         super.startScene();
         this.initLayers();

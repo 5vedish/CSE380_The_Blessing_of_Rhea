@@ -104,7 +104,7 @@ export default class PlayerController extends StateMachineAI implements BattlerA
         }
 
 
-        if (this.inputEnabled && this.health > 0) {
+        if (this.inputEnabled && this.playerStats.stats.health > 0) {
             // Handle input for player movement
             let verticalAxis = (Input.isPressed('up') ? 1 : 0) + (Input.isPressed('down') ? -1 : 0);
             let horizontalAxis = (Input.isPressed('left') ? -1 : 0) + (Input.isPressed('right') ? 1 : 0);

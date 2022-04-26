@@ -438,6 +438,7 @@ export default class GameLevel extends Scene{
 
         //Check if player died
         if(this.playerStats.stats.health <= 0){
+            console.log("DWLJDKJDJJJDFBW " + this.playerStats.stats.health);
             if(this.changeLevelTimer.isStopped() && !this.playerDied) {
                 this.changeLevelTimer.start();
                 this.playerDied = true;
@@ -642,7 +643,6 @@ export default class GameLevel extends Scene{
             // Check direction of projectile before playing animation
             projectiles[i].animation.playIfNotAlready("shoot", true);
             projectiles[i].setGroup("projectile");
-            console.log("PROJECTILE ID: " + projectiles[i].id);
         }
         return projectiles;
     }
