@@ -266,6 +266,33 @@ export default class level_z2 extends GameLevel {
             this.weapon = this.createWeapon("lightning");
             if (this.instant_kill) this.weapon.type.damage = 1000;
             this.playerStats = new CharacterStat(100, 100, 10, (this.speedUp) ? 15 : 2, this.weapon.cooldownTimer.getTotalTime());
+            //Create an enemy for players to get exp
+            let enemy = this.add.animatedSprite("snake", "primary");
+            enemy.scale.set(1,1);
+            enemy.addPhysics(new AABB(Vec2.ZERO, new Vec2(8,8))); //Monkey patched collision box, dynamic later
+            enemy.animation.play("moving");
+            enemy.position = new Vec2(this.player.position.x , this.player.position.y - 32);
+            let options = {
+                health: 1,
+                player: this.player,    
+                speed: 0,
+                weapon: this.createWeapon("knife"),
+                range: 0,
+                experience: 3000,
+                projectiles: this.createProjectiles(3 , "feather"),
+                cooldown: 1000,
+                scene: this,
+            }
+            enemy.addAI(EnemyAI, options);
+            enemy.setGroup("enemy");
+            enemy.freeze();
+            this.currentNumEnemies += 1;
+
+            if(this.battleManager.enemies === undefined){
+                this.battleManager.setEnemies([<BattlerAI>enemy._ai])
+            } else {
+                this.battleManager.enemies.push(<BattlerAI>enemy._ai);
+            }
         } else {
             this.weapon.battleManager = this.battleManager;
         }
