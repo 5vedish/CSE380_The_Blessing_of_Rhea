@@ -143,6 +143,7 @@ export default class GameLevel extends Scene{
     protected unlockAll: boolean;
     protected instant_kill: boolean;
     protected speedUp: boolean;
+    protected unlockedLevels: boolean[];
 
     loadScene(): void {
         // Objects
@@ -480,7 +481,8 @@ export default class GameLevel extends Scene{
                     invincible: this.invincible, 
                     unlockAll: this.unlockAll,
                     instant_kill: this.instant_kill,
-                    speedUp: this.speedUp
+                    speedUp: this.speedUp,
+                    unlockedLevels: this.unlockedLevels
                 });
             }
         }
@@ -626,7 +628,7 @@ export default class GameLevel extends Scene{
             projectiles[i] = this.add.animatedSprite(sprite, "primary");
             projectiles[i].position = new Vec2(0, 0);
             projectiles[i].visible = false;
-            projectiles[i].addAI(ProjectileAI, {speed: 4, player: this.player});
+            projectiles[i].addAI(ProjectileAI, {speed: 3.5, player: this.player});
             projectiles[i].addPhysics(new AABB(Vec2.ZERO, new Vec2(32, 32)));
             // Check direction of projectile before playing animation
             projectiles[i].animation.playIfNotAlready("shoot", true);

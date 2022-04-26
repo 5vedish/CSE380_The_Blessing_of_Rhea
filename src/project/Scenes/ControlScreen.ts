@@ -134,7 +134,7 @@ export default class ControlScreen extends Scene {
         unlockAll: this.unlockAll,
         instant_kill: this.instant_kill,
         speedUp: this.speedUp, 
-        unlcokedLevels: this.unlockedLevels
+        unlockedLevels: this.unlockedLevels
     }
 
       if (event.type === "back") {
