@@ -40,6 +40,11 @@ import Goblet2 from "../../GameSystems/items/Upgrades/Goblet2";
 import Aegis2 from "../../GameSystems/items/Upgrades/Aegis2";
 import HermesSandals3 from "../../GameSystems/items/Upgrades/HermesSandals3";
 import { GameEventType } from "../../../Wolfie2D/Events/GameEventType";
+import Aegis1 from "../../GameSystems/items/Upgrades/Aegis1";
+import Goblet1 from "../../GameSystems/items/Upgrades/Goblet1";
+import Bolt1 from "../../GameSystems/items/Upgrades/Bolt1";
+import HermesSandals1 from "../../GameSystems/items/Upgrades/HermesSandals1";
+import Hourglass1 from "../../GameSystems/items/Upgrades/Hourglass1";
 
 export interface CustomEnemy {
     name: string,
@@ -110,10 +115,12 @@ export default class GameLevel extends Scene{
 
     // items
     protected itemsArray = ["honey_jar", 
+        "hourglass_1", "hermes_sandals_1", "bolt_1", "goblet_of_dionysus_1", "aegis_1",
         "hourglass_2", "hermes_sandals_2", "bolt_2", "goblet_of_dionysus_2", "aegis_2", 
         "hourglass_3", "hermes_sandals_3", "bolt_3", "goblet_of_dionysus_3", "aegis_3"];
     protected selectionArray: Array<string> = [];
     protected itemConstructorPairings: Map<string,any> = new Map([["honey_jar", HoneyJar],
+        ["hourglass_1" , Hourglass1], ["hermes_sandals_1", HermesSandals1], ["bolt_1", Bolt1], ["goblet_of_dionysus_1", Goblet1], ["aegis_1", Aegis1],
         ["hourglass_2" , Hourglass2], ["hermes_sandals_2", HermesSandals2], ["bolt_2", Bolt2], ["goblet_of_dionysus_2", Goblet2], ["aegis_2", Aegis2],
         ["hourglass_3" , Hourglass3], ["hermes_sandals_3", HermesSandals3], ["bolt_3", Bolt], ["goblet_of_dionysus_3", Goblet3], ["aegis_3", Aegis3]
     ]);
@@ -154,6 +161,12 @@ export default class GameLevel extends Scene{
         // Import upgrade icons
         this.load.image("honey_jar", "project_assets/sprites/honeyJar.png");
 
+        this.load.image("aegis_1", "project_assets/sprites/aegis_1.png");
+        this.load.image("bolt_1", "project_assets/sprites/bolt_1.png");
+        this.load.image("goblet_of_dionysus_1", "project_assets/sprites/goblet_1.png");
+        this.load.image("hermes_sandals_1", "project_assets/sprites/hermes_sandals_1.png");
+        this.load.image("hourglass_1", "project_assets/sprites/hourglass_1.png");
+
         this.load.image("aegis_2", "project_assets/sprites/aegis_2.png");
         this.load.image("bolt_2", "project_assets/sprites/bolt_2.png");
         this.load.image("goblet_of_dionysus_2", "project_assets/sprites/goblet_2.png");
@@ -175,7 +188,6 @@ export default class GameLevel extends Scene{
         this.load.audio("heal", "project_assets/sounds/heal.wav");
         this.load.audio("shoot", "project_assets/sounds/shoot.wav")
     }
-    
     
     
     startScene(): void {
