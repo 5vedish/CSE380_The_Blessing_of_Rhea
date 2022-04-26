@@ -19,6 +19,7 @@ import LeviathanAI from "../../AI/LeviathanAI";
 import MainMenu from "../MainMenu";
 import CharacterStat from "../../PlayerStatus";
 import { Project_Events } from "../../project_constants";
+import { GameEventType } from "../../../Wolfie2D/Events/GameEventType";
 
 export default class level_p3 extends GameLevel {
     private boss: CustomEnemy;
@@ -68,11 +69,15 @@ export default class level_p3 extends GameLevel {
         this.load.audio("weapon", "project_assets/sounds/waterfall.wav");
         this.load.audio("weaponv2", "project_assets/sounds/waterfallv2.wav");
         this.load.audio("projectile", "project_assets/sounds/blast.wav");
+        this.load.audio("leviathan", "project_assets/music/leviathan.mp3");
+        this.load.audio("main_menu", "project_assets/music/main_menu.mp3");
 
         super.loadScene();
     }
 
     startScene(): void {
+        this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "leviathan", loop: true, holdReference: true});
+        this.levelMusic = "leviathan";
         // Add in the tilemap and get the wall layer
         let tilemapLayers = this.add.tilemap("levelP1", new Vec2(1, 1));
         this.walls = <OrthogonalTilemap>tilemapLayers[1].getItems()[0];
@@ -289,6 +294,8 @@ export default class level_p3 extends GameLevel {
     
             if(this.bossDefeated && this.currentNumEnemies === 0) {
                 if(this.changeLevelTimer === undefined){
+                    this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "leviathan"});
+                    this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "main_menu", loop: true, holdReference: true});
                     this.changeLevelTimer = new Timer(5000);
                     this.createChallengeLabel("end");
                     this.changeLevelTimer.start();

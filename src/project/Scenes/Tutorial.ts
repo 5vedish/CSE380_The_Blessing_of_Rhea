@@ -242,7 +242,8 @@ export default class Tutorial extends GameLevel {
                 inputEnabled: true,
                 range: 30,
                 playerStats: this.playerStats,
-                weapon: weapon
+                weapon: weapon,
+                weaponV2: "lightningv2"
             });
         this.player.animation.play("idle");
 

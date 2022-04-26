@@ -19,6 +19,7 @@ import { EaseFunctionType } from "../../../Wolfie2D/Utils/EaseFunctions";
 import Sprite from "../../../Wolfie2D/Nodes/Sprites/Sprite";
 import level_p2 from "./Level_P2";
 import { Project_Events } from "../../project_constants";
+import { GameEventType } from "../../../Wolfie2D/Events/GameEventType";
 
 export default class level_p1 extends GameLevel {
     private prep: boolean = false;
@@ -60,11 +61,14 @@ export default class level_p1 extends GameLevel {
         this.load.audio("weapon", "project_assets/sounds/waterfall.wav");
         this.load.audio("weaponv2", "project_assets/sounds/waterfallv2.wav");
         this.load.audio("projectile", "project_assets/sounds/blast.wav");
+        this.load.audio("poseidon", "project_assets/music/poseidon.mp3");
 
         super.loadScene();
     }
 
     startScene(): void {
+        this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "poseidon", loop: true, holdReference: true});
+        this.levelMusic = "poseidon";
         // Add in the tilemap and get the wall layer
         let tilemapLayers = this.add.tilemap("levelP1", new Vec2(1, 1));
         this.walls = <OrthogonalTilemap>tilemapLayers[1].getItems()[0];
@@ -265,6 +269,7 @@ export default class level_p1 extends GameLevel {
                 }
 
                 if(this.changeLevelTimer.getTimeLeft() <= 0){
+                    this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "poseidon"});
                     this.viewport.setSize(1600, 900);
                     this.sceneManager.changeToScene(level_p2, {
                         characterStats: this.playerStats, 

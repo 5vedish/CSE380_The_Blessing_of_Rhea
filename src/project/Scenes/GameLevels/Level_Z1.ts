@@ -228,6 +228,7 @@ export default class level_z1 extends GameLevel {
                 }
                 if(this.changeLevelTimer.getTimeLeft() <= 0){
                     this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "zeus"});
+                    this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "main_menu", loop: true, holdReference: true});
                     this.viewport.setSize(1600, 900);
                     this.sceneManager.changeToScene(level_z2, {characterStats: this.playerStats, 
                         weapon: (<PlayerController>this.player._ai).weapon,

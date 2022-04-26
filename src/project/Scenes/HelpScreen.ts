@@ -24,12 +24,14 @@ export default class HelpScreen extends Scene {
   private unlockLevels: UIElement;
   private instantKill: UIElement;
   private doubleSpeed: UIElement;
+  private unlockedLevels: boolean[];
 
   initScene(init: Record<string, any>): void {
     this.invincible = init.invincible;
     this.unlockAll = init.unlockAll;
     this.instant_kill = init.instant_kill;
     this.speedUp = init.speedUp;
+    this.unlockedLevels = init.unlockedLevels;
   }
 
   loadScene() {
@@ -304,14 +306,14 @@ export default class HelpScreen extends Scene {
     while (this.receiver.hasNextEvent()) {
       let event = this.receiver.getNextEvent();
       console.log(event);
-
       
       if (event.type === "back") {
         this.sceneManager.changeToScene(MainMenu, {
           invincible: this.invincible, 
           unlockAll: this.unlockAll,
           instant_kill: this.instant_kill,
-          speedUp: this.speedUp
+          speedUp: this.speedUp, 
+          unlcokedLevels: this.unlockedLevels
         }, {});
       }
 

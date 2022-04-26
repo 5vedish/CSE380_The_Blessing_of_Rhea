@@ -32,12 +32,14 @@ export default class MainMenu extends Scene {
   private unlockAll: boolean;
   private instant_kill: boolean;
   private speedUp: boolean;
+  private unlockedLevels: boolean[];
 
   initScene(init: Record<string, any>): void {
     this.invincible = init.invincible;
     this.unlockAll = init.unlockAll;
     this.instant_kill = init.instant_kill;
     this.speedUp = init.speedUp;
+    this.unlockedLevels = init.unlockedLevels;
   }
 
   loadScene() {
@@ -51,6 +53,11 @@ export default class MainMenu extends Scene {
   }
   
   startScene() {
+    // Came from splash screen
+    if (this.unlockedLevels === undefined) {
+      this.unlockedLevels = [true, false, false, false, false, false, false, false, false];
+    }
+
     this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "click", loop: false, holdReference: false});
     const origin = new Vec2(192, 64);
     this.flash = new Timer(1000, null, true);
@@ -177,11 +184,13 @@ export default class MainMenu extends Scene {
           invincible: this.invincible, 
           unlockAll: this.unlockAll,
           instant_kill: this.instant_kill,
-          speedUp: this.speedUp
+          speedUp: this.speedUp, 
+          unlcokedLevels: this.unlockedLevels
       }
 
       /* TODO - CHANGE TO SPECIFIED SCENE */
       if (event.type === "play") {
+        
         let physicsOptions = {
             physics: {
                 groupNames: ["wall", "player", "enemy", "projectile"],
@@ -196,7 +205,9 @@ export default class MainMenu extends Scene {
         }
         //TO DO replace with tutorial stage
         this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "main_menu"});
-        this.sceneManager.changeToScene(Level_Z1_Cutscene, options, physicsOptions);
+        // this.sceneManager.changeToScene(Level_Z1_Cutscene, options, physicsOptions);
+        this.sceneManager.changeToScene(level_z1, options, physicsOptions);
+
       }
 
       if (event.type === "select_levels") {

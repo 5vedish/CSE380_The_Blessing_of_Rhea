@@ -96,7 +96,6 @@ export default class level_z3 extends GameLevel {
         // Add in the tilemap and get the wall layer
         this.levelMusic = "echidna";
         this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "echidnaStart", loop: false, holdReference: true});
-        this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "main_menu", loop: true, holdReference: true});
         let tilemapLayers = this.add.tilemap("levelZ3", new Vec2(1, 1));
         this.walls = <OrthogonalTilemap>tilemapLayers[1].getItems()[0];
         this.walls.setGroup("wall");
@@ -214,18 +213,18 @@ export default class level_z3 extends GameLevel {
         this.rheaStatue.position = new Vec2(32*32, 44*32);
         this.rheaStatue.animation.play("idle");
 
-        // this.rheaStatue.tweens.add("fadeOut", {
-        //         startDelay: 0,
-        //         duration: 3000,
-        //         effects: [
-        //             {
-        //                 property: TweenableProperties.alpha,
-        //                 start: 1,
-        //                 end: 0,
-        //                 ease: EaseFunctionType.OUT_SINE
-        //             }
-        //         ],
-        // })
+        this.rheaStatue.tweens.add("fadeOut", {
+                startDelay: 0,
+                duration: 3000,
+                effects: [
+                    {
+                        property: TweenableProperties.alpha,
+                        start: 1,
+                        end: 0,
+                        ease: EaseFunctionType.OUT_SINE
+                    }
+                ],
+        })
 
         this.rheaStatueZone = this.add.graphic(GraphicType.RECT, "primary",{position: new Vec2(32*32, 44*32), size: new Vec2(6*32,6*32)});
         this.rheaStatueZone.color = Color.TRANSPARENT;
@@ -328,7 +327,8 @@ export default class level_z3 extends GameLevel {
         //Rhea statue
         if(!this.rheaStatueUsed){
             if (this.rheaStatueZone.boundary.overlapArea(this.player.boundary) && this.playerStats.stats.health < this.playerStats.stats.maxHealth) {
-                this.rheaStatueUsed = true;                       
+                this.rheaStatueUsed = true; 
+                this.rheaStatue.tweens.play("fadeOut");                      
             } 
         }
 
@@ -340,6 +340,7 @@ export default class level_z3 extends GameLevel {
             }
             
             if(this.changeLevelTimer.getTimeLeft() <= 0){
+                this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "echidna"});
                 this.viewport.setSize(1600, 900);
                 this.sceneManager.changeToScene(level_p1, {
                     invincible: this.invincible, 
