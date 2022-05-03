@@ -79,8 +79,6 @@ export default class HadesController extends PlayerController {
             }
 
             if (Input.isMouseJustPressed()){
-                // fire projectile
-                console.log("HADES ATTACK");
 
                 this.owner.animation.play("attacking", false, null);
 

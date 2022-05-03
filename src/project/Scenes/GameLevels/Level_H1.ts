@@ -46,7 +46,7 @@ export default class level_h1 extends GameLevel {
         this.load.image("objective", "project_assets/sprites/h1_challenge.png");
 
         // Load audio and music
-        this.load.audio("hades", "project_assets/music/main_menu.mp3");
+        this.load.audio("hades", "project_assets/music/Tartarus.mp3");
 
         super.loadScene();
     }
@@ -112,7 +112,7 @@ export default class level_h1 extends GameLevel {
 
         this.enemyConstructorPairings = new Map([["Skull" , EnemyAI], ["Witch", RangeAI]]);
         
-        //Position the rhea statue and zone
+        // position the Rhea statue and zone
         this.rheaStatue = this.add.animatedSprite("rheaStatue", "primary");
         this.rheaStatue.position = new Vec2((37*32) + 32, (40*32) + 32);
         this.rheaStatue.animation.play("idle");

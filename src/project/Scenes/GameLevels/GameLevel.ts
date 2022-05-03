@@ -47,6 +47,7 @@ import HermesSandals1 from "../../GameSystems/items/Upgrades/HermesSandals1";
 import Hourglass1 from "../../GameSystems/items/Upgrades/Hourglass1";
 import HadesController from "../../AI/HadesController";
 import FireballAI from "../../AI/FireballAI";
+import CerberusFireballAI from "../../AI/CerberusFireballAI";
 
 export interface CustomEnemy {
     name: string,
@@ -55,7 +56,7 @@ export interface CustomEnemy {
     speed: number,
     weapon: Weapon,
     range: number,
-    experience: number,
+    experience: number
 }
 
 export default class GameLevel extends Scene{
@@ -632,14 +633,36 @@ export default class GameLevel extends Scene{
     }
 
     createProjectiles(number: number, sprite: string): Array<AnimatedSprite> {
+
+        let ai; // custom projectile support
+        let scaleSize = new Vec2(1, 1); // if you want to make projectiles larger
+        let hitboxSize = new Vec2(32, 32); // custom hitboxes
+        let speed = 4; // custom speed base of 4
+
+        switch (sprite){
+            case "fireball":
+                ai = FireballAI;
+                break;
+            case "CerberusFireball":
+                sprite = "fireball";
+                ai = CerberusFireballAI;
+                scaleSize.x = 2;
+                scaleSize.y = 2;
+                speed = 2;
+                break;
+            default:
+                ai = ProjectileAI;
+        }
+
         let projectiles = new Array(number);
         for (let i = 0; i < number; i++) {
             projectiles[i] = this.add.animatedSprite(sprite, "primary");
             projectiles[i].position = new Vec2(0, 0);
             projectiles[i].visible = false;
-            const ai = (sprite === "fireball") ? FireballAI : ProjectileAI;
-            projectiles[i].addAI(ai, {speed: 4, player: this.player, enemies: this.enemyArray});
-            projectiles[i].addPhysics(new AABB(Vec2.ZERO, new Vec2(32, 32)));
+            (<AnimatedSprite>projectiles[i]).scale.set(scaleSize.x, scaleSize.y);
+       
+            projectiles[i].addAI(ai, {speed: speed, player: this.player, enemies: this.enemyArray});
+            projectiles[i].addPhysics(new AABB(Vec2.ZERO, hitboxSize));
             // Check direction of projectile before playing animation
             projectiles[i].animation.playIfNotAlready("shoot", true);
             projectiles[i].setGroup("projectile");

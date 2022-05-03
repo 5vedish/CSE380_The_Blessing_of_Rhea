@@ -31,6 +31,7 @@ export default class FireballAI extends ProjectileAI{
             for (let enemy of this.enemies){
 
                 if (this.owner.boundary.overlapArea(enemy.boundary) && enemy.ai){
+
                     this.owner.position = Vec2.ZERO;
                     this.owner.visible = false;
                     this.owner.setAIActive(false, {});

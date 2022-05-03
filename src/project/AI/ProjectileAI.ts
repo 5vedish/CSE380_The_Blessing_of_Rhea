@@ -28,14 +28,14 @@ export default class ProjectileAI implements AI {
 
     protected paused: boolean = true;
 
-    private player: AnimatedSprite;
+    protected player: AnimatedSprite;
 
     // Stats
     protected damage: number = 5;
 
     protected emitter: Emitter;
 
-    private timeToLive: Timer;
+    protected timeToLive: Timer;
 
     // An event emitter and receiver to hook into the event system
     protected receiver: Receiver
@@ -43,7 +43,7 @@ export default class ProjectileAI implements AI {
     initializeAI(owner: AnimatedSprite, options: Record<string, any>): void {
         this.owner = owner;
 
-        this.current_speed = options.speed;;
+        this.current_speed = options.speed;
 
         this.emitter = new Emitter();
 
@@ -54,7 +54,7 @@ export default class ProjectileAI implements AI {
         this.player = options.player;
 
         this.timeToLive = new Timer(3000, () => {
-            //Reset onEnd
+            // reset on end
             this.owner.position = Vec2.ZERO;
             this.owner.visible = false;
             this.owner.setAIActive(false, {});

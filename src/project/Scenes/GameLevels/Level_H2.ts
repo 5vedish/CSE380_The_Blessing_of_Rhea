@@ -17,6 +17,7 @@ import HadesController from "../../AI/HadesController";
 import FireballAI from "../../AI/FireballAI";
 import MainMenu from "../MainMenu";
 import { GameEventType } from "../../../Wolfie2D/Events/GameEventType";
+import level_h3 from "./Level_H3";
 
 export default class level_h2 extends GameLevel {
 
@@ -50,8 +51,7 @@ export default class level_h2 extends GameLevel {
         this.load.image("wave_three", "project_assets/sprites/h2_wave3.png");
 
         // Load audio and music
-        this.load.audio("hades", "project_assets/music/main_menu.mp3");
-        this.load.audio("main_menu", "project_assets/music/main_menu.mp3");
+        // this.load.audio("hades", "project_assets/music/main_menu.mp3"); (same music for now)
 
 
         super.loadScene();
@@ -244,14 +244,13 @@ export default class level_h2 extends GameLevel {
                 //end level and move to level z3
                 if(this.changeLevelTimer === undefined){
                     this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "hades"});
-                    this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "main_menu", loop: true, holdReference: true});
                     this.changeLevelTimer = new Timer(5000);
                     this.changeLevelTimer.start();
                 }
 
                 if(this.changeLevelTimer.getTimeLeft() <= 0){
                     this.viewport.setSize(1600, 900);
-                    this.sceneManager.changeToScene(MainMenu, {
+                    this.sceneManager.changeToScene(level_h3, {
                         invincible: this.invincible, 
                         unlockAll: this.unlockAll,
                         instant_kill: this.instant_kill,
@@ -282,7 +281,7 @@ export default class level_h2 extends GameLevel {
            //Create an enemy for players to get exp
            enemy = this.add.animatedSprite("Skull", "primary");
            enemy.scale.set(1,1);
-           enemy.addPhysics(new AABB(Vec2.ZERO, new Vec2(8,8))); //Monkey patched collision box, dynamic later
+           enemy.addPhysics(new AABB(Vec2.ZERO, new Vec2(8,8))); // monkey patched collision box, dynamic later
            enemy.animation.play("moving");
            enemy.position = new Vec2(this.player.position.x , this.player.position.y - 32);
            let options = {

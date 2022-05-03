@@ -15,6 +15,7 @@ import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 import { GraphicType } from "../../Wolfie2D/Nodes/Graphics/GraphicTypes";
 import level_h1 from "./GameLevels/Level_H1";
 import level_h2 from "./GameLevels/Level_H2";
+import level_h3 from "./GameLevels/Level_H3";
 
 export default class LevelSelection extends Scene {
   private splashScreen: Layer;
@@ -305,6 +306,12 @@ export default class LevelSelection extends Scene {
       if (event.type === "hades2") {
         this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "main_menu"});
         if (this.unlockedLevels[7] || this.unlockAll) this.sceneManager.changeToScene(level_h2, options, physicsOptions);
+        else console.log("STAGE NOT UNLOCKED YET");
+      }
+
+      if (event.type === "hades3") {
+        this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "main_menu"});
+        if (this.unlockedLevels[7] || this.unlockAll) this.sceneManager.changeToScene(level_h3, options, physicsOptions);
         else console.log("STAGE NOT UNLOCKED YET");
       }
 

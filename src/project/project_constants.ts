@@ -9,3 +9,10 @@ export enum Project_Events {
     MELEEATTACK = "meleeAttacked",
     BOSSSPAWNENEMIES = "bossSpawnEnemies"
 }
+
+export enum Cerberus_Positions {
+    CAGEONE = 0,
+    CAGETWO = 1,
+    CAGETHREE = 2,
+    CAGEFOUR = 3
+}
