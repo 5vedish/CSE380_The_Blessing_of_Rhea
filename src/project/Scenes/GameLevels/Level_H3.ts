@@ -29,6 +29,7 @@ import { GameEventType } from "../../../Wolfie2D/Events/GameEventType";
 import CerberusAI from "../../AI/CerberusAI";
 import HadesController from "../../AI/HadesController";
 import FireballAI from "../../AI/FireballAI";
+import CanvasNode from "../../../Wolfie2D/Nodes/CanvasNode";
 
 export default class level_h3 extends GameLevel {
 
@@ -39,7 +40,10 @@ export default class level_h3 extends GameLevel {
     private Cerberus2: AnimatedSprite;
     private Cerberus3: AnimatedSprite;
     private bossHealthBar: Graphic;
+    private bossHealthBar2: Graphic;
+    private bossHealthBar3: Graphic;
     private bossReceiver: Receiver;
+    private deadBosses: number = 0;
 
     // lava check
     private floorCheck: OrthogonalTilemap;
@@ -177,7 +181,7 @@ export default class level_h3 extends GameLevel {
 
         // boss initialization
         this.bossReceiver = new Receiver();
-        this.bossReceiver.subscribe(Project_Events.BOSSSPAWNENEMIES);
+        this.bossReceiver.subscribe([Project_Events.BOSSSPAWNENEMIES, Project_Events.CERBERUSDIED]);
 
         // CERBERUS
         
@@ -278,10 +282,18 @@ export default class level_h3 extends GameLevel {
             this.battleManager.enemies.push(<BattlerAI>this.Cerberus3._ai);
         }
 
-        // boss GUI
-        this.bossHealthBar = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(400, 425), size: new Vec2(600, 16)});
-        let bossHealthBarBorder = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(400, 425), size: new Vec2(600, 16)});
+        // boss GUIs
+        this.bossHealthBar = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(400, 425), size: new Vec2(160, 16)});
+        let bossHealthBarBorder = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(400, 425), size: new Vec2(160, 16)});
         bossHealthBarBorder.alpha = 0.5;
+
+        this.bossHealthBar2 = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(150, 425), size: new Vec2(160, 16)});
+        let bossHealthBarBorder2 = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(150, 425), size: new Vec2(160, 16)});
+        bossHealthBarBorder2.alpha = 0.5;
+
+        this.bossHealthBar3 = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(650, 425), size: new Vec2(160, 16)});
+        let bossHealthBarBorder3 = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(650, 425), size: new Vec2(160, 16)});
+        bossHealthBarBorder3.alpha = 0.5;
 
 
         // position the Rhea statue and zone
@@ -334,6 +346,18 @@ export default class level_h3 extends GameLevel {
 
                 }
                 break; // end of event
+                
+                case Project_Events.CERBERUSDIED:
+
+                    const cerberus = <CanvasNode>event.data.get("enemy");
+
+                    this.battleManager.enemies = this.battleManager.enemies.filter(enemy => enemy !== <BattlerAI>(cerberus._ai));
+                    this.enemyArray = this.enemyArray.filter(enemy => enemy !== cerberus);
+                    cerberus.destroy();
+
+                    this.deadBosses += 1;
+
+                break;
             }
         }
 
@@ -377,7 +401,6 @@ export default class level_h3 extends GameLevel {
             enemy.addAI(EnemyAI, options);
             enemy.setGroup("enemy");
             enemy.freeze();
-            this.currentNumEnemies += 1;
 
             if(this.battleManager.enemies === undefined){
                 this.battleManager.setEnemies([<BattlerAI>enemy._ai])
@@ -444,29 +467,6 @@ export default class level_h3 extends GameLevel {
     updateScene(deltaT: number): void {
         super.updateScene(deltaT);
 
-        // boss is defeated and no enemies remaining -> end level timer
-        if(this.bossDefeated && this.currentNumEnemies === 0) {
-            if(this.changeLevelTimer === undefined){
-                this.changeLevelTimer = new Timer(5000);
-                this.createChallengeLabel("end");
-                this.changeLevelTimer.start();
-            }
-            
-            // once end level timer has elapsed -> end level
-            if(this.changeLevelTimer.getTimeLeft() <= 0){
-                this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "hades"});
-                this.viewport.setSize(1600, 900);
-                // maintain scene variables
-                this.sceneManager.changeToScene(MainMenu, {
-                    invincible: this.invincible, 
-                    unlockAll: this.unlockAll,
-                    instant_kill: this.instant_kill,
-                    speedUp: this.speedUp, 
-                    unlockedLevels: this.unlockedLevels
-                });
-            }
-        }
-
         if(this.startSceneTimer.isStopped()){
             if(!this.startedLevel){
                 this.player.unfreeze();
@@ -482,15 +482,72 @@ export default class level_h3 extends GameLevel {
             }
         }
 
-        // update boss health bar
-        if(this.Cerberus._ai){
-            const bossPercentage = (<EchidnaAI>this.Cerberus._ai).health/(<CerberusAI>this.Cerberus._ai).maxHealth;
-            this.bossHealthBar.size = new Vec2(600*bossPercentage, 16);
+        // update bosses healthbar
+        if (!this.Cerberus._ai){
+
+            this.bossHealthBar.visible = false;
+
+        } else {
+
+            const bossPercentage = (<CerberusAI>this.Cerberus._ai).health/(<CerberusAI>this.Cerberus._ai).maxHealth;
+            this.bossHealthBar.size = new Vec2(160*bossPercentage, 16);
+            this.bossHealthBar.position = new Vec2(400 + (bossPercentage-1)*80,425);
+
+        }
+
+        if (!this.Cerberus2._ai){
+
+            this.bossHealthBar2.visible = false;
+            
+        } else {
+
+            const bossPercentage2 = (<CerberusAI>this.Cerberus2._ai).health/(<CerberusAI>this.Cerberus2._ai).maxHealth;
+            this.bossHealthBar2.size = new Vec2(160*bossPercentage2, 16);
+            this.bossHealthBar2.position = new Vec2(150 + (bossPercentage2-1)*80,425);
+
+        }
+
+        if (!this.Cerberus3._ai){
+
+            this.bossHealthBar3.visible = false;
+        
+        } else {
+
+            const bossPercentage3 = (<CerberusAI>this.Cerberus3._ai).health/(<CerberusAI>this.Cerberus3._ai).maxHealth;
+            this.bossHealthBar3.size = new Vec2(160*bossPercentage3, 16);
+            this.bossHealthBar3.position = new Vec2(650 + (bossPercentage3-1)*80,425);
+
+        }
+
+        // boss is defeated and no enemies remaining -> end level timer
+        if(this.deadBosses === 3 && this.currentNumEnemies === 0) {
+            if(this.changeLevelTimer === undefined){
+                this.changeLevelTimer = new Timer(5000, () => {
+
+                    this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "hades"});
+                    this.viewport.setSize(1600, 900);
+                    // maintain scene variables
+                    this.sceneManager.changeToScene(MainMenu, {
+                        invincible: this.invincible, 
+                        unlockAll: this.unlockAll,
+                        instant_kill: this.instant_kill,
+                        speedUp: this.speedUp, 
+                        unlockedLevels: this.unlockedLevels
+                    });
+
+                });
+                this.createChallengeLabel("end");
+                this.changeLevelTimer.start();
+            }
+            
+            // once end level timer has elapsed -> end level
+
         }
 
         while(this.bossReceiver.hasNextEvent()){
             this.handleEvent(this.bossReceiver.getNextEvent());
         }
+
     }
 
 }

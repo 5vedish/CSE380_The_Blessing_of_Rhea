@@ -3,6 +3,8 @@ export enum Project_Events {
     LEVELUP = "levelUp",
     ENEMYDIED = "enemyDied",
     BOSSDIED = "bossDied",
+    CERBERUSDIED = "cerberusDied",
+    CERBERUSDAMAGED = "cerberusDamaged",
     PLAYERATTACKED = "playerAttacked",
     GAMEPAUSE = "GAMEPAUSE",
     GAMEUNPAUSE = "GAMEUNPAUSE",

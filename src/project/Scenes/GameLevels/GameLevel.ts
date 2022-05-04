@@ -70,7 +70,7 @@ export default class GameLevel extends Scene{
     protected startedLevel: boolean = false;
     protected gameTimer: Timer;
     protected gameTime: Label;
-    protected changeLevelTimer: Timer = new Timer(5000);
+    protected changeLevelTimer: Timer;
 
     //Each level has a timer
     protected levelTimer: Timer;
@@ -394,6 +394,7 @@ export default class GameLevel extends Scene{
 
                 case Project_Events.BOSSDIED:
                     const boss = <CanvasNode>event.data.get("enemy");
+
                     this.battleManager.enemies = this.battleManager.enemies.filter(enemy => enemy !== <BattlerAI>(boss._ai));
                     this.enemyArray = this.enemyArray.filter(enemy => enemy !== boss);
                     this.bossDefeated = true;
@@ -401,8 +402,8 @@ export default class GameLevel extends Scene{
                     break;
                 case Project_Events.MELEEATTACK:
                         //handle removing attack sprite
-                        let attackSpirte = event.data.get("owner");
-                        attackSpirte.destroy();     
+                        let attackSprite = event.data.get("owner");
+                        attackSprite.destroy();     
                         break;
                            
             }

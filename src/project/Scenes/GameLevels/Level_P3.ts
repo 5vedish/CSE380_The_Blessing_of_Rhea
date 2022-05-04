@@ -326,22 +326,22 @@ export default class level_p3 extends GameLevel {
             if(this.bossDefeated && this.currentNumEnemies === 0) {
                 if(this.changeLevelTimer === undefined){
                     this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "leviathan"});
-                    this.changeLevelTimer = new Timer(5000);
+                    this.changeLevelTimer = new Timer(5000, () => {
+
+                        this.viewport.setSize(1600, 900);
+                        this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "leviathan"});
+                        this.sceneManager.changeToScene(level_h1, {
+                            invincible: this.invincible, 
+                            unlockAll: this.unlockAll,
+                            instant_kill: this.instant_kill,
+                            speedUp: this.speedUp, 
+                            unlockedLevels: this.unlockedLevels
+                        }, this.sceneOptions);
+                    }); 
                     this.createChallengeLabel("end");
                     this.changeLevelTimer.start();
                 }
                 
-                if(this.changeLevelTimer.getTimeLeft() <= 0){
-                    this.viewport.setSize(1600, 900);
-                    this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "leviathan"});
-                    this.sceneManager.changeToScene(level_h1, {
-                        invincible: this.invincible, 
-                        unlockAll: this.unlockAll,
-                        instant_kill: this.instant_kill,
-                        speedUp: this.speedUp, 
-                        unlockedLevels: this.unlockedLevels
-                    }, this.sceneOptions);
-                }
             }
         }
         

@@ -232,14 +232,11 @@ export default class level_z2 extends GameLevel {
             if(this.currentWave >= 3 && this.currentNumEnemies === 0) {
                 //end level and move to level z3
                 if(this.changeLevelTimer === undefined){
-                    this.changeLevelTimer = new Timer(5000);
-                    this.changeLevelTimer.start();
-                }
+                    this.changeLevelTimer = new Timer(5000, ()=> {
 
-                if(this.changeLevelTimer.getTimeLeft() <= 0){
-                    this.viewport.setSize(1600, 900);
-                    this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "zeus"});
-                    this.sceneManager.changeToScene(level_z3, {characterStats: this.playerStats, 
+                        this.viewport.setSize(1600, 900);
+                        this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "zeus"});
+                        this.sceneManager.changeToScene(level_z3, {characterStats: this.playerStats, 
                         weapon: (<PlayerController>this.player._ai).weapon,
                         invincible: this.invincible, 
                         unlockAll: this.unlockAll,
@@ -248,7 +245,11 @@ export default class level_z2 extends GameLevel {
                         unlockedLevels: this.unlockedLevels,
                         upgradedWeapon: this.upgradedWeapon
                     }, this.sceneOptions);
+
+                    });
+                    this.changeLevelTimer.start();
                 }
+
             }
         }
     }

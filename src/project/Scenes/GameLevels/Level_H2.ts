@@ -243,21 +243,23 @@ export default class level_h2 extends GameLevel {
             if(this.currentWave >= 3 && this.currentNumEnemies === 0) {
                 //end level and move to level z3
                 if(this.changeLevelTimer === undefined){
+                    
                     this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "hades"});
-                    this.changeLevelTimer = new Timer(5000);
+                    this.changeLevelTimer = new Timer(5000, () => {
+
+                        this.viewport.setSize(1600, 900);
+                        this.sceneManager.changeToScene(level_h3, {
+                            invincible: this.invincible, 
+                            unlockAll: this.unlockAll,
+                            instant_kill: this.instant_kill,
+                            speedUp: this.speedUp,
+                            unlockedLevels: this.unlockedLevels
+                        }, this.sceneOptions);
+
+                    });
                     this.changeLevelTimer.start();
                 }
 
-                if(this.changeLevelTimer.getTimeLeft() <= 0){
-                    this.viewport.setSize(1600, 900);
-                    this.sceneManager.changeToScene(level_h3, {
-                        invincible: this.invincible, 
-                        unlockAll: this.unlockAll,
-                        instant_kill: this.instant_kill,
-                        speedUp: this.speedUp,
-                        unlockedLevels: this.unlockedLevels
-                    }, this.sceneOptions);
-                }
             }
         }
     }

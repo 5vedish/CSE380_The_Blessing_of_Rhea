@@ -266,14 +266,10 @@ export default class level_p1 extends GameLevel {
                 //end level and move to level z2
                 if(this.changeLevelTimer === undefined){
                     this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "poseidon"});
-                    this.changeLevelTimer = new Timer(5000);
-                    this.createChallengeLabel("end");
-                    this.changeLevelTimer.start();
-                }
+                    this.changeLevelTimer = new Timer(5000, () => {
 
-                if(this.changeLevelTimer.getTimeLeft() <= 0){
-                    this.viewport.setSize(1600, 900);
-                    this.sceneManager.changeToScene(level_p2, {
+                        this.viewport.setSize(1600, 900);
+                        this.sceneManager.changeToScene(level_p2, {
                         characterStats: this.playerStats, 
                         weapon: (<PlayerController>this.player._ai).weapon,
                         invincible: this.invincible, 
@@ -282,7 +278,12 @@ export default class level_p1 extends GameLevel {
                         speedUp: this.speedUp, 
                         unlockedLevels: this.unlockedLevels
                     }, this.sceneOptions);
+
+                    });
+                    this.changeLevelTimer.start();
                 }
+
+               
             }
         }
         

@@ -42,7 +42,7 @@ export default class CerberusAI extends EnemyAI {
                 }
 
             ],
-            onEnd: Project_Events.BOSSDIED,
+            onEnd: Project_Events.CERBERUSDIED,
             onEndData: {enemy: this.owner}
         });
 
