@@ -107,6 +107,9 @@ export default class GameLevel extends Scene{
     protected item2: Sprite;
     protected item3: Sprite;
 
+    protected itemSelectButton: UIElement;
+    protected itemSelectButtonLabel: Sprite;
+
     protected playerDied: boolean = false;
 
     //Rhea statue
@@ -176,13 +179,16 @@ export default class GameLevel extends Scene{
         this.load.image("hermes_sandals_2", "project_assets/sprites/hermes_sandals_2.png");
         this.load.image("hourglass_2", "project_assets/sprites/hourglass_2.png");
 
-        this.load.image("evolvedWeapon", "project_assets/sprites/evolved_weapon.png");
 
         this.load.image("aegis_3", "project_assets/sprites/aegis_3.png");
         this.load.image("bolt_3", "project_assets/sprites/bolt_3.png");
         this.load.image("goblet_of_dionysus_3", "project_assets/sprites/goblet_3.png");
         this.load.image("hermes_sandals_3", "project_assets/sprites/hermes_sandals_3.png");
         this.load.image("hourglass_3", "project_assets/sprites/hourglass_3.png");
+
+        this.load.image("evolvedWeapon", "project_assets/sprites/evolved_weapon.png");
+
+        this.load.image("itemSelectButton", "project_assets/sprites/itemSelectButton.png");
 
         //Load sound effect and music
         this.load.audio("enemyDamaged", "project_assets/sounds/enemyDamage.wav");
@@ -250,7 +256,14 @@ export default class GameLevel extends Scene{
           this.button1.borderRadius = 10;
           this.button1.borderColor = Color.WHITE;
           this.button1.backgroundColor = Color.GRAYISH;
-          this.button1.onClickEventId = "one";
+          //this.button1.onClickEventId = "one";
+          this.button1.onClick = () => {
+              this.button1.borderColor = Color.GOLDEN_YELLOW;
+              this.button2.borderColor = Color.WHITE;
+              this.button3.borderColor = Color.WHITE;
+
+              this.itemSelectButton.onClickEventId = "one";
+          }
 
           this.button2 = this.add.uiElement(UIElementType.BUTTON, "levelUp", {
             position: new Vec2((this.viewport.getOrigin().x), this.viewport.getOrigin().y), text: ""
@@ -260,7 +273,14 @@ export default class GameLevel extends Scene{
           this.button2.borderRadius = 10;
           this.button2.borderColor = Color.WHITE;
           this.button2.backgroundColor = Color.GRAYISH;
-          this.button2.onClickEventId = "two";
+          //this.button2.onClickEventId = "two";
+          this.button2.onClick = () => {
+            this.button1.borderColor = Color.WHITE;
+            this.button2.borderColor = Color.GOLDEN_YELLOW;
+            this.button3.borderColor = Color.WHITE;
+
+            this.itemSelectButton.onClickEventId = "two";
+        }
 
           this.button3 = this.add.uiElement(UIElementType.BUTTON, "levelUp", {
             position: new Vec2((this.viewport.getOrigin().x + this.viewport.getHalfSize().x/2), this.viewport.getOrigin().y), text: ""
@@ -270,8 +290,25 @@ export default class GameLevel extends Scene{
           this.button3.borderRadius = 10;
           this.button3.borderColor = Color.WHITE;
           this.button3.backgroundColor = Color.GRAYISH;
-          this.button3.onClickEventId = "three";
+          //this.button3.onClickEventId = "three";
+          this.button3.onClick = () => {
+            this.button1.borderColor = Color.WHITE;
+            this.button2.borderColor = Color.WHITE;
+            this.button3.borderColor = Color.GOLDEN_YELLOW;
 
+            this.itemSelectButton.onClickEventId = "three";
+        }
+
+          this.itemSelectButton = this.add.uiElement(UIElementType.BUTTON, "levelUp", {
+            position: new Vec2((this.viewport.getOrigin().x), this.viewport.getOrigin().y + 128), text: ""
+        });
+          this.itemSelectButton.size.set(256, 128);
+          this.itemSelectButton.borderWidth = 10;
+          this.itemSelectButton.borderRadius = 10;
+          this.itemSelectButton.borderColor = Color.WHITE;
+          this.itemSelectButton.backgroundColor = Color.GRAYISH;
+          this.itemSelectButtonLabel = this.add.sprite("itemSelectButton", "levelUp");
+          this.itemSelectButtonLabel.position = new Vec2(this.viewport.getOrigin().x+5, this.itemSelectButton.position.y);
 
           this.createChallengeLabel("objective");
     }
@@ -319,6 +356,8 @@ export default class GameLevel extends Scene{
                         break;
 
                 }
+
+                this.itemSelectButton.onClickEventId = "";
 
                 this.getLayer("levelUp").removeNode(this.item1);
                 this.getLayer("levelUp").removeNode(this.item2);
