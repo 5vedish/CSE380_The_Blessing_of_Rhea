@@ -122,10 +122,7 @@ export default class GameLevel extends Scene{
     protected levelMusic: string;
 
     // items
-    protected itemsArray = ["honey_jar", 
-        "hourglass_1", "hermes_sandals_1", "bolt_1", "goblet_of_dionysus_1", "aegis_1",
-        "hourglass_2", "hermes_sandals_2", "bolt_2", "goblet_of_dionysus_2", "aegis_2", 
-        "hourglass_3", "hermes_sandals_3", "bolt_3", "goblet_of_dionysus_3", "aegis_3"];
+    protected itemsArray = ["honey_jar", "hourglass_", "hermes_sandals_", "bolt_", "goblet_of_dionysus_", "aegis_"]; // "_" means chance to roll 1/2/3
     protected selectionArray: Array<string> = [];
     protected itemConstructorPairings: Map<string,any> = new Map([["honey_jar", HoneyJar],
         ["hourglass_1" , Hourglass1], ["hermes_sandals_1", HermesSandals1], ["bolt_1", Bolt1], ["goblet_of_dionysus_1", Goblet1], ["aegis_1", Aegis1],
@@ -311,6 +308,9 @@ export default class GameLevel extends Scene{
           this.itemSelectButtonLabel.position = new Vec2(this.viewport.getOrigin().x+5, this.itemSelectButton.position.y);
 
           this.createChallengeLabel("objective");
+
+          // player stats HUD
+
     }
 
     updateScene(deltaT: number): void {
@@ -341,18 +341,21 @@ export default class GameLevel extends Scene{
 
                         let item = new (this.itemConstructorPairings.get(this.selectionArray[0]))(new Sprite(this.selectionArray[0]));
                         item.use(this.player, this.playerController.weapon, this.playerStats, this.playerController);
+                        this.button1.borderColor = Color.WHITE;
                         break;
 
                     case "two":
 
                         let item2 = new (this.itemConstructorPairings.get(this.selectionArray[1]))(new Sprite(this.selectionArray[1]));
                         item2.use(this.player, this.playerController.weapon, this.playerStats, this.playerController);
+                        this.button2.borderColor = Color.WHITE;
                         break;
 
                     case "three":
 
                         let item3 = new (this.itemConstructorPairings.get(this.selectionArray[2]))(new Sprite(this.selectionArray[2]));
                         item3.use(this.player, this.playerController.weapon, this.playerStats, this.playerController);
+                        this.button3.borderColor = Color.WHITE;
                         break;
 
                 }
@@ -479,7 +482,6 @@ export default class GameLevel extends Scene{
 
         //Check if player died
         if(this.playerStats.stats.health <= 0){
-            console.log("DWLJDKJDJJJDFBW " + this.playerStats.stats.health);
             if(this.changeLevelTimer.isStopped() && !this.playerDied) {
                 this.changeLevelTimer.start();
                 this.playerDied = true;
@@ -713,10 +715,38 @@ export default class GameLevel extends Scene{
     protected rollItems() : void{
         this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "levelup", loop: false, holdReference: false});
         this.selectionArray = [];
+
+        let rolledItem;
+        let tier;
+        let dupes = [];
         while (this.selectionArray.length < 3){
-            this.selectionArray.push(this.itemsArray[Math.floor(Math.random() * this.itemsArray.length)]);
+
+            rolledItem = this.itemsArray[Math.floor(Math.random() * this.itemsArray.length)];
+
+            // remove dupe
+            this.itemsArray.splice(this.itemsArray.indexOf(rolledItem), 1);
+            dupes.push(rolledItem);
+
+            // roll the tier if applicable
+            if (rolledItem.charAt(rolledItem.length-1) === "_"){
+
+                tier = Math.random();
+                if (tier < .7){
+                    rolledItem = rolledItem.concat("1");
+                } else if (tier < .9){
+                    rolledItem = rolledItem.concat("2");
+                } else {
+                    rolledItem = rolledItem.concat("3");
+                }
+
+            }
+
+            this.selectionArray.push(rolledItem);
 
         }
+
+        // remerge dupes into choices
+        this.itemsArray = this.itemsArray.concat(dupes);
         
         this.item1 = new Sprite(this.selectionArray[0]);
         this.item1.position = new Vec2(this.button1.position.x, this.button1.position.y);

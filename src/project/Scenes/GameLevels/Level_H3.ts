@@ -460,6 +460,7 @@ export default class level_h3 extends GameLevel {
             enemy.addAI(EnemyAI, options);
             enemy.setGroup("enemy");
             enemy.freeze();
+            this.enemyArray.push(enemy);
 
             if(this.battleManager.enemies === undefined){
                 this.battleManager.setEnemies([<BattlerAI>enemy._ai])
