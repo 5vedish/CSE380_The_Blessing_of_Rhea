@@ -40,12 +40,14 @@ export default class Cutscene extends Scene{
     private unlockAll: boolean;
     private instant_kill: boolean;
     private speedUp: boolean;
+    private unlockedLevels: boolean[];
 
     initScene(init: Record<string, any>): void {
         this.invincible = init.invincible;
         this.unlockAll = init.unlockAll;
         this.instant_kill = init.instant_kill;
         this.speedUp = init.speedUp;
+        this.unlockedLevels = init.unlockedLevels;
     }
 
     loadScene(): void {
@@ -158,7 +160,8 @@ export default class Cutscene extends Scene{
                     invincible: this.invincible, 
                     unlockAll: this.unlockAll,
                     instant_kill: this.instant_kill,
-                    speedUp: this.speedUp
+                    speedUp: this.speedUp,
+                    unlockedLevels: this.unlockedLevels
                 }
                 
                 this.sceneManager.changeToScene(level_z1, options, this.sceneOptions);

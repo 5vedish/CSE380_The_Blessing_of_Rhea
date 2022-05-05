@@ -10,7 +10,7 @@ import OrthogonalTilemap from "../../Wolfie2D/Nodes/Tilemaps/OrthogonalTilemap";
 
 export default class HadesController extends PlayerController {
 
-    static HADESCD: number = 2000; // 1s
+    public static HADESCD: number = 2000; // 1s
 
     public projectiles: Array<AnimatedSprite>;
     public attackCooldown: Timer;

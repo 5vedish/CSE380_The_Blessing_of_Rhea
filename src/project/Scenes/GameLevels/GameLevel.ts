@@ -5,7 +5,7 @@ import GameNode, { TweenableProperties } from "../../../Wolfie2D/Nodes/GameNode"
 import { GraphicType } from "../../../Wolfie2D/Nodes/Graphics/GraphicTypes";
 import AnimatedSprite from "../../../Wolfie2D/Nodes/Sprites/AnimatedSprite";
 import OrthogonalTilemap from "../../../Wolfie2D/Nodes/Tilemaps/OrthogonalTilemap";
-import Label from "../../../Wolfie2D/Nodes/UIElements/Label";
+import Label, { HAlign } from "../../../Wolfie2D/Nodes/UIElements/Label";
 import { UIElementType } from "../../../Wolfie2D/Nodes/UIElements/UIElementTypes";
 import Scene from "../../../Wolfie2D/Scene/Scene";
 import Timer from "../../../Wolfie2D/Timing/Timer";
@@ -95,6 +95,13 @@ export default class GameLevel extends Scene{
     protected healthBar: Graphic;
     protected levelUI: Label;
     protected expBar: Graphic;
+
+    // pause gui
+    protected hpHUD: Label;
+    protected attHUD: Label;
+    protected cdHUD: Label;
+    protected defHUD: Label;
+    protected spdHUD: Label;
 
     // leveling
     private levelUpLayer: Layer;
@@ -216,8 +223,7 @@ export default class GameLevel extends Scene{
         this.addUILayer("pause").disable();
         let pauseScreen = this.add.sprite("pause_screen", "pause");
         pauseScreen.position.copy(this.viewport.getOrigin());
-        pauseScreen.alpha = .5;
-        
+        pauseScreen.alpha = .5;        
 
         //Level up UI
         this.levelUpLayer = this.addUILayer("levelUp");
@@ -309,8 +315,36 @@ export default class GameLevel extends Scene{
 
           this.createChallengeLabel("objective");
 
-          // player stats HUD
+          let HUD = this.addUILayer("HUD");
+          HUD.setDepth(999);
+         HUD.disable();
 
+          // player stats HUD
+          this.hpHUD = <Label> this.add.uiElement(UIElementType.LABEL, "HUD", { position: new Vec2(this.viewport.getOrigin().x-350,
+            this.viewport.getOrigin().y-100), text: "HP: "});
+          this.hpHUD.textColor = Color.WHITE;
+          this.hpHUD.setHAlign(HAlign.LEFT);
+
+          this.attHUD = <Label> this.add.uiElement(UIElementType.LABEL, "HUD", { position: new Vec2(this.viewport.getOrigin().x-350,
+            this.viewport.getOrigin().y-50), text: "ATT: "});
+          this.attHUD.textColor = Color.WHITE;
+          this.attHUD.setHAlign(HAlign.LEFT);
+
+          this.cdHUD = <Label> this.add.uiElement(UIElementType.LABEL, "HUD", { position: new Vec2(this.viewport.getOrigin().x-350,
+            this.viewport.getOrigin().y), text: "CDown: "});
+          this.cdHUD.textColor = Color.WHITE;
+          this.cdHUD.setHAlign(HAlign.LEFT);
+
+          this.defHUD = <Label> this.add.uiElement(UIElementType.LABEL, "HUD", { position: new Vec2(this.viewport.getOrigin().x-350,
+            this.viewport.getOrigin().y+50), text: "DEF: "});
+          this.defHUD.textColor = Color.WHITE;
+          this.defHUD.setHAlign(HAlign.LEFT);
+
+          this.spdHUD = <Label> this.add.uiElement(UIElementType.LABEL, "HUD", { position: new Vec2(this.viewport.getOrigin().x-350,
+            this.viewport.getOrigin().y+100), text: "SPD: "});
+          this.spdHUD.textColor = Color.WHITE;
+          this.spdHUD.setHAlign(HAlign.LEFT);
+    
     }
 
     updateScene(deltaT: number): void {
@@ -321,9 +355,12 @@ export default class GameLevel extends Scene{
             if (this.pauseFlag){
                 this.pauseEntities();
                 this.getLayer("pause").enable();
+                this.populateHUD();
+                this.getLayer("HUD").enable();
             } else {
                 this.unpauseEntities();
                 this.getLayer("pause").disable();
+                this.getLayer("HUD").disable();
             }
 
         }
@@ -366,6 +403,8 @@ export default class GameLevel extends Scene{
                 this.getLayer("levelUp").removeNode(this.item2);
                 this.getLayer("levelUp").removeNode(this.item3);
 
+                this.populateHUD();
+
                 this.levelChanged--;
                 // accounting for multiple levels
                 if (this.levelChanged){
@@ -376,7 +415,8 @@ export default class GameLevel extends Scene{
             if (this.levelChanged === 0){
                 this.pauseFlag = !this.pauseFlag;
                 this.getLayer("levelUp").disable();
-                this.unpauseEntities();        
+                this.unpauseEntities();  
+                this.getLayer("HUD").disable();      
             }
             
         }
@@ -422,6 +462,9 @@ export default class GameLevel extends Scene{
 
                     this.pauseFlag = !this.pauseFlag;
                     this.pauseEntities();
+                    this.populateHUD();
+                    this.getLayer("HUD").enable();
+
                     //show layer
                     this.getLayer("levelUp").enable();
                     this.levelChanged = event.data.get("levelChange");
@@ -832,4 +875,24 @@ export default class GameLevel extends Scene{
         this.challenge.tweens.play("fadeIn");
         this.challenge.tweens.play("fadeOut");
     }
+
+    protected populateHUD(): void{
+
+        const attackString = (this.playerController.weapon) ? this.playerController.weapon.type.damage.toString() :
+        (<FireballAI>((<HadesController>this.playerController).projectiles[0]._ai)).getDamage().toString();
+
+        const cDownString = (this.playerController.weapon) ? (this.playerController.weapon.type.cooldown/1000).toString() :
+        ((<HadesController> this.playerController).attackCooldown.getTotalTime()/1000).toString();
+
+        this.hpHUD.setText("HP: " + this.playerStats.stats.maxHealth);
+        
+        this.attHUD.setText("ATT: " + attackString);
+
+        this.cdHUD.setText("CDOWN: " + cDownString);
+
+        this.defHUD.setText("DEF: " + this.playerStats.stats.defense);
+
+        this.spdHUD.setText("SPD: " + this.playerStats.stats.speed);
+    }
+
 }
