@@ -9,11 +9,12 @@ import HelpScreen from "./HelpScreen";
 import Sprite from "../../Wolfie2D/Nodes/Sprites/Sprite";
 import level_z1 from "./GameLevels/Level_Z1";
 import Timer from "../../Wolfie2D/Timing/Timer";
-import Level_Z1_Cutscene from "./Cutscenes/Level_Z1_Cutscene";
 import Tutorial from "./Tutorial";
 import level_z2 from "./GameLevels/Level_Z2";
 import CharacterStat from "../PlayerStatus";
 import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
+import Cutscene from "./Cutscenes/Cutscene";
+import Z1_Cutscene from "./Cutscenes/Z1_Cutscene";
 
 export default class MainMenu extends Scene {
   private splashScreen: Layer;
@@ -205,8 +206,8 @@ export default class MainMenu extends Scene {
         }
         //TO DO replace with tutorial stage
         this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "main_menu"});
-        // this.sceneManager.changeToScene(Level_Z1_Cutscene, options, physicsOptions);
-        this.sceneManager.changeToScene(level_z1, options, physicsOptions);
+        this.sceneManager.changeToScene(Z1_Cutscene, options, physicsOptions);
+        // this.sceneManager.changeToScene(level_z1, options, physicsOptions);
 
       }
 

@@ -10,7 +10,7 @@ import { UIElementType } from "../../Wolfie2D/Nodes/UIElements/UIElementTypes";
 import Color from "../../Wolfie2D/Utils/Color";
 import GameLevel from "./GameLevels/GameLevel";
 import CharacterStat from "../PlayerStatus";
-import Level_Z1_Cutscene from "./Cutscenes/Level_Z1_Cutscene";
+import Level_Z1_Cutscene from "./Cutscenes/Cutscene";
 import Input from "../../Wolfie2D/Input/Input";
 import { Project_Events } from "../project_constants";
 import CanvasNode from "../../Wolfie2D/Nodes/CanvasNode";

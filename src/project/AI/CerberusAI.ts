@@ -15,11 +15,13 @@ export default class CerberusAI extends EnemyAI {
     protected attackCooldown: Timer = new Timer(1000);
 
     protected dead: boolean = false;
+    protected headNum: number;
 
     initializeAI(owner: AnimatedSprite, options: Record<string, any>): void {
         super.initializeAI(owner, options);
     
         this.projectiles = options.projectiles;
+        this.headNum = options.headNum;
 
         this.initialize(EnemyStates.DEFAULT, options);
 
@@ -61,6 +63,9 @@ export default class CerberusAI extends EnemyAI {
         if(this.health <= 0 && !this.dead){
             this.owner.tweens.play("death");
             this.dead = true;
+            this.emitter.fireEvent(Project_Events.CERBERUSDAMAGED, { headNum: this.headNum, dead: true });
+        } else {
+            this.emitter.fireEvent(Project_Events.CERBERUSDAMAGED, { headNum: this.headNum, dead: false });
         }
 
     }

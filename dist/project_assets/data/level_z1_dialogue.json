@@ -4,8 +4,9 @@
     "lines": ["What in Tartarus are you?", 
         "Sssss...", "What's that? I can't quite understand you.", "Sssss!", "Welp. I never did like snakes anyway."],
     "speaker": [0, 1, 0, 1, 0],
-    "speakerName": ["Bigzeus", "bigsnake"],
+    "speakerSprite": ["Bigzeus", "bigsnake"],
     "speakerPositions": ["left", "right", "left", "right", "left"],
-    "speakerAnimations": ["idle", "moving", "idle", "attack", "attacking"]
+    "speakerAnimations": ["idle", "moving", "idle", "attack", "attacking"],
+    "speakerName": ["Zeus", "Snake Thingy", "Zeus", "Snake Thingy", "Zeus"]
     }
 }

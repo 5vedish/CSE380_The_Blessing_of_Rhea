@@ -181,7 +181,7 @@ export default class level_h3 extends GameLevel {
 
         // boss initialization
         this.bossReceiver = new Receiver();
-        this.bossReceiver.subscribe([Project_Events.BOSSSPAWNENEMIES, Project_Events.CERBERUSDIED]);
+        this.bossReceiver.subscribe([Project_Events.BOSSSPAWNENEMIES, Project_Events.CERBERUSDIED, Project_Events.CERBERUSDAMAGED]);
 
         // CERBERUS
         
@@ -198,7 +198,8 @@ export default class level_h3 extends GameLevel {
             experience: 1,
             scene: this,
             projectiles: this.createProjectiles(10, "CerberusFireball"),
-            startingPosition: Cerberus_Positions.CAGEONE
+            startingPosition: Cerberus_Positions.CAGEONE,
+            headNum: 1
         }
 
         this.Cerberus.addAI(CerberusAI, options);
@@ -231,7 +232,8 @@ export default class level_h3 extends GameLevel {
             experience: 1,
             scene: this,
             projectiles: this.createProjectiles(10, "CerberusFireball"),
-            startingPosition: Cerberus_Positions.CAGETWO
+            startingPosition: Cerberus_Positions.CAGETWO,
+            headNum: 2
         }
 
         this.Cerberus2.addAI(CerberusAI, options2);
@@ -264,7 +266,8 @@ export default class level_h3 extends GameLevel {
             experience: 1,
             scene: this,
             projectiles: this.createProjectiles(10, "CerberusFireball"),
-            startingPosition: Cerberus_Positions.CAGETHREE
+            startingPosition: Cerberus_Positions.CAGETHREE,
+            headNum: 3
         }
 
         this.Cerberus3.addAI(CerberusAI, options3);
@@ -346,6 +349,62 @@ export default class level_h3 extends GameLevel {
 
                 }
                 break; // end of event
+
+                case Project_Events.CERBERUSDAMAGED:
+
+                const headNum = event.data.get("headNum");
+                const dead = event.data.get("dead");
+
+                // update bosses healthbar
+                if (headNum === 1){
+
+                    if (dead){
+
+                        this.bossHealthBar.visible = false;
+
+                    } else {
+
+                        const bossPercentage = (<CerberusAI>this.Cerberus._ai).health/(<CerberusAI>this.Cerberus._ai).maxHealth;
+                        this.bossHealthBar.size = new Vec2(160*bossPercentage, 16);
+                        this.bossHealthBar.position = new Vec2(400 + (bossPercentage-1)*80,425);
+
+                    }
+
+                } 
+
+                if (headNum === 2){
+
+                    if (dead){
+
+                        this.bossHealthBar2.visible = false;
+
+                    } else {
+
+                        const bossPercentage2 = (<CerberusAI>this.Cerberus2._ai).health/(<CerberusAI>this.Cerberus2._ai).maxHealth;
+                        this.bossHealthBar2.size = new Vec2(160*bossPercentage2, 16);
+                        this.bossHealthBar2.position = new Vec2(150 + (bossPercentage2-1)*80,425);
+
+                    }
+
+                } 
+
+                if (headNum === 3){
+
+                    if (dead){
+
+                        this.bossHealthBar3.visible = false;
+
+                    } else {
+
+                        const bossPercentage3 = (<CerberusAI>this.Cerberus3._ai).health/(<CerberusAI>this.Cerberus3._ai).maxHealth;
+                        this.bossHealthBar3.size = new Vec2(160*bossPercentage3, 16);
+                        this.bossHealthBar3.position = new Vec2(650 + (bossPercentage3-1)*80,425);
+
+                    }
+
+                } 
+
+                break;
                 
                 case Project_Events.CERBERUSDIED:
 
@@ -480,43 +539,6 @@ export default class level_h3 extends GameLevel {
 
                 this.startedLevel = true;
             }
-        }
-
-        // update bosses healthbar
-        if (!this.Cerberus._ai){
-
-            this.bossHealthBar.visible = false;
-
-        } else {
-
-            const bossPercentage = (<CerberusAI>this.Cerberus._ai).health/(<CerberusAI>this.Cerberus._ai).maxHealth;
-            this.bossHealthBar.size = new Vec2(160*bossPercentage, 16);
-            this.bossHealthBar.position = new Vec2(400 + (bossPercentage-1)*80,425);
-
-        }
-
-        if (!this.Cerberus2._ai){
-
-            this.bossHealthBar2.visible = false;
-            
-        } else {
-
-            const bossPercentage2 = (<CerberusAI>this.Cerberus2._ai).health/(<CerberusAI>this.Cerberus2._ai).maxHealth;
-            this.bossHealthBar2.size = new Vec2(160*bossPercentage2, 16);
-            this.bossHealthBar2.position = new Vec2(150 + (bossPercentage2-1)*80,425);
-
-        }
-
-        if (!this.Cerberus3._ai){
-
-            this.bossHealthBar3.visible = false;
-        
-        } else {
-
-            const bossPercentage3 = (<CerberusAI>this.Cerberus3._ai).health/(<CerberusAI>this.Cerberus3._ai).maxHealth;
-            this.bossHealthBar3.size = new Vec2(160*bossPercentage3, 16);
-            this.bossHealthBar3.position = new Vec2(650 + (bossPercentage3-1)*80,425);
-
         }
 
         // boss is defeated and no enemies remaining -> end level timer
