@@ -879,20 +879,20 @@ export default class GameLevel extends Scene{
     protected populateHUD(): void{
 
         const attackString = (this.playerController.weapon) ? this.playerController.weapon.type.damage.toString() :
-        (<FireballAI>((<HadesController>this.playerController).projectiles[0]._ai)).getDamage().toString();
+        (<FireballAI>((<HadesController>this.playerController).projectiles[0]._ai)).getDamage().toFixed(2).toString();
 
         const cDownString = (this.playerController.weapon) ? (this.playerController.weapon.type.cooldown/1000).toString() :
-        ((<HadesController> this.playerController).attackCooldown.getTotalTime()/1000).toString();
+        ((<HadesController> this.playerController).attackCooldown.getTotalTime()/1000).toFixed(2).toString();
 
-        this.hpHUD.setText("HP: " + this.playerStats.stats.maxHealth);
+        this.hpHUD.setText("HP: " + this.playerStats.stats.maxHealth.toFixed(2));
         
         this.attHUD.setText("ATT: " + attackString);
 
         this.cdHUD.setText("CDOWN: " + cDownString);
 
-        this.defHUD.setText("DEF: " + this.playerStats.stats.defense);
+        this.defHUD.setText("DEF: " + this.playerStats.stats.defense.toFixed(2));
 
-        this.spdHUD.setText("SPD: " + this.playerStats.stats.speed);
+        this.spdHUD.setText("SPD: " + this.playerStats.stats.speed.toFixed(2));
     }
 
 }
