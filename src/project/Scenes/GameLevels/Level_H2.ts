@@ -129,19 +129,19 @@ export default class level_h2 extends GameLevel {
         this.weaponIconCoolDown.alpha = 0;
         
         // add spawnable enemies
-        this.spawnableEnemies.push({
-            name: "Skull",
-            health: 1,
-            player: this.player,
-            speed: 200,
-            weapon: this.createWeapon("knife"),
-            range: 16,
-            experience: 50
-        });
+        // this.spawnableEnemies.push({
+        //     name: "Skull",
+        //     health: 1,
+        //     player: this.player,
+        //     speed: 200,
+        //     weapon: this.createWeapon("knife"),
+        //     range: 16,
+        //     experience: 50
+        // });
 
         this.spawnableEnemies.push({
             name: "Witch",
-            health: 25,
+            health: 20,
             player: this.player,
             speed: 100,
             weapon: this.createWeapon("knife"),
@@ -149,15 +149,15 @@ export default class level_h2 extends GameLevel {
             experience: 250,
         });
 
-        this.spawnableEnemies.push({
-            name: "Hellhound",
-            health: 50,
-            player: this.player,
-            speed: 125,
-            weapon: this.createWeapon("knife"),
-            range: 20,
-            experience: 1000,
-        });
+        // this.spawnableEnemies.push({
+        //     name: "Hellhound",
+        //     health: 50,
+        //     player: this.player,
+        //     speed: 125,
+        //     weapon: this.createWeapon("knife"),
+        //     range: 20,
+        //     experience: 1000,
+        // });
 
         //Position the rhea statue and zone
         this.rheaStatue = this.add.animatedSprite("rheaStatue", "primary");

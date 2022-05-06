@@ -354,7 +354,6 @@ export default class GameLevel extends Scene{
           this.spdHUD.textColor = Color.WHITE;
           this.spdHUD.setHAlign(HAlign.LEFT);
 
-          console.log(this.inventory)
           this.populateInitInventory();
     
     }
@@ -461,6 +460,7 @@ export default class GameLevel extends Scene{
                     let expPercentage = this.playerStats.experience / (reqExp * 500);
                     this.expBar.size = new Vec2(expPercentage*216, 4);
                     this.expBar.position = new Vec2(108*expPercentage+(216/2), 32);
+
                     break;
 
                 case Project_Events.HEALTHCHANGED:
@@ -600,6 +600,8 @@ export default class GameLevel extends Scene{
     }
 
     protected pauseEntities(){
+        console.log("PAUSE")
+        console.log(this.enemyArray);
         this.startSceneTimer.pause();
         if(this.enemyArray.length > 0){
             this.enemyArray.map((enemy) => {
@@ -623,7 +625,10 @@ export default class GameLevel extends Scene{
     }
 
     protected unpauseEntities(){
+        console.log("UNPAUSE");
+        console.log(this.enemyArray);
         this.startSceneTimer.unpause();
+
         if(this.enemyArray.length > 0){
             this.enemyArray.map((enemy) => {
                 enemy.unfreeze();
