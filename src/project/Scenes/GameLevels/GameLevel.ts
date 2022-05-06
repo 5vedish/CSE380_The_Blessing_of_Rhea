@@ -78,7 +78,7 @@ export default class GameLevel extends Scene{
     protected startedLevel: boolean = false;
     protected gameTimer: Timer;
     protected gameTime: Label;
-    protected changeLevelTimer: Timer;
+    protected changeLevelTimer: Timer = new Timer(5000);
 
     //Each level has a timer
     protected levelTimer: Timer;
@@ -353,6 +353,9 @@ export default class GameLevel extends Scene{
             this.viewport.getOrigin().y+100), text: "SPD: "});
           this.spdHUD.textColor = Color.WHITE;
           this.spdHUD.setHAlign(HAlign.LEFT);
+
+          console.log(this.inventory)
+          this.populateInitInventory();
     
     }
 
@@ -538,6 +541,7 @@ export default class GameLevel extends Scene{
         //Check if player died
         if(this.playerStats.stats.health <= 0){
             if(this.changeLevelTimer.isStopped() && !this.playerDied) {
+                this.changeLevelTimer = new Timer(5000);
                 this.changeLevelTimer.start();
                 this.playerDied = true;
                 this.pauseEntities();
@@ -842,7 +846,6 @@ export default class GameLevel extends Scene{
                 // //Check if spawn positon is a wall
                 let spawnTile = this.walls.getColRowAt(enemyPosition);
                 let tile = this.walls.getTileAtRowCol(spawnTile);
-                console.log(tile);
                 if(tile === 0){
                     return enemyPosition;                    
                 } else {
@@ -910,6 +913,10 @@ export default class GameLevel extends Scene{
     }
 
     protected populateInventory(item: string): void {
+
+        if (!this.inventory){
+            this.inventory = []; // if undefined
+        }
         
         const found = this.inventory.findIndex(i => i.name === item);
 
@@ -953,6 +960,25 @@ export default class GameLevel extends Scene{
             ), text: "x" + icon.count });
             icon.countLabel.fontSize = 16;
         }
+    }
+
+    protected populateInitInventory(): void{
+
+        if (this.inventory && this.inventory !== []){ // if we carried over an inventory
+
+            for (let item of this.inventory){
+                item.sprite = this.add.sprite(item.name, "gui");
+                item.sprite.scale.set(.45,.45);
+                item.sprite.position = item.pos;
+
+                item.countLabel = <Label> this.add.uiElement(UIElementType.LABEL, "gui", { position: new Vec2(item.pos.x+15, item.pos.y+15), 
+                    text: "x1"}),
+                item.countLabel.setTextColor(Color.BLACK);
+                item.countLabel.fontSize = 16;
+            }
+
+        }
+       
     }
 
 

@@ -93,6 +93,7 @@ export default class level_z3 extends GameLevel {
         this.speedUp = init.speedUp;
         this.unlockedLevels = init.unlockedLevels;
         this.unlockedLevels[2] = true;
+        this.inventory = init.inventory;
     }
 
     startScene(): void {
@@ -363,23 +364,23 @@ export default class level_z3 extends GameLevel {
         }
 
         if(this.bossDefeated && this.currentNumEnemies === 0) {
-            if(this.changeLevelTimer === undefined){
-                this.changeLevelTimer = new Timer(5000, ()=> {
+    
+            this.changeLevelTimer = new Timer(5000, ()=> {
 
-                    this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "echidna"});
-                    this.viewport.setSize(1600, 900);
-                    this.sceneManager.changeToScene(level_p1, {
-                    invincible: this.invincible, 
-                    unlockAll: this.unlockAll,
-                    instant_kill: this.instant_kill,
-                    speedUp: this.speedUp, 
-                    unlockedLevels: this.unlockedLevels
-                });
+                this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "echidna"});
+                this.viewport.setSize(1600, 900);
+                this.sceneManager.changeToScene(level_p1, {
+                invincible: this.invincible, 
+                unlockAll: this.unlockAll,
+                instant_kill: this.instant_kill,
+                speedUp: this.speedUp, 
+                unlockedLevels: this.unlockedLevels
+            });
 
-                });
-                this.createChallengeLabel("end");
-                this.changeLevelTimer.start();
-            }
+            });
+            this.createChallengeLabel("end");
+            this.changeLevelTimer.start();
+            
             
         }
 

@@ -157,7 +157,8 @@ export default class level_h1 extends GameLevel {
                 weapon: null,
                 weaponV2: null,
                 projectiles: this.createProjectiles(5, "fireball"),
-                floor: this.floorCheck
+                floor: this.floorCheck,
+                invincible: this.invincible
             });
         
             
@@ -239,23 +240,24 @@ export default class level_h1 extends GameLevel {
     
             if(this.gameTimer.getTimeLeft() <= 0){
                 // end level and move to level 2
-                if(this.changeLevelTimer === undefined){
+              
                     
-                    this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "hades"});
-                    this.changeLevelTimer = new Timer(5000, () => {
+                this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "hades"});
+                this.changeLevelTimer = new Timer(5000, () => {
 
-                        this.viewport.setSize(1600, 900); // switch to H2
-                        this.sceneManager.changeToScene(level_h2, {characterStats: this.playerStats,
-                            invincible: this.invincible, 
-                            unlockAll: this.unlockAll,
-                            instant_kill: this.instant_kill,
-                            speedUp: this.speedUp,
-                            unlockedLevels: this.unlockedLevels
-                        }, this.sceneOptions);
+                    this.viewport.setSize(1600, 900); // switch to H2
+                    this.sceneManager.changeToScene(level_h2, {characterStats: this.playerStats,
+                        invincible: this.invincible, 
+                        unlockAll: this.unlockAll,
+                        instant_kill: this.instant_kill,
+                        speedUp: this.speedUp,
+                        unlockedLevels: this.unlockedLevels,
+                        inventory: this.inventory
+                    }, this.sceneOptions);
 
-                    });
-                    this.changeLevelTimer.start();
-                }
+                });
+                this.changeLevelTimer.start();
+                
         
             }
         }

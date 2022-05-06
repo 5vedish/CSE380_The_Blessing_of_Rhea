@@ -86,7 +86,7 @@ export default class level_z1 extends GameLevel {
         this.initPlayer();
         
         //Create how long players need to survive for
-        this.gameTimer = new Timer(120000);
+        this.gameTimer = new Timer(/*120000*/10000);
         this.gameTime = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(this.viewport.getHalfSize().x, 20), text: `${this.parseTimeLeft(this.gameTimer.getTotalTime())}`});
     
         this.levelUI = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(86, 32), 
@@ -223,25 +223,26 @@ export default class level_z1 extends GameLevel {
     
             if(this.gameTimer.getTimeLeft() <= 0){
                 //end level and move to level z2
-                if(this.changeLevelTimer === undefined){
+         
 
-                    this.changeLevelTimer = new Timer(3000, () => {
-                        this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "zeus"});
-                        this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "main_menu", loop: true, holdReference: true});
-                        this.viewport.setSize(1600, 900);
-                        this.sceneManager.changeToScene(level_z2, {characterStats: this.playerStats, 
-                        weapon: (<PlayerController>this.player._ai).weapon,
-                        invincible: this.invincible, 
-                        unlockAll: this.unlockAll,
-                        instant_kill: this.instant_kill,
-                        speedUp: this.speedUp, 
-                        unlockedLevels: this.unlockedLevels,
-                        upgradedWeapon: this.upgradedWeapon
-                    }, this.sceneOptions);
+                this.changeLevelTimer = new Timer(3000, () => {
+                    this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "zeus"});
+                    this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "main_menu", loop: true, holdReference: true});
+                    this.viewport.setSize(1600, 900);
+                    this.sceneManager.changeToScene(level_z2, {characterStats: this.playerStats, 
+                    weapon: (<PlayerController>this.player._ai).weapon,
+                    invincible: this.invincible, 
+                    unlockAll: this.unlockAll,
+                    instant_kill: this.instant_kill,
+                    speedUp: this.speedUp, 
+                    unlockedLevels: this.unlockedLevels,
+                    upgradedWeapon: this.upgradedWeapon,
+                    inventory: this.inventory
+                }, this.sceneOptions);
 
-                    });
-                    this.changeLevelTimer.start();
-                }
+                });
+                this.changeLevelTimer.start();
+                
             }
         }
         

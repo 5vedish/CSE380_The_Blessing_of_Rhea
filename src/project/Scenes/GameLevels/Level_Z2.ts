@@ -75,6 +75,7 @@ export default class level_z2 extends GameLevel {
         this.speedUp = init.speedUp;
         this.unlockedLevels = init.unlockedLevels;
         this.unlockedLevels[1] = true;
+        this.inventory = init.inventory;
     }
     
     startScene(): void {
@@ -231,24 +232,25 @@ export default class level_z2 extends GameLevel {
     
             if(this.currentWave >= 3 && this.currentNumEnemies === 0) {
                 //end level and move to level z3
-                if(this.changeLevelTimer === undefined){
-                    this.changeLevelTimer = new Timer(5000, ()=> {
+      
+                this.changeLevelTimer = new Timer(5000, ()=> {
 
-                        this.viewport.setSize(1600, 900);
-                        this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "zeus"});
-                        this.sceneManager.changeToScene(level_z3, {characterStats: this.playerStats, 
-                        weapon: (<PlayerController>this.player._ai).weapon,
-                        invincible: this.invincible, 
-                        unlockAll: this.unlockAll,
-                        instant_kill: this.instant_kill,
-                        speedUp: this.speedUp, 
-                        unlockedLevels: this.unlockedLevels,
-                        upgradedWeapon: this.upgradedWeapon
-                    }, this.sceneOptions);
+                    this.viewport.setSize(1600, 900);
+                    this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "zeus"});
+                    this.sceneManager.changeToScene(level_z3, {characterStats: this.playerStats, 
+                    weapon: (<PlayerController>this.player._ai).weapon,
+                    invincible: this.invincible, 
+                    unlockAll: this.unlockAll,
+                    instant_kill: this.instant_kill,
+                    speedUp: this.speedUp, 
+                    unlockedLevels: this.unlockedLevels,
+                    upgradedWeapon: this.upgradedWeapon,
+                    inventory: this.inventory
+                }, this.sceneOptions);
 
-                    });
-                    this.changeLevelTimer.start();
-                }
+                });
+                this.changeLevelTimer.start();
+                
 
             }
         }
