@@ -36,8 +36,6 @@ export default class Cerberus extends EnemyState {
                 // if current path is empty
                 let stack = new Stack<Vec2>();
 
-                console.log("BOOM" + this.spot);
-
                 switch (this.spot) {
                     case (Cerberus_Positions.CAGEONE):
                         stack.push(new Vec2(this.owner.position.x + Cerberus.DISTANCE, this.owner.position.y));

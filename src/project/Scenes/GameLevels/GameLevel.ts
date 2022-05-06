@@ -5,10 +5,10 @@ import GameNode, { TweenableProperties } from "../../../Wolfie2D/Nodes/GameNode"
 import { GraphicType } from "../../../Wolfie2D/Nodes/Graphics/GraphicTypes";
 import AnimatedSprite from "../../../Wolfie2D/Nodes/Sprites/AnimatedSprite";
 import OrthogonalTilemap from "../../../Wolfie2D/Nodes/Tilemaps/OrthogonalTilemap";
-import Label from "../../../Wolfie2D/Nodes/UIElements/Label";
+import Label, { HAlign } from "../../../Wolfie2D/Nodes/UIElements/Label";
 import { UIElementType } from "../../../Wolfie2D/Nodes/UIElements/UIElementTypes";
 import Scene from "../../../Wolfie2D/Scene/Scene";
-import Timer from "../../../Wolfie2D/Timing/Timer";
+import Timer, { TimerState } from "../../../Wolfie2D/Timing/Timer";
 import Color from "../../../Wolfie2D/Utils/Color";
 import EnemyAI from "../../AI/EnemyAI";
 import { Project_Events } from "../../project_constants";
@@ -59,6 +59,14 @@ export interface CustomEnemy {
     experience: number
 }
 
+export interface InventoryItemGraphic{
+    name: string,
+    sprite: Sprite,
+    count: number,
+    countLabel: Label,
+    pos: Vec2
+}
+
 export default class GameLevel extends Scene{
 
     protected enemyConstructorPairings: Map<string,any>;
@@ -95,6 +103,14 @@ export default class GameLevel extends Scene{
     protected healthBar: Graphic;
     protected levelUI: Label;
     protected expBar: Graphic;
+    protected inventory: Array<InventoryItemGraphic> = [];
+
+    // pause gui
+    protected hpHUD: Label;
+    protected attHUD: Label;
+    protected cdHUD: Label;
+    protected defHUD: Label;
+    protected spdHUD: Label;
 
     // leveling
     private levelUpLayer: Layer;
@@ -106,6 +122,9 @@ export default class GameLevel extends Scene{
     protected item1: Sprite;
     protected item2: Sprite;
     protected item3: Sprite;
+
+    protected itemSelectButton: UIElement;
+    protected itemSelectButtonLabel: Sprite;
 
     protected playerDied: boolean = false;
 
@@ -119,10 +138,7 @@ export default class GameLevel extends Scene{
     protected levelMusic: string;
 
     // items
-    protected itemsArray = ["honey_jar", 
-        "hourglass_1", "hermes_sandals_1", "bolt_1", "goblet_of_dionysus_1", "aegis_1",
-        "hourglass_2", "hermes_sandals_2", "bolt_2", "goblet_of_dionysus_2", "aegis_2", 
-        "hourglass_3", "hermes_sandals_3", "bolt_3", "goblet_of_dionysus_3", "aegis_3"];
+    protected itemsArray = ["honey_jar", "hourglass_", "hermes_sandals_", "bolt_", "goblet_of_dionysus_", "aegis_"]; // "_" means chance to roll 1/2/3
     protected selectionArray: Array<string> = [];
     protected itemConstructorPairings: Map<string,any> = new Map([["honey_jar", HoneyJar],
         ["hourglass_1" , Hourglass1], ["hermes_sandals_1", HermesSandals1], ["bolt_1", Bolt1], ["goblet_of_dionysus_1", Goblet1], ["aegis_1", Aegis1],
@@ -176,13 +192,16 @@ export default class GameLevel extends Scene{
         this.load.image("hermes_sandals_2", "project_assets/sprites/hermes_sandals_2.png");
         this.load.image("hourglass_2", "project_assets/sprites/hourglass_2.png");
 
-        this.load.image("evolvedWeapon", "project_assets/sprites/evolved_weapon.png");
 
         this.load.image("aegis_3", "project_assets/sprites/aegis_3.png");
         this.load.image("bolt_3", "project_assets/sprites/bolt_3.png");
         this.load.image("goblet_of_dionysus_3", "project_assets/sprites/goblet_3.png");
         this.load.image("hermes_sandals_3", "project_assets/sprites/hermes_sandals_3.png");
         this.load.image("hourglass_3", "project_assets/sprites/hourglass_3.png");
+
+        this.load.image("evolvedWeapon", "project_assets/sprites/evolved_weapon.png");
+
+        this.load.image("itemSelectButton", "project_assets/sprites/itemSelectButton.png");
 
         //Load sound effect and music
         this.load.audio("enemyDamaged", "project_assets/sounds/enemyDamage.wav");
@@ -213,8 +232,7 @@ export default class GameLevel extends Scene{
         this.addUILayer("pause").disable();
         let pauseScreen = this.add.sprite("pause_screen", "pause");
         pauseScreen.position.copy(this.viewport.getOrigin());
-        pauseScreen.alpha = .5;
-        
+        pauseScreen.alpha = .5;        
 
         //Level up UI
         this.levelUpLayer = this.addUILayer("levelUp");
@@ -250,7 +268,14 @@ export default class GameLevel extends Scene{
           this.button1.borderRadius = 10;
           this.button1.borderColor = Color.WHITE;
           this.button1.backgroundColor = Color.GRAYISH;
-          this.button1.onClickEventId = "one";
+          //this.button1.onClickEventId = "one";
+          this.button1.onClick = () => {
+              this.button1.borderColor = Color.GOLDEN_YELLOW;
+              this.button2.borderColor = Color.WHITE;
+              this.button3.borderColor = Color.WHITE;
+
+              this.itemSelectButton.onClickEventId = "one";
+          }
 
           this.button2 = this.add.uiElement(UIElementType.BUTTON, "levelUp", {
             position: new Vec2((this.viewport.getOrigin().x), this.viewport.getOrigin().y), text: ""
@@ -260,7 +285,14 @@ export default class GameLevel extends Scene{
           this.button2.borderRadius = 10;
           this.button2.borderColor = Color.WHITE;
           this.button2.backgroundColor = Color.GRAYISH;
-          this.button2.onClickEventId = "two";
+          //this.button2.onClickEventId = "two";
+          this.button2.onClick = () => {
+            this.button1.borderColor = Color.WHITE;
+            this.button2.borderColor = Color.GOLDEN_YELLOW;
+            this.button3.borderColor = Color.WHITE;
+
+            this.itemSelectButton.onClickEventId = "two";
+        }
 
           this.button3 = this.add.uiElement(UIElementType.BUTTON, "levelUp", {
             position: new Vec2((this.viewport.getOrigin().x + this.viewport.getHalfSize().x/2), this.viewport.getOrigin().y), text: ""
@@ -270,10 +302,60 @@ export default class GameLevel extends Scene{
           this.button3.borderRadius = 10;
           this.button3.borderColor = Color.WHITE;
           this.button3.backgroundColor = Color.GRAYISH;
-          this.button3.onClickEventId = "three";
+          //this.button3.onClickEventId = "three";
+          this.button3.onClick = () => {
+            this.button1.borderColor = Color.WHITE;
+            this.button2.borderColor = Color.WHITE;
+            this.button3.borderColor = Color.GOLDEN_YELLOW;
 
+            this.itemSelectButton.onClickEventId = "three";
+        }
+
+          this.itemSelectButton = this.add.uiElement(UIElementType.BUTTON, "levelUp", {
+            position: new Vec2((this.viewport.getOrigin().x), this.viewport.getOrigin().y + 128), text: ""
+        });
+          this.itemSelectButton.size.set(256, 128);
+          this.itemSelectButton.borderWidth = 10;
+          this.itemSelectButton.borderRadius = 10;
+          this.itemSelectButton.borderColor = Color.WHITE;
+          this.itemSelectButton.backgroundColor = Color.GRAYISH;
+          this.itemSelectButtonLabel = this.add.sprite("itemSelectButton", "levelUp");
+          this.itemSelectButtonLabel.position = new Vec2(this.viewport.getOrigin().x+5, this.itemSelectButton.position.y);
 
           this.createChallengeLabel("objective");
+
+          let HUD = this.addUILayer("HUD");
+          HUD.setDepth(999);
+         HUD.disable();
+
+          // player stats HUD
+          this.hpHUD = <Label> this.add.uiElement(UIElementType.LABEL, "HUD", { position: new Vec2(this.viewport.getOrigin().x-350,
+            this.viewport.getOrigin().y-100), text: "HP: "});
+          this.hpHUD.textColor = Color.WHITE;
+          this.hpHUD.setHAlign(HAlign.LEFT);
+
+          this.attHUD = <Label> this.add.uiElement(UIElementType.LABEL, "HUD", { position: new Vec2(this.viewport.getOrigin().x-350,
+            this.viewport.getOrigin().y-50), text: "ATT: "});
+          this.attHUD.textColor = Color.WHITE;
+          this.attHUD.setHAlign(HAlign.LEFT);
+
+          this.cdHUD = <Label> this.add.uiElement(UIElementType.LABEL, "HUD", { position: new Vec2(this.viewport.getOrigin().x-350,
+            this.viewport.getOrigin().y), text: "CDown: "});
+          this.cdHUD.textColor = Color.WHITE;
+          this.cdHUD.setHAlign(HAlign.LEFT);
+
+          this.defHUD = <Label> this.add.uiElement(UIElementType.LABEL, "HUD", { position: new Vec2(this.viewport.getOrigin().x-350,
+            this.viewport.getOrigin().y+50), text: "DEF: "});
+          this.defHUD.textColor = Color.WHITE;
+          this.defHUD.setHAlign(HAlign.LEFT);
+
+          this.spdHUD = <Label> this.add.uiElement(UIElementType.LABEL, "HUD", { position: new Vec2(this.viewport.getOrigin().x-350,
+            this.viewport.getOrigin().y+100), text: "SPD: "});
+          this.spdHUD.textColor = Color.WHITE;
+          this.spdHUD.setHAlign(HAlign.LEFT);
+
+          this.populateInitInventory();
+    
     }
 
     updateScene(deltaT: number): void {
@@ -284,9 +366,12 @@ export default class GameLevel extends Scene{
             if (this.pauseFlag){
                 this.pauseEntities();
                 this.getLayer("pause").enable();
+                this.populateHUD();
+                this.getLayer("HUD").enable();
             } else {
                 this.unpauseEntities();
                 this.getLayer("pause").disable();
+                this.getLayer("HUD").disable();
             }
 
         }
@@ -304,25 +389,35 @@ export default class GameLevel extends Scene{
 
                         let item = new (this.itemConstructorPairings.get(this.selectionArray[0]))(new Sprite(this.selectionArray[0]));
                         item.use(this.player, this.playerController.weapon, this.playerStats, this.playerController);
+                        this.button1.borderColor = Color.WHITE;
+                        this.populateInventory(this.selectionArray[0]);
                         break;
 
                     case "two":
 
                         let item2 = new (this.itemConstructorPairings.get(this.selectionArray[1]))(new Sprite(this.selectionArray[1]));
                         item2.use(this.player, this.playerController.weapon, this.playerStats, this.playerController);
+                        this.button2.borderColor = Color.WHITE;
+                        this.populateInventory(this.selectionArray[1]);
                         break;
 
                     case "three":
 
                         let item3 = new (this.itemConstructorPairings.get(this.selectionArray[2]))(new Sprite(this.selectionArray[2]));
                         item3.use(this.player, this.playerController.weapon, this.playerStats, this.playerController);
+                        this.button3.borderColor = Color.WHITE;
+                        this.populateInventory(this.selectionArray[2]);
                         break;
 
                 }
 
+                this.itemSelectButton.onClickEventId = "";
+
                 this.getLayer("levelUp").removeNode(this.item1);
                 this.getLayer("levelUp").removeNode(this.item2);
                 this.getLayer("levelUp").removeNode(this.item3);
+
+                this.populateHUD();
 
                 this.levelChanged--;
                 // accounting for multiple levels
@@ -334,7 +429,8 @@ export default class GameLevel extends Scene{
             if (this.levelChanged === 0){
                 this.pauseFlag = !this.pauseFlag;
                 this.getLayer("levelUp").disable();
-                this.unpauseEntities();        
+                this.unpauseEntities();  
+                this.getLayer("HUD").disable();      
             }
             
         }
@@ -364,6 +460,7 @@ export default class GameLevel extends Scene{
                     let expPercentage = this.playerStats.experience / (reqExp * 500);
                     this.expBar.size = new Vec2(expPercentage*216, 4);
                     this.expBar.position = new Vec2(108*expPercentage+(216/2), 32);
+
                     break;
 
                 case Project_Events.HEALTHCHANGED:
@@ -380,6 +477,9 @@ export default class GameLevel extends Scene{
 
                     this.pauseFlag = !this.pauseFlag;
                     this.pauseEntities();
+                    this.populateHUD();
+                    this.getLayer("HUD").enable();
+
                     //show layer
                     this.getLayer("levelUp").enable();
                     this.levelChanged = event.data.get("levelChange");
@@ -394,6 +494,7 @@ export default class GameLevel extends Scene{
 
                 case Project_Events.BOSSDIED:
                     const boss = <CanvasNode>event.data.get("enemy");
+
                     this.battleManager.enemies = this.battleManager.enemies.filter(enemy => enemy !== <BattlerAI>(boss._ai));
                     this.enemyArray = this.enemyArray.filter(enemy => enemy !== boss);
                     this.bossDefeated = true;
@@ -401,8 +502,8 @@ export default class GameLevel extends Scene{
                     break;
                 case Project_Events.MELEEATTACK:
                         //handle removing attack sprite
-                        let attackSpirte = event.data.get("owner");
-                        attackSpirte.destroy();     
+                        let attackSprite = event.data.get("owner");
+                        attackSprite.destroy();     
                         break;
                            
             }
@@ -439,8 +540,8 @@ export default class GameLevel extends Scene{
 
         //Check if player died
         if(this.playerStats.stats.health <= 0){
-            console.log("DWLJDKJDJJJDFBW " + this.playerStats.stats.health);
             if(this.changeLevelTimer.isStopped() && !this.playerDied) {
+                this.changeLevelTimer = new Timer(5000);
                 this.changeLevelTimer.start();
                 this.playerDied = true;
                 this.pauseEntities();
@@ -499,6 +600,9 @@ export default class GameLevel extends Scene{
     }
 
     protected pauseEntities(){
+        console.log("PAUSE")
+        console.log(this.enemyArray);
+        this.startSceneTimer.pause();
         if(this.enemyArray.length > 0){
             this.enemyArray.map((enemy) => {
                 enemy.freeze()
@@ -521,6 +625,10 @@ export default class GameLevel extends Scene{
     }
 
     protected unpauseEntities(){
+        console.log("UNPAUSE");
+        console.log(this.enemyArray);
+        this.startSceneTimer.unpause();
+
         if(this.enemyArray.length > 0){
             this.enemyArray.map((enemy) => {
                 enemy.unfreeze();
@@ -673,10 +781,38 @@ export default class GameLevel extends Scene{
     protected rollItems() : void{
         this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "levelup", loop: false, holdReference: false});
         this.selectionArray = [];
+
+        let rolledItem;
+        let tier;
+        let dupes = [];
         while (this.selectionArray.length < 3){
-            this.selectionArray.push(this.itemsArray[Math.floor(Math.random() * this.itemsArray.length)]);
+
+            rolledItem = this.itemsArray[Math.floor(Math.random() * this.itemsArray.length)];
+
+            // remove dupe
+            this.itemsArray.splice(this.itemsArray.indexOf(rolledItem), 1);
+            dupes.push(rolledItem);
+
+            // roll the tier if applicable
+            if (rolledItem.charAt(rolledItem.length-1) === "_"){
+
+                tier = Math.random();
+                if (tier < .7){
+                    rolledItem = rolledItem.concat("1");
+                } else if (tier < .9){
+                    rolledItem = rolledItem.concat("2");
+                } else {
+                    rolledItem = rolledItem.concat("3");
+                }
+
+            }
+
+            this.selectionArray.push(rolledItem);
 
         }
+
+        // remerge dupes into choices
+        this.itemsArray = this.itemsArray.concat(dupes);
         
         this.item1 = new Sprite(this.selectionArray[0]);
         this.item1.position = new Vec2(this.button1.position.x, this.button1.position.y);
@@ -715,7 +851,6 @@ export default class GameLevel extends Scene{
                 // //Check if spawn positon is a wall
                 let spawnTile = this.walls.getColRowAt(enemyPosition);
                 let tile = this.walls.getTileAtRowCol(spawnTile);
-                console.log(tile);
                 if(tile === 0){
                     return enemyPosition;                    
                 } else {
@@ -762,4 +897,95 @@ export default class GameLevel extends Scene{
         this.challenge.tweens.play("fadeIn");
         this.challenge.tweens.play("fadeOut");
     }
+
+    protected populateHUD(): void{
+
+        const attackString = (this.playerController.weapon) ? this.playerController.weapon.type.damage :
+        (<FireballAI>((<HadesController>this.playerController).projectiles[0]._ai)).getDamage();
+
+        const cDownString = (this.playerController.weapon) ? (this.playerController.weapon.type.cooldown/1000) :
+        ((<HadesController> this.playerController).attackCooldown.getTotalTime()/1000);
+
+        this.hpHUD.setText("HP: " + this.playerStats.stats.maxHealth.toFixed(2).toString());
+        
+        this.attHUD.setText("ATT: " + attackString.toFixed(2).toString());
+
+        this.cdHUD.setText("CDOWN: " + cDownString.toFixed(2).toString());
+
+        this.defHUD.setText("DEF: " + this.playerStats.stats.defense.toFixed(2).toString());
+
+        this.spdHUD.setText("SPD: " + this.playerStats.stats.speed.toFixed(2).toString());
+    }
+
+    protected populateInventory(item: string): void {
+
+        if (!this.inventory){
+            this.inventory = []; // if undefined
+        }
+        
+        const found = this.inventory.findIndex(i => i.name === item);
+
+        if (found === -1){
+            // first pickup
+
+            let startPosx;
+            let startPosy;
+
+            if (this.inventory.length === 0){ // first item added to inventory
+                startPosx = this.viewport.getHalfSize().x-250;
+                startPosy = this.viewport.getHalfSize().y-150;
+            } else { // move it over
+                startPosx = (this.inventory.length % 10 === 0) ? this.inventory[0].pos.x : this.inventory[this.inventory.length-1].pos.x + 40;
+                startPosy = (this.inventory.length % 10 === 0) ? this.inventory[this.inventory.length-1].pos.y + 40 :
+                 this.inventory[this.inventory.length-1].pos.y;
+            }
+
+            let graphic: InventoryItemGraphic = {
+                name: item,
+                sprite: this.add.sprite(item, "gui"),
+                count: 1,
+                countLabel: <Label> this.add.uiElement(UIElementType.LABEL, "gui", { position: new Vec2(startPosx+15, startPosy+15), 
+                text: "x1"}),
+                pos: new Vec2(startPosx, startPosy)
+            }
+
+            graphic.sprite.scale.set(.45, .45); // icon 
+            graphic.sprite.position = graphic.pos;
+
+            graphic.countLabel.setTextColor(Color.BLACK); // label
+            graphic.countLabel.fontSize = 16;
+
+            this.inventory.push(graphic);
+        } else { // increment the count and change the label
+            let icon = this.inventory[found];
+            icon.count += 1;
+            icon.countLabel.destroy();
+            icon.countLabel = <Label> this.add.uiElement(UIElementType.LABEL, "gui", { position: new Vec2(
+                icon.pos.x + 15, icon.pos.y+15
+            ), text: "x" + icon.count });
+            icon.countLabel.fontSize = 16;
+        }
+    }
+
+    protected populateInitInventory(): void{
+
+        if (this.inventory && this.inventory !== []){ // if we carried over an inventory
+
+            for (let item of this.inventory){
+                item.sprite = this.add.sprite(item.name, "gui");
+                item.sprite.scale.set(.45,.45);
+                item.sprite.position = item.pos;
+
+                item.countLabel = <Label> this.add.uiElement(UIElementType.LABEL, "gui", { position: new Vec2(item.pos.x+15, item.pos.y+15), 
+                    text: "x1"}),
+                item.countLabel.setTextColor(Color.BLACK);
+                item.countLabel.fontSize = 16;
+            }
+
+        }
+       
+    }
+
+
+
 }

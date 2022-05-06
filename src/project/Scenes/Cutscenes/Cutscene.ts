@@ -9,14 +9,19 @@ import level_z1 from "../GameLevels/Level_Z1";
 import { GraphicType } from "../../../Wolfie2D/Nodes/Graphics/GraphicTypes";
 import Color from "../../../Wolfie2D/Utils/Color";
 
-export default class Level_Z1_Cutscene extends Scene{
+export default class Cutscene extends Scene{
+
+    //loads
+    protected tileMapName: string;
+    protected playerName: string;
 
     private lines: string[];
     private dialogueNumber = 0;
     private speaker: number[];
-    private speakerName: string[];
+    private speakerSprite: string[];
     private speakerPositions: string[];
     private speakerAnimations: string[];
+    private speakerName: string[];
     private scroll: Timer;
 
     private line1: Label;
@@ -29,42 +34,38 @@ export default class Level_Z1_Cutscene extends Scene{
 
     private leftSprite: AnimatedSprite;
     private rightSprite: AnimatedSprite;
+    private speakerNameLabel: Label;
 
     private invincible: boolean;
     private unlockAll: boolean;
     private instant_kill: boolean;
     private speedUp: boolean;
+    private unlockedLevels: boolean[];
 
     initScene(init: Record<string, any>): void {
         this.invincible = init.invincible;
         this.unlockAll = init.unlockAll;
         this.instant_kill = init.instant_kill;
         this.speedUp = init.speedUp;
+        this.unlockedLevels = init.unlockedLevels;
     }
 
     loadScene(): void {
-        this.load.tilemap("levelZ1", "project_assets/tilemaps/LevelZ1.json");
-        this.load.spritesheet("zeus", "project_assets/spritesheets/Zeus.json"); 
-        this.load.spritesheet("Bigzeus", "project_assets/spritesheets/BigZeus.json");
-
-        this.load.spritesheet("snake", "project_assets/spritesheets/Snake.json");
-        this.load.spritesheet("bigsnake", "project_assets/spritesheets/BigSnake.json");
-        this.load.spritesheet("harpy", "project_assets/spritesheets/harpy.json");
-
-        this.load.object("dialogue", "project_assets/data/level_z1_dialogue.json");
+        // load tilemap + dialogue object + player + displayed sprites
     }
 
     startScene(): void {
 
+        // add layers
         this.addLayer("top", 10);
         this.addLayer("lit", 11);
         // add the map
-        this.add.tilemap("levelZ1", new Vec2(1,1));
+        this.add.tilemap(this.tileMapName, new Vec2(1,1));
         this.viewport.setBounds(0, 0, 64*32, 64*32);
         this.viewport.setSize(this.viewport.getHalfSize());
         
         // add the player
-        let player = this.add.animatedSprite("zeus", "top");
+        let player = this.add.animatedSprite(this.playerName, "top");
         player.position = new Vec2(32*32, 32*32);
         player.animation.play("idle");
         // center viewport around player
@@ -74,9 +75,10 @@ export default class Level_Z1_Cutscene extends Scene{
         
         this.lines = dialogueData.dialogue.lines;
         this.speaker = dialogueData.dialogue.speaker;
-        this.speakerName = dialogueData.dialogue.speakerName;
+        this.speakerSprite = dialogueData.dialogue.speakerSprite;
         this.speakerPositions = dialogueData.dialogue.speakerPositions;
         this.speakerAnimations = dialogueData.dialogue.speakerAnimations;
+        this.speakerName = dialogueData.dialogue.speakerName;
 
         this.loadBuffers();
 
@@ -120,15 +122,19 @@ export default class Level_Z1_Cutscene extends Scene{
         this.scroll.start();
 
         if (this.speakerPositions[this.dialogueNumber] === "left"){
-            this.leftSprite = this.add.animatedSprite(this.speakerName[this.speaker[this.dialogueNumber]], "top");
+            this.leftSprite = this.add.animatedSprite(this.speakerSprite[this.speaker[this.dialogueNumber]], "top");
             this.leftSprite.position = new Vec2(824, 1124);
             this.leftSprite.animation.play(this.speakerAnimations[this.dialogueNumber]);
         } else {
-            this.rightSprite = this.add.animatedSprite(this.speakerName[this.speaker[this.dialogueNumber]], "top");
+            this.rightSprite = this.add.animatedSprite(this.speakerSprite[this.speaker[this.dialogueNumber]], "top");
             this.rightSprite.position = new Vec2(1324, 1124);
             this.rightSprite.animation.play(this.speakerAnimations[this.dialogueNumber]);
         }
 
+        this.speakerNameLabel = <Label> this.add.uiElement(UIElementType.LABEL, "lit", { position: new Vec2(player.position.x-330, 1090),text: this.speakerName[0]});
+        this.speakerNameLabel.fontSize = 64;
+        this.speakerNameLabel.setHAlign(HAlign.LEFT);
+        this.speakerNameLabel.setTextColor(Color.WHITE);
         
     }
 
@@ -154,11 +160,14 @@ export default class Level_Z1_Cutscene extends Scene{
                     invincible: this.invincible, 
                     unlockAll: this.unlockAll,
                     instant_kill: this.instant_kill,
-                    speedUp: this.speedUp
+                    speedUp: this.speedUp,
+                    unlockedLevels: this.unlockedLevels
                 }
                 
                 this.sceneManager.changeToScene(level_z1, options, this.sceneOptions);
             } else {
+
+                this.speakerNameLabel.setText(this.speakerName[this.dialogueNumber]);
 
                 if (this.speakerPositions[this.dialogueNumber] === "left"){
 
@@ -170,9 +179,10 @@ export default class Level_Z1_Cutscene extends Scene{
                         this.leftSprite.destroy();
                     }
     
-                    this.leftSprite = this.add.animatedSprite(this.speakerName[this.speaker[this.dialogueNumber]], "top");
+                    this.leftSprite = this.add.animatedSprite(this.speakerSprite[this.speaker[this.dialogueNumber]], "top");
                     this.leftSprite.position = new Vec2(824, 1124);
                     this.leftSprite.animation.play(this.speakerAnimations[this.dialogueNumber]);
+
                 } else {
     
                     if (this.leftSprite){
@@ -183,7 +193,7 @@ export default class Level_Z1_Cutscene extends Scene{
                     this.rightSprite.destroy();
                     }
                     
-                    this.rightSprite = this.add.animatedSprite(this.speakerName[this.speaker[this.dialogueNumber]], "top");
+                    this.rightSprite = this.add.animatedSprite(this.speakerSprite[this.speaker[this.dialogueNumber]], "top");
                     this.rightSprite.position = new Vec2(1324, 1124);
                     this.rightSprite.animation.play(this.speakerAnimations[this.dialogueNumber]);
                 }
@@ -215,8 +225,6 @@ export default class Level_Z1_Cutscene extends Scene{
             }
         }
 
-      
-        
     }
 
     loadBuffers(){

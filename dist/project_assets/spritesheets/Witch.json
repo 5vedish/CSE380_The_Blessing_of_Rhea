@@ -52,15 +52,15 @@
 			"frames": [
 				{
 					"index": 0,
-					"duration": 7
+					"duration": 1
 				},
 				{
 					"index": 6,
-					"duration": 15
+					"duration": 2
 				},
 				{
 					"index": 0,
-					"duration": 7
+					"duration": 1
 				}
 			]
         }

@@ -7,10 +7,11 @@ import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
 import Timer from "../../Wolfie2D/Timing/Timer";
 import ProjectileAI from "./ProjectileAI";
 import OrthogonalTilemap from "../../Wolfie2D/Nodes/Tilemaps/OrthogonalTilemap";
+import FireballAI from "./FireballAI";
 
 export default class HadesController extends PlayerController {
 
-    static HADESCD: number = 2000; // 1s
+    public static HADESCD: number = 2000; // 1s
 
     public projectiles: Array<AnimatedSprite>;
     public attackCooldown: Timer;
@@ -98,6 +99,8 @@ export default class HadesController extends PlayerController {
                     (<ProjectileAI> projectile._ai).setAngle(Vec2.UP.angleToCCW(dir));
                     projectile.setAIActive(true, {speed: 4});
                     projectile.visible = true;
+                    (<FireballAI> projectile._ai).setPierce();
+                    (<FireballAI> projectile._ai).checkInvuln();
                 }
 
                 this.attackCooldown.start();

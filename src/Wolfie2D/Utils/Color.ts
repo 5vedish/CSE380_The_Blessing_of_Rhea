@@ -136,6 +136,10 @@ export default class Color {
 		return new Color(82, 58, 58, 1);
 	}
 
+	static get GOLDEN_YELLOW(): Color {
+		return new Color(255, 223, 0, 1);
+	}
+
 
 	/**
 	 * Sets the color to the values provided

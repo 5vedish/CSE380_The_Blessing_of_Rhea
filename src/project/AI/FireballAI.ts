@@ -7,6 +7,8 @@ import EnemyAI from "./EnemyAI";
 export default class FireballAI extends ProjectileAI{
 
     protected enemies: Array<AnimatedSprite>;
+    protected pierce: number;
+    protected invuln: Array<AnimatedSprite> = [];
 
     initializeAI(owner: AnimatedSprite, options: Record<string, any>): void {
         super.initializeAI(owner, options);
@@ -32,11 +34,18 @@ export default class FireballAI extends ProjectileAI{
 
                 if (this.owner.boundary.overlapArea(enemy.boundary) && enemy.ai){
 
-                    this.owner.position = Vec2.ZERO;
-                    this.owner.visible = false;
-                    this.owner.setAIActive(false, {});
-
                     (<EnemyAI> enemy._ai).damage(this.damage);
+                    this.invuln.push(enemy); // to re-add later
+                    this.enemies = this.enemies.filter(target => target !== enemy); // remove from array temporarily
+
+                    if (this.pierce === 0){
+                        this.owner.position = Vec2.ZERO;
+                        this.owner.visible = false;
+                        this.owner.setAIActive(false, {});
+                    }
+
+                    this.pierce -= 1;
+                    
                     break;
                 }
                 
@@ -48,6 +57,22 @@ export default class FireballAI extends ProjectileAI{
 
     setEnemies(enemies: Array<AnimatedSprite>): void{
         this.enemies = enemies;
+    }
+
+    setPierce():void{
+        this.pierce = 2;
+    }
+
+    checkInvuln():void{
+        
+        for (let i of this.invuln){
+            if (i.active) {
+             //   console.log("WE ARE PUSHING BACK");
+                this.enemies.push(i); // if enemy still exists, push them back
+            }
+        }
+
+        this.invuln = []; // clear the array
     }
 
 }

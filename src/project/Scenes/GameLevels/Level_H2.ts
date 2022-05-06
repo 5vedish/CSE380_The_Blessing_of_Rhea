@@ -72,6 +72,7 @@ export default class level_h2 extends GameLevel {
         this.unlockedLevels = init.unlockedLevels;
 
         this.unlockedLevels[7] = true;
+        this.inventory = init.inventory;
     }
     
     startScene(): void {
@@ -128,19 +129,19 @@ export default class level_h2 extends GameLevel {
         this.weaponIconCoolDown.alpha = 0;
         
         // add spawnable enemies
-        this.spawnableEnemies.push({
-            name: "Skull",
-            health: 1,
-            player: this.player,
-            speed: 200,
-            weapon: this.createWeapon("knife"),
-            range: 16,
-            experience: 50
-        });
+        // this.spawnableEnemies.push({
+        //     name: "Skull",
+        //     health: 1,
+        //     player: this.player,
+        //     speed: 200,
+        //     weapon: this.createWeapon("knife"),
+        //     range: 16,
+        //     experience: 50
+        // });
 
         this.spawnableEnemies.push({
             name: "Witch",
-            health: 25,
+            health: 20,
             player: this.player,
             speed: 100,
             weapon: this.createWeapon("knife"),
@@ -148,15 +149,15 @@ export default class level_h2 extends GameLevel {
             experience: 250,
         });
 
-        this.spawnableEnemies.push({
-            name: "Hellhound",
-            health: 50,
-            player: this.player,
-            speed: 125,
-            weapon: this.createWeapon("knife"),
-            range: 20,
-            experience: 1000,
-        });
+        // this.spawnableEnemies.push({
+        //     name: "Hellhound",
+        //     health: 50,
+        //     player: this.player,
+        //     speed: 125,
+        //     weapon: this.createWeapon("knife"),
+        //     range: 20,
+        //     experience: 1000,
+        // });
 
         //Position the rhea statue and zone
         this.rheaStatue = this.add.animatedSprite("rheaStatue", "primary");
@@ -242,22 +243,24 @@ export default class level_h2 extends GameLevel {
     
             if(this.currentWave >= 3 && this.currentNumEnemies === 0) {
                 //end level and move to level z3
-                if(this.changeLevelTimer === undefined){
-                    this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "hades"});
-                    this.changeLevelTimer = new Timer(5000);
-                    this.changeLevelTimer.start();
-                }
+                    
+                this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "hades"});
+                this.changeLevelTimer = new Timer(5000, () => {
 
-                if(this.changeLevelTimer.getTimeLeft() <= 0){
                     this.viewport.setSize(1600, 900);
                     this.sceneManager.changeToScene(level_h3, {
                         invincible: this.invincible, 
                         unlockAll: this.unlockAll,
                         instant_kill: this.instant_kill,
                         speedUp: this.speedUp,
-                        unlockedLevels: this.unlockedLevels
+                        unlockedLevels: this.unlockedLevels,
+                        inventory: this.inventory
                     }, this.sceneOptions);
-                }
+
+                });
+                this.changeLevelTimer.start();
+                
+
             }
         }
     }
@@ -320,7 +323,8 @@ export default class level_h2 extends GameLevel {
                weapon: null,
                weaponV2: null,
                projectiles: this.createProjectiles(5, "fireball"),
-               floor: this.floorCheck
+               floor: this.floorCheck,
+               invincible: this.invincible
            });
 
            

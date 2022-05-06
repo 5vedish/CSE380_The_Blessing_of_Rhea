@@ -39,6 +39,7 @@ export default class level_p2 extends GameLevel {
         this.speedUp = init.speedUp;
         this.unlockedLevels = init.unlockedLevels;
         this.unlockedLevels[4] = true;
+        this.inventory = init.inventory;
     }
 
     loadScene(): void {
@@ -284,25 +285,25 @@ export default class level_p2 extends GameLevel {
     
             if(this.gameTimer.getTimeLeft() <= 0) {
                 //end level and move to level z2
-                if(this.changeLevelTimer === undefined){
-                    this.changeLevelTimer = new Timer(5000);
-                    this.createChallengeLabel("end");
-                    this.changeLevelTimer.start();
-                }
-                
-                if(this.changeLevelTimer.getTimeLeft() <= 0){
+               
+                this.changeLevelTimer = new Timer(5000, () => {
+
                     this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "poseidon"});
                     this.viewport.setSize(1600, 900);
                     this.sceneManager.changeToScene(level_p3, {
-                        characterStats: this.playerStats, 
-                        weapon: (<PlayerController>this.player._ai).weapon,
-                        invincible: this.invincible, 
-                        unlockAll: this.unlockAll,
-                        instant_kill: this.instant_kill,
-                        speedUp: this.speedUp, 
-                        unlockedLevels: this.unlockedLevels
-                    }, this.sceneOptions);
-                }
+                    characterStats: this.playerStats, 
+                    weapon: (<PlayerController>this.player._ai).weapon,
+                    invincible: this.invincible, 
+                    unlockAll: this.unlockAll,
+                    instant_kill: this.instant_kill,
+                    speedUp: this.speedUp, 
+                    unlockedLevels: this.unlockedLevels,
+                    inventory: this.inventory
+                }, this.sceneOptions);
+                });
+                this.changeLevelTimer.start();
+                
+                
             }
         }
         
