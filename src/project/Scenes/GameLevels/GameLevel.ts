@@ -8,7 +8,7 @@ import OrthogonalTilemap from "../../../Wolfie2D/Nodes/Tilemaps/OrthogonalTilema
 import Label, { HAlign } from "../../../Wolfie2D/Nodes/UIElements/Label";
 import { UIElementType } from "../../../Wolfie2D/Nodes/UIElements/UIElementTypes";
 import Scene from "../../../Wolfie2D/Scene/Scene";
-import Timer from "../../../Wolfie2D/Timing/Timer";
+import Timer, { TimerState } from "../../../Wolfie2D/Timing/Timer";
 import Color from "../../../Wolfie2D/Utils/Color";
 import EnemyAI from "../../AI/EnemyAI";
 import { Project_Events } from "../../project_constants";
@@ -59,6 +59,14 @@ export interface CustomEnemy {
     experience: number
 }
 
+export interface InventoryItemGraphic{
+    name: string,
+    sprite: Sprite,
+    count: number,
+    countLabel: Label,
+    pos: Vec2
+}
+
 export default class GameLevel extends Scene{
 
     protected enemyConstructorPairings: Map<string,any>;
@@ -95,6 +103,7 @@ export default class GameLevel extends Scene{
     protected healthBar: Graphic;
     protected levelUI: Label;
     protected expBar: Graphic;
+    protected inventory: Array<InventoryItemGraphic> = [];
 
     // pause gui
     protected hpHUD: Label;
@@ -379,6 +388,7 @@ export default class GameLevel extends Scene{
                         let item = new (this.itemConstructorPairings.get(this.selectionArray[0]))(new Sprite(this.selectionArray[0]));
                         item.use(this.player, this.playerController.weapon, this.playerStats, this.playerController);
                         this.button1.borderColor = Color.WHITE;
+                        this.populateInventory(this.selectionArray[0]);
                         break;
 
                     case "two":
@@ -386,6 +396,7 @@ export default class GameLevel extends Scene{
                         let item2 = new (this.itemConstructorPairings.get(this.selectionArray[1]))(new Sprite(this.selectionArray[1]));
                         item2.use(this.player, this.playerController.weapon, this.playerStats, this.playerController);
                         this.button2.borderColor = Color.WHITE;
+                        this.populateInventory(this.selectionArray[1]);
                         break;
 
                     case "three":
@@ -393,6 +404,7 @@ export default class GameLevel extends Scene{
                         let item3 = new (this.itemConstructorPairings.get(this.selectionArray[2]))(new Sprite(this.selectionArray[2]));
                         item3.use(this.player, this.playerController.weapon, this.playerStats, this.playerController);
                         this.button3.borderColor = Color.WHITE;
+                        this.populateInventory(this.selectionArray[2]);
                         break;
 
                 }
@@ -584,6 +596,7 @@ export default class GameLevel extends Scene{
     }
 
     protected pauseEntities(){
+        this.startSceneTimer.pause();
         if(this.enemyArray.length > 0){
             this.enemyArray.map((enemy) => {
                 enemy.freeze()
@@ -606,6 +619,7 @@ export default class GameLevel extends Scene{
     }
 
     protected unpauseEntities(){
+        this.startSceneTimer.unpause();
         if(this.enemyArray.length > 0){
             this.enemyArray.map((enemy) => {
                 enemy.unfreeze();
@@ -878,21 +892,69 @@ export default class GameLevel extends Scene{
 
     protected populateHUD(): void{
 
-        const attackString = (this.playerController.weapon) ? this.playerController.weapon.type.damage.toString() :
-        (<FireballAI>((<HadesController>this.playerController).projectiles[0]._ai)).getDamage().toFixed(2).toString();
+        const attackString = (this.playerController.weapon) ? this.playerController.weapon.type.damage :
+        (<FireballAI>((<HadesController>this.playerController).projectiles[0]._ai)).getDamage();
 
-        const cDownString = (this.playerController.weapon) ? (this.playerController.weapon.type.cooldown/1000).toString() :
-        ((<HadesController> this.playerController).attackCooldown.getTotalTime()/1000).toFixed(2).toString();
+        const cDownString = (this.playerController.weapon) ? (this.playerController.weapon.type.cooldown/1000) :
+        ((<HadesController> this.playerController).attackCooldown.getTotalTime()/1000);
 
-        this.hpHUD.setText("HP: " + this.playerStats.stats.maxHealth.toFixed(2));
+        this.hpHUD.setText("HP: " + this.playerStats.stats.maxHealth.toFixed(2).toString());
         
-        this.attHUD.setText("ATT: " + attackString);
+        this.attHUD.setText("ATT: " + attackString.toFixed(2).toString());
 
-        this.cdHUD.setText("CDOWN: " + cDownString);
+        this.cdHUD.setText("CDOWN: " + cDownString.toFixed(2).toString());
 
-        this.defHUD.setText("DEF: " + this.playerStats.stats.defense.toFixed(2));
+        this.defHUD.setText("DEF: " + this.playerStats.stats.defense.toFixed(2).toString());
 
-        this.spdHUD.setText("SPD: " + this.playerStats.stats.speed.toFixed(2));
+        this.spdHUD.setText("SPD: " + this.playerStats.stats.speed.toFixed(2).toString());
     }
+
+    protected populateInventory(item: string): void {
+        
+        const found = this.inventory.findIndex(i => i.name === item);
+
+        if (found === -1){
+            // first pickup
+
+            let startPosx;
+            let startPosy;
+
+            if (this.inventory.length === 0){ // first item added to inventory
+                startPosx = this.viewport.getHalfSize().x-250;
+                startPosy = this.viewport.getHalfSize().y-150;
+            } else { // move it over
+                startPosx = (this.inventory.length % 10 === 0) ? this.inventory[0].pos.x : this.inventory[this.inventory.length-1].pos.x + 40;
+                startPosy = (this.inventory.length % 10 === 0) ? this.inventory[this.inventory.length-1].pos.y + 40 :
+                 this.inventory[this.inventory.length-1].pos.y;
+            }
+
+            let graphic: InventoryItemGraphic = {
+                name: item,
+                sprite: this.add.sprite(item, "gui"),
+                count: 1,
+                countLabel: <Label> this.add.uiElement(UIElementType.LABEL, "gui", { position: new Vec2(startPosx+15, startPosy+15), 
+                text: "x1"}),
+                pos: new Vec2(startPosx, startPosy)
+            }
+
+            graphic.sprite.scale.set(.45, .45); // icon 
+            graphic.sprite.position = graphic.pos;
+
+            graphic.countLabel.setTextColor(Color.BLACK); // label
+            graphic.countLabel.fontSize = 16;
+
+            this.inventory.push(graphic);
+        } else { // increment the count and change the label
+            let icon = this.inventory[found];
+            icon.count += 1;
+            icon.countLabel.destroy();
+            icon.countLabel = <Label> this.add.uiElement(UIElementType.LABEL, "gui", { position: new Vec2(
+                icon.pos.x + 15, icon.pos.y+15
+            ), text: "x" + icon.count });
+            icon.countLabel.fontSize = 16;
+        }
+    }
+
+
 
 }
