@@ -419,6 +419,13 @@ export default class GameLevel extends Scene{
 
                 this.populateHUD();
 
+                // items rolled => leveled up => enemies give more exp but not enough to outpace required exp
+
+                for (let s of this.spawnableEnemies){
+                    s.experience = Math.pow(s.experience, 1.05);
+                    s.health *= 1.1; 
+                }
+
                 this.levelChanged--;
                 // accounting for multiple levels
                 if (this.levelChanged){
@@ -453,11 +460,11 @@ export default class GameLevel extends Scene{
                     this.enemyArray = this.enemyArray.filter(enemy => enemy !== (event.data.get("enemy")));
                     enemy.destroy();
                     this.currentNumEnemies -= 1;
-                    this.playerStats.gainedExperience(enemyExperience); // to-do : scaling
+                    this.playerStats.gainedExperience(enemyExperience);
 
                     //Update the exp bar
-                    let reqExp = Math.pow(this.playerStats.level, 1.5);
-                    let expPercentage = this.playerStats.experience / (reqExp * 500);
+                    const reqExp = 1000 * Math.pow(this.playerStats.level, 1.3);
+                    let expPercentage = this.playerStats.experience / reqExp;
                     this.expBar.size = new Vec2(expPercentage*216, 4);
                     this.expBar.position = new Vec2(108*expPercentage+(216/2), 32);
 
@@ -745,7 +752,7 @@ export default class GameLevel extends Scene{
         let ai; // custom projectile support
         let scaleSize = new Vec2(1, 1); // if you want to make projectiles larger
         let hitboxSize = new Vec2(32, 32); // custom hitboxes
-        let speed = 4; // custom speed base of 4
+        let speed = 3.5; // custom speed base of 4
 
         switch (sprite){
             case "fireball":

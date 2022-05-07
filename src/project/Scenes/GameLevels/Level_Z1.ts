@@ -86,7 +86,8 @@ export default class level_z1 extends GameLevel {
         this.initPlayer();
         
         //Create how long players need to survive for
-        this.gameTimer = new Timer(/*120000*/10000);
+        // this.gameTimer = new Timer(10000);  // (testing timer)
+        this.gameTimer = new Timer(150000); // (production timer)
         this.gameTime = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(this.viewport.getHalfSize().x, 20), text: `${this.parseTimeLeft(this.gameTimer.getTotalTime())}`});
     
         this.levelUI = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(86, 32), 
@@ -101,12 +102,12 @@ export default class level_z1 extends GameLevel {
         
         this.spawnableEnemies.push({
             name: "snake",
-            health: 2,
+            health: 150,
             player: this.player,
-            speed: 125,
+            speed: 115,
             weapon: this.createWeapon("knife"),
-            range: 10,
-            experience: 200
+            range: 16,
+            experience: 100
         });
 
         this.enemyConstructorPairings = new Map([["snake" , EnemyAI], ["harpy", RangeAI]]);
@@ -145,14 +146,14 @@ export default class level_z1 extends GameLevel {
         let weapon = this.createWeapon("lightning");
         if (this.instant_kill) weapon.type.damage = 1000;
         
-        this.playerStats = new CharacterStat(100, 1, 10, (this.speedUp) ? 15 : 2, weapon.cooldownTimer.getTotalTime());
+        this.playerStats = new CharacterStat(150, 1, 15, (this.speedUp) ? 15 : 2, weapon.cooldownTimer.getTotalTime());
         // TODO - ADD PLAYER AI HERE
         this.player.addAI(PlayerController,
             {
                 speed:  this.playerStats.stats.speed,
                 health: this.playerStats.stats.health,
                 inputEnabled: true,
-                range: 30,
+                range: -1,
                 playerStats: this.playerStats,
                 weapon: weapon,
                 weaponV2: "lightningv2",
@@ -211,12 +212,12 @@ export default class level_z1 extends GameLevel {
             if(this.gameTimer.getTimeLeft() <= this.gameTimer.getTotalTime()/2 && !this.addedHarpy){
                 this.spawnableEnemies.push({
                     name: "harpy",
-                    health: 3,
+                    health: 300,
                     player: this.player,
-                    speed: 150,
+                    speed: 145,
                     weapon: this.createWeapon("knife"),
                     range: 150,
-                    experience: 250,
+                    experience: 200,
                 });
                 this.addedHarpy = true;
             }
