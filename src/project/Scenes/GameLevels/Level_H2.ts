@@ -168,6 +168,8 @@ export default class level_h2 extends GameLevel {
         this.rheaStatueZone.color = Color.TRANSPARENT;
         this.rheaStatueCooldown = new Timer(30000);
         
+        this.populateHUD();
+        
         this.startSceneTimer.start();
     }
 

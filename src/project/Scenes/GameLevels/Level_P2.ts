@@ -148,6 +148,8 @@ export default class level_p2 extends GameLevel {
         this.rheaStatueZone.color = Color.TRANSPARENT;
         this.rheaStatueCooldown = new Timer(30000);
 
+        this.populateHUD();
+
         //Start spawning delay
         this.startSceneTimer.start();
     }
