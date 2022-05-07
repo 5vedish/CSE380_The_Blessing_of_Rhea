@@ -182,7 +182,7 @@ export default class level_z3 extends GameLevel {
         this.echidna.scale.set(2,2);
         let options = {
             name: "echidna",
-            health: 30,
+            health: 500,
             player: this.player,
             speed: 30,
             weapon: echidnaTailWhip,

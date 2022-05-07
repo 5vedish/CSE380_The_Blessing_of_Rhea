@@ -102,13 +102,15 @@ export default class level_h1 extends GameLevel {
         
         this.spawnableEnemies.push({
             name: "Skull",
-            health: 1,
+            health: 50,
             player: this.player,
             speed: 200,
             weapon: this.createWeapon("knife"),
             range: 16,
             experience: 50
         });
+
+        this.spawnableEnemies[0].weapon.type.damage = 1;
 
         this.enemyConstructorPairings = new Map([["Skull" , EnemyAI], ["Witch", RangeAI]]);
         
@@ -145,7 +147,7 @@ export default class level_h1 extends GameLevel {
         this.player.addPhysics(new AABB(Vec2.ZERO, new Vec2(16, 16)));
         
         // last argument is arbitrary because Hades will not use the weapon system, health was 75
-        this.playerStats = new CharacterStat(75, 5, 5, 3, 1);
+        this.playerStats = new CharacterStat(75, -1, 5, 3, 1);
         // add player AI: range/weapon is arbitrary ... weaponV2 will possible be an updated sprite
         this.player.addAI(HadesController,
             {
@@ -199,7 +201,7 @@ export default class level_h1 extends GameLevel {
                 let enemyPosition = this.randomSpawn();
                 let options = {
                     name: enemyType.name,
-                    health: enemyType.health,
+                    health: enemyType.health*(Math.pow(1.05, this.playerStats.level)),
                     player: enemyType.player,
                     speed: enemyType.speed,
                     weapon: enemyType.weapon,

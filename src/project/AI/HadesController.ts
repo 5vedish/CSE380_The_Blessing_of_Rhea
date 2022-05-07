@@ -11,7 +11,7 @@ import FireballAI from "./FireballAI";
 
 export default class HadesController extends PlayerController {
 
-    public static HADESCD: number = 2000; // 1s
+    public static HADESCD: number = 5000; // 1s
 
     public projectiles: Array<AnimatedSprite>;
     public attackCooldown: Timer;
