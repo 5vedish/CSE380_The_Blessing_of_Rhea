@@ -167,9 +167,9 @@ export default class level_z3 extends GameLevel {
 
         this.spawnableEnemies.push({
             name: "harpy",
-            health: 4,
+            health: 300,
             player: this.player,
-            speed: 300,
+            speed: 150,
             weapon: this.createWeapon("knife"),
             range: 150,
             experience: 250,
@@ -177,15 +177,16 @@ export default class level_z3 extends GameLevel {
 
         this.spawnableEnemies.push({
             name: "giant",
-            health: 6,
+            health: 600,
             player: this.player,
-            speed: 600,
+            speed: 100,
             weapon: this.createWeapon("knife"),
             range: 20,
             experience: 320,
         });
         
         let echidnaTailWhip = this.createWeapon("tailwhip");
+        echidnaTailWhip.sprite.scale.set(2,2);
         // console.log(echidnaTailWhip);
         this.echidna = this.add.animatedSprite("echidna", "primary");
         this.echidna.position = new Vec2(32*32 , 24*32);
@@ -196,7 +197,7 @@ export default class level_z3 extends GameLevel {
             player: this.player,
             speed: 30,
             weapon: echidnaTailWhip,
-            range: 50,
+            range: 6*32,
             venomRange: 400,
             experience: 1000,
             scene: this,
