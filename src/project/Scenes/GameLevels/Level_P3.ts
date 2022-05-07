@@ -210,7 +210,7 @@ export default class level_p3 extends GameLevel {
             // create weapon
             this.weapon = this.createWeapon("trident");
             if (this.instant_kill) this.weapon.type.damage = 10000;
-            this.playerStats = new CharacterStat(125, this.weapon.type.damage, 10, (this.speedUp) ? 15 : 2, this.weapon.cooldownTimer.getTotalTime());
+            this.playerStats = new CharacterStat(175, this.weapon.type.damage, 10, (this.speedUp) ? 15 : 2, this.weapon.cooldownTimer.getTotalTime());
 
             //Create an enemy for players to get exp
             let enemy = this.add.animatedSprite("crab", "primary");

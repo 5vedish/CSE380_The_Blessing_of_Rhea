@@ -261,6 +261,12 @@ export default class GameLevel extends Scene{
             size: new Vec2(0, 0)});
         this.expBar.color = Color.BLUE;
 
+        // Inventory Box Label
+        let inventoryBorder = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(this.viewport.getHalfSize().x + 216.5, this.viewport.getHalfSize().y - 179), 
+            size: new Vec2(320, 80)});
+        inventoryBorder.color = Color.BLACK;
+        inventoryBorder.alpha = .5;
+
         this.button1 = this.add.uiElement(UIElementType.BUTTON, "levelUp", {
             position: new Vec2((this.viewport.getOrigin().x - this.viewport.getHalfSize().x/2), this.viewport.getOrigin().y), text: ""
           });
@@ -939,11 +945,11 @@ export default class GameLevel extends Scene{
             let startPosy;
 
             if (this.inventory.length === 0){ // first item added to inventory
-                startPosx = this.viewport.getHalfSize().x-250;
-                startPosy = this.viewport.getHalfSize().y-150;
+                startPosx = this.viewport.getHalfSize().x+75;
+                startPosy = this.viewport.getHalfSize().y-200;
             } else { // move it over
-                startPosx = (this.inventory.length % 10 === 0) ? this.inventory[0].pos.x : this.inventory[this.inventory.length-1].pos.x + 40;
-                startPosy = (this.inventory.length % 10 === 0) ? this.inventory[this.inventory.length-1].pos.y + 40 :
+                startPosx = (this.inventory.length % 8 === 0) ? this.inventory[0].pos.x : this.inventory[this.inventory.length-1].pos.x + 40;
+                startPosy = (this.inventory.length % 8 === 0) ? this.inventory[this.inventory.length-1].pos.y + 40 :
                  this.inventory[this.inventory.length-1].pos.y;
             }
 
@@ -959,7 +965,7 @@ export default class GameLevel extends Scene{
             graphic.sprite.scale.set(.45, .45); // icon 
             graphic.sprite.position = graphic.pos;
 
-            graphic.countLabel.setTextColor(Color.BLACK); // label
+            graphic.countLabel.setTextColor(Color.WHITE); // label
             graphic.countLabel.fontSize = 16;
 
             this.inventory.push(graphic);
@@ -970,12 +976,12 @@ export default class GameLevel extends Scene{
             icon.countLabel = <Label> this.add.uiElement(UIElementType.LABEL, "gui", { position: new Vec2(
                 icon.pos.x + 15, icon.pos.y+15
             ), text: "x" + icon.count });
+            icon.countLabel.setTextColor(Color.WHITE);
             icon.countLabel.fontSize = 16;
         }
     }
 
     protected populateInitInventory(): void{
-
         if (this.inventory && this.inventory !== []){ // if we carried over an inventory
 
             for (let item of this.inventory){
@@ -985,7 +991,7 @@ export default class GameLevel extends Scene{
 
                 item.countLabel = <Label> this.add.uiElement(UIElementType.LABEL, "gui", { position: new Vec2(item.pos.x+15, item.pos.y+15), 
                     text: "x1"}),
-                item.countLabel.setTextColor(Color.BLACK);
+                item.countLabel.setTextColor(Color.WHITE);
                 item.countLabel.fontSize = 16;
             }
 
