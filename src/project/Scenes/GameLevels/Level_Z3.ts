@@ -157,7 +157,7 @@ export default class level_z3 extends GameLevel {
         
         this.spawnableEnemies.push({
             name: "snake",
-            health: 3,
+            health: 150,
             player: this.player,
             speed: 125,
             weapon: this.createWeapon("knife"),
@@ -169,7 +169,7 @@ export default class level_z3 extends GameLevel {
             name: "harpy",
             health: 4,
             player: this.player,
-            speed: 150,
+            speed: 300,
             weapon: this.createWeapon("knife"),
             range: 150,
             experience: 250,
@@ -179,7 +179,7 @@ export default class level_z3 extends GameLevel {
             name: "giant",
             health: 6,
             player: this.player,
-            speed: 100,
+            speed: 600,
             weapon: this.createWeapon("knife"),
             range: 20,
             experience: 320,
@@ -192,7 +192,7 @@ export default class level_z3 extends GameLevel {
         this.echidna.scale.set(2,2);
         let options = {
             name: "echidna",
-            health: 500,
+            health: 6000,
             player: this.player,
             speed: 30,
             weapon: echidnaTailWhip,
@@ -260,7 +260,9 @@ export default class level_z3 extends GameLevel {
                     enemy.scale.set(1.5,1.5);
                     enemy.addPhysics(new AABB(Vec2.ZERO, new Vec2(8,8))); //Monkey patched collision box, dynamic later
                     enemy.animation.play("moving");
-                    enemy.position = this.spawnablePositions[Math.floor(Math.random()*4)];
+                    // enemy.position = new Vec2((this.echidna.position.clone().x + (i===0? -32 : 32)), this.echidna.position.y);
+                    let postion = this.spawnablePositions[Math.floor(Math.random()*4)];
+                    enemy.position = postion.clone();
                     let options = {
                         health: enemyType.health,
                         player: enemyType.player,
@@ -274,6 +276,7 @@ export default class level_z3 extends GameLevel {
                     }
                     enemy.addAI(this.enemyConstructorPairings.get(enemyType.name), options);
                     enemy.setGroup("enemy");
+                    this.enemyArray.push(enemy);
                     this.currentNumEnemies += 1;
 
                     if(this.battleManager.enemies === undefined){
@@ -299,13 +302,12 @@ export default class level_z3 extends GameLevel {
         if (this.playerStats === undefined) {
             // create weapon
             this.weapon = this.createWeapon("lightning");
-            this.weapon.type.damage = 20;
             if (this.instant_kill) this.weapon.type.damage = 1000;
             this.playerStats = new CharacterStat(100, 100, 10, (this.speedUp) ? 15 : 2, this.weapon.cooldownTimer.getTotalTime());
             //Create an enemy for players to get exp
             let enemy = this.add.animatedSprite("snake", "primary");
             enemy.scale.set(1,1);
-            enemy.addPhysics(new AABB(Vec2.ZERO, new Vec2(8,8))); //Monkey patched collision box, dynamic later
+            enemy.addPhysics(new AABB(Vec2.ZERO, new Vec2(8,8)));
             enemy.animation.play("moving");
             enemy.position = new Vec2(this.player.position.x , this.player.position.y - 32);
             let options = {
@@ -322,7 +324,7 @@ export default class level_z3 extends GameLevel {
             enemy.addAI(EnemyAI, options);
             enemy.setGroup("enemy");
             enemy.freeze();
-            this.currentNumEnemies += 1;
+            this.currentNumEnemies += 1;    
 
             if(this.battleManager.enemies === undefined){
                 this.battleManager.setEnemies([<BattlerAI>enemy._ai])
