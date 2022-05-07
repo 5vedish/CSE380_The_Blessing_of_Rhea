@@ -21,10 +21,14 @@ import CharacterStat from "../../PlayerStatus";
 import { Project_Events } from "../../project_constants";
 import { GameEventType } from "../../../Wolfie2D/Events/GameEventType";
 import level_h1 from "./Level_H1";
+import Graphic from "../../../Wolfie2D/Nodes/Graphic";
+import AnimatedSprite from "../../../Wolfie2D/Nodes/Sprites/AnimatedSprite";
 
 export default class level_p3 extends GameLevel {
+    private bossHealthBar: Graphic;
     private boss: CustomEnemy;
     private bossSpawned: boolean = false;
+    private leviathan: AnimatedSprite;
     private weapon: Weapon;
     
     initScene(init: Record<string, any>): void {
@@ -119,7 +123,7 @@ export default class level_p3 extends GameLevel {
 
         this.boss = {
             name: "leviathan",
-            health: 50,
+            health: 35,
             player: this.player,
             speed: 150,
             weapon: this.createWeapon("blast"),
@@ -158,6 +162,11 @@ export default class level_p3 extends GameLevel {
         });
 
         this.enemyConstructorPairings = new Map([["crab" , EnemyAI], ["cyclops", EnemyAI], ["octopus", RangeAI]]);
+
+        //Add boss health bar
+        this.bossHealthBar = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(400, 425), size: new Vec2(600, 16)});
+        let bossHealthBarBorder = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(400, 425), size: new Vec2(600, 16)});
+        bossHealthBarBorder.alpha = 0.5;
         
          //Position the rhea statue and zone
          this.rheaStatue = this.add.animatedSprite("rheaStatue", "primary");
@@ -282,22 +291,22 @@ export default class level_p3 extends GameLevel {
                     ai: LeviathanAI
                 } 
 
-                let enemy = this.add.animatedSprite("leviathan", "primary");
+                this.leviathan = this.add.animatedSprite("leviathan", "primary");
 
-                enemy.scale.set(1.5,1.5);
-                enemy.addPhysics(new AABB(Vec2.ZERO, new Vec2(8,8))); //Monkey patched collision box, dynamic later
-                enemy.animation.play("moving");
-                enemy.position = options.position;
-                enemy.addAI(options.ai, options);
-                enemy.setGroup("enemy");
+                this.leviathan.scale.set(1.5,1.5);
+                this.leviathan.addPhysics(new AABB(Vec2.ZERO, new Vec2(8,8))); //Monkey patched collision box, dynamic later
+                this.leviathan.animation.play("moving");
+                this.leviathan.position = options.position;
+                this.leviathan.addAI(options.ai, options);
+                this.leviathan.setGroup("enemy");
 
                 if(this.battleManager.enemies === undefined){
-                    this.battleManager.setEnemies([<BattlerAI>enemy._ai])
+                    this.battleManager.setEnemies([<BattlerAI>this.leviathan._ai])
                 } else {
-                    this.battleManager.enemies.push(<BattlerAI>enemy._ai);
+                    this.battleManager.enemies.push(<BattlerAI>this.leviathan._ai);
                 }
 
-                this.enemyArray.push(enemy);
+                this.enemyArray.push(this.leviathan);
                 
                 this.bossSpawned = true;
             }
@@ -322,6 +331,12 @@ export default class level_p3 extends GameLevel {
                 }
                 
                 this.enemyArray.push(this.addEnemy(enemyType.name, options));
+            }
+
+            // Update health bar for leviathan
+            if(this.leviathan._ai !== undefined){
+                let bossPercentage = (<LeviathanAI>this.leviathan._ai).health/(<LeviathanAI>this.leviathan._ai).maxHealth;
+                this.bossHealthBar.size = new Vec2(600*bossPercentage, 16);
             }
     
             if(this.bossDefeated && this.currentNumEnemies === 0) {
