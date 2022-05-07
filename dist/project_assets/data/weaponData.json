@@ -17,7 +17,7 @@
             "displayName": "Trident",
             "animationSprite": "Trident",
             "spriteKey": "trident",
-            "damage": 1,
+            "damage": 75,
             "cooldown": 1500,
             "useVolume": 10
         },

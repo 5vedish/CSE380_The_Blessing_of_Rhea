@@ -119,6 +119,8 @@ export default class level_z1 extends GameLevel {
         this.rheaStatueZone = this.add.graphic(GraphicType.RECT, "primary",{position: new Vec2(33*32, 61*32), size: new Vec2(6*32,6*32)});
         this.rheaStatueZone.color = Color.TRANSPARENT;
 
+        this.populateHUD();
+
         //Start spawning delay
         this.startSceneTimer.start();
     }

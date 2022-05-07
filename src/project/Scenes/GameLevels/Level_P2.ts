@@ -22,6 +22,7 @@ import { GameEventType } from "../../../Wolfie2D/Events/GameEventType";
 
 export default class level_p2 extends GameLevel {
     private halfway: boolean = false;
+    private freeKill: boolean = false;
     private weapon: Weapon;
 
     initScene(init: Record<string, any>): void {
@@ -116,22 +117,22 @@ export default class level_p2 extends GameLevel {
         
         this.spawnableEnemies.push({
             name: "crab",
-            health: 2,
+            health: 200,
             player: this.player,
             speed: 125,
             weapon: this.createWeapon("knife"),
-            range: 10,
+            range: 16,
             experience: 200
         });
 
         this.spawnableEnemies.push({
             name: "cyclops",
-            health: 3,
+            health: 450,
             player: this.player,
             speed: 100,
             weapon: this.createWeapon("knife"),
             range: 32,
-            experience: 250,
+            experience: 600,
         });
 
         this.enemyConstructorPairings = new Map([["crab" , EnemyAI], ["cyclops", EnemyAI], ["octopus", RangeAI]]);
@@ -146,6 +147,8 @@ export default class level_p2 extends GameLevel {
         this.rheaStatueZone = this.add.graphic(GraphicType.RECT, "primary",{position: this.rheaStatue.position, size: new Vec2(3*32,3*32)});
         this.rheaStatueZone.color = Color.TRANSPARENT;
         this.rheaStatueCooldown = new Timer(30000);
+
+        this.populateHUD();
 
         //Start spawning delay
         this.startSceneTimer.start();
@@ -196,6 +199,7 @@ export default class level_p2 extends GameLevel {
             enemy.setGroup("enemy");
             enemy.freeze();
             this.currentNumEnemies += 1;
+            this.freeKill = true;
 
             if(this.battleManager.enemies === undefined){
                 this.battleManager.setEnemies([<BattlerAI>enemy._ai])
@@ -235,11 +239,16 @@ export default class level_p2 extends GameLevel {
 
         // Spawn enemies in
         if(this.startSceneTimer.isStopped()){
-            if(!this.startedLevel){
-                this.gameTimer.start();
+            if(!this.startedLevel) {
                 this.player.unfreeze();
                 this.player.setAIActive(true, {});
                 this.startedLevel = true;
+                if (!this.freeKill) this.gameTimer.start();
+            }
+
+            if (this.currentNumEnemies === 0 && this.freeKill) {
+                this.freeKill = false;
+                this.gameTimer.start();
             }
 
             if(!this.gameTimer.isStopped() && this.currentNumEnemies < this.maxEnemies && !this.pauseFlag){
@@ -248,7 +257,7 @@ export default class level_p2 extends GameLevel {
                 let enemyPosition = this.randomSpawn();
                 let options = {
                     name: enemyType.name,
-                    health: enemyType.health,
+                    health: enemyType.health*(Math.pow(1.05, this.playerStats.level)),
                     player: enemyType.player,
                     speed: enemyType.speed,
                     weapon: enemyType.weapon,
@@ -270,11 +279,11 @@ export default class level_p2 extends GameLevel {
             if(this.gameTimer.getTimeLeft() <= this.gameTimer.getTotalTime()/2 && !this.halfway){
                 this.spawnableEnemies.push({
                     name: "octopus",
-                    health: 2,
+                    health: 200,
                     player: this.player,
-                    speed: 125,
+                    speed: 150,
                     weapon: this.createWeapon("knife"),
-                    range: 150,
+                    range: 125,
                     experience: 250,
                 });
                 this.halfway = true;
@@ -283,7 +292,8 @@ export default class level_p2 extends GameLevel {
             //Half way through add harpies
             // console.log(this.gameTimer.getTimeLeft() + " | " + this.gameTimer.getTotalTime()/2)
     
-            if(this.gameTimer.getTimeLeft() <= 0) {
+            if (!this.freeKill) {
+                if(this.gameTimer.getTimeLeft() <= 0) {
                 //end level and move to level z2
                
                 this.changeLevelTimer = new Timer(5000, () => {
@@ -291,19 +301,18 @@ export default class level_p2 extends GameLevel {
                     this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "poseidon"});
                     this.viewport.setSize(1600, 900);
                     this.sceneManager.changeToScene(level_p3, {
-                    characterStats: this.playerStats, 
-                    weapon: (<PlayerController>this.player._ai).weapon,
-                    invincible: this.invincible, 
-                    unlockAll: this.unlockAll,
-                    instant_kill: this.instant_kill,
-                    speedUp: this.speedUp, 
-                    unlockedLevels: this.unlockedLevels,
-                    inventory: this.inventory
-                }, this.sceneOptions);
+                        characterStats: this.playerStats, 
+                        weapon: (<PlayerController>this.player._ai).weapon,
+                        invincible: this.invincible, 
+                        unlockAll: this.unlockAll,
+                        instant_kill: this.instant_kill,
+                        speedUp: this.speedUp, 
+                        unlockedLevels: this.unlockedLevels,
+                        inventory: this.inventory
+                    }, this.sceneOptions);
                 });
                 this.changeLevelTimer.start();
-                
-                
+                }
             }
         }
         

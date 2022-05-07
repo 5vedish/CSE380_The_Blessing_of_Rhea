@@ -25,6 +25,7 @@ import Graphic from "../../../Wolfie2D/Nodes/Graphic";
 import AnimatedSprite from "../../../Wolfie2D/Nodes/Sprites/AnimatedSprite";
 
 export default class level_p3 extends GameLevel {
+    private freeKill: boolean = false;
     private bossHealthBar: Graphic;
     private boss: CustomEnemy;
     private bossSpawned: boolean = false;
@@ -134,11 +135,11 @@ export default class level_p3 extends GameLevel {
         
         this.spawnableEnemies.push({
             name: "crab",
-            health: 2,
+            health: 200,
             player: this.player,
             speed: 125,
             weapon: this.createWeapon("knife"),
-            range: 10,
+            range: 16,
             experience: 200
         });
 
@@ -149,16 +150,16 @@ export default class level_p3 extends GameLevel {
             speed: 100,
             weapon: this.createWeapon("knife"),
             range: 32,
-            experience: 250,
+            experience: 600,
         });
 
         this.spawnableEnemies.push({
             name: "octopus",
-            health: 2,
+            health: 200,
             player: this.player,
-            speed: 125,
+            speed: 150,
             weapon: this.createWeapon("blast"),
-            range: 150,
+            range: 125,
             experience: 250,
         });
 
@@ -179,6 +180,8 @@ export default class level_p3 extends GameLevel {
          this.rheaStatueZone = this.add.graphic(GraphicType.RECT, "primary",{position: this.rheaStatue.position, size: new Vec2(3*32,3*32)});
          this.rheaStatueZone.color = Color.TRANSPARENT;
          this.rheaStatueCooldown = new Timer(30000);
+
+        this.populateHUD();
 
         //Start spawning delay
         this.startSceneTimer.start();
@@ -230,6 +233,7 @@ export default class level_p3 extends GameLevel {
             enemy.setGroup("enemy");
             enemy.freeze();
             this.currentNumEnemies += 1;
+            this.freeKill = true;
 
             if(this.battleManager.enemies === undefined){
                 this.battleManager.setEnemies([<BattlerAI>enemy._ai])
@@ -275,7 +279,11 @@ export default class level_p3 extends GameLevel {
                 this.startedLevel = true;
             }
 
-            if (!this.bossSpawned && !this.bossDefeated) {
+            if (this.currentNumEnemies === 0 && this.freeKill) {
+                this.freeKill = false;
+            }
+
+            if (!this.bossSpawned && !this.bossDefeated && !this.freeKill) {
                 let enemyPosition = this.randomSpawn();
                 let options = {
                     name: this.boss.name,
@@ -313,13 +321,13 @@ export default class level_p3 extends GameLevel {
                 this.bossSpawned = true;
             }
 
-            if(!this.bossDefeated && this.bossSpawned && this.currentNumEnemies < this.maxEnemies && !this.pauseFlag) {
+            if(!this.freeKill && !this.bossDefeated && this.bossSpawned && this.currentNumEnemies < this.maxEnemies && !this.pauseFlag) {
                 let enemyType = this.spawnableEnemies[Math.floor(Math.random() * this.spawnableEnemies.length)];
     
                 let enemyPosition = this.randomSpawn();
                 let options = {
                     name: enemyType.name,
-                    health: enemyType.health,
+                    health: enemyType.health*(Math.pow(1.05, this.playerStats.level)),
                     player: enemyType.player,
                     speed: enemyType.speed,
                     weapon: enemyType.weapon,
@@ -336,7 +344,7 @@ export default class level_p3 extends GameLevel {
             }
 
             // Update health bar for leviathan
-            if(this.leviathan._ai !== undefined){
+            if(!this.freeKill && this.leviathan._ai !== undefined){
                 let bossPercentage = (<LeviathanAI>this.leviathan._ai).health/(<LeviathanAI>this.leviathan._ai).maxHealth;
                 this.bossHealthBar.size = new Vec2(600*bossPercentage, 16);
             }

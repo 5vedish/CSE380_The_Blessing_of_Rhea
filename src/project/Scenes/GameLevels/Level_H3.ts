@@ -308,6 +308,8 @@ export default class level_h3 extends GameLevel {
         this.rheaStatueZone = this.add.graphic(GraphicType.RECT, "primary",{position: new Vec2(31*32, 31*32), size: new Vec2(12*32,12*32)});
         this.rheaStatueZone.color = Color.TRANSPARENT;
 
+        this.populateHUD();
+
         this.startSceneTimer.start();
     }
 

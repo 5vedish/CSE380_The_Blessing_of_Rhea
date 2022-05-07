@@ -146,6 +146,8 @@ export default class level_p1 extends GameLevel {
         this.rheaStatueZone = this.add.graphic(GraphicType.RECT, "primary",{position: this.rheaStatue.position, size: new Vec2(3*32,3*32)});
         this.rheaStatueZone.color = Color.TRANSPARENT;
         this.rheaStatueCooldown = new Timer(30000);
+
+        this.populateHUD();
         
         //Start spawning delay
         this.startSceneTimer.start();
@@ -242,7 +244,7 @@ export default class level_p1 extends GameLevel {
                         let enemyPosition = this.randomSpawn();
                         let options = {
                             name: enemyType.name,
-                            health: enemyType.health,
+                            health: enemyType.health*(Math.pow(1.05, this.playerStats.level)),
                             player: enemyType.player,
                             speed: enemyType.speed,
                             weapon: enemyType.weapon,
@@ -282,9 +284,6 @@ export default class level_p1 extends GameLevel {
 
                 });
                 this.changeLevelTimer.start();
-                
-
-               
             }
         }
         

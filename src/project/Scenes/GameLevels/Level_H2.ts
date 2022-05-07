@@ -168,6 +168,8 @@ export default class level_h2 extends GameLevel {
         this.rheaStatueZone.color = Color.TRANSPARENT;
         this.rheaStatueCooldown = new Timer(30000);
         
+        this.populateHUD();
+        
         this.startSceneTimer.start();
     }
 
@@ -249,6 +251,7 @@ export default class level_h2 extends GameLevel {
 
                     this.viewport.setSize(1600, 900);
                     this.sceneManager.changeToScene(level_h3, {
+                        characterStats: this.playerStats,
                         invincible: this.invincible, 
                         unlockAll: this.unlockAll,
                         instant_kill: this.instant_kill,
@@ -280,7 +283,7 @@ export default class level_h2 extends GameLevel {
        // last argument is arbitrary because Hades will not use the weapon system, health was 75
        let enemy;
        if (!this.playerStats){
-           this.playerStats = new CharacterStat(75, 5, 5, 3, 1);
+           this.playerStats = new CharacterStat(75, 5, 5, (this.speedUp) ? 15 : 3, 1);
            //Create an enemy for players to get exp
            enemy = this.add.animatedSprite("Skull", "primary");
            enemy.scale.set(1,1);
