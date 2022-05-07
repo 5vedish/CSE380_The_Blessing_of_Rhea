@@ -7,7 +7,7 @@ import Weapon from "../Weapon";
 export default class HermesSandals2 extends Item {
     
     use(user: GameNode, weapon: Weapon, playerStats: CharacterStat, playerController: PlayerController): void {
-        playerStats.stats.speed *= 1.04;
+        playerStats.stats.speed *= 1.03;
         playerController.setSpeed(playerStats.stats.speed);
     }
 

@@ -27,14 +27,14 @@ export default class level_h1 extends GameLevel {
     private floorCheck: OrthogonalTilemap;
 
     loadScene(): void {
-        //Load Hades
+        // load Hades
         this.load.spritesheet("hades", "project_assets/spritesheets/Hades.json"); 
 
-        //Load Enemies
+        // load enemies
         this.load.spritesheet("Skull", "project_assets/spritesheets/Skull.json")
         this.load.spritesheet("Witch", "project_assets/spritesheets/Witch.json")
 
-        //Load tilemap
+        // load tilemap
         this.load.tilemap("levelH1", "project_assets/tilemaps/LevelH1.json");
         
 
@@ -42,10 +42,10 @@ export default class level_h1 extends GameLevel {
         this.load.spritesheet("hex", "project_assets/spritesheets/Hex.json");
         this.load.image("bident", "project_assets/sprites/bident.png");
 
-        //Load Challenge img
+        // load challenge img
         this.load.image("objective", "project_assets/sprites/h1_challenge.png");
 
-        // Load audio and music
+        // load audio and music
         this.load.audio("hades", "project_assets/music/Tartarus.mp3");
 
         super.loadScene();
