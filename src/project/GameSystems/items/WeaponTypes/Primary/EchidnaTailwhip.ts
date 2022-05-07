@@ -17,8 +17,9 @@ export default class EchidnaTailWhip extends WeaponType {
 
     doAnimation(attacker: GameNode, direction: Vec2, tailSprite: AnimatedSprite): void {
         // (<AnimatedSprite>attacker).animation.play("attack");
+        tailSprite.rotation = attacker.rotation;
         // Move the slice out from the player
-        tailSprite.position = attacker.position.clone().add(direction.scaled(32));
+        tailSprite.position = attacker.position.clone().add(direction.scaled(128));
         tailSprite.rotation = Vec2.UP.angleToCCW(direction);
         
         tailSprite.animation.play("WHIP", false, Project_Events.MELEEATTACK);

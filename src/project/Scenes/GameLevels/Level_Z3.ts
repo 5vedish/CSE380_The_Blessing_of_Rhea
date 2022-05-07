@@ -167,9 +167,9 @@ export default class level_z3 extends GameLevel {
 
         this.spawnableEnemies.push({
             name: "harpy",
-            health: 4,
+            health: 300,
             player: this.player,
-            speed: 300,
+            speed: 150,
             weapon: this.createWeapon("knife"),
             range: 150,
             experience: 250,
@@ -177,15 +177,16 @@ export default class level_z3 extends GameLevel {
 
         this.spawnableEnemies.push({
             name: "giant",
-            health: 6,
+            health: 600,
             player: this.player,
-            speed: 600,
+            speed: 100,
             weapon: this.createWeapon("knife"),
             range: 20,
             experience: 320,
         });
         
         let echidnaTailWhip = this.createWeapon("tailwhip");
+        echidnaTailWhip.sprite.scale.set(2,2);
         // console.log(echidnaTailWhip);
         this.echidna = this.add.animatedSprite("echidna", "primary");
         this.echidna.position = new Vec2(32*32 , 24*32);
@@ -196,7 +197,7 @@ export default class level_z3 extends GameLevel {
             player: this.player,
             speed: 30,
             weapon: echidnaTailWhip,
-            range: 50,
+            range: 6*32,
             venomRange: 400,
             experience: 1000,
             scene: this,
@@ -226,19 +227,6 @@ export default class level_z3 extends GameLevel {
         this.rheaStatue = this.add.animatedSprite("rheaStatue", "primary");
         this.rheaStatue.position = new Vec2(32*32, 44*32);
         this.rheaStatue.animation.play("idle");
-
-        this.rheaStatue.tweens.add("fadeOut", {
-                startDelay: 0,
-                duration: 3000,
-                effects: [
-                    {
-                        property: TweenableProperties.alpha,
-                        start: 1,
-                        end: 0,
-                        ease: EaseFunctionType.OUT_SINE
-                    }
-                ],
-        })
 
         this.rheaStatueZone = this.add.graphic(GraphicType.RECT, "primary",{position: new Vec2(32*32, 44*32), size: new Vec2(6*32,6*32)});
         this.rheaStatueZone.color = Color.TRANSPARENT;
@@ -303,7 +291,7 @@ export default class level_z3 extends GameLevel {
             // create weapon
             this.weapon = this.createWeapon("lightning");
             if (this.instant_kill) this.weapon.type.damage = 1000;
-            this.playerStats = new CharacterStat(100, 100, 10, (this.speedUp) ? 15 : 2, this.weapon.cooldownTimer.getTotalTime());
+            this.playerStats = new CharacterStat(150, 100, 10, (this.speedUp) ? 15 : 2, this.weapon.cooldownTimer.getTotalTime());
             //Create an enemy for players to get exp
             let enemy = this.add.animatedSprite("snake", "primary");
             enemy.scale.set(1,1);
@@ -369,14 +357,6 @@ export default class level_z3 extends GameLevel {
 
     updateScene(deltaT: number): void {
         super.updateScene(deltaT);
-
-        //Rhea statue
-        if(!this.rheaStatueUsed){
-            if (this.rheaStatueZone.boundary.overlapArea(this.player.boundary) && this.playerStats.stats.health < this.playerStats.stats.maxHealth) {
-                this.rheaStatueUsed = true; 
-                this.rheaStatue.tweens.play("fadeOut");                      
-            } 
-        }
 
         if(this.bossDefeated && this.currentNumEnemies === 0) {
     
