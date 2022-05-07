@@ -15,6 +15,7 @@ export default class HadesController extends PlayerController {
 
     public projectiles: Array<AnimatedSprite>;
     public attackCooldown: Timer;
+    protected pierce: number = 0; // start off with no pierce
 
     public floor: OrthogonalTilemap;
 
@@ -35,8 +36,8 @@ export default class HadesController extends PlayerController {
         switch(event.type){
             case Project_Events.LEVELUP:
                 // check for evolved weapon
-                if(this.playerStats.level === undefined){
-           
+                if(this.playerStats.level >= 5){
+                    this.pierce = 1;
                 }
         }
     }
@@ -99,7 +100,7 @@ export default class HadesController extends PlayerController {
                     (<ProjectileAI> projectile._ai).setAngle(Vec2.UP.angleToCCW(dir));
                     projectile.setAIActive(true, {speed: 4});
                     projectile.visible = true;
-                    (<FireballAI> projectile._ai).setPierce();
+                    (<FireballAI> projectile._ai).setPierce(this.pierce);
                     (<FireballAI> projectile._ai).checkInvuln();
                 }
 

@@ -7,6 +7,6 @@ import Weapon from "../Weapon";
 export default class Aegis3 extends Item {
     
     use(user: GameNode, weapon: Weapon, playerStats: CharacterStat, playerController: PlayerController): void {
-        playerStats.stats.defense += 3;
+        playerStats.stats.defense += 7;
     }
 }

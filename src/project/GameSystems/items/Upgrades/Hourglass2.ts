@@ -10,12 +10,12 @@ export default class Hourglass2 extends Item {
     
     use(user: GameNode, weapon: Weapon, playerStats: CharacterStat, playerController: PlayerController): void {
         if (weapon){
-            weapon.type.cooldown *= .93;
+            weapon.type.cooldown *= .92;
             playerStats.weaponCoolDown = weapon.type.cooldown;
             weapon.cooldownTimer = new Timer(weapon.type.cooldown);
         } else {
             let castedPlayer = (<HadesController> playerController);
-            castedPlayer.attackCooldown = new Timer(castedPlayer.attackCooldown.getTotalTime() * .93);
+            castedPlayer.attackCooldown = new Timer(castedPlayer.attackCooldown.getTotalTime() * .92);
         }
         
     }

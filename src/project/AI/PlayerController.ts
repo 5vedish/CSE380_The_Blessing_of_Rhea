@@ -93,6 +93,7 @@ export default class PlayerController extends StateMachineAI implements BattlerA
                 //check if leveled up
                 if(this.playerStats.level >= 5 && !this.weapon.type.spriteKey.includes("v2")) {
                     this.weapon.type.spriteKey = this.weaponV2;
+                    this.weapon.type.damage *= 1.3;
                 }
             
         }
@@ -129,7 +130,6 @@ export default class PlayerController extends StateMachineAI implements BattlerA
             let movement = Vec2.UP.scaled(verticalAxis * this.speed);
             movement = movement.add(new Vec2(horizontalAxis * this.speed, 0));
             
-            // this.owner.move(movement);
             //Scale the diagonal movements to match one directions speed
             (verticalAxis && horizontalAxis) ? this.owner.move(movement.scale(0.75)) : this.owner.move(movement);
         }
@@ -137,7 +137,7 @@ export default class PlayerController extends StateMachineAI implements BattlerA
 
     damage(damage: number): void {
         if(!this.invincible){
-            this.health -= damage;
+            this.health -= damage - (this.playerStats.stats.defense > damage ? 0 : this.playerStats.stats.defense); // defense mitigates damage
             this.playerStats.editHealth(damage * -1);
             this.owner.animation.play("damage");
             

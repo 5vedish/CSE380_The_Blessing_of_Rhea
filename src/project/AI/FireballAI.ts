@@ -13,7 +13,7 @@ export default class FireballAI extends ProjectileAI{
     initializeAI(owner: AnimatedSprite, options: Record<string, any>): void {
         super.initializeAI(owner, options);
         this.enemies = options.enemies; // receive enemies from GameLevel
-        this.damage = 2;
+        this.damage = 1;
     }
 
     update(deltaT: number): void {
@@ -59,15 +59,14 @@ export default class FireballAI extends ProjectileAI{
         this.enemies = enemies;
     }
 
-    setPierce():void{
-        this.pierce = 2;
+    setPierce(pierce: number):void{
+        this.pierce = pierce;
     }
 
     checkInvuln():void{
         
         for (let i of this.invuln){
             if (i.active) {
-             //   console.log("WE ARE PUSHING BACK");
                 this.enemies.push(i); // if enemy still exists, push them back
             }
         }

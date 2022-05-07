@@ -130,32 +130,32 @@ export default class level_z2 extends GameLevel {
         
         this.spawnableEnemies.push({
             name: "snake",
-            health: 3,
+            health: 150,
             player: this.player,
-            speed: 125,
+            speed: 115,
             weapon: this.createWeapon("knife"),
-            range: 10,
-            experience: 200
+            range: 16,
+            experience: 100
         });
 
         this.spawnableEnemies.push({
             name: "harpy",
-            health: 4,
+            health: 200,
             player: this.player,
-            speed: 150,
+            speed: 145,
             weapon: this.createWeapon("knife"),
             range: 150,
-            experience: 250,
+            experience: 200,
         });
 
         this.spawnableEnemies.push({
             name: "giant",
-            health: 6,
+            health: 600,
             player: this.player,
             speed: 100,
             weapon: this.createWeapon("knife"),
             range: 20,
-            experience: 320,
+            experience: 8000,
         });
         //Position the rhea statue and zone
         this.rheaStatue = this.add.animatedSprite("rheaStatue", "primary");
@@ -283,7 +283,7 @@ export default class level_z2 extends GameLevel {
                 speed: 0,
                 weapon: this.createWeapon("knife"),
                 range: 0,
-                experience: 3000,
+                experience: 8200, // for level 5
                 projectiles: this.createProjectiles(3 , "feather"),
                 cooldown: 1000,
                 scene: this,

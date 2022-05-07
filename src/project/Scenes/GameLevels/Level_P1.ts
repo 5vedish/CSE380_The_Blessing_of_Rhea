@@ -106,27 +106,27 @@ export default class level_p1 extends GameLevel {
         
         this.spawnableEnemies.push({
             name: "crab",
-            health: 2,
+            health: 200,
             player: this.player,
             speed: 125,
             weapon: this.createWeapon("knife"),
-            range: 10,
+            range: 16,
             experience: 200
         });
 
         this.spawnableEnemies.push({
             name: "cyclops",
-            health: 3,
+            health: 450,
             player: this.player,
             speed: 100,
             weapon: this.createWeapon("knife"),
             range: 32,
-            experience: 250,
+            experience: 600,
         });
 
         this.spawnableEnemies.push({
             name: "octopus",
-            health: 2,
+            health: 200,
             player: this.player,
             speed: 150,
             weapon: this.createWeapon("knife"),
