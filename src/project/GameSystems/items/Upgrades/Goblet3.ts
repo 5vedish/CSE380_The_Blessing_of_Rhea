@@ -8,7 +8,7 @@ import { Project_Events } from "../../../project_constants";
 export default class Goblet extends Item {
     
     use(user: GameNode, weapon: Weapon, playerStats: CharacterStat, playerController: PlayerController): void {
-        playerStats.stats.maxHealth += 100;
+        playerStats.stats.maxHealth += 75;
         this.emitter.fireEvent(Project_Events.HEALTHCHANGED);
     }
 

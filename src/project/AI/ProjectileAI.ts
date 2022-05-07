@@ -35,7 +35,7 @@ export default class ProjectileAI implements AI {
 
     protected emitter: Emitter;
 
-    protected timeToLive: Timer;
+    timeToLive: Timer;
 
     // An event emitter and receiver to hook into the event system
     protected receiver: Receiver

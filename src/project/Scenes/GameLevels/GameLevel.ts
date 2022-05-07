@@ -48,6 +48,7 @@ import Hourglass1 from "../../GameSystems/items/Upgrades/Hourglass1";
 import HadesController from "../../AI/HadesController";
 import FireballAI from "../../AI/FireballAI";
 import CerberusFireballAI from "../../AI/CerberusFireballAI";
+import VenomAi from "../../AI/VenomAI";
 
 export interface CustomEnemy {
     name: string,
@@ -758,6 +759,10 @@ export default class GameLevel extends Scene{
                 scaleSize.x = 2;
                 scaleSize.y = 2;
                 speed = 2;
+                break;
+            case "venom":
+                ai= VenomAi;
+                speed = 5;
                 break;
             default:
                 ai = ProjectileAI;

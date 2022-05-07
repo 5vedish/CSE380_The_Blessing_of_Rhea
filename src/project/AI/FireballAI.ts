@@ -13,7 +13,7 @@ export default class FireballAI extends ProjectileAI{
     initializeAI(owner: AnimatedSprite, options: Record<string, any>): void {
         super.initializeAI(owner, options);
         this.enemies = options.enemies; // receive enemies from GameLevel
-        this.damage = 1;
+        this.damage = 50;
     }
 
     update(deltaT: number): void {

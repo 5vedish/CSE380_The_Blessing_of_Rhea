@@ -39,6 +39,8 @@ export default class level_z3 extends GameLevel {
 
     private bossReceiver: Receiver;
 
+    private spawnablePositions: Array<Vec2>;
+
     loadScene(): void {
         //Load Zeus
         this.load.spritesheet("zeus", "project_assets/spritesheets/Zeus.json"); 
@@ -113,6 +115,14 @@ export default class level_z3 extends GameLevel {
         this.bossReceiver.subscribe(Project_Events.BOSSSPAWNENEMIES);
 
         this.maxEnemies = 15;
+
+        this.spawnablePositions = new Array<Vec2>();
+        this.spawnablePositions.push(new Vec2(40*32, 19*32));
+        this.spawnablePositions.push(new Vec2(40*32, 35*32));
+        this.spawnablePositions.push(new Vec2(24*32, 19*32));
+        this.spawnablePositions.push(new Vec2(24*32, 35*32));
+
+        console.log(this.spawnablePositions);
         
         super.startScene();
         this.initLayers();
@@ -182,12 +192,12 @@ export default class level_z3 extends GameLevel {
         this.echidna.scale.set(2,2);
         let options = {
             name: "echidna",
-            health: 30,
+            health: 500,
             player: this.player,
             speed: 30,
             weapon: echidnaTailWhip,
             range: 50,
-            venomRange: 200,
+            venomRange: 400,
             experience: 1000,
             scene: this,
             projectiles: this.createProjectiles(3, "venom") 
@@ -248,7 +258,7 @@ export default class level_z3 extends GameLevel {
                     enemy.scale.set(1.5,1.5);
                     enemy.addPhysics(new AABB(Vec2.ZERO, new Vec2(8,8))); //Monkey patched collision box, dynamic later
                     enemy.animation.play("moving");
-                    enemy.position = new Vec2((this.echidna.position.clone().x + (i===0? -32 : 32)), this.echidna.position.y);
+                    enemy.position = this.spawnablePositions[Math.floor(Math.random()*4)];
                     let options = {
                         health: enemyType.health,
                         player: enemyType.player,
@@ -287,6 +297,7 @@ export default class level_z3 extends GameLevel {
         if (this.playerStats === undefined) {
             // create weapon
             this.weapon = this.createWeapon("lightning");
+            this.weapon.type.damage = 20;
             if (this.instant_kill) this.weapon.type.damage = 1000;
             this.playerStats = new CharacterStat(100, 100, 10, (this.speedUp) ? 15 : 2, this.weapon.cooldownTimer.getTotalTime());
             //Create an enemy for players to get exp

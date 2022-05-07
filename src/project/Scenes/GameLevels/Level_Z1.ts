@@ -78,7 +78,7 @@ export default class level_z1 extends GameLevel {
         // this.viewport.setFocus(new Vec2(this.playerSpawn.x, this.playerSpawn.y));
         
         
-        this.maxEnemies = 20;
+        this.maxEnemies = 1;
         
         super.startScene();
         this.initLayers();
