@@ -179,6 +179,7 @@ export default class AnimationManager {
             this.loop = loop;
         } else {
             // Otherwise, use what the json file specified
+            console.log(animation)
             this.loop = this.animations.get(animation).repeat;
         }
 
