@@ -175,8 +175,8 @@ export default class level_p2 extends GameLevel {
         if (this.playerStats === undefined) {
             // create weapon
             this.weapon = this.createWeapon("trident");
-            if (this.instant_kill) this.weapon.type.damage = 1000;
-            this.playerStats = new CharacterStat(100, this.weapon.type.damage, 10, (this.speedUp) ? 15 : 2, this.weapon.cooldownTimer.getTotalTime());
+            if (this.instant_kill) this.weapon.type.damage = 10000;
+            this.playerStats = new CharacterStat(125, this.weapon.type.damage, 10, (this.speedUp) ? 15 : 2, this.weapon.cooldownTimer.getTotalTime());
             
             //Create an enemy for players to get exp
             let enemy = this.add.animatedSprite("crab", "primary");
@@ -257,7 +257,7 @@ export default class level_p2 extends GameLevel {
                 let enemyPosition = this.randomSpawn();
                 let options = {
                     name: enemyType.name,
-                    health: enemyType.health*(Math.pow(1.05, this.playerStats.level)),
+                    health: enemyType,
                     player: enemyType.player,
                     speed: enemyType.speed,
                     weapon: enemyType.weapon,
