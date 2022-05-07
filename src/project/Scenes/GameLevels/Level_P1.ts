@@ -73,7 +73,7 @@ export default class level_p1 extends GameLevel {
         this.levelMusic = "poseidon";
         // Add in the tilemap and get the wall layer
         let tilemapLayers = this.add.tilemap("levelP1", new Vec2(1, 1));
-        this.walls = <OrthogonalTilemap>tilemapLayers[1].getItems()[0];
+        this.walls = <OrthogonalTilemap>tilemapLayers[2].getItems()[0];
         this.walls.setGroup("wall");
         
         this.viewport.setBounds(0, 0, 64*32, 64*32);
