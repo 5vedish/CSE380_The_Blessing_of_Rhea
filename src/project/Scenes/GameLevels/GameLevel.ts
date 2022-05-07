@@ -688,6 +688,7 @@ export default class GameLevel extends Scene{
     }
 
     protected addEnemy(spriteKey: string, options: Record<string, any>): AnimatedSprite{
+        options.health *= (Math.pow(1.05, this.playerStats.level));
         let enemy = this.add.animatedSprite(spriteKey, "primary");
 
         enemy.scale.set(1,1);

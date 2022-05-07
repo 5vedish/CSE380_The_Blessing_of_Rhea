@@ -47,7 +47,7 @@
             "displayName": "Blast",
             "animationSprite": "slice",
             "spriteKey": "blast",
-            "damage": 5,
+            "damage": 15,
             "cooldown": 2000,
             "useVolume": 0
         }
