@@ -19,6 +19,7 @@ import { TweenableProperties } from "../../../Wolfie2D/Nodes/GameNode";
 import { EaseFunctionType } from "../../../Wolfie2D/Utils/EaseFunctions";
 import Sprite from "../../../Wolfie2D/Nodes/Sprites/Sprite";
 import { GameEventType } from "../../../Wolfie2D/Events/GameEventType";
+import Z2_Cutscene from "../Cutscenes/Z2_Cutscene";
 
 export default class level_z1 extends GameLevel {
 
@@ -232,7 +233,7 @@ export default class level_z1 extends GameLevel {
                     this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "zeus"});
                     this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "main_menu", loop: true, holdReference: true});
                     this.viewport.setSize(1600, 900);
-                    this.sceneManager.changeToScene(level_z2, {characterStats: this.playerStats, 
+                    this.sceneManager.changeToScene(Z2_Cutscene, {characterStats: this.playerStats, 
                     weapon: (<PlayerController>this.player._ai).weapon,
                     invincible: this.invincible, 
                     unlockAll: this.unlockAll,

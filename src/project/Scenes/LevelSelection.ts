@@ -16,6 +16,8 @@ import { GraphicType } from "../../Wolfie2D/Nodes/Graphics/GraphicTypes";
 import level_h1 from "./GameLevels/Level_H1";
 import level_h2 from "./GameLevels/Level_H2";
 import level_h3 from "./GameLevels/Level_H3";
+import Z1_Cutscene from "./Cutscenes/Z1_Cutscene";
+import Z2_Cutscene from "./Cutscenes/Z2_Cutscene";
 
 export default class LevelSelection extends Scene {
   private splashScreen: Layer;
@@ -282,12 +284,12 @@ export default class LevelSelection extends Scene {
 
       if (event.type === "zeus1") {
         this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "main_menu"});
-        this.sceneManager.changeToScene(level_z1, options, physicsOptions);
+        this.sceneManager.changeToScene(Z1_Cutscene, options, physicsOptions);
       }
 
       if (event.type === "zeus2") {
         this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "main_menu"});
-        if (this.unlockedLevels[1] || this.unlockAll) this.sceneManager.changeToScene(level_z2, options, physicsOptions);
+        if (this.unlockedLevels[1] || this.unlockAll) this.sceneManager.changeToScene(Z2_Cutscene, options, physicsOptions);
         else console.log("STAGE NOT UNLOCKED YET");
       }
 

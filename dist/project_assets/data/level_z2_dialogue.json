@@ -1,0 +1,16 @@
+{   
+    "dialogue": 
+    {
+    "lines": ["Now, now Echidna. Be a dear and face me you coward!", 
+        "You're a fool messsing with me you sssly bassstard.", 
+        "Your henchmens are no match for me.", "Is this all you got!",
+    "You and your white beard under essstimate my powersss.", 
+    "I have made more alliesss and they will do my bidding.",
+"GGGGRRRRRRR!!!", "Ha. You're a giant fool. Now on your knees if you wish to beg for mercy!"],
+    "speaker": [0,1,0,0,1,1,2,0,0],
+    "speakerSprite": ["Bigzeus", "Echidna","Bigzeus","Bigzeus", "Echidna", "Echinda", "giant", "Zeus"],
+    "speakerPositions": ["left","right","left","left","right","right","right","left"],
+    "speakerAnimations": ["idle","moving","idle","idle","moving","moving","attack","attacking"],
+    "speakerName": ["Zeus", "Echidna","Zeus","Zeus","Echidna","Echidna","Giant","Zeus"]
+    }
+}

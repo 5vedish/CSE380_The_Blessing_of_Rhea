@@ -42,6 +42,8 @@ export default class Cutscene extends Scene{
     private speedUp: boolean;
     private unlockedLevels: boolean[];
 
+    protected nextScene: Record<string,any>;
+
     initScene(init: Record<string, any>): void {
         this.invincible = init.invincible;
         this.unlockAll = init.unlockAll;
@@ -164,7 +166,7 @@ export default class Cutscene extends Scene{
                     unlockedLevels: this.unlockedLevels
                 }
                 
-                this.sceneManager.changeToScene(level_z1, options, this.sceneOptions);
+                this.sceneManager.changeToScene(this.nextScene.next, options, this.sceneOptions);
             } else {
 
                 this.speakerNameLabel.setText(this.speakerName[this.dialogueNumber]);
