@@ -419,13 +419,6 @@ export default class GameLevel extends Scene{
 
                 this.populateHUD();
 
-                // items rolled => leveled up => enemies give more exp but not enough to outpace required exp
-
-                for (let s of this.spawnableEnemies){
-                    s.experience = Math.pow(s.experience, 1.05);
-                    s.health *= 1.1; 
-                }
-
                 this.levelChanged--;
                 // accounting for multiple levels
                 if (this.levelChanged){
@@ -456,11 +449,12 @@ export default class GameLevel extends Scene{
                         break;
                     }
                     const enemyExperience = (<EnemyAI>enemy._ai).experience;
+                    const scaledExp = Math.pow(this.playerStats.level, 1.05) * enemyExperience; // exp scaling
                     this.battleManager.enemies = this.battleManager.enemies.filter(enemy => enemy !== <BattlerAI>(event.data.get("enemy")._ai));
                     this.enemyArray = this.enemyArray.filter(enemy => enemy !== (event.data.get("enemy")));
                     enemy.destroy();
                     this.currentNumEnemies -= 1;
-                    this.playerStats.gainedExperience(enemyExperience);
+                    this.playerStats.gainedExperience(scaledExp);
 
                     //Update the exp bar
                     const reqExp = 1000 * Math.pow(this.playerStats.level, 1.3);

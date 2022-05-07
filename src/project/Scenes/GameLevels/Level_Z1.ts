@@ -190,7 +190,7 @@ export default class level_z1 extends GameLevel {
                 let enemyPosition = this.randomSpawn();
                 let options = {
                     name: enemyType.name,
-                    health: enemyType.health,
+                    health: enemyType.health*(Math.pow(1.05, this.playerStats.level)), // slight hp scaling increase
                     player: enemyType.player,
                     speed: enemyType.speed,
                     weapon: enemyType.weapon,
