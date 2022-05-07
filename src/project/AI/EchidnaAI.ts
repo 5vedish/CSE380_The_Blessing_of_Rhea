@@ -15,12 +15,13 @@ import { EaseFunctionType } from "../../Wolfie2D/Utils/EaseFunctions";
 import Timer from "../../Wolfie2D/Timing/Timer";
 import ProjectileAI from "./ProjectileAI";
 import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
+import VenomAi from "./VenomAI";
 
 export default class EchidnaAI extends EnemyAI {
 
     protected projectiles: Array<AnimatedSprite>;
 
-    protected venomAttackCooldown: Timer = new Timer(5000);
+    protected venomAttackCooldown: Timer = new Timer(2000);
 
     protected minionsCooldown: Timer = new Timer(3000);
 
@@ -88,8 +89,15 @@ export default class EchidnaAI extends EnemyAI {
     update(deltaT: number): void {
         //Flip enemy sprites towards the player on the x-axis
         super.update(deltaT);
+        let visibleProjectile = false;
+        for(let i = 0; i<this.projectiles.length; i++){
+            if(this.projectiles[i].visible){
+                visibleProjectile = true;
+                break;
+            }
+        }
 
-        if(this.distanceToPlayer() <= this.venomRange && this.venomAttackCooldown.isStopped()){
+        if(this.distanceToPlayer() <= this.venomRange && this.venomAttackCooldown.isStopped() && !visibleProjectile){
             let dir  = this.player.position.clone().sub(this.owner.position.clone()).normalize();
             let angelLeft = Vec2.UP.angleToCCW(dir) - Math.PI/16;
             let angelStraight = Vec2.UP.angleToCCW(dir);
