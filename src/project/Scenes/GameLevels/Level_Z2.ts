@@ -272,7 +272,7 @@ export default class level_z2 extends GameLevel {
             // create weapon
             this.weapon = this.createWeapon("lightning");
             if (this.instant_kill) this.weapon.type.damage = 1000;
-            this.playerStats = new CharacterStat(100, 100, 10, (this.speedUp) ? 15 : 2, this.weapon.cooldownTimer.getTotalTime());
+            this.playerStats = new CharacterStat(150, 100, 10, (this.speedUp) ? 15 : 2, this.weapon.cooldownTimer.getTotalTime());
             //Create an enemy for players to get exp
             let enemy = this.add.animatedSprite("snake", "primary");
             enemy.scale.set(1,1);

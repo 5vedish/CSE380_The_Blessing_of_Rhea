@@ -23,7 +23,7 @@ export default class EchidnaAI extends EnemyAI {
 
     protected venomAttackCooldown: Timer = new Timer(2000);
 
-    protected minionsCooldown: Timer = new Timer(3000);
+    protected minionsCooldown: Timer = new Timer(5000);
 
     protected venomRange: number;
 
@@ -126,8 +126,8 @@ export default class EchidnaAI extends EnemyAI {
             }
             this.venomAttackCooldown.start();
         }
-        if(this.health/this.maxHealth <= 0.75){
-            this.speed = 100;
+        if(this.health/this.maxHealth <= 0.25){
+            this.speed = 60;
         }
 
         //Check if Echidna is at 50% health, if so she can spawn enemies
