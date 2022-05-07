@@ -7,10 +7,7 @@ import Weapon from "../Weapon";
 export default class HermesSandals2 extends Item {
     
     use(user: GameNode, weapon: Weapon, playerStats: CharacterStat, playerController: PlayerController): void {
-        // (<BattlerAI>user._ai).health += 1;
-        // playerStats.stats.speed *= 1.05;
-        // For Test
-        playerStats.stats.speed *= 1.07;
+        playerStats.stats.speed *= 1.03;
         playerController.setSpeed(playerStats.stats.speed);
     }
 

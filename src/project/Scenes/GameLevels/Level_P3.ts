@@ -60,6 +60,7 @@ export default class level_p3 extends GameLevel {
         //Load Enemies
         this.load.spritesheet("leviathan", "project_assets/spritesheets/Leviathan.json");
         this.load.spritesheet("blast", "project_assets/spritesheets/blast.json");
+        this.load.spritesheet("blastV2", "project_assets/spritesheets/blastV2.json");
         this.load.image("blast", "project_assets/sprites/blast.png");
         this.load.spritesheet("crab", "project_assets/spritesheets/Crab.json");
         this.load.spritesheet("cyclops", "project_assets/spritesheets/Cyclops.json");
@@ -88,7 +89,7 @@ export default class level_p3 extends GameLevel {
         this.levelMusic = "leviathan";
         // Add in the tilemap and get the wall layer
         let tilemapLayers = this.add.tilemap("levelP1", new Vec2(1, 1));
-        this.walls = <OrthogonalTilemap>tilemapLayers[1].getItems()[0];
+        this.walls = <OrthogonalTilemap>tilemapLayers[2].getItems()[0];
         this.walls.setGroup("wall");
         
         this.viewport.setBounds(0, 0, 64*32, 64*32);
@@ -123,7 +124,7 @@ export default class level_p3 extends GameLevel {
 
         this.boss = {
             name: "leviathan",
-            health: 35,
+            health: 40,
             player: this.player,
             speed: 150,
             weapon: this.createWeapon("blast"),
@@ -286,6 +287,7 @@ export default class level_p3 extends GameLevel {
                     experience: this.boss.experience,
                     position: enemyPosition,
                     projectiles: this.createProjectiles(10, "blast"),
+                    projectilesV2: this.createProjectiles(10, "blastV2"),
                     cooldown: 1000,
                     scene: this,
                     ai: LeviathanAI

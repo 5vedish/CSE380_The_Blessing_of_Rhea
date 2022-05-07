@@ -8,7 +8,7 @@ import { Project_Events } from "../../../project_constants";
 export default class HoneyJar extends Item {
     
     use(user: GameNode, weapon: Weapon, playerStats: CharacterStat, playerController: PlayerController): void {
-        playerStats.editHealth(10);
+        playerStats.editHealth(25);
         this.emitter.fireEvent(Project_Events.HEALTHCHANGED);
     }
 

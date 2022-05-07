@@ -10,13 +10,13 @@ export default class Bolt1 extends Item {
     
     use(user: GameNode, weapon: Weapon, playerStats: CharacterStat, playerController: PlayerController): void {
         if (playerController.weapon){
-            playerController.weapon.type.damage *= 1.04;
+            playerController.weapon.type.damage *= 1.13;
         } else {
             const fireballs = (<HadesController> playerController).projectiles;
 
             for (let f of fireballs){
                 const castedF = (<ProjectileAI> f._ai);
-                castedF.setDamage(castedF.getDamage() * 1.04);
+                castedF.setDamage(castedF.getDamage() * 1.13);
             }
         }
     }
