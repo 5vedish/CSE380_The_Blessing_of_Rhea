@@ -1,0 +1,19 @@
+{   
+    "dialogue": 
+    {
+    "lines": ["So the mountains and mountains of bones, that was you.", 
+        "*grrrrrrrrrr-*", 
+        "*rrrrrrrrrr-*", 
+        "*rrrrrrrrrr*",
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc metus quam, hendrerit a ex at, vulputate interdum velit. Vestibulum ultricies, elit non tincidunt egestas, nisl est blandit lorem, ac condimentum lacus tortor id urna. Interdum et malesuada fames ac ante ipsum primis in faucibus. Ut eget justo id leo congue sodales. Duis nec molestie neque.",
+        "*RUFF*",
+        "Ahhhhhhhhhhhhhh!!!",
+        "Oh save our souls o' mighty Olympian. Tear out her throat. Stitch her lips tight with Hecate's yarn. Erase her wretched hex and tear us to salvation! Gahhhhh!!!",
+        "Abhorrency! Savagery! Mercilessness! Rescind your judgement, my brothers, for I shall turn this mutt into my perfect pet!"],
+    "speaker": [0, 1, 1, 1, 2, 1, 3, 3, 0],
+    "speakerSprite": ["hades", "Cerberus", "Witch", "Skull"],
+    "speakerPositions": ["left", "right", "right", "right", "left", "right", "left", "right", "left"],
+    "speakerAnimations": ["idle", "moving", "moving", "moving", "attack", "attack", "damage", "damage", "attacking"],
+    "speakerName": ["Hades", "Cerberus Head#1", "Cerberus Head#2", "Cerberus Head#3", "Follower of Circe", "Cerberus Heads#1,2,3", "Damned Soul", " Chanting Damned Soul#2", "Hades"]
+    }
+}
