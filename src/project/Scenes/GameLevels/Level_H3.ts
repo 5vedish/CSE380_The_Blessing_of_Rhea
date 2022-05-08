@@ -48,6 +48,10 @@ export default class level_h3 extends GameLevel {
     // lava check
     private floorCheck: OrthogonalTilemap;
 
+    // spawnable cages
+    private cageSpawns: Array<Vec2> = [new Vec2(20*32, 24*32), new Vec2(44*32, 24*32), new Vec2(20*32, 40*32), new Vec2(44*32, 40*32)];
+
+
     loadScene(): void {
         // load player
         this.load.spritesheet("hades", "project_assets/spritesheets/Hades.json"); 
@@ -123,7 +127,7 @@ export default class level_h3 extends GameLevel {
         this.initializeWeapons();
         this.initPlayer();
 
-        this.enemyConstructorPairings = new Map([["snake" , EnemyAI], ["harpy", RangeAI], ["giant", EnemyAI]]);
+        this.enemyConstructorPairings = new Map([["Skull" , EnemyAI], ["Witch", RangeAI], ["Hellhound", EnemyAI]]);
     
     
         // healthbar adjustment and rebalancing
@@ -319,17 +323,18 @@ export default class level_h3 extends GameLevel {
 
             case Project_Events.BOSSSPAWNENEMIES:
                 // spawn enemies
-                for(let i = 0; i < 8; i++){
+                for(let i = 0; i < this.maxEnemies; i++){
 
-                    let enemyType = this.spawnableEnemies[Math.floor(Math.random() * this.spawnableEnemies.length)]
+                    let enemyType = this.spawnableEnemies[Math.floor(Math.random() * this.spawnableEnemies.length)];
                     let enemy = this.add.animatedSprite(enemyType.name, "primary"); 
                     enemy.animation.play("moving");
                     // specify enemy position (one of four cage zones)
+                    enemy.position = this.cageSpawns[Math.floor(Math.random()*this.cageSpawns.length)].clone();
 
                     let options = {
                         health: enemyType.health*(Math.pow(1.05, this.playerStats.level)),
                         player: enemyType.player,
-                        speed: enemyType.speed,
+                        speed: enemyType.speed*.75, // slow them down a bit
                         weapon: enemyType.weapon,
                         range: enemyType.range,
                         experience: enemyType.experience,
@@ -349,6 +354,14 @@ export default class level_h3 extends GameLevel {
                     }
 
                     this.currentNumEnemies += 1;
+                    this.enemyArray.push(enemy);
+
+                     // tailored to update enemy array
+                     const fireballs = (<HadesController> this.playerController).projectiles
+
+                     for (let f of fireballs){
+                         (<FireballAI> f._ai).setEnemies(this.enemyArray);
+                     }
 
                 }
                 break; // end of event
