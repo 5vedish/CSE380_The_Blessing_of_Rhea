@@ -41,6 +41,7 @@ export default class level_z2 extends GameLevel {
 
         this.load.spritesheet("lightning", "project_assets/spritesheets/lightning.json");
         this.load.spritesheet("lightningv2", "project_assets/spritesheets/lightningv2.json");
+        this.load.spritesheet("batSwing", "project_assets/spritesheets/batSwing.json");
         this.load.spritesheet("feather", "project_assets/spritesheets/Feather.json");
         this.load.image("lightning", "project_assets/sprites/lightning.png");
 
@@ -93,7 +94,7 @@ export default class level_z2 extends GameLevel {
         this.playerSpawn = new Vec2(32*32, 32*32);
         // this.viewport.setFocus(new Vec2(this.playerSpawn.x, this.playerSpawn.y));
         
-        this.maxEnemies = 10;
+        this.maxEnemies = 1;
         
         super.startScene();
         this.initLayers();
@@ -129,33 +130,33 @@ export default class level_z2 extends GameLevel {
         this.weaponIconCoolDown.color = Color.GRAY;
         this.weaponIconCoolDown.alpha = 0;
         
-        this.spawnableEnemies.push({
-            name: "snake",
-            health: 150,
-            player: this.player,
-            speed: 115,
-            weapon: this.createWeapon("knife"),
-            range: 16,
-            experience: 100
-        });
+        // this.spawnableEnemies.push({
+        //     name: "snake",
+        //     health: 150,
+        //     player: this.player,
+        //     speed: 115,
+        //     weapon: this.createWeapon("knife"),
+        //     range: 16,
+        //     experience: 100
+        // });
 
-        this.spawnableEnemies.push({
-            name: "harpy",
-            health: 200,
-            player: this.player,
-            speed: 145,
-            weapon: this.createWeapon("knife"),
-            range: 150,
-            experience: 200,
-        });
+        // this.spawnableEnemies.push({
+        //     name: "harpy",
+        //     health: 200,
+        //     player: this.player,
+        //     speed: 145,
+        //     weapon: this.createWeapon("knife"),
+        //     range: 150,
+        //     experience: 200,
+        // });
 
         this.spawnableEnemies.push({
             name: "giant",
             health: 600,
             player: this.player,
             speed: 100,
-            weapon: this.createWeapon("knife"),
-            range: 20,
+            weapon: this.createWeapon("batSwing"),
+            range: 64,
             experience: 400,
         });
         //Position the rhea statue and zone

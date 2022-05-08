@@ -51,10 +51,11 @@ export default class level_z3 extends GameLevel {
         this.load.spritesheet("harpy", "project_assets/spritesheets/harpy.json");
         this.load.spritesheet("giant", "project_assets/spritesheets/Giant.json");
         this.load.spritesheet("echidna", "project_assets/spritesheets/echidna.json")
-
+        
         //Load tilemap
         this.load.tilemap("levelZ3", "project_assets/tilemaps/LevelZ3.json");
-
+        
+        this.load.spritesheet("batSwing", "project_assets/spritesheets/batSwing.json");
         this.load.spritesheet("lightning", "project_assets/spritesheets/lightning.json");
         this.load.spritesheet("lightningv2", "project_assets/spritesheets/lightningv2.json");
         this.load.spritesheet("feather", "project_assets/spritesheets/Feather.json");

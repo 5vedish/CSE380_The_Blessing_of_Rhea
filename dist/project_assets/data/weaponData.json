@@ -1,5 +1,5 @@
 {
-    "numWeapons": 5,
+    "numWeapons": 6,
     "weapons": [
         {
             "weaponType": "lightning",
@@ -48,6 +48,16 @@
             "animationSprite": "slice",
             "spriteKey": "blast",
             "damage": 25,
+            "cooldown": 1000,
+            "useVolume": 0
+        },
+        {
+            "weaponType": "batSwing",
+            "name": "batSwing",
+            "displayName": "Bat Swing",
+            "animationSprite": "batSwing",
+            "spriteKey": "knife",
+            "damage": 40,
             "cooldown": 1000,
             "useVolume": 0
         }
