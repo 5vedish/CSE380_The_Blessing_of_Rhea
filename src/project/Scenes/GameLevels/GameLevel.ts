@@ -26,7 +26,6 @@ import PlayerController from "../../AI/PlayerController";
 import Receiver from "../../../Wolfie2D/Events/Receiver";
 import Layer from "../../../Wolfie2D/Scene/Layer";
 import UIElement from "../../../Wolfie2D/Nodes/UIElement";
-import Bolt from "../../GameSystems/items/Upgrades/Bolt3";
 import ProjectileAI from "../../AI/ProjectileAI";
 import DeathScreen from "../DeathScreen";
 import { EaseFunctionType } from "../../../Wolfie2D/Utils/EaseFunctions";
@@ -52,6 +51,9 @@ import VenomAi from "../../AI/VenomAI";
 import BlastAI from "../../AI/BlastAI";
 import BlastV2AI from "../../AI/BlastV2AI";
 import RockAI from "../../AI/RockAI";
+import FracturedAegis from "../../GameSystems/items/Upgrades/FracturedAegis";
+import Bolt3 from "../../GameSystems/items/Upgrades/Bolt3";
+import PoisonedGoblet from "../../GameSystems/items/Upgrades/PoisonedGoblet";
 
 export interface CustomEnemy {
     name: string,
@@ -142,12 +144,13 @@ export default class GameLevel extends Scene{
     protected levelMusic: string;
 
     // items
-    protected itemsArray = ["honey_jar", "hourglass_", "hermes_sandals_", "bolt_", "goblet_of_dionysus_", "aegis_"]; // "_" means chance to roll 1/2/3
+    protected itemsArray = ["honey_jar", "fractured_aegis", "poisoned_goblet",
+        "hourglass_", "hermes_sandals_", "bolt_", "goblet_of_dionysus_", "aegis_"]; // "_" means chance to roll 1/2/3
     protected selectionArray: Array<string> = [];
-    protected itemConstructorPairings: Map<string,any> = new Map([["honey_jar", HoneyJar],
+    protected itemConstructorPairings: Map<string,any> = new Map([["honey_jar", HoneyJar], ["fractured_aegis", FracturedAegis], ["poisoned_goblet", PoisonedGoblet],
         ["hourglass_1" , Hourglass1], ["hermes_sandals_1", HermesSandals1], ["bolt_1", Bolt1], ["goblet_of_dionysus_1", Goblet1], ["aegis_1", Aegis1],
         ["hourglass_2" , Hourglass2], ["hermes_sandals_2", HermesSandals2], ["bolt_2", Bolt2], ["goblet_of_dionysus_2", Goblet2], ["aegis_2", Aegis2],
-        ["hourglass_3" , Hourglass3], ["hermes_sandals_3", HermesSandals3], ["bolt_3", Bolt], ["goblet_of_dionysus_3", Goblet3], ["aegis_3", Aegis3]
+        ["hourglass_3" , Hourglass3], ["hermes_sandals_3", HermesSandals3], ["bolt_3", Bolt3], ["goblet_of_dionysus_3", Goblet3], ["aegis_3", Aegis3]
     ]);
 
     //Sprite to hold weapon icon
@@ -183,6 +186,8 @@ export default class GameLevel extends Scene{
         
         // Import upgrade icons
         this.load.image("honey_jar", "project_assets/sprites/honeyJar.png");
+        this.load.image("fractured_aegis", "project_assets/sprites/fractured_aegis.png");
+        this.load.image("poisoned_goblet", "project_assets/sprites/poisoned_goblet.png");
 
         this.load.image("aegis_1", "project_assets/sprites/aegis_1.png");
         this.load.image("bolt_1", "project_assets/sprites/bolt_1.png");
@@ -401,6 +406,7 @@ export default class GameLevel extends Scene{
                         item.use(this.player, this.playerController.weapon, this.playerStats, this.playerController);
                         this.button1.borderColor = Color.WHITE;
                         this.populateInventory(this.selectionArray[0]);
+                        this.removeLunar(this.selectionArray[0]);
                         break;
 
                     case "two":
@@ -409,6 +415,7 @@ export default class GameLevel extends Scene{
                         item2.use(this.player, this.playerController.weapon, this.playerStats, this.playerController);
                         this.button2.borderColor = Color.WHITE;
                         this.populateInventory(this.selectionArray[1]);
+                        this.removeLunar(this.selectionArray[1]);
                         break;
 
                     case "three":
@@ -417,6 +424,7 @@ export default class GameLevel extends Scene{
                         item3.use(this.player, this.playerController.weapon, this.playerStats, this.playerController);
                         this.button3.borderColor = Color.WHITE;
                         this.populateInventory(this.selectionArray[2]);
+                        this.removeLunar(this.selectionArray[2]);
                         break;
 
                 }
@@ -830,7 +838,7 @@ export default class GameLevel extends Scene{
         let tier;
         let dupes = [];
         while (this.selectionArray.length < 3){
-            if(this.playerStats.stats.health >= this.playerStats.stats.maxHealth){
+            if(this.playerStats.stats.health >= this.playerStats.stats.maxHealth){ // filter out heal if full hp
                 this.itemsArray = this.itemsArray.filter(item => item !== "honey_jar");
                 dupes.push("honey_jar");
             }
@@ -856,7 +864,6 @@ export default class GameLevel extends Scene{
             }
 
             this.selectionArray.push(rolledItem);
-
         }
 
         // remerge dupes into choices
@@ -1032,6 +1039,16 @@ export default class GameLevel extends Scene{
 
         }
        
+    }
+
+    protected removeLunar(item: string): void{
+        if (item === "fractured_aegis"){
+            this.itemsArray.splice(this.itemsArray.indexOf("fractured_aegis"), 1);
+        }
+
+        if (item === "poisoned_goblet"){
+            this.itemsArray.splice(this.itemsArray.indexOf("poisoned_goblet"), 1);
+        }
     }
 
 
