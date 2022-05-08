@@ -20,12 +20,16 @@ import RangeAI from "../AI/RangeAI";
 import Timer from "../../Wolfie2D/Timing/Timer";
 
 export default class Tutorial extends GameLevel {
-    protected tutorialTexts: Label[];
+    protected tutorialTexts: Sprite[];
     protected tutorialZones: AABB[];
 
     protected endTutorial: boolean = false;
-
     protected healedOnce: boolean = false;
+
+    private wasd: Sprite;
+    private click: Sprite;
+    private goal: Sprite;
+    private heal: Sprite;
   
     initScene(init: Record<string, any>): void {
       this.invincible = init.invincible;
@@ -50,7 +54,11 @@ export default class Tutorial extends GameLevel {
         this.load.image("lightningImg", "project_assets/sprites/lightning.png");
 
         this.load.image("objective", "project_assets/sprites/tutorial.png");
-        this.load.image("end", "project_assets/sprites/end_tutorial.png")
+        this.load.image("wasd", "project_assets/sprites/tutorialwasd.png");
+        this.load.image("click", "project_assets/sprites/tutorialClick.png");
+        this.load.image("goals", "project_assets/sprites/tutorialObjective.png");
+        this.load.image("heal", "project_assets/sprites/tutorialRhea.png");
+        this.load.image("end", "project_assets/sprites/end_tutorial.png");
 
         super.loadScene();
     }
@@ -110,7 +118,7 @@ export default class Tutorial extends GameLevel {
             player: this.player,
             speed: 5,
             weapon: this.createWeapon("knife"),
-            experience: 200}
+            experience: 400}
         firstEnemy.addAI(EnemyAI, options);
         firstEnemy.position.set(this.player.position.x, 44*32);
         firstEnemy.freeze();
@@ -129,7 +137,7 @@ export default class Tutorial extends GameLevel {
             player: this.player,
             speed: 5,
             weapon: this.createWeapon("knife"),
-            experience: 200}
+            experience: 400}
         secondEnemy.addAI(EnemyAI, options);
         secondEnemy.position.set(33*32+16, 30*32+16);
         secondEnemy.freeze();
@@ -163,7 +171,7 @@ export default class Tutorial extends GameLevel {
     }
 
     protected initTutorial(): void {
-        this.tutorialTexts = new Array<Label>();
+        this.tutorialTexts = new Array<Sprite>();
         this.tutorialZones = new Array<AABB>();
 
         //Movement tutorial
@@ -171,32 +179,36 @@ export default class Tutorial extends GameLevel {
         movementZone.color = Color.TRANSPARENT;
         this.tutorialZones.push(movementZone.boundary);
 
-        let movementLabel = <Label>this.add.uiElement(UIElementType.LABEL, "tutorial", {position: new Vec2(32*32, 48*32), text:"Use W A S D to move"});
-        this.tutorialTexts.push(movementLabel);
+        this.wasd = this.add.sprite("wasd", "tutorial");
+        this.wasd.position = new Vec2(32*32, 48*32);
+        this.tutorialTexts.push(this.wasd);
         
         //attack tutorial
         let attackZone = this.add.graphic(GraphicType.RECT, "tutorial", {position: this.player.position.clone().add(new Vec2(0, 5*32*-1)), size: new Vec2(8*32, 4*32)});
         attackZone.color = Color.TRANSPARENT;
         this.tutorialZones.push(attackZone.boundary);
 
-        let attackLabel = <Label>this.add.uiElement(UIElementType.LABEL, "tutorial", {position: new Vec2(32*32, 42*32), text:"Left Click to attack"});
-        this.tutorialTexts.push(attackLabel);
+        this.click = this.add.sprite("click", "tutorial");
+        this.click.position = new Vec2(32*32, 42*32);
+        this.tutorialTexts.push(this.click);
 
         //level up tutorial
         let levelupZone = this.add.graphic(GraphicType.RECT, "tutorial", {position: new Vec2(32*32, 37*32), size: new Vec2(2*32, 8*32)});
         levelupZone.color = Color.TRANSPARENT;
         this.tutorialZones.push(levelupZone.boundary);
 
-        let levelupLabel = <Label>this.add.uiElement(UIElementType.LABEL, "tutorial", {position: new Vec2(32*32, 37*32), text: "Defeat enemies to lvl up and obtain stat upgrades"});
-        this.tutorialTexts.push(levelupLabel);
+        this.goal = this.add.sprite("goals", "tutorial");
+        this.goal.position = new Vec2(32*32, 37*32);
+        this.tutorialTexts.push(this.goal);
 
         //end of tutorial
         let rheaTutorial = this.add.graphic(GraphicType.RECT, "tutorial",{position: new Vec2(32*32, 24*32), size: new Vec2(8*32,8*32)});
         rheaTutorial.color = Color.TRANSPARENT;
         this.tutorialZones.push(rheaTutorial.boundary);
 
-        let rheaTutorialLabel = <Label>this.add.uiElement(UIElementType.LABEL, "tutorial", {position: new Vec2(32*32, 24*32), text: "Stand near a Rhea statue to heal"});
-        this.tutorialTexts.push(rheaTutorialLabel);
+        this.heal = this.add.sprite("heal", "tutorial");
+        this.heal.position = new Vec2(32*32, 24*32);
+        this.tutorialTexts.push(this.heal);
 
         //Position the rhea statue and zone
         this.rheaStatue = this.add.animatedSprite("rheaStatue", "primary");
@@ -294,6 +306,7 @@ export default class Tutorial extends GameLevel {
 
         // handle leveling up
         if (this.levelChanged) {
+            console.log("LEVEL UP");
             // level up events
             while(this.levelReceiver.hasNextEvent()){
 
@@ -357,8 +370,8 @@ export default class Tutorial extends GameLevel {
                     this.playerStats.gainedExperience(enemyExperience); // to-do : scaling
 
                     //Update the exp bar
-                    let reqExp = Math.pow(this.playerStats.level, 1.5);
-                    let expPercentage = this.playerStats.experience / (reqExp * 500);
+                    let reqExp = 1000 * Math.pow(this.playerStats.level, 1.3);
+                    let expPercentage = this.playerStats.experience / reqExp;
                     this.expBar.size = new Vec2(expPercentage*216, 4);
                     this.expBar.position = new Vec2(108*expPercentage+(216/2), 32);
                     break;
@@ -374,7 +387,7 @@ export default class Tutorial extends GameLevel {
                     break;
 
                 case Project_Events.LEVELUP:
-
+                    console.log("TUTORIAL LEVEL UP");
                     this.pauseFlag = !this.pauseFlag;
                     this.pauseEntities();
                     //show layer

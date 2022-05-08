@@ -20,37 +20,39 @@ import BattlerAI from "../../AI/BattlerAI";
 import Graphic from "../../../Wolfie2D/Nodes/Graphic";
 import CharacterStat from "../../PlayerStatus";
 import CanvasNode from "../../../Wolfie2D/Nodes/CanvasNode";
-import Hourglass3 from "../../GameSystems/items/Upgrades/Hourglass3";
 import Sprite from "../../../Wolfie2D/Nodes/Sprites/Sprite";
 import PlayerController from "../../AI/PlayerController";
 import Receiver from "../../../Wolfie2D/Events/Receiver";
 import Layer from "../../../Wolfie2D/Scene/Layer";
 import UIElement from "../../../Wolfie2D/Nodes/UIElement";
-import Bolt from "../../GameSystems/items/Upgrades/Bolt3";
 import ProjectileAI from "../../AI/ProjectileAI";
 import DeathScreen from "../DeathScreen";
 import { EaseFunctionType } from "../../../Wolfie2D/Utils/EaseFunctions";
 import HoneyJar from "../../GameSystems/items/Upgrades/HoneyJar";
-import Goblet3 from "../../GameSystems/items/Upgrades/Goblet3";
-import Aegis3 from "../../GameSystems/items/Upgrades/Aegis3";
-import Hourglass2 from "../../GameSystems/items/Upgrades/Hourglass2";
-import HermesSandals2 from "../../GameSystems/items/Upgrades/HermesSandals2";
-import Bolt2 from "../../GameSystems/items/Upgrades/Bolt2";
-import Goblet2 from "../../GameSystems/items/Upgrades/Goblet2";
-import Aegis2 from "../../GameSystems/items/Upgrades/Aegis2";
-import HermesSandals3 from "../../GameSystems/items/Upgrades/HermesSandals3";
 import { GameEventType } from "../../../Wolfie2D/Events/GameEventType";
-import Aegis1 from "../../GameSystems/items/Upgrades/Aegis1";
-import Goblet1 from "../../GameSystems/items/Upgrades/Goblet1";
-import Bolt1 from "../../GameSystems/items/Upgrades/Bolt1";
-import HermesSandals1 from "../../GameSystems/items/Upgrades/HermesSandals1";
 import Hourglass1 from "../../GameSystems/items/Upgrades/Hourglass1";
+import Hourglass2 from "../../GameSystems/items/Upgrades/Hourglass2";
+import Hourglass3 from "../../GameSystems/items/Upgrades/Hourglass3";
+import Aegis1 from "../../GameSystems/items/Upgrades/Aegis1";
+import Aegis2 from "../../GameSystems/items/Upgrades/Aegis2";
+import Aegis3 from "../../GameSystems/items/Upgrades/Aegis3";
+import Goblet1 from "../../GameSystems/items/Upgrades/Goblet1";
+import Goblet2 from "../../GameSystems/items/Upgrades/Goblet2";
+import Goblet3 from "../../GameSystems/items/Upgrades/Goblet3";
+import Bolt1 from "../../GameSystems/items/Upgrades/Bolt1";
+import Bolt2 from "../../GameSystems/items/Upgrades/Bolt2";
+import Bolt3 from "../../GameSystems/items/Upgrades/Bolt3";
+import HermesSandals1 from "../../GameSystems/items/Upgrades/HermesSandals1";
+import HermesSandals2 from "../../GameSystems/items/Upgrades/HermesSandals2";
+import HermesSandals3 from "../../GameSystems/items/Upgrades/HermesSandals3";
 import HadesController from "../../AI/HadesController";
 import FireballAI from "../../AI/FireballAI";
 import CerberusFireballAI from "../../AI/CerberusFireballAI";
 import VenomAi from "../../AI/VenomAI";
 import BlastAI from "../../AI/BlastAI";
 import BlastV2AI from "../../AI/BlastV2AI";
+import FracturedAegis from "../../GameSystems/items/Upgrades/FracturedAegis";
+import PoisonedGoblet from "../../GameSystems/items/Upgrades/PoisonedGoblet";
 
 export interface CustomEnemy {
     name: string,
@@ -141,12 +143,13 @@ export default class GameLevel extends Scene{
     protected levelMusic: string;
 
     // items
-    protected itemsArray = ["honey_jar", "hourglass_", "hermes_sandals_", "bolt_", "goblet_of_dionysus_", "aegis_"]; // "_" means chance to roll 1/2/3
+    protected itemsArray = ["honey_jar", "fractured_aegis", "poisoned_goblet",
+        "hourglass_", "hermes_sandals_", "bolt_", "goblet_of_dionysus_", "aegis_"]; // "_" means chance to roll 1/2/3
     protected selectionArray: Array<string> = [];
-    protected itemConstructorPairings: Map<string,any> = new Map([["honey_jar", HoneyJar],
+    protected itemConstructorPairings: Map<string,any> = new Map([["honey_jar", HoneyJar], ["fractured_aegis", FracturedAegis], ["poisoned_goblet", PoisonedGoblet],
         ["hourglass_1" , Hourglass1], ["hermes_sandals_1", HermesSandals1], ["bolt_1", Bolt1], ["goblet_of_dionysus_1", Goblet1], ["aegis_1", Aegis1],
         ["hourglass_2" , Hourglass2], ["hermes_sandals_2", HermesSandals2], ["bolt_2", Bolt2], ["goblet_of_dionysus_2", Goblet2], ["aegis_2", Aegis2],
-        ["hourglass_3" , Hourglass3], ["hermes_sandals_3", HermesSandals3], ["bolt_3", Bolt], ["goblet_of_dionysus_3", Goblet3], ["aegis_3", Aegis3]
+        ["hourglass_3" , Hourglass3], ["hermes_sandals_3", HermesSandals3], ["bolt_3", Bolt3], ["goblet_of_dionysus_3", Goblet3], ["aegis_3", Aegis3]
     ]);
 
     //Sprite to hold weapon icon
@@ -182,6 +185,8 @@ export default class GameLevel extends Scene{
         
         // Import upgrade icons
         this.load.image("honey_jar", "project_assets/sprites/honeyJar.png");
+        this.load.image("fractured_aegis", "project_assets/sprites/fractured_aegis.png");
+        this.load.image("poisoned_goblet", "project_assets/sprites/poisoned_goblet.png");
 
         this.load.image("aegis_1", "project_assets/sprites/aegis_1.png");
         this.load.image("bolt_1", "project_assets/sprites/bolt_1.png");
@@ -840,6 +845,9 @@ export default class GameLevel extends Scene{
             }
 
             this.selectionArray.push(rolledItem);
+            if (rolledItem === "poisoned_goblet" || rolledItem === "fractured_aegis") {
+                this.itemsArray = this.itemsArray.filter(item => )
+            }
 
         }
 
