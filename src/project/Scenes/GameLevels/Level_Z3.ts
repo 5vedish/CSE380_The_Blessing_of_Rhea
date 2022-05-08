@@ -27,6 +27,7 @@ import { TweenableProperties } from "../../../Wolfie2D/Nodes/GameNode";
 import { EaseFunctionType } from "../../../Wolfie2D/Utils/EaseFunctions";
 import { GameEventType } from "../../../Wolfie2D/Events/GameEventType";
 import P1_Cutscene from "../Cutscenes/P1_Cutscene";
+import GiantAI from "../../AI/GiantAI";
 
 export default class level_z3 extends GameLevel {
 
@@ -130,7 +131,7 @@ export default class level_z3 extends GameLevel {
         this.initializeWeapons();
         this.initPlayer();
 
-        this.enemyConstructorPairings = new Map([["snake" , EnemyAI], ["harpy", RangeAI], ["giant", EnemyAI]]);
+        this.enemyConstructorPairings = new Map([["snake" , EnemyAI], ["harpy", RangeAI], ["giant", GiantAI]]);
     
         //Add health bar and exp bar
         // update health bar
