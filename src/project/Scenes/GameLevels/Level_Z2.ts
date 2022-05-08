@@ -130,25 +130,25 @@ export default class level_z2 extends GameLevel {
         this.weaponIconCoolDown.color = Color.GRAY;
         this.weaponIconCoolDown.alpha = 0;
         
-        // this.spawnableEnemies.push({
-        //     name: "snake",
-        //     health: 150,
-        //     player: this.player,
-        //     speed: 115,
-        //     weapon: this.createWeapon("knife"),
-        //     range: 16,
-        //     experience: 100
-        // });
+        this.spawnableEnemies.push({
+            name: "snake",
+            health: 150,
+            player: this.player,
+            speed: 115,
+            weapon: this.createWeapon("knife"),
+            range: 16,
+            experience: 100
+        });
 
-        // this.spawnableEnemies.push({
-        //     name: "harpy",
-        //     health: 200,
-        //     player: this.player,
-        //     speed: 145,
-        //     weapon: this.createWeapon("knife"),
-        //     range: 150,
-        //     experience: 200,
-        // });
+        this.spawnableEnemies.push({
+            name: "harpy",
+            health: 200,
+            player: this.player,
+            speed: 145,
+            weapon: this.createWeapon("knife"),
+            range: 150,
+            experience: 200,
+        });
 
         this.spawnableEnemies.push({
             name: "giant",
