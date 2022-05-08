@@ -12,6 +12,30 @@ import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 export default class HelpScreen extends Scene {
   private splashScreen: Layer;
   private bg: Sprite;
+  private backstory: Sprite
+  private b1: Sprite;
+  private b2: Sprite;
+  private b3: Sprite;
+  private b4: Sprite;
+  private b5: Sprite;
+  private b6: Sprite;
+  private b7: Sprite;
+  private b8: Sprite;
+  private b9: Sprite;
+  private b10: Sprite;
+  private b11: Sprite;
+  private back : Sprite;
+
+  private devs: Sprite;
+  private z: Sprite;
+  private j: Sprite;
+  private n: Sprite;
+
+  private cheatsLabel: Sprite;
+  private invLabel: Sprite;
+  private unlockLabel: Sprite;
+  private instantLabel: Sprite;
+  private speedLabel: Sprite;
 
   private helpScreen: Layer;
 
@@ -36,6 +60,32 @@ export default class HelpScreen extends Scene {
 
   loadScene() {
     this.load.image("splash_screen", "project_assets/screens/Splash.png");
+    
+    this.load.image("backstory", "project_assets/sprites/backstory.png");
+    this.load.image("l1", "project_assets/sprites/line1.png");
+    this.load.image("l2", "project_assets/sprites/line2.png");
+    this.load.image("l3", "project_assets/sprites/line3.png");
+    this.load.image("l4", "project_assets/sprites/line4.png");
+    this.load.image("l5", "project_assets/sprites/line5.png");
+    this.load.image("l6", "project_assets/sprites/line6.png");
+    this.load.image("l7", "project_assets/sprites/line7.png");
+    this.load.image("l8", "project_assets/sprites/line8.png");
+    this.load.image("l9", "project_assets/sprites/line9.png");
+    this.load.image("l10", "project_assets/sprites/line10.png");
+    this.load.image("l11", "project_assets/sprites/line11.png");
+
+    this.load.image("devs", "project_assets/sprites/devs.png");
+    this.load.image("z", "project_assets/sprites/zhi.png");
+    this.load.image("j", "project_assets/sprites/jeffery.png");
+    this.load.image("n", "project_assets/sprites/nelson.png");
+
+    this.load.image("cheats", "project_assets/sprites/cheats.png");
+    this.load.image("inv", "project_assets/sprites/inv.png");
+    this.load.image("unlock", "project_assets/sprites/unlock.png");
+    this.load.image("instant", "project_assets/sprites/instant.png");
+    this.load.image("speed", "project_assets/sprites/speed.png");
+
+    this.load.image("back", "project_assets/sprites/back.png");
     this.load.audio("click", "project_assets/sounds/click.wav");
   }
 
@@ -64,11 +114,14 @@ export default class HelpScreen extends Scene {
     const backstoryHeader = <Label>(
       this.add.uiElement(UIElementType.LABEL, "helpScreen", {
         position: new Vec2(462, 115),
-        text: "Backstory",
+        text: "",
       })
     );
     backstoryHeader.fontSize = 36;
     backstoryHeader.textColor = Color.WHITE;
+
+    this.backstory = this.add.sprite("backstory", "helpScreen");
+    this.backstory.position.copy(backstoryHeader.position);
 
     // BACKSTORY
     const line1 =
@@ -90,89 +143,38 @@ export default class HelpScreen extends Scene {
       "matter how the looms of fate spin for our three young gods, their";
     const line10 = "mother’s love and blessings will always remain with them.";
 
-    const one = <Label>(
-      this.add.uiElement(UIElementType.LABEL, "helpScreen", {
-        position: new Vec2(462, 164),
-        text: line1,
-      })
-    );
-    const two = <Label>(
-      this.add.uiElement(UIElementType.LABEL, "helpScreen", {
-        position: new Vec2(462, 188),
-        text: line2,
-      })
-    );
-    const three = <Label>(
-      this.add.uiElement(UIElementType.LABEL, "helpScreen", {
-        position: new Vec2(462, 212),
-        text: line3,
-      })
-    );
-    const four = <Label>(
-      this.add.uiElement(UIElementType.LABEL, "helpScreen", {
-        position: new Vec2(462, 236),
-        text: line4,
-      })
-    );
-    const five = <Label>(
-      this.add.uiElement(UIElementType.LABEL, "helpScreen", {
-        position: new Vec2(462, 260),
-        text: line5,
-      })
-    );
-    const six = <Label>(
-      this.add.uiElement(UIElementType.LABEL, "helpScreen", {
-        position: new Vec2(462, 284),
-        text: line6,
-      })
-    );
-    const seven = <Label>(
-      this.add.uiElement(UIElementType.LABEL, "helpScreen", {
-        position: new Vec2(462, 308),
-        text: line7,
-      })
-    );
-    const eight = <Label>(
-      this.add.uiElement(UIElementType.LABEL, "helpScreen", {
-        position: new Vec2(462, 332),
-        text: line8,
-      })
-    );
-    const nine = <Label>(
-      this.add.uiElement(UIElementType.LABEL, "helpScreen", {
-        position: new Vec2(462, 356),
-        text: line9,
-      })
-    );
-    const ten = <Label>(
-      this.add.uiElement(UIElementType.LABEL, "helpScreen", {
-        position: new Vec2(462, 380),
-        text: line10,
-      })
-    );
+    this.b1 = this.add.sprite("l1", "helpScreen");
+    this.b1.position = new Vec2(462, 164);
 
-    one.fontSize =
-      two.fontSize =
-      three.fontSize =
-      four.fontSize =
-      five.fontSize =
-      six.fontSize =
-      seven.fontSize =
-      eight.fontSize =
-      nine.fontSize =
-      ten.fontSize =
-        16;
-    one.textColor =
-      two.textColor =
-      three.textColor =
-      four.textColor =
-      five.textColor =
-      six.textColor =
-      seven.textColor =
-      eight.textColor =
-      nine.textColor =
-      ten.textColor =
-        Color.WHITE;
+    this.b2 = this.add.sprite("l2", "helpScreen");
+    this.b2.position = new Vec2(462, 188);
+
+    this.b3 = this.add.sprite("l3", "helpScreen");
+    this.b3.position = new Vec2(462, 212);
+
+    this.b4 = this.add.sprite("l4", "helpScreen");
+    this.b4.position = new Vec2(462, 236);
+
+    this.b5 = this.add.sprite("l5", "helpScreen");
+    this.b5.position = new Vec2(462, 260);
+
+    this.b6 = this.add.sprite("l6", "helpScreen");
+    this.b6.position = new Vec2(462, 284);
+
+    this.b7 = this.add.sprite("l7", "helpScreen");
+    this.b7.position = new Vec2(462, 308);
+
+    this.b8 = this.add.sprite("l8", "helpScreen");
+    this.b8.position = new Vec2(462, 332);
+
+    this.b9 = this.add.sprite("l9", "helpScreen");
+    this.b9.position = new Vec2(462, 356);
+
+    this.b10 = this.add.sprite("l10", "helpScreen");
+    this.b10.position = new Vec2(462, 380);
+
+    this.b11 = this.add.sprite("l11", "helpScreen");
+    this.b11.position = new Vec2(462, 404);
 
     // Developers
     const developers = this.add.uiElement(
@@ -187,36 +189,18 @@ export default class HelpScreen extends Scene {
     developers.backgroundColor = Color.GRAYISH;
     // No click event
 
-    const devHeader = <Label>(
-      this.add.uiElement(UIElementType.LABEL, "helpScreen", {
-        position: new Vec2(457, 550),
-        text: "Developers",
-      })
-    );
-    devHeader.fontSize = 36;
-    devHeader.textColor = Color.WHITE;
+    // Devs
+    this.devs = this.add.sprite("devs", "helpScreen");
+    this.devs.position = new Vec2(457, 550);
 
-    const dev1 = <Label>(
-      this.add.uiElement(UIElementType.LABEL, "helpScreen", {
-        position: new Vec2(457, 594),
-        text: "Zhi Zhao",
-      })
-    );
-    const dev2 = <Label>(
-      this.add.uiElement(UIElementType.LABEL, "helpScreen", {
-        position: new Vec2(457, 618),
-        text: "Jeffery Chen",
-      })
-    );
-    const dev3 = <Label>(
-      this.add.uiElement(UIElementType.LABEL, "helpScreen", {
-        position: new Vec2(457, 642),
-        text: "Nelson Tan",
-      })
-    );
+    this.z = this.add.sprite("z", "helpScreen");
+    this.z.position = new Vec2(457, 614);
+    
+    this.j = this.add.sprite("j", "helpScreen");
+    this.j.position = new Vec2(457, 650);
 
-    dev1.fontSize = dev2.fontSize = dev3.fontSize = 16;
-    dev1.textColor = dev2.textColor = dev3.textColor = Color.WHITE;
+    this.n = this.add.sprite("n", "helpScreen");
+    this.n.position = new Vec2(457, 686);
 
     // Cheats
     const cheats = this.add.uiElement(UIElementType.LABEL, "helpScreen", {
@@ -230,18 +214,12 @@ export default class HelpScreen extends Scene {
     cheats.backgroundColor = Color.GRAYISH;
     // No click event
 
-    const cheatHeader = <Label>(
-      this.add.uiElement(UIElementType.LABEL, "helpScreen", {
-        position: new Vec2(1106, 112),
-        text: "Cheats",
-      })
-    );
-    cheatHeader.fontSize = 48;
-    cheatHeader.textColor = Color.WHITE;
+    this.cheatsLabel = this.add.sprite("cheats", "helpScreen");
+    this.cheatsLabel.position = new Vec2(1106, 112);
 
     this.inv = this.add.uiElement(UIElementType.BUTTON, "helpScreen", {
       position: new Vec2(1106, 268),
-      text: "Invincibility",
+      text: "",
     });
     this.inv.size.set(384, 128);
     this.inv.borderWidth = 5;
@@ -250,11 +228,13 @@ export default class HelpScreen extends Scene {
     else this.inv.backgroundColor = Color.GRAYISH;
     this.inv.onClickEventId = "invincible";
 
-    this.unlockLevels = this.add.uiElement(
-      UIElementType.BUTTON,
-      "helpScreen",
-      { position: new Vec2(1106, 424), text: "Unlock All Levels" }
-    );
+    this.invLabel = this.add.sprite("inv", "helpScreen");
+    this.invLabel.position.copy(this.inv.position);
+
+    this.unlockLevels = this.add.uiElement(UIElementType.BUTTON, "helpScreen", { 
+      position: new Vec2(1106, 424),
+      text: "" 
+    });
     this.unlockLevels.size.set(384, 128);
     this.unlockLevels.borderWidth = 5;
     this.unlockLevels.borderColor = Color.BORDERCOLOR;
@@ -262,9 +242,12 @@ export default class HelpScreen extends Scene {
     else this.unlockLevels.backgroundColor = Color.GRAYISH;
     this.unlockLevels.onClickEventId = "unlock";
 
+    this.unlockLabel = this.add.sprite("unlock", "helpScreen");
+    this.unlockLabel.position.copy(this.unlockLevels.position);
+
     this.instantKill = this.add.uiElement(UIElementType.BUTTON, "helpScreen", {
       position: new Vec2(1106, 580),
-      text: "Instant Kill",
+      text: "",
     });
     this.instantKill.size.set(384, 128);
     this.instantKill.borderWidth = 5;
@@ -273,9 +256,12 @@ export default class HelpScreen extends Scene {
     else this.instantKill.backgroundColor = Color.GRAYISH;
     this.instantKill.onClickEventId = "kill";
 
+    this.instantLabel = this.add.sprite("instant", "helpScreen");
+    this.instantLabel.position.copy(this.instantKill.position);
+
     this.doubleSpeed = this.add.uiElement(UIElementType.BUTTON, "helpScreen", {
       position: new Vec2(1106, 736),
-      text: "I am Speed",
+      text: "",
     });
     this.doubleSpeed.size.set(384, 128);
     this.doubleSpeed.borderWidth = 5;
@@ -284,16 +270,23 @@ export default class HelpScreen extends Scene {
     else this.doubleSpeed.backgroundColor = Color.GRAYISH;
     this.doubleSpeed.onClickEventId = "speed";
 
+    this.speedLabel = this.add.sprite("speed", "helpScreen");
+    this.speedLabel.position.copy(this.doubleSpeed.position);
+
     // Back button
     const backHelp = this.add.uiElement(UIElementType.BUTTON, "helpScreen", {
       position: new Vec2(66, 815),
-      text: "Back",
+      text: "",
     });
     backHelp.size.set(75, 80);
     backHelp.borderWidth = 2;
     backHelp.borderColor = Color.BORDERCOLOR;
     backHelp.backgroundColor = Color.GRAYISH;
     backHelp.onClickEventId = "back";
+
+    this.back = this.add.sprite("back", "helpScreen");
+    this.back.position.copy(backHelp.position);
+    this.back.position.x += 5;
 
     this.receiver.subscribe("invincible");
     this.receiver.subscribe("unlock");

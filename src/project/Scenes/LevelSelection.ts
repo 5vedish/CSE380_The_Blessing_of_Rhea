@@ -44,6 +44,8 @@ export default class LevelSelection extends Scene {
   private h2: Sprite;
   private h3: Sprite;
 
+  private back: Sprite;
+
   private levelSelect: Layer;
   private invincible: boolean;
   private unlockAll: boolean;
@@ -90,6 +92,7 @@ export default class LevelSelection extends Scene {
     this.load.image("h3", "project_assets/sprites/h3.png");
     this.load.image("hadesLock", "project_assets/sprites/hadesLock.png");
 
+    this.load.image("back", "project_assets/sprites/back.png");
     this.load.audio("click", "project_assets/sounds/click.wav");
   }
 
@@ -273,13 +276,17 @@ export default class LevelSelection extends Scene {
     // Back button
     const backLevel = this.add.uiElement(UIElementType.BUTTON, "levelSelect", {
       position: new Vec2(66, 815),
-      text: "Back",
+      text: "",
     });
     backLevel.size.set(75, 80);
     backLevel.borderWidth = 2;
     backLevel.borderColor = Color.BORDERCOLOR;
     backLevel.backgroundColor = Color.GRAYISH;
     backLevel.onClickEventId = "back";
+
+    this.back = this.add.sprite("back", "levelSelect");
+    this.back.position.copy(backLevel.position);
+    this.back.position.x += 5;
 
     this.receiver.subscribe("back");
     this.receiver.subscribe("poseidon1");
