@@ -1,0 +1,16 @@
+{   
+    "dialogue": 
+    {
+    "lines": ["I've had enough of you games Echidna.",
+         "The Heavens will be mine and mine only!",
+        "The only thing that belongsss to you is the grave waiting for you below!",
+        "Enough with the chatter.",
+        "Give me the HEAVENS!!",
+    "sssSSSS!"],
+    "speaker": [0,0,1,0,0,1],
+    "speakerSprite": ["zeus", "Echidna"],
+    "speakerPositions": ["left","left","right","left","left","right"],
+    "speakerAnimations": ["attacking","attacking","moving","idle","attacking","attack"],
+    "speakerName": ["Zeus","Zeus", "Echidna","Zeus","Zeus","Echidna"]
+    }
+}
