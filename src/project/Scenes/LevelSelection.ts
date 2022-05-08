@@ -5,12 +5,9 @@ import Scene from "../../Wolfie2D/Scene/Scene";
 import Color from "../../Wolfie2D/Utils/Color";
 import MainMenu from "./MainMenu";
 import Sprite from "../../Wolfie2D/Nodes/Sprites/Sprite";
-import level_p1 from "./GameLevels/Level_P1";
-import level_p2 from "./GameLevels/Level_P2";
-import level_p3 from "./GameLevels/Level_P3";
 import level_z1 from "./GameLevels/Level_Z1";
-import level_z3 from "./GameLevels/Level_Z3";
 import level_z2 from "./GameLevels/Level_Z2";
+import level_z3 from "./GameLevels/Level_Z3";
 import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 import { GraphicType } from "../../Wolfie2D/Nodes/Graphics/GraphicTypes";
 import level_h1 from "./GameLevels/Level_H1";
@@ -19,6 +16,8 @@ import level_h3 from "./GameLevels/Level_H3";
 import Z1_Cutscene from "./Cutscenes/Z1_Cutscene";
 import Z2_Cutscene from "./Cutscenes/Z2_Cutscene";
 import P1_Cutscene from "./Cutscenes/P1_Cutscene";
+import P2_Cutscene from "./Cutscenes/P2_Cutscene";
+import P3_Cutscene from "./Cutscenes/P3_Cutscene";
 
 export default class LevelSelection extends Scene {
   private splashScreen: Layer;
@@ -273,13 +272,13 @@ export default class LevelSelection extends Scene {
 
       if (event.type === "poseidon2") {
         this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "main_menu"});
-        if (this.unlockedLevels[4] || this.unlockAll) this.sceneManager.changeToScene(level_p2, options, physicsOptions);
+        if (this.unlockedLevels[4] || this.unlockAll) this.sceneManager.changeToScene(P2_Cutscene, options, physicsOptions);
         else console.log("STAGE NOT UNLOCKED YET");
       }
 
       if (event.type === "poseidon3" ) {
         this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "main_menu"});
-        if (this.unlockedLevels[5] || this.unlockAll) this.sceneManager.changeToScene(level_p3, options, physicsOptions);
+        if (this.unlockedLevels[5] || this.unlockAll) this.sceneManager.changeToScene(P3_Cutscene, options, physicsOptions);
         else console.log("STAGE NOT UNLOCKED YET");
       }
 

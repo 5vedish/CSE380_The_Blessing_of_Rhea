@@ -275,7 +275,7 @@ export default class HelpScreen extends Scene {
 
     this.doubleSpeed = this.add.uiElement(UIElementType.BUTTON, "helpScreen", {
       position: new Vec2(1106, 736),
-      text: "Double Speed",
+      text: "I am Speed",
     });
     this.doubleSpeed.size.set(384, 128);
     this.doubleSpeed.borderWidth = 5;

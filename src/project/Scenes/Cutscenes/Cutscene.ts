@@ -8,6 +8,9 @@ import Input from "../../../Wolfie2D/Input/Input";
 import level_z1 from "../GameLevels/Level_Z1";
 import { GraphicType } from "../../../Wolfie2D/Nodes/Graphics/GraphicTypes";
 import Color from "../../../Wolfie2D/Utils/Color";
+import CharacterStat from "../../PlayerStatus";
+import Weapon from "../../GameSystems/items/Weapon";
+import { InventoryItemGraphic } from "../GameLevels/GameLevel";
 
 export default class Cutscene extends Scene{
 
@@ -41,6 +44,9 @@ export default class Cutscene extends Scene{
     private instant_kill: boolean;
     private speedUp: boolean;
     private unlockedLevels: boolean[];
+    private characterStats: CharacterStat;
+    private weapon: Weapon;
+    private inventory: InventoryItemGraphic;
 
     protected nextScene: Record<string,any>;
 
@@ -50,6 +56,9 @@ export default class Cutscene extends Scene{
         this.instant_kill = init.instant_kill;
         this.speedUp = init.speedUp;
         this.unlockedLevels = init.unlockedLevels;
+        this.characterStats = init.characterStats;
+        this.weapon = init.weapon;
+        this.inventory = init.inventory;
     }
 
     loadScene(): void {
@@ -167,7 +176,10 @@ export default class Cutscene extends Scene{
                     unlockAll: this.unlockAll,
                     instant_kill: this.instant_kill,
                     speedUp: this.speedUp,
-                    unlockedLevels: this.unlockedLevels
+                    unlockedLevels: this.unlockedLevels,
+                    characterStats: this.characterStats,
+                    weapon: this.weapon,
+                    inventory: this.inventory
                 }
                 
                 this.sceneManager.changeToScene(this.nextScene.next, options, this.sceneOptions);

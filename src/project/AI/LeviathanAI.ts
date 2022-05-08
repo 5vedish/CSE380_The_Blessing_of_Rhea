@@ -15,6 +15,7 @@ export default class LeviathanAI extends EnemyAI{
     protected attackCooldown: Timer;
     protected upgradeWeapon: Boolean;
     protected removeProjectiles: Boolean;
+    protected dead: Boolean = false;
 
     initializeAI(owner: AnimatedSprite, options: Record<string, any>){
         super.initializeAI(owner, options);
@@ -73,9 +74,10 @@ export default class LeviathanAI extends EnemyAI{
         this.owner.animation.queue("moving", true);
         
         // If health goes below 0, disable AI and fire enemyDied event
-        if (this.health <= 0) {
+        if (this.health <= 0 && !this.dead) {
             this.owner.setAIActive(false, {});
             this.owner.isCollidable = false;
+            this.dead = true;
             // this.owner.visible = false;
 
             this.owner.tweens.add("death", {
