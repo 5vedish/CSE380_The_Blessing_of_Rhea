@@ -13,6 +13,6 @@
     "speakerSprite": ["poseidon", "octopus", "cyclops"],
     "speakerPositions": ["left", "right", "right", "right", "right", "right", "right", "left"],
     "speakerAnimations": ["idle", "attack", "attack", "attack", "attack", "attack", "attack", "idle"],
-    "speakerName": ["Poseidon", "Squid", "Squid", "Squid", "Squid", "Squid", "Cyclops", "Poseidon"]
+    "speakerName": ["Poseidon", "Squid", "Poseidon", "Squid", "Squid", "Squid", "Cyclops", "Poseidon"]
     }
 }
