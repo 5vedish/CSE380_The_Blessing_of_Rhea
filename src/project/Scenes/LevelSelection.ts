@@ -26,17 +26,26 @@ import H3_Cutscene from "./Cutscenes/H3_Cutscene";
 export default class LevelSelection extends Scene {
   private splashScreen: Layer;
   private bg: Sprite;
-  private poseidon1 : Sprite;
+  private poseidon1: Sprite;
   private poseidon2: Sprite;
   private poseidon3: Sprite;
+  private p1: Sprite;
+  private p2: Sprite;
+  private p3: Sprite;
 
   private zeus1 : Sprite;
   private zeus2: Sprite;
   private zeus3: Sprite;
+  private z1: Sprite;
+  private z2: Sprite;
+  private z3: Sprite;
 
   private hades1 : Sprite;
   private hades2 : Sprite;
   private hades3 : Sprite;
+  private h1: Sprite;
+  private h2: Sprite;
+  private h3: Sprite;
 
   private levelSelect: Layer;
   private invincible: boolean;
@@ -57,20 +66,32 @@ export default class LevelSelection extends Scene {
 
   loadScene() {
     this.load.image("splash_screen", "project_assets/screens/Splash.png");
-    // Poseidon previews
+    // Poseidon previews and texts
     this.load.image("level_p1", "project_assets/tilemaps/p1_preview.png");
     this.load.image("level_p2", "project_assets/tilemaps/p2_preview.png");
     this.load.image("level_p3", "project_assets/tilemaps/p3_preview.png");
+    this.load.image("p1", "project_assets/sprites/p1.png");
+    this.load.image("p2", "project_assets/sprites/p2.png");
+    this.load.image("p3", "project_assets/sprites/p3.png");
+    this.load.image("poseidonLock", "project_assets/sprites/poseidonLock.png");
 
-    // Zeus previews
+    // Zeus previews and texts
     this.load.image("level_z1", "project_assets/tilemaps/z1_preview.png");
     this.load.image("level_z2", "project_assets/tilemaps/z2_preview.png");
     this.load.image("level_z3", "project_assets/tilemaps/z3_preview.png");
+    this.load.image("z1", "project_assets/sprites/z1.png");
+    this.load.image("z2", "project_assets/sprites/z2.png");
+    this.load.image("z3", "project_assets/sprites/z3.png");
+    this.load.image("zeusLock", "project_assets/sprites/zeusLock.png");
 
-    // Hades previews
+    // Hades previews and texts
     this.load.image("level_h1", "project_assets/tilemaps/h1_preview.png");
     this.load.image("level_h2", "project_assets/tilemaps/h2_preview.png");
     this.load.image("level_h3", "project_assets/tilemaps/h3_preview.png");
+    this.load.image("h1", "project_assets/sprites/h1.png");
+    this.load.image("h2", "project_assets/sprites/h2.png");
+    this.load.image("h3", "project_assets/sprites/h3.png");
+    this.load.image("hadesLock", "project_assets/sprites/hadesLock.png");
 
     this.load.audio("click", "project_assets/sounds/click.wav");
   }
@@ -92,7 +113,7 @@ export default class LevelSelection extends Scene {
     // Add Poseidon level buttons
     const levelp1 = this.add.uiElement(UIElementType.BUTTON, "levelSelect", {
       position: new Vec2(400, origin.y + 135),
-      text: "Level 1",
+      text: "",
     });
     levelp1.size.set(256, 128);
     levelp1.borderWidth = 2;
@@ -102,12 +123,15 @@ export default class LevelSelection extends Scene {
 
     if(this.unlockedLevels[3] || this.unlockAll){
     this.poseidon1 = this.add.sprite("level_p1", "splashScreen");
+    this.p1 = this.add.sprite("p1", "splashScreen");
     this.poseidon1.position.copy(levelp1.position);
-    }
+    } else this.p1 = this.add.sprite("poseidonLock", "levelSelect");
+    
+    this.p1.position.copy(levelp1.position);
 
     const levelp2 = this.add.uiElement(UIElementType.BUTTON, "levelSelect", {
       position: new Vec2(400, origin.y + 361),
-      text: "Level 2",
+      text: "",
     });
     levelp2.size.set(256, 128);
     levelp2.borderWidth = 2;
@@ -117,12 +141,15 @@ export default class LevelSelection extends Scene {
 
     if(this.unlockedLevels[4] || this.unlockAll){
     this.poseidon2 = this.add.sprite("level_p2", "splashScreen");
+    this.p2 = this.add.sprite("p2", "splashScreen");
     this.poseidon2.position.copy(levelp2.position);
-    }
+    } else this.p2 = this.add.sprite("poseidonLock", "levelSelect");
+    
+    this.p2.position.copy(levelp2.position);
 
     const levelp3 = this.add.uiElement(UIElementType.BUTTON, "levelSelect", {
       position: new Vec2(400, origin.y + 587),
-      text: "Level 3",
+      text: "",
     });
     levelp3.size.set(256, 128);
     levelp3.borderWidth = 2;
@@ -132,13 +159,16 @@ export default class LevelSelection extends Scene {
 
     if(this.unlockedLevels[5] || this.unlockAll){
     this.poseidon3 = this.add.sprite("level_p3", "splashScreen");
+    this.p3 = this.add.sprite("p3", "splashScreen");
     this.poseidon3.position.copy(levelp3.position);
-    }
+    } else this.p3 = this.add.sprite("poseidonLock", "levelSelect");
+
+    this.p3.position.copy(levelp3.position);
 
     // Add Zeus level buttons
     const levelz1 = this.add.uiElement(UIElementType.BUTTON, "levelSelect", {
       position: new Vec2(800, origin.y + 135),
-      text: "Level 1",
+      text: "",
     });
     levelz1.size.set(256, 128);
     levelz1.borderWidth = 2;
@@ -149,13 +179,15 @@ export default class LevelSelection extends Scene {
     if(this.unlockedLevels[0] || this.unlockAll){
     // Add preview of zeus1
     this.zeus1 = this.add.sprite("level_z1", "splashScreen");
+    this.z1 = this.add.sprite("z1", "splashScreen");
     this.zeus1.position.copy(levelz1.position);
-    }
+    } else this.z1 = this.add.sprite("zeusLock", "levelSelect");
     
+    this.z1.position.copy(levelz1.position);
 
     const levelz2 = this.add.uiElement(UIElementType.BUTTON, "levelSelect", {
       position: new Vec2(800, origin.y + 361),
-      text: "Level 2",
+      text: "",
     });
     levelz2.size.set(256, 128);
     levelz2.borderWidth = 2;
@@ -165,12 +197,15 @@ export default class LevelSelection extends Scene {
 
     if(this.unlockedLevels[1] || this.unlockAll){
     this.zeus2 = this.add.sprite("level_z2", "splashScreen");
+    this.z2 = this.add.sprite("z2", "splashScreen");
     this.zeus2.position.copy(levelz2.position);
-    }
+    } else this.z2 = this.add.sprite("zeusLock", "levelSelect");
+
+    this.z2.position.copy(levelz2.position);
 
     const levelz3 = this.add.uiElement(UIElementType.BUTTON, "levelSelect", {
       position: new Vec2(800, origin.y + 587),
-      text: "Level 3",
+      text: "",
     });
     levelz3.size.set(256, 128);
     levelz3.borderWidth = 2;
@@ -180,12 +215,16 @@ export default class LevelSelection extends Scene {
 
     if(this.unlockedLevels[2] || this.unlockAll){
     this.zeus3 = this.add.sprite("level_z3", "splashScreen");
+    this.z3 = this.add.sprite("z3", "splashScreen");
     this.zeus3.position.copy(levelz3.position);
-    }
+    } else this.z3 = this.add.sprite("zeusLock", "levelSelect");
+
+    this.z3.position.copy(levelz3.position);
+
     // Add Hades level buttons
     const levelh1 = this.add.uiElement(UIElementType.BUTTON, "levelSelect", {
       position: new Vec2(1200, origin.y + 135),
-      text: "Level 1",
+      text: "",
     });
     levelh1.size.set(256, 128);
     levelh1.borderWidth = 2;
@@ -194,13 +233,15 @@ export default class LevelSelection extends Scene {
     levelh1.onClickEventId = "hades1";
     if(this.unlockedLevels[6] || this.unlockAll){
       this.hades1 = this.add.sprite("level_h1", "splashScreen");
+      this.h1 = this.add.sprite("h1", "splashScreen");
       this.hades1.position.copy(levelh1.position);
-    }
+    } else this.h1 = this.add.sprite("hadesLock", "levelSelect");
 
+    this.h1.position.copy(levelh1.position);
 
     const levelh2 = this.add.uiElement(UIElementType.BUTTON, "levelSelect", {
       position: new Vec2(1200, origin.y + 361),
-      text: "Level 2",
+      text: "",
     });
     levelh2.size.set(256, 128);
     levelh2.borderWidth = 2;
@@ -209,12 +250,15 @@ export default class LevelSelection extends Scene {
     levelh2.onClickEventId = "hades2";
     if(this.unlockedLevels[7] || this.unlockAll){
       this.hades2 = this.add.sprite("level_h2", "splashScreen");
+      this.h2 = this.add.sprite("h2", "splashScreen");
       this.hades2.position.copy(levelh2.position);
-    }
+    } else this.h2 = this.add.sprite("hadesLock", "levelSelect");
+
+    this.h2.position.copy(levelh2.position);
 
     const levelh3 = this.add.uiElement(UIElementType.BUTTON, "levelSelect", {
       position: new Vec2(1200, origin.y + 587),
-      text: "Level 3",
+      text: "",
     });
     levelh3.size.set(256, 128);
     levelh3.borderWidth = 2;
@@ -223,8 +267,11 @@ export default class LevelSelection extends Scene {
     levelh3.onClickEventId = "hades3";
     if(this.unlockedLevels[8] || this.unlockAll){
       this.hades3 = this.add.sprite("level_h3", "splashScreen");
+      this.h3 = this.add.sprite("h3", "splashScreen");
       this.hades3.position.copy(levelh3.position);
-    }
+    } else this.h3 = this.add.sprite("hadesLock", "levelSelect");
+
+    this.h3.position.copy(levelh3.position);
 
     // Back button
     const backLevel = this.add.uiElement(UIElementType.BUTTON, "levelSelect", {

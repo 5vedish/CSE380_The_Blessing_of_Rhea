@@ -49,6 +49,8 @@ import HadesController from "../../AI/HadesController";
 import FireballAI from "../../AI/FireballAI";
 import CerberusFireballAI from "../../AI/CerberusFireballAI";
 import VenomAi from "../../AI/VenomAI";
+import BlastAI from "../../AI/BlastAI";
+import BlastV2AI from "../../AI/BlastV2AI";
 
 export interface CustomEnemy {
     name: string,
@@ -771,6 +773,14 @@ export default class GameLevel extends Scene{
                 ai= VenomAi;
                 speed = 5;
                 break;
+            case "blast":
+                ai = BlastAI;
+                speed = 4;
+                break;
+            case "blastV2":
+                ai = BlastV2AI;
+                speed = 8;
+                break;
             default:
                 ai = ProjectileAI;
         }
@@ -990,7 +1000,7 @@ export default class GameLevel extends Scene{
                 item.sprite.position = item.pos;
 
                 item.countLabel = <Label> this.add.uiElement(UIElementType.LABEL, "gui", { position: new Vec2(item.pos.x+15, item.pos.y+15), 
-                    text: "x1"}),
+                    text: `x${item.count}`}),
                 item.countLabel.setTextColor(Color.WHITE);
                 item.countLabel.fontSize = 16;
             }

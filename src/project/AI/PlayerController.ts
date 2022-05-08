@@ -135,11 +135,27 @@ export default class PlayerController extends StateMachineAI implements BattlerA
         }
     }
 
-    damage(damage: number): void {
+    damage(damage: number, ignoreDef = false): void {
         if(!this.invincible){
-            damage = (damage - this.playerStats.stats.defense < 0) ? 1 : (damage - this.playerStats.stats.defense);
-            this.playerStats.editHealth(damage * -1);
-            this.owner.animation.play("damage");
+            let calcDamage = (damage - this.playerStats.stats.defense < 0) ? 1 : (damage - this.playerStats.stats.defense);
+            if(ignoreDef){
+                this.playerStats.editHealth (damage * -1);
+                if(this.health - damage < 0){
+                    this.health = 0;
+                } else {
+                    this.health -= damage;
+                }
+            } else {
+                this.playerStats.editHealth(calcDamage * -1);
+                this.owner.animation.play("damage");
+
+                if(this.health - calcDamage < 0){
+                    this.health = 0;
+                } else {
+                    this.health -= calcDamage;
+                }
+            }
+            
             
             this.emitter.fireEvent(Project_Events.HEALTHCHANGED);
         }

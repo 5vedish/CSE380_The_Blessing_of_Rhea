@@ -1,5 +1,5 @@
 {
-    "numWeapons": 5,
+    "numWeapons": 6,
     "weapons": [
         {
             "weaponType": "lightning",
@@ -17,7 +17,7 @@
             "displayName": "Trident",
             "animationSprite": "Trident",
             "spriteKey": "trident",
-            "damage": 65,
+            "damage": 50,
             "cooldown": 1500,
             "useVolume": 10
         },
@@ -37,7 +37,7 @@
             "displayName": "Echidna_tailwhip",
             "animationSprite": "tailwhip",
             "spriteKey": "tailwhip",
-            "damage": 15,
+            "damage": 69,
             "cooldown": 3000,
             "useVolume": 0
         },
@@ -47,8 +47,18 @@
             "displayName": "Blast",
             "animationSprite": "slice",
             "spriteKey": "blast",
-            "damage": 15,
-            "cooldown": 2000,
+            "damage": 25,
+            "cooldown": 1000,
+            "useVolume": 0
+        },
+        {
+            "weaponType": "batSwing",
+            "name": "batSwing",
+            "displayName": "Bat Swing",
+            "animationSprite": "batSwing",
+            "spriteKey": "knife",
+            "damage": 40,
+            "cooldown": 1000,
             "useVolume": 0
         }
     ]

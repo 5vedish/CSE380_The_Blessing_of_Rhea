@@ -14,6 +14,7 @@ export default class LeviathanAI extends EnemyAI{
     protected projectilesV2: Array<AnimatedSprite>;
     protected attackCooldown: Timer;
     protected upgradeWeapon: Boolean;
+    protected pSpeed: number;
     protected removeProjectiles: Boolean;
     protected dead: Boolean = false;
 
@@ -34,7 +35,12 @@ export default class LeviathanAI extends EnemyAI{
         //Fire when in range;
         if(this.distanceToPlayer() <= this.inRange && this.attackCooldown.isStopped()) {
             // If health reaches a certain threshold upgrade weapon
-            if (!this.upgradeWeapon && this.health <= this.maxHealth * 0.6) this.upgradeWeapon = true;
+            if (!this.upgradeWeapon && this.health <= this.maxHealth * 0.6) {
+                this.attackCooldown = new Timer(500);
+                this.upgradeWeapon = true;
+                this.pSpeed = 5;
+            }
+            
             let projectile: AnimatedSprite = null;
             let poolProjectiles = this.upgradeWeapon ? this.projectilesV2: this.projectiles; 
             for (let p of poolProjectiles) {
@@ -47,9 +53,10 @@ export default class LeviathanAI extends EnemyAI{
             if (projectile !== null) {
                 let dir = this.player.position.clone().sub(this.owner.position.clone()).normalize();
                 projectile.position = this.owner.position.clone();
+                projectile.position.y -= 40;
                 (<ProjectileAI> projectile._ai).setDirection(dir);
                 (<ProjectileAI> projectile._ai).setAngle(Vec2.UP.angleToCCW(dir));
-                projectile.setAIActive(true, {speed: 4});
+                projectile.setAIActive(true, {speed: this.pSpeed});
                 this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "shoot", loop: false, holdReference: false});
                 projectile.visible = true;
             }

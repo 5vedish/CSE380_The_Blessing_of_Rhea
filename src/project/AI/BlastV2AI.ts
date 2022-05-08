@@ -1,25 +1,22 @@
 import AnimatedSprite from "../../Wolfie2D/Nodes/Sprites/AnimatedSprite";
 import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
 import ProjectileAI from "./ProjectileAI";
-import GameEvent from "../../Wolfie2D/Events/GameEvent";
-import EnemyAI from "./EnemyAI";
+import Timer from "../../Wolfie2D/Timing/Timer";
 import PlayerController from "./PlayerController";
 import { Project_Events } from "../project_constants";
-import Timer from "../../Wolfie2D/Timing/Timer";
 
-export default class VenomAi extends ProjectileAI{
+export default class BlastV2AI extends ProjectileAI{
 
     initializeAI(owner: AnimatedSprite, options: Record<string, any>): void {
         super.initializeAI(owner, options);
-        //Damage will be true damage, 8% of max health
-        this.damage = (<PlayerController>this.player._ai).playerStats.stats.maxHealth * 0.08; 
+        this.damage = 50; // should be higher damage
 
-        this.timeToLive = new Timer(1500, () => {
+        // 10 Blasts
+        this.timeToLive = new Timer(5000, () => {
             this.owner.position = Vec2.ZERO;
             this.owner.visible = false;
             this.owner.setAIActive(false, {});
         });
-        
     }
 
     update(deltaT: number): void {
@@ -40,7 +37,6 @@ export default class VenomAi extends ProjectileAI{
                 this.owner.setAIActive(false, {});
                 this.emitter.fireEvent(Project_Events.HEALTHCHANGED);
             }
-
         }
     }
 }
