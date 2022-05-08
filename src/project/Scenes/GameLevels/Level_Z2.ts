@@ -17,6 +17,7 @@ import Weapon from "../../GameSystems/items/Weapon";
 import Lightning from "../../GameSystems/items/WeaponTypes/Primary/Lightning";
 import level_z3 from "./Level_Z3";
 import { GameEventType } from "../../../Wolfie2D/Events/GameEventType";
+import Z3_Cutscene from "../Cutscenes/Z3_Cutscene";
 
 export default class level_z2 extends GameLevel {
 
@@ -239,7 +240,7 @@ export default class level_z2 extends GameLevel {
 
                     this.viewport.setSize(1600, 900);
                     this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "zeus"});
-                    this.sceneManager.changeToScene(level_z3, {characterStats: this.playerStats, 
+                    this.sceneManager.changeToScene(Z3_Cutscene, {characterStats: this.playerStats, 
                     weapon: (<PlayerController>this.player._ai).weapon,
                     invincible: this.invincible, 
                     unlockAll: this.unlockAll,
