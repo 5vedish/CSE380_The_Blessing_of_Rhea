@@ -1,0 +1,21 @@
+{   
+    "dialogue": 
+    {
+    "lines": ["Fascinating structure. But I have broken enough bones this day.", 
+        "- one-thousand anvils crash down, sealing the bridge behind -", 
+        "...", 
+        "And so it is the will of the Fates that I proceed.",
+        "Ahhhhn~ An Olympian! What a fine specimen! You bear no shortage of godly ichor in your veins, perhaps, to offer as penance for our imprisonment in the Titanomachy?",
+        "Penance? I did not cross the River Styx to give, you wench. Everything that will be given in life will always return to me!",
+        "Mmm. Such a pity. Were you any more sightly I may have kept you as a pet.",
+        "And... as for pets. You Olympians have yet to truly comprehend the horrors you enslaved in Tartarus.",
+        "*grrrrrrrrrr*",
+        "*auwooooooooooh*",
+        "Hexes and houndstooth. I will relish this more than grinding boneshards to dust beneath my heel!"],
+    "speaker": [0, 0, 0, 0, 1, 0, 1, 1, 2, 2, 0],
+    "speakerSprite": ["hades", "Witch", "Hellhound"],
+    "speakerPositions": ["left", "left", "left", "left", "right", "left", "right", "right", "right", "right", "left"],
+    "speakerAnimations": ["right", "attacking", "idle", "idle", "moving", "idle", "moving", "attack", "moving", "moving", "attacking"],
+    "speakerName": ["Hades", "Hades", "Hades", "Hades", "Follower of Circe", "Hades (the Chad)", "Follower of Circe", "Follower of Circe", "Hellhound", "Hellhound#2", "Hades"]
+    }
+}

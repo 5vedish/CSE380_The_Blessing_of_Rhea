@@ -102,7 +102,7 @@ export default class Cutscene extends Scene{
         box.setColor(Color.BLACK);
         box.alpha = .7;
 
-        this.line1 = <Label> this.add.uiElement(UIElementType.LABEL, "lit", { position: new Vec2(player.position.x-300, player.position.y+110),text: ""});
+        this.line1 = <Label> this.add.uiElement(UIElementType.LABEL, "lit", { position: new Vec2(player.position.x-330, player.position.y+110),text: ""});
         this.line1.fontSize = 32;
         this.line1.setHAlign(HAlign.LEFT);
         this.line1.setTextColor(Color.WHITE);
@@ -120,7 +120,7 @@ export default class Cutscene extends Scene{
         this.line4 = <Label> this.add.uiElement(UIElementType.LABEL, "lit", { position: new Vec2(player.position.x-330, player.position.y+200),text: ""});
         this.line4.fontSize = 32;
         this.line4.setHAlign(HAlign.LEFT);
-        this.line3.setTextColor(Color.WHITE);
+        this.line4.setTextColor(Color.WHITE);
 
         this.scroll = new Timer(1000, () => {
             if (this.currentLine < this.buffers.length - 1){

@@ -1,5 +1,5 @@
 import Cutscene from "./Cutscene";
-import level_h2 from "../GameLevels/Level_H2";
+import level_h1 from "../GameLevels/Level_H1";
 
 
 export default class H1_Cutscene extends Cutscene{
@@ -17,7 +17,7 @@ export default class H1_Cutscene extends Cutscene{
         // simply specify the name of the tile map and the name of the character sprite
         this.tileMapName = "levelH1";
         this.playerName = "hades";
-        this.nextScene = {next: level_h2};
+        this.nextScene = {next: level_h1};
         super.startScene();
 
     }
