@@ -220,7 +220,7 @@ export default class level_z2 extends GameLevel {
                             range: enemyType.range,
                             experience: enemyType.experience,
                             position: enemyPosition,
-                            projectiles: this.createProjectiles(3, "feather"),
+                            projectiles: this.createProjectiles(3, (enemyType.name === "harpy") ? "feather" : null),
                             cooldown: 2000,
                             scene: this,
                             ai: this.enemyConstructorPairings.get(enemyType.name)
@@ -273,7 +273,7 @@ export default class level_z2 extends GameLevel {
         if (this.playerStats === undefined) {
             // create weapon
             this.weapon = this.createWeapon("lightning");
-            if (this.instant_kill) this.weapon.type.damage = 1000;
+            if (this.instant_kill) this.weapon.type.damage = 10000;
             this.playerStats = new CharacterStat(150, 100, 10, (this.speedUp) ? 15 : 2, this.weapon.cooldownTimer.getTotalTime());
             //Create an enemy for players to get exp
             let enemy = this.add.animatedSprite("snake", "primary");

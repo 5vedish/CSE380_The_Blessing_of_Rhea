@@ -326,7 +326,8 @@ export default class level_h3 extends GameLevel {
                 for(let i = 0; i < this.maxEnemies; i++){
 
                     let enemyType = this.spawnableEnemies[Math.floor(Math.random() * this.spawnableEnemies.length)];
-                    let enemy = this.add.animatedSprite(enemyType.name, "primary"); 
+                    let enemy = this.add.animatedSprite(enemyType.name, "primary");
+                    console.log(`H3 spawn enemies: ${enemy.id} of enemy type: ${enemyType.name}`)
                     enemy.animation.play("moving");
                     // specify enemy position (one of four cage zones)
                     enemy.position = this.cageSpawns[Math.floor(Math.random()*this.cageSpawns.length)].clone();
@@ -338,7 +339,7 @@ export default class level_h3 extends GameLevel {
                         weapon: enemyType.weapon,
                         range: enemyType.range,
                         experience: enemyType.experience,
-                        projectiles: this.createProjectiles(1 , "Hex"),
+                        projectiles: this.createProjectiles(1 , (enemyType.name === "Witch") ? "Hex" : null),
                         cooldown: 1000,
                         scene: this,
                     }
@@ -526,7 +527,7 @@ export default class level_h3 extends GameLevel {
             const fireballs = (<HadesController> this.playerController).projectiles
 
             for (let f of fireballs){
-                (<FireballAI> f._ai).setDamage(1000);
+                (<FireballAI> f._ai).setDamage(100000);
             }
         }
 

@@ -42,6 +42,8 @@ export default abstract class UIElement extends CanvasNode {
 	/** Whether or not this UIElement is currently hovered over */
 	protected isEntered: boolean;
 
+	enabled: boolean = true;
+
 	constructor(position: Vec2){
 		super();
 		this.position = position;
@@ -66,6 +68,11 @@ export default abstract class UIElement extends CanvasNode {
 		this.isEntered = false;
 	}
 
+	setEnabled(enable: boolean){
+		console.log(enable);
+		this.enabled = enable;
+	}
+
 	// @deprecated
 	setBackgroundColor(color: Color): void {
 		this.backgroundColor = color;
@@ -79,55 +86,57 @@ export default abstract class UIElement extends CanvasNode {
 	update(deltaT: number): void {
 		super.update(deltaT);
 
-		// See of this object was just clicked
-		if(Input.isMouseJustPressed()){
-			let clickPos = Input.getMousePressPosition();
-			if(this.contains(clickPos.x, clickPos.y) && this.visible && !this.layer.isHidden()){
-				this.isClicked = true;
+		if(this.enabled){
+				// See of this object was just clicked
+			if(Input.isMouseJustPressed()){
+				let clickPos = Input.getMousePressPosition();
+				if(this.contains(clickPos.x, clickPos.y) && this.visible && !this.layer.isHidden()){
+					this.isClicked = true;
 
-				if(this.onClick !== null){
-					this.onClick();
-				}
-				if(this.onClickEventId !== null){
-					let data = {};
-					this.emitter.fireEvent(this.onClickEventId, data);
+					if(this.onClick !== null){
+						this.onClick();
+					}
+					if(this.onClickEventId !== null){
+						let data = {};
+						this.emitter.fireEvent(this.onClickEventId, data);
+					}
 				}
 			}
-		}
 
-		// If the mouse wasn't just pressed, then we definitely weren't clicked
-		if(!Input.isMousePressed()){
-			if(this.isClicked){
+			// If the mouse wasn't just pressed, then we definitely weren't clicked
+			if(!Input.isMousePressed()){
+				if(this.isClicked){
+					this.isClicked = false;
+				}
+			}
+
+			// Check if the mouse is hovering over this element
+			let mousePos = Input.getMousePosition();
+			if(mousePos && this.contains(mousePos.x, mousePos.y)){
+				this.isEntered = true;
+
+				if(this.onEnter !== null){
+					this.onEnter();
+				}
+				if(this.onEnterEventId !== null){
+					let data = {};
+					this.emitter.fireEvent(this.onEnterEventId, data);
+				}
+
+			} else if(this.isEntered) {
+				this.isEntered = false;
+
+				if(this.onLeave !== null){
+					this.onLeave();
+				}
+				if(this.onLeaveEventId !== null){
+					let data = {};
+					this.emitter.fireEvent(this.onLeaveEventId, data);
+				}
+			} else if(this.isClicked) {
+				// If mouse is dragged off of element while down, it is not clicked anymore
 				this.isClicked = false;
 			}
-		}
-
-		// Check if the mouse is hovering over this element
-		let mousePos = Input.getMousePosition();
-		if(mousePos && this.contains(mousePos.x, mousePos.y)){
-			this.isEntered = true;
-
-			if(this.onEnter !== null){
-				this.onEnter();
-			}
-			if(this.onEnterEventId !== null){
-				let data = {};
-				this.emitter.fireEvent(this.onEnterEventId, data);
-			}
-
-		} else if(this.isEntered) {
-			this.isEntered = false;
-
-			if(this.onLeave !== null){
-				this.onLeave();
-			}
-			if(this.onLeaveEventId !== null){
-				let data = {};
-				this.emitter.fireEvent(this.onLeaveEventId, data);
-			}
-		} else if(this.isClicked) {
-			// If mouse is dragged off of element while down, it is not clicked anymore
-			this.isClicked = false;
 		}
 	}
 

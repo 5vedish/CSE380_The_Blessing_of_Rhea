@@ -269,7 +269,7 @@ export default class level_p2 extends GameLevel {
                     range: enemyType.range,
                     experience: enemyType.experience,
                     position: enemyPosition,
-                    projectiles: this.createProjectiles(2, "ink"),
+                    projectiles: this.createProjectiles(2, (enemyType.name === "octopus") ? "ink" : null),
                     cooldown: 2000,
                     scene: this,
                     ai: this.enemyConstructorPairings.get(enemyType.name)

@@ -117,6 +117,8 @@ export default class LevelSelection extends Scene {
     levelp1.borderColor = Color.WHITE;
     levelp1.backgroundColor = (this.unlockedLevels[3] || this.unlockAll) ? Color.TRANSPARENT : Color.GRAY;
     levelp1.onClickEventId = "poseidon1";
+    levelp1.setEnabled(this.unlockedLevels[3] || this.unlockAll);
+    console.log(this.unlockAll)
 
     if(this.unlockedLevels[3] || this.unlockAll){
     this.poseidon1 = this.add.sprite("level_p1", "splashScreen");
@@ -135,6 +137,7 @@ export default class LevelSelection extends Scene {
     levelp2.borderColor = Color.WHITE;
     levelp2.backgroundColor = (this.unlockedLevels[4] || this.unlockAll) ? Color.TRANSPARENT : Color.GRAY;
     levelp2.onClickEventId = "poseidon2";
+    levelp2.setEnabled(this.unlockedLevels[4] || this.unlockAll);
 
     if(this.unlockedLevels[4] || this.unlockAll){
     this.poseidon2 = this.add.sprite("level_p2", "splashScreen");
@@ -153,6 +156,7 @@ export default class LevelSelection extends Scene {
     levelp3.borderColor = Color.WHITE;
     levelp3.backgroundColor = (this.unlockedLevels[5] || this.unlockAll) ? Color.TRANSPARENT : Color.GRAY;
     levelp3.onClickEventId = "poseidon3";
+    levelp3.setEnabled(this.unlockedLevels[5] || this.unlockAll);
 
     if(this.unlockedLevels[5] || this.unlockAll){
     this.poseidon3 = this.add.sprite("level_p3", "splashScreen");
@@ -191,6 +195,7 @@ export default class LevelSelection extends Scene {
     levelz2.borderColor = Color.WHITE;
     levelz2.backgroundColor = (this.unlockedLevels[1] || this.unlockAll) ? Color.TRANSPARENT : Color.GRAY;
     levelz2.onClickEventId = "zeus2";
+    levelz2.setEnabled(this.unlockedLevels[1] || this.unlockAll);
 
     if(this.unlockedLevels[1] || this.unlockAll){
     this.zeus2 = this.add.sprite("level_z2", "splashScreen");
@@ -209,6 +214,7 @@ export default class LevelSelection extends Scene {
     levelz3.borderColor = Color.WHITE;
     levelz3.backgroundColor = (this.unlockedLevels[2] || this.unlockAll) ? Color.TRANSPARENT : Color.GRAY;
     levelz3.onClickEventId = "zeus3";
+    levelz3.setEnabled(this.unlockedLevels[3] || this.unlockAll);
 
     if(this.unlockedLevels[2] || this.unlockAll){
     this.zeus3 = this.add.sprite("level_z3", "splashScreen");
@@ -228,6 +234,8 @@ export default class LevelSelection extends Scene {
     levelh1.borderColor = Color.WHITE;
     levelh1.backgroundColor = (this.unlockedLevels[6] || this.unlockAll) ? Color.TRANSPARENT : Color.GRAY;
     levelh1.onClickEventId = "hades1";
+    levelh1.setEnabled(this.unlockedLevels[6] || this.unlockAll);
+
     if(this.unlockedLevels[6] || this.unlockAll){
       this.hades1 = this.add.sprite("level_h1", "splashScreen");
       this.h1 = this.add.sprite("h1", "splashScreen");
@@ -245,6 +253,8 @@ export default class LevelSelection extends Scene {
     levelh2.borderColor = Color.WHITE;
     levelh2.backgroundColor = (this.unlockedLevels[7] || this.unlockAll) ? Color.TRANSPARENT : Color.GRAY;
     levelh2.onClickEventId = "hades2";
+    levelh2.setEnabled(this.unlockedLevels[7] || this.unlockAll);
+
     if(this.unlockedLevels[7] || this.unlockAll){
       this.hades2 = this.add.sprite("level_h2", "splashScreen");
       this.h2 = this.add.sprite("h2", "splashScreen");
@@ -262,6 +272,8 @@ export default class LevelSelection extends Scene {
     levelh3.borderColor = Color.WHITE;
     levelh3.backgroundColor = (this.unlockedLevels[8] || this.unlockAll) ? Color.TRANSPARENT : Color.GRAY;
     levelh3.onClickEventId = "hades3";
+    levelh3.setEnabled(this.unlockedLevels[8] || this.unlockAll);
+
     if(this.unlockedLevels[8] || this.unlockAll){
       this.hades3 = this.add.sprite("level_h3", "splashScreen");
       this.h3 = this.add.sprite("h3", "splashScreen");

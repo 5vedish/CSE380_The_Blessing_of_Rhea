@@ -180,7 +180,7 @@ export default class level_h1 extends GameLevel {
                 const fireballs = (<HadesController> this.playerController).projectiles
     
                 for (let f of fireballs){
-                    (<FireballAI> f._ai).setDamage(1000);
+                    (<FireballAI> f._ai).setDamage(100000);
                 }
             }
         }
@@ -210,7 +210,7 @@ export default class level_h1 extends GameLevel {
                     range: enemyType.range,
                     experience: enemyType.experience,
                     position: enemyPosition,
-                    projectiles: this.createProjectiles(1 , "hex"),
+                    projectiles: this.createProjectiles(1 , (enemyType.name === "Witch") ? "Hex" : null),
                     cooldown: 1000,
                     scene: this,
                     ai: this.enemyConstructorPairings.get(enemyType.name)
