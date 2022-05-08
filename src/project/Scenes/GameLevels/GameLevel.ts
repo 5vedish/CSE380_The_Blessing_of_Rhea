@@ -990,7 +990,7 @@ export default class GameLevel extends Scene{
                 item.sprite.position = item.pos;
 
                 item.countLabel = <Label> this.add.uiElement(UIElementType.LABEL, "gui", { position: new Vec2(item.pos.x+15, item.pos.y+15), 
-                    text: "x1"}),
+                    text: `x${item.count}`}),
                 item.countLabel.setTextColor(Color.WHITE);
                 item.countLabel.fontSize = 16;
             }

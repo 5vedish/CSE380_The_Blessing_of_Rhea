@@ -163,7 +163,7 @@ export default class level_z3 extends GameLevel {
             speed: 125,
             weapon: this.createWeapon("knife"),
             range: 10,
-            experience: 200
+            experience: 100
         });
 
         this.spawnableEnemies.push({
@@ -173,7 +173,7 @@ export default class level_z3 extends GameLevel {
             speed: 150,
             weapon: this.createWeapon("knife"),
             range: 150,
-            experience: 250,
+            experience: 200,
         });
 
         this.spawnableEnemies.push({
@@ -183,7 +183,7 @@ export default class level_z3 extends GameLevel {
             speed: 100,
             weapon: this.createWeapon("knife"),
             range: 20,
-            experience: 320,
+            experience: 400,
         });
         
         let echidnaTailWhip = this.createWeapon("tailwhip");
@@ -298,14 +298,14 @@ export default class level_z3 extends GameLevel {
             enemy.scale.set(1,1);
             enemy.addPhysics(new AABB(Vec2.ZERO, new Vec2(8,8)));
             enemy.animation.play("moving");
-            enemy.position = new Vec2(this.player.position.x , this.player.position.y - 32);
+            enemy.position = new Vec2(this.player.position.x , this.player.position.y - 48);
             let options = {
                 health: 1,
                 player: this.player,    
                 speed: 0,
                 weapon: this.createWeapon("knife"),
                 range: 0,
-                experience: 4500,
+                experience: 9000,
                 projectiles: this.createProjectiles(3 , "feather"),
                 cooldown: 1000,
                 scene: this,

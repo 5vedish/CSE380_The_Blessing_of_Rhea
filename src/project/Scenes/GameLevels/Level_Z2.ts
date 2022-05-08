@@ -156,7 +156,7 @@ export default class level_z2 extends GameLevel {
             speed: 100,
             weapon: this.createWeapon("knife"),
             range: 20,
-            experience: 8000,
+            experience: 400,
         });
         //Position the rhea statue and zone
         this.rheaStatue = this.add.animatedSprite("rheaStatue", "primary");

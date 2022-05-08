@@ -37,7 +37,7 @@
             "displayName": "Echidna_tailwhip",
             "animationSprite": "tailwhip",
             "spriteKey": "tailwhip",
-            "damage": 15,
+            "damage": 69,
             "cooldown": 3000,
             "useVolume": 0
         },

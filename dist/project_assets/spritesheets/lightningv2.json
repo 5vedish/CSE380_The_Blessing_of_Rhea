@@ -1,8 +1,8 @@
 {
     "name": "Lightningv2",
     "spriteSheetImage": "lightningv2.png",
-    "spriteWidth": 64,
-    "spriteHeight": 96,
+    "spriteWidth": 96,
+    "spriteHeight": 144,
     "leftBuffer": 0,
     "rightBuffer": 0,
     "topBuffer": 0,

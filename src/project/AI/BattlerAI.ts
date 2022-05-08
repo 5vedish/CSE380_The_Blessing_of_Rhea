@@ -7,5 +7,5 @@ export default interface BattlerAI extends AI {
 
     health: number;
 
-    damage: (damage: number) => void;
+    damage: (damage: number, ignoreDef: boolean) => void;
 }

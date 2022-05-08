@@ -11,7 +11,8 @@ export default class VenomAi extends ProjectileAI{
 
     initializeAI(owner: AnimatedSprite, options: Record<string, any>): void {
         super.initializeAI(owner, options);
-        this.damage = 5; // should be higher damage
+        //Damage will be true damage, 8% of max health
+        this.damage = (<PlayerController>this.player._ai).playerStats.stats.maxHealth * 0.08; 
 
         this.timeToLive = new Timer(1500, () => {
             this.owner.position = Vec2.ZERO;
@@ -19,5 +20,27 @@ export default class VenomAi extends ProjectileAI{
             this.owner.setAIActive(false, {});
         });
         
+    }
+
+    update(deltaT: number): void {
+        while(this.receiver.hasNextEvent()){
+            this.handleEvent(this.receiver.getNextEvent());
+		}
+        
+        if(this.owner.visible && !this.paused){
+            // Update the position
+            this.owner.rotation = this.angle;
+            this.owner.move(this.dir.scaled(this.current_speed));
+
+            //Check if it hits the player
+            if(this.owner.boundary.overlapArea(this.player.boundary)){
+                (<PlayerController>this.player._ai).damage(this.damage, true);
+                this.owner.position = Vec2.ZERO;
+                this.owner.visible = false;
+                this.owner.setAIActive(false, {});
+                this.emitter.fireEvent(Project_Events.HEALTHCHANGED);
+            }
+
+        }
     }
 }
