@@ -69,7 +69,7 @@ export default class level_p3 extends GameLevel {
         this.load.spritesheet("ink", "project_assets/spritesheets/ink.json")
 
         //Load tilemap
-        this.load.tilemap("levelP1", "project_assets/tilemaps/LevelP3.json");
+        this.load.tilemap("levelP3", "project_assets/tilemaps/LevelP3.json");
 
         //Load Challenge img
         this.load.image("objective", "project_assets/sprites/p3_challenge.png");
@@ -89,7 +89,7 @@ export default class level_p3 extends GameLevel {
         this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "leviathan", loop: true, holdReference: true});
         this.levelMusic = "leviathan";
         // Add in the tilemap and get the wall layer
-        let tilemapLayers = this.add.tilemap("levelP1", new Vec2(1, 1));
+        let tilemapLayers = this.add.tilemap("levelP3", new Vec2(1, 1));
         this.walls = <OrthogonalTilemap>tilemapLayers[2].getItems()[0];
         this.walls.setGroup("wall");
         

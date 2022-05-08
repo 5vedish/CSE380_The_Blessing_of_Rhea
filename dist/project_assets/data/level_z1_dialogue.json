@@ -2,7 +2,11 @@
     "dialogue": 
     {
     "lines": ["You're a meddling, mean snake, Echidna. You won't get any mercy from me!", 
-        "Sssss...", "What's that? I can't quite understand you.", "Sssss!", "A big fool you are by sending your henchmen after me! You will all feel the wrath of", "A-", "MIGHTY-", "GOD!"],
+        "Sssss...", 
+        "What's that? I can't quite understand you.", 
+        "Sssss!", 
+        "A big fool you are by sending your henchmen after me! You will all feel the wrath of-", 
+        "A-", "MIGHTY-", "GOD!"],
     "speaker": [0, 1, 0, 1, 0, 0 ,0 ,0],
     "speakerSprite": ["zeus", "snake"],
     "speakerPositions": ["left", "right", "left", "right", "left","left","left","left"],

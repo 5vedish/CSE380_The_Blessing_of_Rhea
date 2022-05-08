@@ -134,7 +134,7 @@ export default class Cutscene extends Scene{
 
         if (this.speakerPositions[this.dialogueNumber] === "left"){
             this.leftSprite = this.add.animatedSprite(this.speakerSprite[this.speaker[this.dialogueNumber]], "top");
-            this.leftSprite.position = new Vec2(824, 1124);
+            this.leftSprite.position = new Vec2(749, 1124);
             let size = this.leftSprite.size;
             (<AnimatedSprite> this.leftSprite).scale.set((256 / size.x), (256 / size.y));
             this.leftSprite.animation.play(this.speakerAnimations[this.dialogueNumber]);
@@ -197,7 +197,7 @@ export default class Cutscene extends Scene{
                     }
     
                     this.leftSprite = this.add.animatedSprite(this.speakerSprite[this.speaker[this.dialogueNumber]], "top");
-                    this.leftSprite.position = new Vec2(824, 1124);
+                    this.leftSprite.position = new Vec2(749, 1124);
                     let size = this.leftSprite.size;
                     (<AnimatedSprite> this.leftSprite).scale.set((256 / size.x), (256 / size.y));
                     this.leftSprite.animation.play(this.speakerAnimations[this.dialogueNumber]);
@@ -256,7 +256,7 @@ export default class Cutscene extends Scene{
         let num = 0;
 
         splitline.map((word) => {
-            if (word.length + 1 + this.buffers[num].length > 69){
+            if (word.length + 1 + this.buffers[num].length > 100){
                 this.buffers[++num] += word + " ";
             } else {
                 this.buffers[num] += word + " ";
