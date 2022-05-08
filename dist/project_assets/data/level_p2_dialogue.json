@@ -1,0 +1,18 @@
+{   
+    "dialogue": 
+    {
+    "lines": ["Is that all? I haven't even warmed up yet.", 
+        "Do not mock us! We will have your head!", 
+        "Such insolence. There will be no forgiveness.", 
+        "EVERYBODY!", 
+        "SWARM HIM!", 
+        "NOW!",
+        "CHARGE!!!",
+        "Mere numbers will make no difference. You will all fall."],
+    "speaker": [0, 1, 1, 1, 1, 1, 2, 0],
+    "speakerSprite": ["poseidon", "octopus", "cyclops"],
+    "speakerPositions": ["left", "right", "right", "right", "right", "right", "right", "left"],
+    "speakerAnimations": ["idle", "attack", "attack", "attack", "attack", "attack", "attack", "idle"],
+    "speakerName": ["Poseidon", "Squid", "Squid", "Squid", "Squid", "Squid", "Cyclops", "Poseidon"]
+    }
+}

@@ -19,6 +19,7 @@ import level_p3 from "./Level_P3";
 import CharacterStat from "../../PlayerStatus";
 import { Project_Events } from "../../project_constants";
 import { GameEventType } from "../../../Wolfie2D/Events/GameEventType";
+import P3_Cutscene from "../Cutscenes/P3_Cutscene";
 
 export default class level_p2 extends GameLevel {
     private halfway: boolean = false;
@@ -61,7 +62,7 @@ export default class level_p2 extends GameLevel {
         this.load.tilemap("levelP1", "project_assets/tilemaps/LevelP2.json");
 
         //Load Challenge img
-        this.load.image("objective", "project_assets/sprites/p1_challenge.png");
+        this.load.image("objective", "project_assets/sprites/p2_challenge.png");
         this.load.image("end", "project_assets/sprites/p2_end.png");
 
         //Load sound effect and music
@@ -243,11 +244,15 @@ export default class level_p2 extends GameLevel {
                 this.player.unfreeze();
                 this.player.setAIActive(true, {});
                 this.startedLevel = true;
-                if (!this.freeKill) this.gameTimer.start();
+                if (!this.freeKill) {
+                    this.createChallengeLabel("objective");
+                    this.gameTimer.start();
+                }
             }
 
             if (this.currentNumEnemies === 0 && this.freeKill) {
                 this.freeKill = false;
+                this.createChallengeLabel("objective");
                 this.gameTimer.start();
             }
 
@@ -296,21 +301,23 @@ export default class level_p2 extends GameLevel {
                 if(this.gameTimer.getTimeLeft() <= 0) {
                 //end level and move to level z2
                
+
                 this.changeLevelTimer = new Timer(5000, () => {
 
                     this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "poseidon"});
                     this.viewport.setSize(1600, 900);
-                    this.sceneManager.changeToScene(level_p3, {
-                        characterStats: this.playerStats, 
-                        weapon: (<PlayerController>this.player._ai).weapon,
+                    this.sceneManager.changeToScene(P3_Cutscene, {
                         invincible: this.invincible, 
                         unlockAll: this.unlockAll,
                         instant_kill: this.instant_kill,
                         speedUp: this.speedUp, 
                         unlockedLevels: this.unlockedLevels,
+                        characterStats: this.playerStats, 
+                        weapon: (<PlayerController>this.player._ai).weapon,
                         inventory: this.inventory
                     }, this.sceneOptions);
                 });
+                this.createChallengeLabel("end");
                 this.changeLevelTimer.start();
                 }
             }

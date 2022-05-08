@@ -11,6 +11,6 @@
     "speakerSprite": ["zeus", "Echidna","giant"],
     "speakerPositions": ["left","right","left","left","right","right","right","left"],
     "speakerAnimations": ["idle","moving","idle","idle","moving","moving","attack","attacking"],
-    "speakerName": ["Zeus", "Echidna","Zeus","Zeus","Echidna","Echidna","Giant","Zeus"]
+    "speakerName": ["Zeus", "Echidnaa","Zeus","Zeus","Echidna","Echidna","Giant","Zeus"]
     }
 }

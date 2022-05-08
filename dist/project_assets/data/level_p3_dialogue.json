@@ -1,0 +1,15 @@
+{   
+    "dialogue": 
+    {
+    "lines": ["Leviathan... This was unexpected.", 
+        "I did not think you were behind this.", 
+        "Only one of us can control the seas...", 
+        "You will have to kill me for control over MY domain.", 
+        "Then, you leave me no choice..."],
+    "speaker": [0, 0, 1, 1, 0],
+    "speakerSprite": ["poseidon", "leviathan"],
+    "speakerPositions": ["left", "left", "right", "right", "left"],
+    "speakerAnimations": ["idle", "idle", "moving", "moving", "idle"],
+    "speakerName": ["Poseidon", "Poseidon", "Leviathan", "Leviathan", "Poseidon"]
+    }
+}

@@ -284,6 +284,7 @@ export default class level_p3 extends GameLevel {
             }
 
             if (!this.bossSpawned && !this.bossDefeated && !this.freeKill) {
+                this.createChallengeLabel("objective");
                 let enemyPosition = this.randomSpawn();
                 let options = {
                     name: this.boss.name,

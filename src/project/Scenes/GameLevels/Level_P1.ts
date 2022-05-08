@@ -20,6 +20,7 @@ import Sprite from "../../../Wolfie2D/Nodes/Sprites/Sprite";
 import level_p2 from "./Level_P2";
 import { Project_Events } from "../../project_constants";
 import { GameEventType } from "../../../Wolfie2D/Events/GameEventType";
+import P2_Cutscene from "../Cutscenes/P2_Cutscene";
 
 export default class level_p1 extends GameLevel {
     private prep: boolean = false;
@@ -150,6 +151,7 @@ export default class level_p1 extends GameLevel {
         this.populateHUD();
         
         //Start spawning delay
+        this.createChallengeLabel("objective");
         this.startSceneTimer.start();
     }
     
@@ -271,18 +273,19 @@ export default class level_p1 extends GameLevel {
                 this.changeLevelTimer = new Timer(5000, () => {
 
                     this.viewport.setSize(1600, 900);
-                    this.sceneManager.changeToScene(level_p2, {
-                    characterStats: this.playerStats, 
-                    weapon: (<PlayerController>this.player._ai).weapon,
-                    invincible: this.invincible, 
-                    unlockAll: this.unlockAll,
-                    instant_kill: this.instant_kill,
-                    speedUp: this.speedUp, 
-                    unlockedLevels: this.unlockedLevels,
-                    inventory: this.inventory
-                }, this.sceneOptions);
+                    this.sceneManager.changeToScene(P2_Cutscene, {
+                        invincible: this.invincible, 
+                        unlockAll: this.unlockAll,
+                        instant_kill: this.instant_kill,
+                        speedUp: this.speedUp, 
+                        unlockedLevels: this.unlockedLevels,
+                        characterStats: this.playerStats, 
+                        weapon: (<PlayerController>this.player._ai).weapon,
+                        inventory: this.inventory
+                    }, this.sceneOptions);
 
                 });
+                this.createChallengeLabel("end");
                 this.changeLevelTimer.start();
             }
         }
