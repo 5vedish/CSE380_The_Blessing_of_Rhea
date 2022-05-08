@@ -305,7 +305,7 @@ export default class level_z3 extends GameLevel {
                 speed: 0,
                 weapon: this.createWeapon("knife"),
                 range: 0,
-                experience: 9000,
+                experience: 14000,
                 projectiles: this.createProjectiles(3 , "feather"),
                 cooldown: 1000,
                 scene: this,
