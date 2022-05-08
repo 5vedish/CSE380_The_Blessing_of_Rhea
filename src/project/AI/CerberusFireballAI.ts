@@ -11,7 +11,7 @@ export default class CerberusFireballAI extends ProjectileAI{
 
     initializeAI(owner: AnimatedSprite, options: Record<string, any>): void {
         super.initializeAI(owner, options);
-        this.damage = 5; // should be higher damage
+        this.damage = 80; // should be higher damage
 
         this.timeToLive = new Timer(10000, () => {
             this.owner.position = Vec2.ZERO;

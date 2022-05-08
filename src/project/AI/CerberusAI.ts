@@ -17,6 +17,8 @@ export default class CerberusAI extends EnemyAI {
     protected dead: boolean = false;
     protected headNum: number;
 
+    protected spawnThreshold = .75 // starts off spawning at 70% hp
+
     initializeAI(owner: AnimatedSprite, options: Record<string, any>): void {
         super.initializeAI(owner, options);
     
@@ -66,6 +68,14 @@ export default class CerberusAI extends EnemyAI {
             this.emitter.fireEvent(Project_Events.CERBERUSDAMAGED, { headNum: this.headNum, dead: true });
         } else {
             this.emitter.fireEvent(Project_Events.CERBERUSDAMAGED, { headNum: this.headNum, dead: false });
+
+            if (this.health < this.maxHealth*this.spawnThreshold){
+                this.emitter.fireEvent(Project_Events.BOSSSPAWNENEMIES);
+                
+                while (this.health/this.maxHealth < this.spawnThreshold){
+                    this.spawnThreshold -= .25; // round down to the nearest quarter of hp
+                }
+            }
         }
 
     }

@@ -11,11 +11,11 @@ import FireballAI from "./FireballAI";
 
 export default class HadesController extends PlayerController {
 
-    public static HADESCD: number = 5000; // 1s
+    public static HADESCD: number = 500; // .5s
 
     public projectiles: Array<AnimatedSprite>;
     public attackCooldown: Timer;
-    protected pierce: number = 0; // start off with no pierce
+    protected pierce: number = 1; // start off with no pierce
 
     public floor: OrthogonalTilemap;
 
@@ -37,7 +37,9 @@ export default class HadesController extends PlayerController {
             case Project_Events.LEVELUP:
                 // check for evolved weapon
                 if(this.playerStats.level >= 5){
-                    this.pierce = 1;
+                    this.pierce = 2;
+                } else if (this.playerStats.level >= 10){
+                    this.pierce = 3;
                 }
         }
     }
@@ -80,19 +82,18 @@ export default class HadesController extends PlayerController {
                 }
             }
 
-            if (Input.isMouseJustPressed()){
-
-                this.owner.animation.play("attacking", false, null);
+            if (Input.isMousePressed()){
 
                 let projectile: AnimatedSprite = null;
                     for (let p of this.projectiles) {
-                        if (!p.visible) {
+                        if (!p.visible && this.attackCooldown.isStopped()) {
                         projectile = p;
                         break;
                     }
                 }
     
                 if (projectile !== null) {
+                    this.owner.animation.play("attacking", false, null);
                     // player to mouse -> write mouse to player
                     let dir = Input.getGlobalMousePosition().clone().sub(this.owner.position.clone()).normalize();
                     projectile.position = this.owner.position.clone();
@@ -102,9 +103,11 @@ export default class HadesController extends PlayerController {
                     projectile.visible = true;
                     (<FireballAI> projectile._ai).setPierce(this.pierce);
                     (<FireballAI> projectile._ai).checkInvuln();
+
+                    this.attackCooldown.start();
                 }
 
-                this.attackCooldown.start();
+               
 
             }
 

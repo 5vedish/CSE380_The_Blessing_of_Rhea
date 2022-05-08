@@ -3,6 +3,7 @@ import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
 import ProjectileAI from "./ProjectileAI";
 import GameEvent from "../../Wolfie2D/Events/GameEvent";
 import EnemyAI from "./EnemyAI";
+import Timer from "../../Wolfie2D/Timing/Timer";
 
 export default class FireballAI extends ProjectileAI{
 
@@ -14,6 +15,13 @@ export default class FireballAI extends ProjectileAI{
         super.initializeAI(owner, options);
         this.enemies = options.enemies; // receive enemies from GameLevel
         this.damage = 50;
+
+        this.timeToLive = new Timer(3000, () => {
+            // reset on end
+            this.owner.position = Vec2.ZERO;
+            this.owner.visible = false;
+            this.owner.setAIActive(false, {});
+        });
     }
 
     update(deltaT: number): void {

@@ -15,6 +15,7 @@ import level_h2 from "./GameLevels/Level_H2";
 import level_h3 from "./GameLevels/Level_H3";
 import Z1_Cutscene from "./Cutscenes/Z1_Cutscene";
 import Z2_Cutscene from "./Cutscenes/Z2_Cutscene";
+import Z3_Cutscene from "./Cutscenes/Z3_Cutscene";
 import P1_Cutscene from "./Cutscenes/P1_Cutscene";
 import P2_Cutscene from "./Cutscenes/P2_Cutscene";
 import P3_Cutscene from "./Cutscenes/P3_Cutscene";
@@ -29,6 +30,10 @@ export default class LevelSelection extends Scene {
   private zeus1 : Sprite;
   private zeus2: Sprite;
   private zeus3: Sprite;
+
+  private hades1 : Sprite;
+  private hades2 : Sprite;
+  private hades3 : Sprite;
 
   private levelSelect: Layer;
   private invincible: boolean;
@@ -58,6 +63,11 @@ export default class LevelSelection extends Scene {
     this.load.image("level_z1", "project_assets/tilemaps/z1_preview.png");
     this.load.image("level_z2", "project_assets/tilemaps/z2_preview.png");
     this.load.image("level_z3", "project_assets/tilemaps/z3_preview.png");
+
+    // Hades previews
+    this.load.image("level_h1", "project_assets/tilemaps/h1_preview.png");
+    this.load.image("level_h2", "project_assets/tilemaps/h2_preview.png");
+    this.load.image("level_h3", "project_assets/tilemaps/h3_preview.png");
 
     this.load.audio("click", "project_assets/sounds/click.wav");
   }
@@ -179,8 +189,9 @@ export default class LevelSelection extends Scene {
     levelh1.borderColor = Color.WHITE;
     levelh1.backgroundColor = (this.unlockedLevels[6] || this.unlockAll) ? Color.TRANSPARENT : Color.GRAY;
     levelh1.onClickEventId = "hades1";
-    if(this.unlockedLevels[6]){
-      //ADD PREVIEW
+    if(this.unlockedLevels[6] || this.unlockAll){
+      this.hades1 = this.add.sprite("level_h1", "splashScreen");
+      this.hades1.position.copy(levelh1.position);
     }
 
 
@@ -194,7 +205,8 @@ export default class LevelSelection extends Scene {
     levelh2.backgroundColor = (this.unlockedLevels[7] || this.unlockAll) ? Color.TRANSPARENT : Color.GRAY;
     levelh2.onClickEventId = "hades2";
     if(this.unlockedLevels[7] || this.unlockAll){
-      //ADD PREVIEW
+      this.hades2 = this.add.sprite("level_h2", "splashScreen");
+      this.hades2.position.copy(levelh2.position);
     }
 
     const levelh3 = this.add.uiElement(UIElementType.BUTTON, "levelSelect", {
@@ -207,7 +219,8 @@ export default class LevelSelection extends Scene {
     levelh3.backgroundColor = (this.unlockedLevels[8] || this.unlockAll) ? Color.TRANSPARENT : Color.GRAY;
     levelh3.onClickEventId = "hades3";
     if(this.unlockedLevels[8] || this.unlockAll){
-      //ADD PREVIEW
+      this.hades3 = this.add.sprite("level_h3", "splashScreen");
+      this.hades3.position.copy(levelh3.position);
     }
 
     // Back button
@@ -295,7 +308,7 @@ export default class LevelSelection extends Scene {
 
       if (event.type === "zeus3") {
         this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "main_menu"});
-        if (this.unlockedLevels[2] || this.unlockAll) this.sceneManager.changeToScene(level_z3, options, physicsOptions);
+        if (this.unlockedLevels[2] || this.unlockAll) this.sceneManager.changeToScene(Z3_Cutscene, options, physicsOptions);
         else console.log("STAGE NOT UNLOCKED YET");
       }
 

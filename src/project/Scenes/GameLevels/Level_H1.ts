@@ -85,7 +85,7 @@ export default class level_h1 extends GameLevel {
         this.initPlayer();
         
         // level timer and UI
-        this.gameTimer = new Timer(30000);
+        this.gameTimer = new Timer(150000);
         this.gameTime = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(this.viewport.getHalfSize().x, 20), text: `${this.parseTimeLeft(this.gameTimer.getTotalTime())}`});
     
         // player stat UI
@@ -102,15 +102,15 @@ export default class level_h1 extends GameLevel {
         
         this.spawnableEnemies.push({
             name: "Skull",
-            health: 50,
+            health: 47, // make them one-shottable
             player: this.player,
             speed: 200,
             weapon: this.createWeapon("knife"),
             range: 16,
-            experience: 50
+            experience: 25
         });
 
-        this.spawnableEnemies[0].weapon.type.damage = 1;
+        this.spawnableEnemies[0].weapon.type.damage = 7; // make them weak
 
         this.enemyConstructorPairings = new Map([["Skull" , EnemyAI], ["Witch", RangeAI]]);
         
@@ -149,7 +149,7 @@ export default class level_h1 extends GameLevel {
         this.player.addPhysics(new AABB(Vec2.ZERO, new Vec2(16, 16)));
         
         // last argument is arbitrary because Hades will not use the weapon system, health was 75
-        this.playerStats = new CharacterStat(75, 5, 5, (this.speedUp) ? 15 : 3, 1);
+        this.playerStats = new CharacterStat(75, 5, 5, (this.speedUp) ? 15 : 3, HadesController.HADESCD);
         // add player AI: range/weapon is arbitrary ... weaponV2 will possible be an updated sprite
         this.player.addAI(HadesController,
             {
@@ -160,7 +160,7 @@ export default class level_h1 extends GameLevel {
                 playerStats: this.playerStats,
                 weapon: null,
                 weaponV2: null,
-                projectiles: this.createProjectiles(5, "fireball"),
+                projectiles: this.createProjectiles(2, "fireball"),
                 floor: this.floorCheck,
                 invincible: this.invincible
             });
@@ -229,14 +229,14 @@ export default class level_h1 extends GameLevel {
             this.gameTime.text = `${this.parseTimeLeft(this.gameTimer.getTimeLeft())}`;
     
             // dynamically add new enemies
-            if(this.gameTimer.getTimeLeft() <= this.gameTimer.getTotalTime()*.99 && !this.addedWitch){
+            if(this.gameTimer.getTimeLeft() <= this.gameTimer.getTotalTime()*.75 && !this.addedWitch){
                 this.spawnableEnemies.push({
                     name: "Witch",
-                    health: 25,
+                    health: 200,
                     player: this.player,
                     speed: 100,
                     weapon: this.createWeapon("knife"),
-                    range: 400,
+                    range: 500,
                     experience: 250,
                 });
                 this.addedWitch = true;
@@ -248,6 +248,11 @@ export default class level_h1 extends GameLevel {
                     
                 this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "hades"});
                 this.changeLevelTimer = new Timer(5000, () => {
+
+                    //preserve projectile attack and cooldown
+
+                    this.playerStats.stats.attack = (<FireballAI> (<HadesController> this.playerController).projectiles[0]._ai).getDamage();
+                    this.playerStats.weaponCoolDown = (<HadesController> this.playerController).attackCooldown.getTotalTime();
 
                     this.viewport.setSize(1600, 900); // switch to H2
                     this.sceneManager.changeToScene(level_h2, {

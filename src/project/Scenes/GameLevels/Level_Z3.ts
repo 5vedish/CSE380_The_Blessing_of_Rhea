@@ -112,7 +112,7 @@ export default class level_z3 extends GameLevel {
         this.playerSpawn = new Vec2(32*32, 49*32);
 
         this.bossReceiver = new Receiver();
-        this.bossReceiver.subscribe(Project_Events.BOSSSPAWNENEMIES);
+        this.bossReceiver.subscribe([Project_Events.BOSSSPAWNENEMIES]);
 
         this.maxEnemies = 15;
 
@@ -197,7 +197,7 @@ export default class level_z3 extends GameLevel {
             player: this.player,
             speed: 30,
             weapon: echidnaTailWhip,
-            range: 6*32,
+            range: 5*32,
             venomRange: 400,
             experience: 1000,
             scene: this,
@@ -290,7 +290,7 @@ export default class level_z3 extends GameLevel {
         if (this.playerStats === undefined) {
             // create weapon
             this.weapon = this.createWeapon("lightning");
-            if (this.instant_kill) this.weapon.type.damage = 1000;
+            if (this.instant_kill) this.weapon.type.damage = 10000;
             this.playerStats = new CharacterStat(150, 100, 10, (this.speedUp) ? 15 : 2, this.weapon.cooldownTimer.getTotalTime());
             //Create an enemy for players to get exp
             let enemy = this.add.animatedSprite("snake", "primary");
