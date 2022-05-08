@@ -271,6 +271,7 @@ export default class level_p1 extends GameLevel {
       
                 this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "poseidon"});
                 this.changeLevelTimer = new Timer(5000, () => {
+                    this.cleanUp();
 
                     this.viewport.setSize(1600, 900);
                     this.sceneManager.changeToScene(P2_Cutscene, {

@@ -354,6 +354,7 @@ export default class level_p3 extends GameLevel {
            
                 this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "leviathan"});
                 this.changeLevelTimer = new Timer(5000, () => {
+                    this.cleanUp();
 
                     this.viewport.setSize(1600, 900);
                     this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "leviathan"});

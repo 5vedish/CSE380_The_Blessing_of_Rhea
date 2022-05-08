@@ -303,6 +303,7 @@ export default class level_p2 extends GameLevel {
                
 
                 this.changeLevelTimer = new Timer(5000, () => {
+                    this.cleanUp();
 
                     this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "poseidon"});
                     this.viewport.setSize(1600, 900);

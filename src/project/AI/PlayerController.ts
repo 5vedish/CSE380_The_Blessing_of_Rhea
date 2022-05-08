@@ -163,6 +163,7 @@ export default class PlayerController extends StateMachineAI implements BattlerA
 
     destroy() {
         this.receiver.destroy();
+        super.destroy(); // destroy the created receiver
     }
 
     getSpeed(): number{

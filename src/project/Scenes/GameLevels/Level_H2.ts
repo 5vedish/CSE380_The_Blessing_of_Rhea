@@ -18,6 +18,7 @@ import FireballAI from "../../AI/FireballAI";
 import MainMenu from "../MainMenu";
 import { GameEventType } from "../../../Wolfie2D/Events/GameEventType";
 import level_h3 from "./Level_H3";
+import H3_Cutscene from "../Cutscenes/H3_Cutscene";
 
 export default class level_h2 extends GameLevel {
 
@@ -252,6 +253,7 @@ export default class level_h2 extends GameLevel {
                     
                 this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "hades"});
                 this.changeLevelTimer = new Timer(5000, () => {
+                    this.cleanUp();
 
                     //preserve projectile attack and cooldown
 
@@ -259,7 +261,7 @@ export default class level_h2 extends GameLevel {
                     this.playerStats.weaponCoolDown = (<HadesController> this.playerController).attackCooldown.getTotalTime();
 
                     this.viewport.setSize(1600, 900);
-                    this.sceneManager.changeToScene(level_h3, {
+                    this.sceneManager.changeToScene(H3_Cutscene, {
                         characterStats: this.playerStats,
                         invincible: this.invincible, 
                         unlockAll: this.unlockAll,
@@ -305,7 +307,7 @@ export default class level_h2 extends GameLevel {
                speed: 0,
                weapon: this.createWeapon("knife"),
                range: 0,
-               experience: 10000,
+               experience: /*10000*/100000,
                projectiles: this.createProjectiles(3 , "fireball"),
                cooldown: 1000,
                scene: this,
