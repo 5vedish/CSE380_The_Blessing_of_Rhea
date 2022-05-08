@@ -9,8 +9,7 @@ export default class Z1_Cutscene extends Cutscene{
         // load tilemap + dialogue object + player + displayed sprites
         this.load.tilemap("levelZ1", "project_assets/tilemaps/LevelZ1.json");
         this.load.spritesheet("zeus", "project_assets/spritesheets/Zeus.json"); 
-        this.load.spritesheet("Bigzeus", "project_assets/spritesheets/BigZeus.json");
-        this.load.spritesheet("bigsnake", "project_assets/spritesheets/BigSnake.json");
+        this.load.spritesheet("snake", "project_assets/spritesheets/Snake.json");
         this.load.object("dialogue", "project_assets/data/level_z1_dialogue.json");
     }
 

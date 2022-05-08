@@ -1,7 +1,7 @@
 import Scene from "../../../Wolfie2D/Scene/Scene";
 import AnimatedSprite from "../../../Wolfie2D/Nodes/Sprites/AnimatedSprite";
 import Vec2 from "../../../Wolfie2D/DataTypes/Vec2";
-import Timer from "../../../Wolfie2D/Timing/Timer";
+import Timer, { TimerState } from "../../../Wolfie2D/Timing/Timer";
 import { UIElementType } from "../../../Wolfie2D/Nodes/UIElements/UIElementTypes";
 import Label, { HAlign } from "../../../Wolfie2D/Nodes/UIElements/Label";
 import Input from "../../../Wolfie2D/Input/Input";
@@ -126,10 +126,14 @@ export default class Cutscene extends Scene{
         if (this.speakerPositions[this.dialogueNumber] === "left"){
             this.leftSprite = this.add.animatedSprite(this.speakerSprite[this.speaker[this.dialogueNumber]], "top");
             this.leftSprite.position = new Vec2(824, 1124);
+            let size = this.leftSprite.size;
+            (<AnimatedSprite> this.leftSprite).scale.set((256 / size.x), (256 / size.y));
             this.leftSprite.animation.play(this.speakerAnimations[this.dialogueNumber]);
         } else {
             this.rightSprite = this.add.animatedSprite(this.speakerSprite[this.speaker[this.dialogueNumber]], "top");
             this.rightSprite.position = new Vec2(1324, 1124);
+            let size = this.rightSprite.size;
+            (<AnimatedSprite> this.rightSprite).scale.set((256 / size.x), (256 / size.y));
             this.rightSprite.animation.play(this.speakerAnimations[this.dialogueNumber]);
         }
 
@@ -170,7 +174,6 @@ export default class Cutscene extends Scene{
             } else {
 
                 this.speakerNameLabel.setText(this.speakerName[this.dialogueNumber]);
-
                 if (this.speakerPositions[this.dialogueNumber] === "left"){
 
                     if (this.rightSprite){
@@ -183,6 +186,8 @@ export default class Cutscene extends Scene{
     
                     this.leftSprite = this.add.animatedSprite(this.speakerSprite[this.speaker[this.dialogueNumber]], "top");
                     this.leftSprite.position = new Vec2(824, 1124);
+                    let size = this.leftSprite.size;
+                    (<AnimatedSprite> this.leftSprite).scale.set((256 / size.x), (256 / size.y));
                     this.leftSprite.animation.play(this.speakerAnimations[this.dialogueNumber]);
 
                 } else {
@@ -197,6 +202,8 @@ export default class Cutscene extends Scene{
                     
                     this.rightSprite = this.add.animatedSprite(this.speakerSprite[this.speaker[this.dialogueNumber]], "top");
                     this.rightSprite.position = new Vec2(1324, 1124);
+                    let size = this.rightSprite.size;
+                    (<AnimatedSprite> this.rightSprite).scale.set((256 / size.x), (256 / size.y));
                     this.rightSprite.animation.play(this.speakerAnimations[this.dialogueNumber]);
                 }
 

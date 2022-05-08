@@ -1,0 +1,12 @@
+{   
+    "dialogue": 
+    {
+    "lines": ["What is this?", 
+        "Whatever do you mean?", "Cease your attacks at once. This is my domain.", "It isn't anymore.", "Know your place, squid. You are talking to a god."],
+    "speaker": [0, 1, 0, 1, 0],
+    "speakerSprite": ["poseidon", "octopus"],
+    "speakerPositions": ["left", "right", "left", "right", "left"],
+    "speakerAnimations": ["idle", "moving", "idle", "attack", "idle"],
+    "speakerName": ["Poseidon", "Squid", "Poseidon", "Squid", "Poseidon"]
+    }
+}

@@ -18,6 +18,7 @@ import level_h2 from "./GameLevels/Level_H2";
 import level_h3 from "./GameLevels/Level_H3";
 import Z1_Cutscene from "./Cutscenes/Z1_Cutscene";
 import Z2_Cutscene from "./Cutscenes/Z2_Cutscene";
+import P1_Cutscene from "./Cutscenes/P1_Cutscene";
 
 export default class LevelSelection extends Scene {
   private splashScreen: Layer;
@@ -266,7 +267,7 @@ export default class LevelSelection extends Scene {
       /* TODO - ADD REST OF STAGES */
       if (event.type === "poseidon1") {
         this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "main_menu"});
-        if (this.unlockedLevels[3] || this.unlockAll) this.sceneManager.changeToScene(level_p1, options, physicsOptions);
+        if (this.unlockedLevels[3] || this.unlockAll) this.sceneManager.changeToScene(P1_Cutscene, options, physicsOptions);
         else console.log("STAGE NOT UNLOCKED YET");
       }
 
