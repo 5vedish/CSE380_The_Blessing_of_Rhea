@@ -147,7 +147,7 @@ export default class level_z1 extends GameLevel {
 
         // create weapon
         let weapon = this.createWeapon("lightning");
-        if (this.instant_kill) weapon.type.damage = 1000;
+        if (this.instant_kill) weapon.type.damage = 10000;
         
         this.playerStats = new CharacterStat(150, 1, 15, (this.speedUp) ? 15 : 2, weapon.cooldownTimer.getTotalTime());
         // TODO - ADD PLAYER AI HERE
@@ -200,7 +200,7 @@ export default class level_z1 extends GameLevel {
                     range: enemyType.range,
                     experience: enemyType.experience,
                     position: enemyPosition,
-                    projectiles: this.createProjectiles(1 , "feather"),
+                    projectiles: this.createProjectiles(1 , (enemyType.name === "harpy") ? "feather" : null),
                     cooldown: 1000,
                     scene: this,
                     ai: this.enemyConstructorPairings.get(enemyType.name)

@@ -760,7 +760,6 @@ export default class GameLevel extends Scene{
     }
 
     createProjectiles(number: number, sprite: string): Array<AnimatedSprite> {
-
         let ai; // custom projectile support
         let scaleSize = new Vec2(1, 1); // if you want to make projectiles larger
         let hitboxSize = new Vec2(32, 32); // custom hitboxes
@@ -789,13 +788,23 @@ export default class GameLevel extends Scene{
                 ai = BlastV2AI;
                 speed = 8;
                 break;
-            default:
+            case "feather":
                 ai = ProjectileAI;
+                break;
+            case "ink":
+                ai = ProjectileAI;
+                break;
+            case "Hex":
+                ai = ProjectileAI;
+                break;
+            default:
+                return null;
         }
 
         let projectiles = new Array(number);
         for (let i = 0; i < number; i++) {
             projectiles[i] = this.add.animatedSprite(sprite, "primary");
+            console.log(`Create projectiles: ${projectiles[i].id}`)
             projectiles[i].position = new Vec2(0, 0);
             projectiles[i].visible = false;
             (<AnimatedSprite>projectiles[i]).scale.set(scaleSize.x, scaleSize.y);

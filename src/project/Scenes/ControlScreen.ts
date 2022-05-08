@@ -14,11 +14,19 @@ export default class ControlScreen extends Scene {
   private bg: Sprite;
 
   private controlScreen: Layer;
+  private controlsText: Sprite;
+  private WASD: Sprite;
+  private click: Sprite;
+  private escape: Sprite;
+  private tutorial: Sprite;
+  private back: Sprite;
+
   private invincible: boolean;
   private unlockAll: boolean;
   private instant_kill: boolean;
   private speedUp: boolean;
   private unlockedLevels: boolean[];
+
 
   initScene(init: Record<string, any>): void {
     this.invincible = init.invincible;
@@ -30,6 +38,12 @@ export default class ControlScreen extends Scene {
 
   loadScene() {
     this.load.image("splash_screen", "project_assets/screens/Splash.png");
+    this.load.image("controlsText", "project_assets/sprites/controlsText.png");
+    this.load.image("wasd", "project_assets/sprites/WASD.png");
+    this.load.image("click", "project_assets/sprites/click.png");
+    this.load.image("escape", "project_assets/sprites/escape.png");
+    this.load.image("tutorialLevel", "project_assets/sprites/tutorialLevel.png");
+    this.load.image("back", "project_assets/sprites/back.png");
     this.load.audio("click", "project_assets/sounds/click.wav");
   }
 
@@ -56,69 +70,45 @@ export default class ControlScreen extends Scene {
     // No click event
 
     // Text in controls box
-    const controlHeader = <Label>(
-      this.add.uiElement(UIElementType.LABEL, "controls", {
-        position: new Vec2(800, 332),
-        text: "Controls",
-      })
-    );
-    const movement = <Label>(
-      this.add.uiElement(UIElementType.LABEL, "controls", {
-        position: new Vec2(800, 366),
-        text: "WASD - Movement",
-      })
-    );
-    const leftClick = <Label>(
-      this.add.uiElement(UIElementType.LABEL, "controls", {
-        position: new Vec2(800, 400),
-        text: "Left Click - Select Tile",
-      })
-    );
-    const rightClick = <Label>(
-      this.add.uiElement(UIElementType.LABEL, "controls", {
-        position: new Vec2(800, 434),
-        text: "Right Click - Use Utility",
-      })
-    );
-    const pause = <Label>(
-      this.add.uiElement(UIElementType.LABEL, "controls", {
-        position: new Vec2(800, 468),
-        text: "Escape - Pause Game",
-      })
-    );
+    this.controlsText = this.add.sprite("controlsText", "controls");
+    this.controlsText.position = new Vec2(800, 264);
 
-    controlHeader.fontSize = 36;
-    movement.fontSize =
-      leftClick.fontSize =
-      rightClick.fontSize =
-      pause.fontSize =
-        24;
+    this.WASD = this.add.sprite("wasd", "controls");
+    this.WASD.position = new Vec2(800, 360);
+    
+    this.click = this.add.sprite("click", "controls");
+    this.click.position = new Vec2(800, 424);
 
-    controlHeader.textColor =
-      movement.textColor =
-      leftClick.textColor =
-      rightClick.textColor =
-      pause.textColor =
-        Color.WHITE;
+    this.escape = this.add.sprite("escape", "controls");
+    this.escape.position = new Vec2(800, 488);
 
-    const tutorialLevel = this.add.uiElement(UIElementType.BUTTON, "controls", {position: new Vec2(800, 700), text: "Tutorial Level"});
+    const tutorialLevel = this.add.uiElement(UIElementType.BUTTON, "controls", {
+      position: new Vec2(800, 700), 
+      text: ""
+    });
     tutorialLevel.size.set(256, 128);
     tutorialLevel.borderWidth = 2;
     tutorialLevel.borderColor = Color.BORDERCOLOR;
     tutorialLevel.backgroundColor = Color.GRAYISH;
     tutorialLevel.onClickEventId = "tutorial";
-    /* TODO - HAVE TO ADD TUTORIAL ATTACK SPRITES AND DESCRIPTIONS */
+    
+    this.tutorial = this.add.sprite("tutorialLevel", "controls");
+    this.tutorial.position.copy(tutorialLevel.position);
 
     // Back button
     const backControls = this.add.uiElement(UIElementType.BUTTON, "controls", {
       position: new Vec2(66, 815),
-      text: "Back",
+      text: "",
     });
     backControls.size.set(75, 80);
     backControls.borderWidth = 2;
     backControls.borderColor = Color.BORDERCOLOR;
     backControls.backgroundColor = Color.GRAYISH;
     backControls.onClickEventId = "back";
+
+    this.back = this.add.sprite("back", "controls");
+    this.back.position.copy(backControls.position);
+    this.back.position.x += 5;
 
     this.receiver.subscribe("back");
     this.receiver.subscribe("tutorial");

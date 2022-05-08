@@ -24,4 +24,5 @@ export default class Button extends Label {
 			return this.backgroundColor;
 		}
 	}
+
 }

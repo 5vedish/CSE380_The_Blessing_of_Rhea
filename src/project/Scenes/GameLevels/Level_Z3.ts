@@ -182,8 +182,8 @@ export default class level_z3 extends GameLevel {
             health: 600,
             player: this.player,
             speed: 100,
-            weapon: this.createWeapon("knife"),
-            range: 20,
+            weapon: this.createWeapon("batSwing"),
+            range: 64,
             experience: 400,
         });
         
@@ -254,13 +254,13 @@ export default class level_z3 extends GameLevel {
                     let postion = this.spawnablePositions[Math.floor(Math.random()*4)];
                     enemy.position = postion.clone();
                     let options = {
-                        health: enemyType.health,
+                        health: enemyType.health*(Math.pow(1.05, this.playerStats.level)),
                         player: enemyType.player,
                         speed: enemyType.speed,
                         weapon: enemyType.weapon,
                         range: enemyType.range,
                         experience: enemyType.experience,
-                        projectiles: this.createProjectiles(3 , "feather"),
+                        projectiles: this.createProjectiles(3 , (enemyType.name === "harpy") ? "feather" : null),
                         cooldown: 1000,
                         scene: this,
                     }
