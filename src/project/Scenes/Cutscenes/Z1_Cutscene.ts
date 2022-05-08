@@ -13,6 +13,11 @@ export default class Z1_Cutscene extends Cutscene{
         this.load.object("dialogue", "project_assets/data/level_z1_dialogue.json");
     }
 
+    // unloadScene(): void {
+    //     this.load.keepSpritesheet("zeus");
+    //     this.load.keepSpritesheet("snake");
+    // }
+
     startScene(): void {
 
         // simply specify the name of the tile map and the name of the character sprite

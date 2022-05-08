@@ -26,6 +26,7 @@ import level_p1 from "./Level_P1";
 import { TweenableProperties } from "../../../Wolfie2D/Nodes/GameNode";
 import { EaseFunctionType } from "../../../Wolfie2D/Utils/EaseFunctions";
 import { GameEventType } from "../../../Wolfie2D/Events/GameEventType";
+import P1_Cutscene from "../Cutscenes/P1_Cutscene";
 
 export default class level_z3 extends GameLevel {
 
@@ -364,7 +365,7 @@ export default class level_z3 extends GameLevel {
 
                 this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "echidna"});
                 this.viewport.setSize(1600, 900);
-                this.sceneManager.changeToScene(level_p1, {
+                this.sceneManager.changeToScene(P1_Cutscene, {
                 invincible: this.invincible, 
                 unlockAll: this.unlockAll,
                 instant_kill: this.instant_kill,
