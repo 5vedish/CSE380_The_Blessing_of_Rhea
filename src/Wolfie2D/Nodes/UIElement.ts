@@ -69,7 +69,6 @@ export default abstract class UIElement extends CanvasNode {
 	}
 
 	setEnabled(enable: boolean){
-		console.log(enable);
 		this.enabled = enable;
 	}
 

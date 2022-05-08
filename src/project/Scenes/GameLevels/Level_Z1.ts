@@ -88,7 +88,7 @@ export default class level_z1 extends GameLevel {
         
         //Create how long players need to survive for
         // this.gameTimer = new Timer(10000);  // (testing timer)
-        this.gameTimer = new Timer(120000); // (production timer)
+        this.gameTimer = new Timer(2000); // (production timer)
         this.gameTime = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(this.viewport.getHalfSize().x, 20), text: `${this.parseTimeLeft(this.gameTimer.getTotalTime())}`});
     
         this.levelUI = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(86, 32), 
@@ -230,6 +230,7 @@ export default class level_z1 extends GameLevel {
          
 
                 this.changeLevelTimer = new Timer(3000, () => {
+                    this.cleanUp();
                     this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "zeus"});
                     this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "main_menu", loop: true, holdReference: true});
                     this.viewport.setSize(1600, 900);

@@ -601,8 +601,7 @@ export default class GameLevel extends Scene{
             if(this.changeLevelTimer.getTimeLeft() <= 0) {
                 this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: this.levelMusic});
                 this.viewport.setSize(1600, 900);
-                this.healthBar.destroy();
-                this.expBar.destroy();
+                this.cleanUp();
                 this.sceneManager.changeToScene(DeathScreen, {
                     invincible: this.invincible, 
                     unlockAll: this.unlockAll,
@@ -664,6 +663,15 @@ export default class GameLevel extends Scene{
             this.rheaStatueCooldown.unpause();
         }
         this.emitter.fireEvent(Project_Events.GAMEUNPAUSE);
+    }
+
+    protected cleanUp(): void{
+        // UI stuff
+        this.healthBar.destroy();
+        this.expBar.destroy();
+
+        // extraneous things like receivers that must be destroyed
+        this.levelReceiver.destroy();
     }
 
     // main events
@@ -801,7 +809,6 @@ export default class GameLevel extends Scene{
         let projectiles = new Array(number);
         for (let i = 0; i < number; i++) {
             projectiles[i] = this.add.animatedSprite(sprite, "primary");
-            console.log(`Create projectiles: ${projectiles[i].id}`)
             projectiles[i].position = new Vec2(0, 0);
             projectiles[i].visible = false;
             (<AnimatedSprite>projectiles[i]).scale.set(scaleSize.x, scaleSize.y);
@@ -823,6 +830,10 @@ export default class GameLevel extends Scene{
         let tier;
         let dupes = [];
         while (this.selectionArray.length < 3){
+            if(this.playerStats.stats.health >= this.playerStats.stats.maxHealth){
+                this.itemsArray = this.itemsArray.filter(item => item !== "honey_jar");
+                dupes.push("honey_jar");
+            }
 
             rolledItem = this.itemsArray[Math.floor(Math.random() * this.itemsArray.length)];
 
