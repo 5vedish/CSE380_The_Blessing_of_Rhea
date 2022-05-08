@@ -224,7 +224,7 @@ export default class level_p3 extends GameLevel {
                 speed: 0,
                 weapon: this.createWeapon("knife"),
                 range: 0,
-                experience: 15000,
+                experience: 20000,
                 projectiles: this.createProjectiles(3 , "ink"),
                 cooldown: 1000,
                 scene: this,

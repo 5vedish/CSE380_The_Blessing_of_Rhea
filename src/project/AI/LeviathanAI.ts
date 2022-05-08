@@ -38,7 +38,7 @@ export default class LeviathanAI extends EnemyAI{
             if (!this.upgradeWeapon && this.health <= this.maxHealth * 0.6) {
                 this.attackCooldown = new Timer(500);
                 this.upgradeWeapon = true;
-                this.pSpeed *= 2;
+                this.pSpeed = 5;
             }
             
             let projectile: AnimatedSprite = null;
@@ -53,6 +53,7 @@ export default class LeviathanAI extends EnemyAI{
             if (projectile !== null) {
                 let dir = this.player.position.clone().sub(this.owner.position.clone()).normalize();
                 projectile.position = this.owner.position.clone();
+                projectile.position.y -= 40;
                 (<ProjectileAI> projectile._ai).setDirection(dir);
                 (<ProjectileAI> projectile._ai).setAngle(Vec2.UP.angleToCCW(dir));
                 projectile.setAIActive(true, {speed: this.pSpeed});
