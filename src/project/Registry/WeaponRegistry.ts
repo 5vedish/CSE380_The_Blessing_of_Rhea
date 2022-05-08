@@ -1,5 +1,6 @@
 import Registry from "../../Wolfie2D/Registry/Registries/Registry";
 import ResourceManager from "../../Wolfie2D/ResourceManager/ResourceManager";
+import Bat from "../GameSystems/items/WeaponTypes/Primary/Bat";
 import EchidnaTailWhip from "../GameSystems/items/WeaponTypes/Primary/EchidnaTailwhip";
 import Lightning from "../GameSystems/items/WeaponTypes/Primary/Lightning";
 import Slice from "../GameSystems/items/WeaponTypes/Primary/Slice";
@@ -24,6 +25,7 @@ export default class WeaponTemplateRegistry extends Registry<WeaponConstructor> 
         rm.spritesheet("lightningv2", "project_assets/spritesheets/lightningv2.json");
         rm.spritesheet("trident", "project_assets/spritesheets/waterfall.json");
         rm.spritesheet("tailwhip", "project_assets/spritesheets/tailwhip.json");
+        rm.spritesheet("batSwing", "project_assets/spritesheets/tailwhip.json");
 
         // Register default types
         this.registerItem("slice", Slice);
@@ -31,6 +33,7 @@ export default class WeaponTemplateRegistry extends Registry<WeaponConstructor> 
         this.registerItem("trident", Trident);
         this.registerItem("tailwhip", EchidnaTailWhip);
         this.registerItem("slice", Slice);
+        this.registerItem("batSwing", Bat);
     }
 
     // We don't need this for this assignment
