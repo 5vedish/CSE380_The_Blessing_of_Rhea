@@ -230,6 +230,7 @@ export default class level_z1 extends GameLevel {
          
 
                 this.changeLevelTimer = new Timer(3000, () => {
+                    this.cleanUp();
                     this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "zeus"});
                     this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "main_menu", loop: true, holdReference: true});
                     this.viewport.setSize(1600, 900);

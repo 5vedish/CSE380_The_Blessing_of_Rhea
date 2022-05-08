@@ -17,6 +17,7 @@ import HadesController from "../../AI/HadesController";
 import FireballAI from "../../AI/FireballAI";
 import level_h2 from "./Level_H2";
 import { GameEventType } from "../../../Wolfie2D/Events/GameEventType";
+import H2_Cutscene from "../Cutscenes/H2_Cutscene";
 
 export default class level_h1 extends GameLevel {
 
@@ -86,6 +87,7 @@ export default class level_h1 extends GameLevel {
         
         // level timer and UI
         this.gameTimer = new Timer(150000);
+        // this.gameTimer = new Timer(10000);
         this.gameTime = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(this.viewport.getHalfSize().x, 20), text: `${this.parseTimeLeft(this.gameTimer.getTotalTime())}`});
     
         // player stat UI
@@ -248,6 +250,7 @@ export default class level_h1 extends GameLevel {
                     
                 this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "hades"});
                 this.changeLevelTimer = new Timer(5000, () => {
+                    this.cleanUp();
 
                     //preserve projectile attack and cooldown
 
@@ -255,7 +258,7 @@ export default class level_h1 extends GameLevel {
                     this.playerStats.weaponCoolDown = (<HadesController> this.playerController).attackCooldown.getTotalTime();
 
                     this.viewport.setSize(1600, 900); // switch to H2
-                    this.sceneManager.changeToScene(level_h2, {
+                    this.sceneManager.changeToScene(H2_Cutscene, {
                         characterStats: this.playerStats,
                         invincible: this.invincible, 
                         unlockAll: this.unlockAll,

@@ -596,8 +596,7 @@ export default class GameLevel extends Scene{
             if(this.changeLevelTimer.getTimeLeft() <= 0) {
                 this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: this.levelMusic});
                 this.viewport.setSize(1600, 900);
-                this.healthBar.destroy();
-                this.expBar.destroy();
+                this.cleanUp();
                 this.sceneManager.changeToScene(DeathScreen, {
                     invincible: this.invincible, 
                     unlockAll: this.unlockAll,
@@ -659,6 +658,15 @@ export default class GameLevel extends Scene{
             this.rheaStatueCooldown.unpause();
         }
         this.emitter.fireEvent(Project_Events.GAMEUNPAUSE);
+    }
+
+    protected cleanUp(): void{
+        // UI stuff
+        this.healthBar.destroy();
+        this.expBar.destroy();
+
+        // extraneous things like receivers that must be destroyed
+        this.levelReceiver.destroy();
     }
 
     // main events

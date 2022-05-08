@@ -361,6 +361,7 @@ export default class level_z3 extends GameLevel {
         if(this.bossDefeated && this.currentNumEnemies === 0) {
     
             this.changeLevelTimer = new Timer(5000, ()=> {
+                this.cleanUp();
 
                 this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "echidna"});
                 this.viewport.setSize(1600, 900);
