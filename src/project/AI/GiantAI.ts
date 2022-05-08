@@ -46,7 +46,7 @@ export default class GiantAI extends EnemyAI {
                     (<ProjectileAI> projectile._ai).setDirection(dir /**.clone().rotateCCW(Math.PI/<angle>) */);
                     (<ProjectileAI> projectile._ai).setAngle(angle);
 
-                    projectile.setAIActive(true, {speed: 4});
+                    projectile.setAIActive(true, {});
                     // play sound here
                     projectile.visible = true;
                     this.attackCooldown.start();

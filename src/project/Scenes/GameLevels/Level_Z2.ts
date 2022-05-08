@@ -44,6 +44,7 @@ export default class level_z2 extends GameLevel {
         this.load.spritesheet("lightningv2", "project_assets/spritesheets/lightningv2.json");
         this.load.spritesheet("batSwing", "project_assets/spritesheets/batSwing.json");
         this.load.spritesheet("feather", "project_assets/spritesheets/Feather.json");
+        this.load.spritesheet("rock", "project_assets/spritesheets/boulder.json");
         this.load.image("lightning", "project_assets/sprites/lightning.png");
 
         this.load.image("lightningImg", "project_assets/sprites/lightning.png");
@@ -131,25 +132,25 @@ export default class level_z2 extends GameLevel {
         this.weaponIconCoolDown.color = Color.GRAY;
         this.weaponIconCoolDown.alpha = 0;
         
-        // this.spawnableEnemies.push({
-        //     name: "snake",
-        //     health: 150,
-        //     player: this.player,
-        //     speed: 115,
-        //     weapon: this.createWeapon("knife"),
-        //     range: 16,
-        //     experience: 100
-        // });
+        this.spawnableEnemies.push({
+            name: "snake",
+            health: 150,
+            player: this.player,
+            speed: 115,
+            weapon: this.createWeapon("knife"),
+            range: 16,
+            experience: 100
+        });
 
-        // this.spawnableEnemies.push({
-        //     name: "harpy",
-        //     health: 200,
-        //     player: this.player,
-        //     speed: 145,
-        //     weapon: this.createWeapon("knife"),
-        //     range: 150,
-        //     experience: 200,
-        // });
+        this.spawnableEnemies.push({
+            name: "harpy",
+            health: 200,
+            player: this.player,
+            speed: 145,
+            weapon: this.createWeapon("knife"),
+            range: 150,
+            experience: 200,
+        });
 
         this.spawnableEnemies.push({
             name: "giant",
@@ -210,7 +211,6 @@ export default class level_z2 extends GameLevel {
                 if (this.midWave) {
                     for (let i = 0; i < this.maxEnemies; i++) {
                         let enemyType = this.spawnableEnemies[Math.floor(Math.random() * this.spawnableEnemies.length)];
-        
                         let enemyPosition = this.randomSpawn();
                         let options = {
                             name: enemyType.name,
@@ -222,7 +222,7 @@ export default class level_z2 extends GameLevel {
                             experience: enemyType.experience,
                             position: enemyPosition,
                             projectiles: (enemyType.name === "harpy") ? this.createProjectiles(3,"feather") : 
-                                (enemyType.name === "giant") ? this.createProjectiles(1,"feather") : null,
+                                (enemyType.name === "giant") ? this.createProjectiles(1,"rock") : null,
                             cooldown: 2000,
                             scene: this,
                             ai: this.enemyConstructorPairings.get(enemyType.name)

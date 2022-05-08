@@ -773,7 +773,6 @@ export default class GameLevel extends Scene{
         let scaleSize = new Vec2(1, 1); // if you want to make projectiles larger
         let hitboxSize = new Vec2(32, 32); // custom hitboxes
         let speed = 3.5; // custom speed base of 4
-
         switch (sprite){
             case "fireball":
                 ai = FireballAI;
@@ -806,8 +805,9 @@ export default class GameLevel extends Scene{
             case "Hex":
                 ai = ProjectileAI;
                 break;
-            case "feather":
+            case "rock":
                 ai = RockAI;
+                speed = 4
                 break;
             default:
                 return null;

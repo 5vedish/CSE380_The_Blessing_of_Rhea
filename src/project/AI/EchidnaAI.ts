@@ -21,9 +21,9 @@ export default class EchidnaAI extends EnemyAI {
 
     protected projectiles: Array<AnimatedSprite>;
 
-    protected venomAttackCooldown: Timer = new Timer(2000);
+    protected venomAttackCooldown: Timer = new Timer(4000);
 
-    protected minionsCooldown: Timer = new Timer(5000);
+    protected minionsCooldown: Timer = new Timer(10000);
 
     protected venomRange: number;
 
@@ -100,9 +100,9 @@ export default class EchidnaAI extends EnemyAI {
 
             if(this.distanceToPlayer() <= this.venomRange && this.venomAttackCooldown.isStopped() && !visibleProjectile){
                 let dir  = this.player.position.clone().sub(this.owner.position.clone()).normalize();
-                let angelLeft = Vec2.UP.angleToCCW(dir) - Math.PI/16;
+                let angelLeft = Vec2.UP.angleToCCW(dir) - Math.PI/8;
                 let angelStraight = Vec2.UP.angleToCCW(dir);
-                let angelRight = Vec2.UP.angleToCCW(dir) + Math.PI/16;
+                let angelRight = Vec2.UP.angleToCCW(dir) + Math.PI/8;
 
                 for(let i = 0; i<this.projectiles.length; i++){
                     if(this.projectiles[i].visible){
@@ -111,13 +111,13 @@ export default class EchidnaAI extends EnemyAI {
                     let projectile = this.projectiles[i];
                     projectile.position = this.owner.position.clone();
                     if(i === 0){
-                        (<ProjectileAI> projectile._ai).setDirection(dir.clone().rotateCCW(Math.PI/16));
+                        (<ProjectileAI> projectile._ai).setDirection(dir.clone().rotateCCW(Math.PI/8));
                         (<ProjectileAI> projectile._ai).setAngle(angelLeft);
                     } else if (i === 1){
                         (<ProjectileAI> projectile._ai).setDirection(dir);
                         (<ProjectileAI> projectile._ai).setAngle(angelStraight);
                     } else {
-                        (<ProjectileAI> projectile._ai).setDirection(dir.clone().rotateCCW(Math.PI/-16));
+                        (<ProjectileAI> projectile._ai).setDirection(dir.clone().rotateCCW(Math.PI/-8));
                         (<ProjectileAI> projectile._ai).setAngle(angelRight);
                     }
                     projectile.setAIActive(true, {speed: 4});

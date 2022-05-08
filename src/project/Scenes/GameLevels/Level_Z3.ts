@@ -59,6 +59,7 @@ export default class level_z3 extends GameLevel {
         this.load.spritesheet("lightning", "project_assets/spritesheets/lightning.json");
         this.load.spritesheet("lightningv2", "project_assets/spritesheets/lightningv2.json");
         this.load.spritesheet("feather", "project_assets/spritesheets/Feather.json");
+        this.load.spritesheet("rock", "project_assets/spritesheets/boulder.json");
         this.load.spritesheet("tailwhip", "project_assets/spritesheets/tailwhip.json")
         this.load.image("lightning", "project_assets/sprites/lightning.png");
         this.load.image("end", "project_assets/sprites/z3_end.png");
@@ -189,7 +190,7 @@ export default class level_z3 extends GameLevel {
         echidnaTailWhip.sprite.scale.set(2,2);
         // console.log(echidnaTailWhip);
         this.echidna = this.add.animatedSprite("echidna", "primary");
-        this.echidna.position = new Vec2(32*32 , 26*32);
+        this.echidna.position = new Vec2(32*32 , 20*32);
         this.echidna.scale.set(2,2);
         let options = {
             name: "echidna",
@@ -207,10 +208,10 @@ export default class level_z3 extends GameLevel {
         this.echidna.addAI(EchidnaAI, options);
         this.echidna.addPhysics(new AABB(Vec2.ZERO, new Vec2(48,48)));
         this.echidna.animation.play("moving");
-        this.echidna.freeze();
-        this.echidna.setAIActive(false, {});
         this.echidna.setGroup("enemy");
         this.enemyArray.push(this.echidna);
+        this.echidna.freeze();
+        this.echidna.setAIActive(false, {});
 
         //Add boss health bar
         this.bossHealthBar = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(400, 425), size: new Vec2(600, 16)});
@@ -246,9 +247,8 @@ export default class level_z3 extends GameLevel {
                     let enemyType = this.spawnableEnemies[Math.floor(Math.random() * this.spawnableEnemies.length)]
                     let enemy = this.add.animatedSprite(enemyType.name, "primary");
                     enemy.scale.set(1.5,1.5);
-                    enemy.addPhysics(new AABB(Vec2.ZERO, new Vec2(8,8))); //Monkey patched collision box, dynamic later
-                    enemy.animation.play("moving");
-                    // enemy.position = new Vec2((this.echidna.position.clone().x + (i===0? -32 : 32)), this.echidna.position.y);
+                    enemy.addPhysics(new AABB(Vec2.ZERO, new Vec2(8,8)));
+                    enemy.animation.play("moving")
                     let postion = this.spawnablePositions[Math.floor(Math.random()*4)];
                     enemy.position = postion.clone();
                     let options = {
@@ -258,7 +258,8 @@ export default class level_z3 extends GameLevel {
                         weapon: enemyType.weapon,
                         range: enemyType.range,
                         experience: enemyType.experience,
-                        projectiles: this.createProjectiles(3 , (enemyType.name === "harpy") ? "feather" : null),
+                        projectiles: (enemyType.name === "harpy") ? this.createProjectiles(3,"feather") : 
+                        (enemyType.name === "giant") ? this.createProjectiles(1,"rock") : null,
                         cooldown: 1000,
                         scene: this,
                     }
@@ -305,7 +306,7 @@ export default class level_z3 extends GameLevel {
                 weapon: this.createWeapon("knife"),
                 range: 0,
                 experience: 14000,
-                projectiles: this.createProjectiles(3 , "feather"),
+                projectiles: (false) ? this.createProjectiles(3 , "feather") : null,
                 cooldown: 1000,
                 scene: this,
             }
@@ -394,7 +395,13 @@ export default class level_z3 extends GameLevel {
             }
         }
 
+        if(!this.fightStarted){
+            this.echidna.freeze();
+            this.echidna.setAIActive(false, {});
+        }
+
         if(this.player.position.y < 33*32 && !this.fightStarted){
+            console.log("STARTY FIGHT")
             this.fightStarted = true;
             this.echidna.unfreeze();
             this.echidna.setAIActive(true, {});
