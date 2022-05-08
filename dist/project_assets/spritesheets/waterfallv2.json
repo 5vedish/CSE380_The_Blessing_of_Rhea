@@ -1,8 +1,8 @@
 {
     "name": "Waterfallv2",
     "spriteSheetImage": "waterfallv2.png",
-    "spriteWidth": 64,
-    "spriteHeight": 96,
+    "spriteWidth": 128,
+    "spriteHeight": 192,
     "leftBuffer": 0,
     "rightBuffer": 0,
     "topBuffer": 0,

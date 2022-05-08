@@ -129,7 +129,7 @@ export default class level_p3 extends GameLevel {
             player: this.player,
             speed: 150,
             weapon: this.createWeapon("blast"),
-            range: 250,
+            range: 500,
             experience: 5000
         }
         
@@ -224,7 +224,7 @@ export default class level_p3 extends GameLevel {
                 speed: 0,
                 weapon: this.createWeapon("knife"),
                 range: 0,
-                experience: 4500,
+                experience: 15000,
                 projectiles: this.createProjectiles(3 , "ink"),
                 cooldown: 1000,
                 scene: this,
