@@ -832,11 +832,14 @@ export default class GameLevel extends Scene{
         let rolledItem;
         let tier;
         let dupes = [];
+
+        if(this.playerStats.stats.health >= this.playerStats.stats.maxHealth){ // filter out heal if full hp
+            this.itemsArray = this.itemsArray.filter(item => item !== "honey_jar");
+            dupes.push("honey_jar");
+        }
+
         while (this.selectionArray.length < 3){
-            if(this.playerStats.stats.health >= this.playerStats.stats.maxHealth){ // filter out heal if full hp
-                this.itemsArray = this.itemsArray.filter(item => item !== "honey_jar");
-                dupes.push("honey_jar");
-            }
+            
 
             rolledItem = this.itemsArray[Math.floor(Math.random() * this.itemsArray.length)];
 

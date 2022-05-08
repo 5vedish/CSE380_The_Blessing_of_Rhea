@@ -77,7 +77,12 @@ export default class EnemyAI extends StateMachineGoapAI implements BattlerAI {
 
     activate(options: Record<string, any>): void { }
 
-    damage(damage: number): void {
+    damage(damage: number, critHit : boolean = false): void {
+
+        // if (critHit){
+        //     damage *= 1.5; 
+        //     this.scene.add.animatedSprite()
+        // }
         this.health -= damage;
         this.owner.animation.play("damage");
         this.owner.animation.queue("moving", true);
