@@ -185,6 +185,8 @@ export default class GameLevel extends Scene{
         
         // Import upgrade icons
         this.load.image("honey_jar", "project_assets/sprites/honeyJar.png");
+        this.load.image("fractured_aegis", "project_assets/sprites/fractured_aegis.png");
+        this.load.image("poisoned_goblet", "project_assets/sprites/poisoned_goblet.png");
 
         this.load.image("aegis_1", "project_assets/sprites/aegis_1.png");
         this.load.image("bolt_1", "project_assets/sprites/bolt_1.png");
@@ -854,14 +856,16 @@ export default class GameLevel extends Scene{
             }
 
             this.selectionArray.push(rolledItem);
-            if (rolledItem === "fractured_aegis" || rolledItem === "poisoned_goblet") {
-                this.itemsArray = (rolledItem === "fractured_aegis") ? 
-                    this.itemsArray.filter(item => item !== "fractured_aegis") : this.itemsArray.filter(item => item !== "poisoned_goblet");
-            }
         }
 
         // remerge dupes into choices
         this.itemsArray = this.itemsArray.concat(dupes);
+
+        // Remove lunar items after (only one use)
+        if (rolledItem === "fractured_aegis" || rolledItem === "poisoned_goblet") {
+            this.itemsArray = (rolledItem === "fractured_aegis") ? 
+                this.itemsArray.filter(item => item !== "fractured_aegis") : this.itemsArray.filter(item => item !== "poisoned_goblet");
+        }
         
         this.item1 = new Sprite(this.selectionArray[0]);
         this.item1.position = new Vec2(this.button1.position.x, this.button1.position.y);
