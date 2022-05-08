@@ -18,6 +18,7 @@ import Lightning from "../../GameSystems/items/WeaponTypes/Primary/Lightning";
 import level_z3 from "./Level_Z3";
 import { GameEventType } from "../../../Wolfie2D/Events/GameEventType";
 import Z3_Cutscene from "../Cutscenes/Z3_Cutscene";
+import GiantAI from "../../AI/GiantAI";
 
 export default class level_z2 extends GameLevel {
 
@@ -43,6 +44,7 @@ export default class level_z2 extends GameLevel {
         this.load.spritesheet("lightningv2", "project_assets/spritesheets/lightningv2.json");
         this.load.spritesheet("batSwing", "project_assets/spritesheets/batSwing.json");
         this.load.spritesheet("feather", "project_assets/spritesheets/Feather.json");
+        this.load.spritesheet("rock", "project_assets/spritesheets/boulder.json");
         this.load.image("lightning", "project_assets/sprites/lightning.png");
 
         this.load.image("lightningImg", "project_assets/sprites/lightning.png");
@@ -101,7 +103,7 @@ export default class level_z2 extends GameLevel {
         this.initializeWeapons();
         this.initPlayer();
 
-        this.enemyConstructorPairings = new Map([["snake" , EnemyAI], ["harpy", RangeAI], ["giant", EnemyAI]]);
+        this.enemyConstructorPairings = new Map([["snake" , EnemyAI], ["harpy", RangeAI], ["giant", GiantAI]]);
 
         this.gameTimer = new Timer(5000);
         this.gameTime = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(this.viewport.getHalfSize().x, 20), text: `${this.parseTimeLeft(this.gameTimer.getTotalTime())}`});
@@ -209,7 +211,6 @@ export default class level_z2 extends GameLevel {
                 if (this.midWave) {
                     for (let i = 0; i < this.maxEnemies; i++) {
                         let enemyType = this.spawnableEnemies[Math.floor(Math.random() * this.spawnableEnemies.length)];
-        
                         let enemyPosition = this.randomSpawn();
                         let options = {
                             name: enemyType.name,
@@ -220,7 +221,8 @@ export default class level_z2 extends GameLevel {
                             range: enemyType.range,
                             experience: enemyType.experience,
                             position: enemyPosition,
-                            projectiles: this.createProjectiles(3, (enemyType.name === "harpy") ? "feather" : null),
+                            projectiles: (enemyType.name === "harpy") ? this.createProjectiles(3,"feather") : 
+                                (enemyType.name === "giant") ? this.createProjectiles(1,"rock") : null,
                             cooldown: 2000,
                             scene: this,
                             ai: this.enemyConstructorPairings.get(enemyType.name)
@@ -289,7 +291,7 @@ export default class level_z2 extends GameLevel {
                 weapon: this.createWeapon("knife"),
                 range: 0,
                 experience: 9000, // for level 5
-                projectiles: this.createProjectiles(3 , "feather"),
+                projectiles: (false) ? this.createProjectiles(3 , "feather") : null,
                 cooldown: 1000,
                 scene: this,
             }

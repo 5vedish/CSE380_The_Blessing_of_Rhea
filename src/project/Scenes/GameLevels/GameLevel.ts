@@ -50,9 +50,10 @@ import CerberusFireballAI from "../../AI/CerberusFireballAI";
 import VenomAi from "../../AI/VenomAI";
 import BlastAI from "../../AI/BlastAI";
 import BlastV2AI from "../../AI/BlastV2AI";
+import RockAI from "../../AI/RockAI";
 import FracturedAegis from "../../GameSystems/items/Upgrades/FracturedAegis";
-import PoisonedGoblet from "../../GameSystems/items/Upgrades/PoisonedGoblet";
 import Bolt3 from "../../GameSystems/items/Upgrades/Bolt3";
+import PoisonedGoblet from "../../GameSystems/items/Upgrades/PoisonedGoblet";
 
 export interface CustomEnemy {
     name: string,
@@ -772,7 +773,6 @@ export default class GameLevel extends Scene{
         let scaleSize = new Vec2(1, 1); // if you want to make projectiles larger
         let hitboxSize = new Vec2(32, 32); // custom hitboxes
         let speed = 3.5; // custom speed base of 4
-
         switch (sprite){
             case "fireball":
                 ai = FireballAI;
@@ -805,6 +805,10 @@ export default class GameLevel extends Scene{
             case "Hex":
                 ai = ProjectileAI;
                 break;
+            case "rock":
+                ai = RockAI;
+                speed = 4
+                break;
             default:
                 return null;
         }
@@ -812,6 +816,7 @@ export default class GameLevel extends Scene{
         let projectiles = new Array(number);
         for (let i = 0; i < number; i++) {
             projectiles[i] = this.add.animatedSprite(sprite, "primary");
+            console.log(`PRojectile id: ${projectiles[i].id}`)
             projectiles[i].position = new Vec2(0, 0);
             projectiles[i].visible = false;
             (<AnimatedSprite>projectiles[i]).scale.set(scaleSize.x, scaleSize.y);
