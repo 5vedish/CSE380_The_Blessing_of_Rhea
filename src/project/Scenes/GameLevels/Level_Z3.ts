@@ -123,8 +123,6 @@ export default class level_z3 extends GameLevel {
         this.spawnablePositions.push(new Vec2(40*32, 35*32));
         this.spawnablePositions.push(new Vec2(24*32, 19*32));
         this.spawnablePositions.push(new Vec2(24*32, 35*32));
-
-        console.log(this.spawnablePositions);
         
         super.startScene();
         this.initLayers();
@@ -191,7 +189,7 @@ export default class level_z3 extends GameLevel {
         echidnaTailWhip.sprite.scale.set(2,2);
         // console.log(echidnaTailWhip);
         this.echidna = this.add.animatedSprite("echidna", "primary");
-        this.echidna.position = new Vec2(32*32 , 24*32);
+        this.echidna.position = new Vec2(32*32 , 26*32);
         this.echidna.scale.set(2,2);
         let options = {
             name: "echidna",
@@ -395,7 +393,7 @@ export default class level_z3 extends GameLevel {
             }
         }
 
-        if(this.player.position.y < 34*32 && !this.fightStarted){
+        if(this.player.position.y < 33*32 && !this.fightStarted){
             this.fightStarted = true;
             this.echidna.unfreeze();
             this.echidna.setAIActive(true, {});

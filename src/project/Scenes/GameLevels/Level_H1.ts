@@ -39,7 +39,7 @@ export default class level_h1 extends GameLevel {
         
 
         this.load.spritesheet("fireball", "project_assets/spritesheets/fireball.json");
-        this.load.spritesheet("hex", "project_assets/spritesheets/Hex.json");
+        this.load.spritesheet("Hex", "project_assets/spritesheets/Hex.json");
         this.load.image("bident", "project_assets/sprites/bident.png");
 
         // load challenge img
