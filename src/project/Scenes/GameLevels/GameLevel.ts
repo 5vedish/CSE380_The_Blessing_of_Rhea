@@ -405,6 +405,7 @@ export default class GameLevel extends Scene{
                         item.use(this.player, this.playerController.weapon, this.playerStats, this.playerController);
                         this.button1.borderColor = Color.WHITE;
                         this.populateInventory(this.selectionArray[0]);
+                        this.removeLunar(this.selectionArray[0]);
                         break;
 
                     case "two":
@@ -413,6 +414,7 @@ export default class GameLevel extends Scene{
                         item2.use(this.player, this.playerController.weapon, this.playerStats, this.playerController);
                         this.button2.borderColor = Color.WHITE;
                         this.populateInventory(this.selectionArray[1]);
+                        this.removeLunar(this.selectionArray[1]);
                         break;
 
                     case "three":
@@ -421,6 +423,7 @@ export default class GameLevel extends Scene{
                         item3.use(this.player, this.playerController.weapon, this.playerStats, this.playerController);
                         this.button3.borderColor = Color.WHITE;
                         this.populateInventory(this.selectionArray[2]);
+                        this.removeLunar(this.selectionArray[2]);
                         break;
 
                 }
@@ -830,7 +833,7 @@ export default class GameLevel extends Scene{
         let tier;
         let dupes = [];
         while (this.selectionArray.length < 3){
-            if(this.playerStats.stats.health >= this.playerStats.stats.maxHealth){
+            if(this.playerStats.stats.health >= this.playerStats.stats.maxHealth){ // filter out heal if full hp
                 this.itemsArray = this.itemsArray.filter(item => item !== "honey_jar");
                 dupes.push("honey_jar");
             }
@@ -860,12 +863,6 @@ export default class GameLevel extends Scene{
 
         // remerge dupes into choices
         this.itemsArray = this.itemsArray.concat(dupes);
-
-        // Remove lunar items after (only one use)
-        if (rolledItem === "fractured_aegis" || rolledItem === "poisoned_goblet") {
-            this.itemsArray = (rolledItem === "fractured_aegis") ? 
-                this.itemsArray.filter(item => item !== "fractured_aegis") : this.itemsArray.filter(item => item !== "poisoned_goblet");
-        }
         
         this.item1 = new Sprite(this.selectionArray[0]);
         this.item1.position = new Vec2(this.button1.position.x, this.button1.position.y);
@@ -1037,6 +1034,16 @@ export default class GameLevel extends Scene{
 
         }
        
+    }
+
+    protected removeLunar(item: string): void{
+        if (item === "fractured_aegis"){
+            this.itemsArray.splice(this.itemsArray.indexOf("fractured_aegis"), 1);
+        }
+
+        if (item === "poisoned_goblet"){
+            this.itemsArray.splice(this.itemsArray.indexOf("poisoned_goblet"), 1);
+        }
     }
 
 
