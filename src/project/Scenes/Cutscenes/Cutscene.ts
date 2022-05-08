@@ -102,22 +102,22 @@ export default class Cutscene extends Scene{
         box.setColor(Color.BLACK);
         box.alpha = .7;
 
-        this.line1 = <Label> this.add.uiElement(UIElementType.LABEL, "lit", { position: new Vec2(player.position.x-300, player.position.y+100),text: ""});
+        this.line1 = <Label> this.add.uiElement(UIElementType.LABEL, "lit", { position: new Vec2(player.position.x-300, player.position.y+110),text: ""});
         this.line1.fontSize = 32;
         this.line1.setHAlign(HAlign.LEFT);
         this.line1.setTextColor(Color.WHITE);
 
-        this.line2 = <Label> this.add.uiElement(UIElementType.LABEL, "lit", { position: new Vec2(player.position.x-330, player.position.y+130),text: ""});
+        this.line2 = <Label> this.add.uiElement(UIElementType.LABEL, "lit", { position: new Vec2(player.position.x-330, player.position.y+140),text: ""});
         this.line2.fontSize = 32;
         this.line2.setHAlign(HAlign.LEFT);
         this.line2.setTextColor(Color.WHITE);
 
-        this.line3 = <Label> this.add.uiElement(UIElementType.LABEL, "lit", { position: new Vec2(player.position.x-330, player.position.y+160),text: ""});
+        this.line3 = <Label> this.add.uiElement(UIElementType.LABEL, "lit", { position: new Vec2(player.position.x-330, player.position.y+170),text: ""});
         this.line3.fontSize = 32;
         this.line3.setHAlign(HAlign.LEFT);
         this.line3.setTextColor(Color.WHITE);
 
-        this.line4 = <Label> this.add.uiElement(UIElementType.LABEL, "lit", { position: new Vec2(player.position.x-330, player.position.y+190),text: ""});
+        this.line4 = <Label> this.add.uiElement(UIElementType.LABEL, "lit", { position: new Vec2(player.position.x-330, player.position.y+200),text: ""});
         this.line4.fontSize = 32;
         this.line4.setHAlign(HAlign.LEFT);
         this.line3.setTextColor(Color.WHITE);
@@ -146,9 +146,9 @@ export default class Cutscene extends Scene{
             this.rightSprite.animation.play(this.speakerAnimations[this.dialogueNumber]);
         }
 
-        this.speakerNameLabel = <Label> this.add.uiElement(UIElementType.LABEL, "lit", { position: new Vec2(player.position.x-330, 1090),text: this.speakerName[0]});
+        this.speakerNameLabel = <Label> this.add.uiElement(UIElementType.LABEL, "lit", { position: new Vec2(player.position.x, 1100),text: this.speakerName[0]});
         this.speakerNameLabel.fontSize = 64;
-        this.speakerNameLabel.setHAlign(HAlign.LEFT);
+        this.speakerNameLabel.setHAlign(HAlign.CENTER);
         this.speakerNameLabel.setTextColor(Color.WHITE);
         
     }
