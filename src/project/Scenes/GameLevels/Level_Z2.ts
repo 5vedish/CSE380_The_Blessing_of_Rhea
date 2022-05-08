@@ -18,6 +18,7 @@ import Lightning from "../../GameSystems/items/WeaponTypes/Primary/Lightning";
 import level_z3 from "./Level_Z3";
 import { GameEventType } from "../../../Wolfie2D/Events/GameEventType";
 import Z3_Cutscene from "../Cutscenes/Z3_Cutscene";
+import GiantAI from "../../AI/GiantAI";
 
 export default class level_z2 extends GameLevel {
 
@@ -94,14 +95,14 @@ export default class level_z2 extends GameLevel {
         this.playerSpawn = new Vec2(32*32, 32*32);
         // this.viewport.setFocus(new Vec2(this.playerSpawn.x, this.playerSpawn.y));
         
-        this.maxEnemies = 10;
+        this.maxEnemies = 1;
         
         super.startScene();
         this.initLayers();
         this.initializeWeapons();
         this.initPlayer();
 
-        this.enemyConstructorPairings = new Map([["snake" , EnemyAI], ["harpy", RangeAI], ["giant", EnemyAI]]);
+        this.enemyConstructorPairings = new Map([["snake" , EnemyAI], ["harpy", RangeAI], ["giant", GiantAI]]);
 
         this.gameTimer = new Timer(5000);
         this.gameTime = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(this.viewport.getHalfSize().x, 20), text: `${this.parseTimeLeft(this.gameTimer.getTotalTime())}`});
@@ -130,25 +131,25 @@ export default class level_z2 extends GameLevel {
         this.weaponIconCoolDown.color = Color.GRAY;
         this.weaponIconCoolDown.alpha = 0;
         
-        this.spawnableEnemies.push({
-            name: "snake",
-            health: 150,
-            player: this.player,
-            speed: 115,
-            weapon: this.createWeapon("knife"),
-            range: 16,
-            experience: 100
-        });
+        // this.spawnableEnemies.push({
+        //     name: "snake",
+        //     health: 150,
+        //     player: this.player,
+        //     speed: 115,
+        //     weapon: this.createWeapon("knife"),
+        //     range: 16,
+        //     experience: 100
+        // });
 
-        this.spawnableEnemies.push({
-            name: "harpy",
-            health: 200,
-            player: this.player,
-            speed: 145,
-            weapon: this.createWeapon("knife"),
-            range: 150,
-            experience: 200,
-        });
+        // this.spawnableEnemies.push({
+        //     name: "harpy",
+        //     health: 200,
+        //     player: this.player,
+        //     speed: 145,
+        //     weapon: this.createWeapon("knife"),
+        //     range: 150,
+        //     experience: 200,
+        // });
 
         this.spawnableEnemies.push({
             name: "giant",
@@ -220,7 +221,8 @@ export default class level_z2 extends GameLevel {
                             range: enemyType.range,
                             experience: enemyType.experience,
                             position: enemyPosition,
-                            projectiles: this.createProjectiles(3, (enemyType.name === "harpy") ? "feather" : null),
+                            projectiles: (enemyType.name === "harpy") ? this.createProjectiles(3,"feather") : 
+                                (enemyType.name === "giant") ? this.createProjectiles(1,"feather") : null,
                             cooldown: 2000,
                             scene: this,
                             ai: this.enemyConstructorPairings.get(enemyType.name)
@@ -289,7 +291,7 @@ export default class level_z2 extends GameLevel {
                 weapon: this.createWeapon("knife"),
                 range: 0,
                 experience: 9000, // for level 5
-                projectiles: this.createProjectiles(3 , "feather"),
+                projectiles: (false) ? this.createProjectiles(3 , "feather") : null,
                 cooldown: 1000,
                 scene: this,
             }
