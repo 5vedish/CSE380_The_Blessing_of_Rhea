@@ -19,6 +19,9 @@ import Z3_Cutscene from "./Cutscenes/Z3_Cutscene";
 import P1_Cutscene from "./Cutscenes/P1_Cutscene";
 import P2_Cutscene from "./Cutscenes/P2_Cutscene";
 import P3_Cutscene from "./Cutscenes/P3_Cutscene";
+import H1_Cutscene from "./Cutscenes/H1_Cutscene";
+import H2_Cutscene from "./Cutscenes/H2_Cutscene";
+import H3_Cutscene from "./Cutscenes/H3_Cutscene";
 
 export default class LevelSelection extends Scene {
   private splashScreen: Layer;
@@ -368,19 +371,19 @@ export default class LevelSelection extends Scene {
 
       if (event.type === "hades1") {
         this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "main_menu"});
-        if (this.unlockedLevels[6] || this.unlockAll) this.sceneManager.changeToScene(level_h1, options, physicsOptions);
+        if (this.unlockedLevels[6] || this.unlockAll) this.sceneManager.changeToScene(H1_Cutscene, options, physicsOptions);
         else console.log("STAGE NOT UNLOCKED YET");
       }
 
       if (event.type === "hades2") {
         this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "main_menu"});
-        if (this.unlockedLevels[7] || this.unlockAll) this.sceneManager.changeToScene(level_h2, options, physicsOptions);
+        if (this.unlockedLevels[7] || this.unlockAll) this.sceneManager.changeToScene(H2_Cutscene, options, physicsOptions);
         else console.log("STAGE NOT UNLOCKED YET");
       }
 
       if (event.type === "hades3") {
         this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "main_menu"});
-        if (this.unlockedLevels[7] || this.unlockAll) this.sceneManager.changeToScene(level_h3, options, physicsOptions);
+        if (this.unlockedLevels[7] || this.unlockAll) this.sceneManager.changeToScene(H3_Cutscene, options, physicsOptions);
         else console.log("STAGE NOT UNLOCKED YET");
       }
 
