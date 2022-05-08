@@ -2,13 +2,19 @@
     "dialogue": 
     {
     "lines": ["...", 
-        "It had escaped my mind that the Underworld houses a basement.", 
-        "*anvil ", 
-        "Know your place, squid. You are talking to a god."],
-    "speaker": [0, 1, 0, 1, 0],
-    "speakerSprite": ["poseidon", "octopus"],
-    "speakerPositions": ["left", "right", "left", "right", "left"],
-    "speakerAnimations": ["idle", "moving", "idle", "attack", "idle"],
-    "speakerName": ["Poseidon", "Squid", "Poseidon", "Squid", "Poseidon"]
+        "Greetings, Tartarus. As the Three Fates will it, I am obliged to traverse your desecrated soils.", 
+        "*woooooooooosh* *SPLASH*", 
+        "... ...",
+        "Was that an anvil?",
+        "*rattle* *rattle*",
+        "Hadeeees, Son of Kronus. The gall you possess, to set foot in my dominion! Have you forgotten the ones responsible for pouring the filth in these desecrated soils you so brazenly speak of?",
+        "... You misunderstand, o' mighty Tartarus. I. DO. NOT. ASSOCIATE. WITH. THOSE. MONGRELS.",
+        "Silence! I shall not forgive your trangressions!",
+        "... It's time to clean my basement."],
+    "speaker": [0, 0, 0, 0, 1, 1, 0, 1, 0],
+    "speakerSprite": ["hades", "Skull"],
+    "speakerPositions": ["left", "left", "left", "left", "right", "right", "left", "right", "left"],
+    "speakerAnimations": ["right", "idle", "attacking", "idle", "moving", "moving", "idle", "attack", "attacking"],
+    "speakerName": ["Hades", "Hades", "Hades", "Hades", "Damned Soul Possessed By Tartarus", "Damned Soul Possessed By Tartarus", "Hades", "Damned Soul Possessed By Tartarus", "Hades"]
     }
 }

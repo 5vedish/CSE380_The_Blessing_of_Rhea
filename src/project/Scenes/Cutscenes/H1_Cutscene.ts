@@ -9,7 +9,6 @@ export default class H1_Cutscene extends Cutscene{
         this.load.tilemap("levelH1", "project_assets/tilemaps/LevelH1.json");
         this.load.spritesheet("hades", "project_assets/spritesheets/Hades.json"); 
         this.load.spritesheet("Skull", "project_assets/spritesheets/Skull.json");
-        this.load.spritesheet("Witch", "project_assets/spritesheets/Witch.json");
         this.load.object("dialogue", "project_assets/data/level_h1_dialogue.json");
     }
 
