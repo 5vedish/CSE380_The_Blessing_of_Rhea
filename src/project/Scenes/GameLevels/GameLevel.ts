@@ -20,6 +20,7 @@ import BattlerAI from "../../AI/BattlerAI";
 import Graphic from "../../../Wolfie2D/Nodes/Graphic";
 import CharacterStat from "../../PlayerStatus";
 import CanvasNode from "../../../Wolfie2D/Nodes/CanvasNode";
+import Hourglass3 from "../../GameSystems/items/Upgrades/Hourglass3";
 import Sprite from "../../../Wolfie2D/Nodes/Sprites/Sprite";
 import PlayerController from "../../AI/PlayerController";
 import Receiver from "../../../Wolfie2D/Events/Receiver";
@@ -29,22 +30,20 @@ import ProjectileAI from "../../AI/ProjectileAI";
 import DeathScreen from "../DeathScreen";
 import { EaseFunctionType } from "../../../Wolfie2D/Utils/EaseFunctions";
 import HoneyJar from "../../GameSystems/items/Upgrades/HoneyJar";
-import { GameEventType } from "../../../Wolfie2D/Events/GameEventType";
-import Hourglass1 from "../../GameSystems/items/Upgrades/Hourglass1";
-import Hourglass2 from "../../GameSystems/items/Upgrades/Hourglass2";
-import Hourglass3 from "../../GameSystems/items/Upgrades/Hourglass3";
-import Aegis1 from "../../GameSystems/items/Upgrades/Aegis1";
-import Aegis2 from "../../GameSystems/items/Upgrades/Aegis2";
-import Aegis3 from "../../GameSystems/items/Upgrades/Aegis3";
-import Goblet1 from "../../GameSystems/items/Upgrades/Goblet1";
-import Goblet2 from "../../GameSystems/items/Upgrades/Goblet2";
 import Goblet3 from "../../GameSystems/items/Upgrades/Goblet3";
-import Bolt1 from "../../GameSystems/items/Upgrades/Bolt1";
-import Bolt2 from "../../GameSystems/items/Upgrades/Bolt2";
-import Bolt3 from "../../GameSystems/items/Upgrades/Bolt3";
-import HermesSandals1 from "../../GameSystems/items/Upgrades/HermesSandals1";
+import Aegis3 from "../../GameSystems/items/Upgrades/Aegis3";
+import Hourglass2 from "../../GameSystems/items/Upgrades/Hourglass2";
 import HermesSandals2 from "../../GameSystems/items/Upgrades/HermesSandals2";
+import Bolt2 from "../../GameSystems/items/Upgrades/Bolt2";
+import Goblet2 from "../../GameSystems/items/Upgrades/Goblet2";
+import Aegis2 from "../../GameSystems/items/Upgrades/Aegis2";
 import HermesSandals3 from "../../GameSystems/items/Upgrades/HermesSandals3";
+import { GameEventType } from "../../../Wolfie2D/Events/GameEventType";
+import Aegis1 from "../../GameSystems/items/Upgrades/Aegis1";
+import Goblet1 from "../../GameSystems/items/Upgrades/Goblet1";
+import Bolt1 from "../../GameSystems/items/Upgrades/Bolt1";
+import HermesSandals1 from "../../GameSystems/items/Upgrades/HermesSandals1";
+import Hourglass1 from "../../GameSystems/items/Upgrades/Hourglass1";
 import HadesController from "../../AI/HadesController";
 import FireballAI from "../../AI/FireballAI";
 import CerberusFireballAI from "../../AI/CerberusFireballAI";
@@ -53,6 +52,7 @@ import BlastAI from "../../AI/BlastAI";
 import BlastV2AI from "../../AI/BlastV2AI";
 import FracturedAegis from "../../GameSystems/items/Upgrades/FracturedAegis";
 import PoisonedGoblet from "../../GameSystems/items/Upgrades/PoisonedGoblet";
+import Bolt3 from "../../GameSystems/items/Upgrades/Bolt3";
 
 export interface CustomEnemy {
     name: string,
@@ -185,8 +185,6 @@ export default class GameLevel extends Scene{
         
         // Import upgrade icons
         this.load.image("honey_jar", "project_assets/sprites/honeyJar.png");
-        this.load.image("fractured_aegis", "project_assets/sprites/fractured_aegis.png");
-        this.load.image("poisoned_goblet", "project_assets/sprites/poisoned_goblet.png");
 
         this.load.image("aegis_1", "project_assets/sprites/aegis_1.png");
         this.load.image("bolt_1", "project_assets/sprites/bolt_1.png");
@@ -856,10 +854,10 @@ export default class GameLevel extends Scene{
             }
 
             this.selectionArray.push(rolledItem);
-            if (rolledItem === "poisoned_goblet" || rolledItem === "fractured_aegis") {
-                this.itemsArray = this.itemsArray.filter(item => )
+            if (rolledItem === "fractured_aegis" || rolledItem === "poisoned_goblet") {
+                this.itemsArray = (rolledItem === "fractured_aegis") ? 
+                    this.itemsArray.filter(item => item !== "fractured_aegis") : this.itemsArray.filter(item => item !== "poisoned_goblet");
             }
-
         }
 
         // remerge dupes into choices
