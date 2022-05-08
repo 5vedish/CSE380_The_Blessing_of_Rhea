@@ -137,7 +137,7 @@ export default class PlayerController extends StateMachineAI implements BattlerA
 
     damage(damage: number): void {
         if(!this.invincible){
-            this.health -= damage - (this.playerStats.stats.defense > damage ? 0 : this.playerStats.stats.defense); // defense mitigates damage
+            damage = (damage - this.playerStats.stats.defense < 0) ? 1 : (damage - this.playerStats.stats.defense);
             this.playerStats.editHealth(damage * -1);
             this.owner.animation.play("damage");
             

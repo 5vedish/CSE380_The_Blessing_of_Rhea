@@ -129,35 +129,39 @@ export default class level_h2 extends GameLevel {
         this.weaponIconCoolDown.alpha = 0;
         
         // add spawnable enemies
-        // this.spawnableEnemies.push({
-        //     name: "Skull",
-        //     health: 1,
-        //     player: this.player,
-        //     speed: 200,
-        //     weapon: this.createWeapon("knife"),
-        //     range: 16,
-        //     experience: 50
-        // });
+        this.spawnableEnemies.push({
+            name: "Skull",
+            health: 47,
+            player: this.player,
+            speed: 200,
+            weapon: this.createWeapon("knife"),
+            range: 16,
+            experience: 25
+        });
 
         this.spawnableEnemies.push({
             name: "Witch",
-            health: 20,
+            health: 200,
             player: this.player,
             speed: 100,
             weapon: this.createWeapon("knife"),
-            range: 400,
+            range: 500,
             experience: 250,
         });
 
-        // this.spawnableEnemies.push({
-        //     name: "Hellhound",
-        //     health: 50,
-        //     player: this.player,
-        //     speed: 125,
-        //     weapon: this.createWeapon("knife"),
-        //     range: 20,
-        //     experience: 1000,
-        // });
+        this.spawnableEnemies.push({
+            name: "Hellhound",
+            health: 500,
+            player: this.player,
+            speed: 125,
+            weapon: this.createWeapon("knife"),
+            range: 16,
+            experience: 1000,
+        });
+
+        this.spawnableEnemies[0].weapon.type.damage = 1;
+        this.spawnableEnemies[1].weapon.type.damage = 30;
+        this.spawnableEnemies[2].weapon.type.damage = 79;
 
         //Position the rhea statue and zone
         this.rheaStatue = this.add.animatedSprite("rheaStatue", "primary");
@@ -214,7 +218,7 @@ export default class level_h2 extends GameLevel {
                         let enemyPosition = this.randomSpawn();
                         let options = {
                             name: enemyType.name,
-                            health: enemyType.health,
+                            health: enemyType.health*(Math.pow(1.05, this.playerStats.level)),
                             player: enemyType.player,
                             speed: enemyType.speed,
                             weapon: enemyType.weapon,
@@ -248,6 +252,11 @@ export default class level_h2 extends GameLevel {
                     
                 this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "hades"});
                 this.changeLevelTimer = new Timer(5000, () => {
+
+                    //preserve projectile attack and cooldown
+
+                    this.playerStats.stats.attack = (<FireballAI> (<HadesController> this.playerController).projectiles[0]._ai).getDamage();
+                    this.playerStats.weaponCoolDown = (<HadesController> this.playerController).attackCooldown.getTotalTime();
 
                     this.viewport.setSize(1600, 900);
                     this.sceneManager.changeToScene(level_h3, {
@@ -283,7 +292,7 @@ export default class level_h2 extends GameLevel {
        // last argument is arbitrary because Hades will not use the weapon system, health was 75
        let enemy;
        if (!this.playerStats){
-           this.playerStats = new CharacterStat(75, 5, 5, (this.speedUp) ? 15 : 3, 1);
+           this.playerStats = new CharacterStat(75, 50, 5, (this.speedUp) ? 15 : 3, HadesController.HADESCD);
            //Create an enemy for players to get exp
            enemy = this.add.animatedSprite("Skull", "primary");
            enemy.scale.set(1,1);
@@ -296,7 +305,7 @@ export default class level_h2 extends GameLevel {
                speed: 0,
                weapon: this.createWeapon("knife"),
                range: 0,
-               experience: 3000,
+               experience: 10000,
                projectiles: this.createProjectiles(3 , "fireball"),
                cooldown: 1000,
                scene: this,
@@ -325,12 +334,21 @@ export default class level_h2 extends GameLevel {
                playerStats: this.playerStats,
                weapon: null,
                weaponV2: null,
-               projectiles: this.createProjectiles(5, "fireball"),
+               projectiles: this.createProjectiles(2, "fireball"),
                floor: this.floorCheck,
                invincible: this.invincible
            });
 
-           
+           // add in projectile attack and cooldown
+
+            const fireballs = (<HadesController> this.player._ai).projectiles
+   
+            for (let f of fireballs){
+                (<FireballAI> f._ai).setDamage(this.playerStats.stats.attack);
+            }
+
+            (<HadesController> this.player._ai).attackCooldown = new Timer(this.playerStats.weaponCoolDown);
+   
            // setup player and viewport tracking
            this.player.animation.play("idle");
            this.player.setGroup("player");

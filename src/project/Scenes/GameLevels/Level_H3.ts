@@ -152,31 +152,31 @@ export default class level_h3 extends GameLevel {
         // specify level enemy types
         this.spawnableEnemies.push({
             name: "Skull",
-            health: 1,
+            health: 47,
             player: this.player,
             speed: 200,
             weapon: this.createWeapon("knife"),
             range: 16,
-            experience: 50
+            experience: 25
         });
 
         this.spawnableEnemies.push({
             name: "Witch",
-            health: 25,
+            health: 200,
             player: this.player,
             speed: 100,
             weapon: this.createWeapon("knife"),
-            range: 400,
-            experience: 250
+            range: 500,
+            experience: 250,
         });
 
         this.spawnableEnemies.push({
             name: "Hellhound",
-            health: 50,
+            health: 500,
             player: this.player,
             speed: 125,
             weapon: this.createWeapon("knife"),
-            range: 20,
+            range: 16,
             experience: 1000
         });
 
@@ -191,7 +191,7 @@ export default class level_h3 extends GameLevel {
 
         let options = {
             name: "Cerberus",
-            health: 100,
+            health: 3000,
             player: this.player,
             speed: 50,
             weapon: this.createWeapon("knife"),
@@ -225,7 +225,7 @@ export default class level_h3 extends GameLevel {
 
         let options2 = {
             name: "Cerberus",
-            health: 100,
+            health: 3000,
             player: this.player,
             speed: 50,
             weapon: this.createWeapon("knife"),
@@ -259,7 +259,7 @@ export default class level_h3 extends GameLevel {
 
         let options3 = {
             name: "Cerberus",
-            health: 100,
+            health: 3000,
             player: this.player,
             speed: 50,
             weapon: this.createWeapon("knife"),
@@ -327,7 +327,7 @@ export default class level_h3 extends GameLevel {
                     // specify enemy position (one of four cage zones)
 
                     let options = {
-                        health: enemyType.health,
+                        health: enemyType.health*(Math.pow(1.05, this.playerStats.level)),
                         player: enemyType.player,
                         speed: enemyType.speed,
                         weapon: enemyType.weapon,
@@ -440,7 +440,7 @@ export default class level_h3 extends GameLevel {
         let enemy;
         if (this.playerStats === undefined) {
        
-            this.playerStats = new CharacterStat(75, 1, 5, (this.speedUp) ? 15 : 3, 1);
+            this.playerStats = new CharacterStat(75, 50, 5, (this.speedUp) ? 15 : 3, HadesController.HADESCD);
 
             // exp supply drop
             enemy = this.add.animatedSprite("Skull", "primary");
@@ -454,7 +454,7 @@ export default class level_h3 extends GameLevel {
                 speed: 0,
                 weapon: this.createWeapon("knife"),
                 range: 0,
-                experience: 10000,
+                experience: 25000,
                 projectiles: this.createProjectiles(0, ""),
                 cooldown: 0,
                 scene: this,
@@ -482,12 +482,21 @@ export default class level_h3 extends GameLevel {
                 playerStats: this.playerStats,
                 weapon: null,
                 weaponV2: null,
-                projectiles: this.createProjectiles(5, "fireball"),
+                projectiles: this.createProjectiles(2, "fireball"),
                 floor: this.floorCheck,
                 invincible: this.invincible
             });
 
 
+        // add in projectile attack and cooldown
+
+        const fireballs = (<HadesController> this.player._ai).projectiles
+   
+        for (let f of fireballs){
+            (<FireballAI> f._ai).setDamage(this.playerStats.stats.attack);
+        }
+
+        (<HadesController> this.player._ai).attackCooldown = new Timer(this.playerStats.weaponCoolDown);
 
         // setup player and viewport tracking
         this.player.animation.play("idle");
