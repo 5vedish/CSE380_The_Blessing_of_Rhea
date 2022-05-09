@@ -100,7 +100,7 @@ export default class level_p3 extends GameLevel {
         this.playerSpawn = new Vec2((32*32) + 16, (32*32) + 16);
         // this.viewport.setFocus(new Vec2(this.playerSpawn.x, this.playerSpawn.y));
         
-        this.maxEnemies = 17;
+        this.maxEnemies = 15;
         
         super.startScene();
         this.initLayers();
