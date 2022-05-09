@@ -58,7 +58,6 @@ export default class level_p1 extends GameLevel {
         this.load.image("wave_one", "project_assets/sprites/p1_wave1.png");
         this.load.image("wave_two", "project_assets/sprites/p1_wave2.png");
         this.load.image("wave_three", "project_assets/sprites/p1_wave3.png");
-        this.load.image("end", "project_assets/sprites/p1_end.png");
 
         //Load sound effect and music
         this.load.audio("weapon", "project_assets/sounds/waterfall.wav");
@@ -286,7 +285,6 @@ export default class level_p1 extends GameLevel {
                     }, this.sceneOptions);
 
                 });
-                this.createChallengeLabel("end");
                 this.changeLevelTimer.start();
             }
         }

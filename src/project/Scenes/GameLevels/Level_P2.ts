@@ -63,7 +63,6 @@ export default class level_p2 extends GameLevel {
 
         //Load Challenge img
         this.load.image("objective", "project_assets/sprites/p2_challenge.png");
-        this.load.image("end", "project_assets/sprites/p2_end.png");
 
         //Load sound effect and music
         this.load.audio("weapon", "project_assets/sounds/waterfall.wav");
@@ -319,7 +318,6 @@ export default class level_p2 extends GameLevel {
                         inventory: this.inventory
                     }, this.sceneOptions);
                 });
-                this.createChallengeLabel("end");
                 this.changeLevelTimer.start();
                 }
             }
