@@ -13,6 +13,7 @@ import Scene from "../../Wolfie2D/Scene/Scene";
 import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 import Cerberus from "./EnemyStates/Cerberus";
 import Giant from "./EnemyStates/Giant";
+import Dash from "./EnemyStates/Dash";
 
 
 
@@ -63,6 +64,7 @@ export default class EnemyAI extends StateMachineGoapAI implements BattlerAI {
         this.addState(EnemyStates.GIANT, new Giant(this, owner, options.player, options.range));
         this.addState(EnemyStates.ATTACK, new Attack(this, owner, options.player, options.name, this.emitter));
         this.addState(EnemyStates.CERBERUS, new Cerberus(this, owner, options.startingPosition));
+        this.addState(EnemyStates.DASH, new Dash(this, owner, options.player));
 
         this.maxHealth = options.health;
         this.health = options.health;
@@ -121,5 +123,6 @@ export enum EnemyStates {
     ATTACK = "attack",
     MOVEANDATTACK = "move_and_attack",
     CERBERUS = "Cerberus",
-    GIANT = "Giant"
+    GIANT = "Giant",
+    DASH = "dash"
 }
