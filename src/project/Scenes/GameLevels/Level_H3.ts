@@ -406,6 +406,7 @@ export default class level_h3 extends GameLevel {
                         this.bossHealthBar.size = new Vec2(160*bossPercentage, 16);
                         this.bossHealthBar.position = new Vec2(400 + (bossPercentage-1)*80,425);
                         this.bossHealthBarNumber.text = `${(<CerberusAI>this.Cerberus._ai).health.toFixed(2)} / ${(<CerberusAI>this.Cerberus._ai).maxHealth}`
+                        console.log("I'M NOT DEAD");
 
                     }
 
@@ -424,6 +425,7 @@ export default class level_h3 extends GameLevel {
                         this.bossHealthBar2.size = new Vec2(160*bossPercentage2, 16);
                         this.bossHealthBar2.position = new Vec2(150 + (bossPercentage2-1)*80,425);
                         this.bossHealthBarNumber2.text = `${(<CerberusAI>this.Cerberus2._ai).health.toFixed(2)} / ${(<CerberusAI>this.Cerberus2._ai).maxHealth}`
+                        console.log("I'M NOT DEAD");
 
                     }
 
@@ -442,6 +444,7 @@ export default class level_h3 extends GameLevel {
                         this.bossHealthBar3.size = new Vec2(160*bossPercentage3, 16);
                         this.bossHealthBar3.position = new Vec2(650 + (bossPercentage3-1)*80,425);
                         this.bossHealthBarNumber3.text = `${(<CerberusAI>this.Cerberus3._ai).health.toFixed(2)} / ${(<CerberusAI>this.Cerberus3._ai).maxHealth}`
+                        console.log("I'M NOT DEAD");
                     }
 
                 } 
