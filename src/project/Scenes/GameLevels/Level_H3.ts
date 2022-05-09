@@ -397,6 +397,7 @@ export default class level_h3 extends GameLevel {
                     if (dead){
 
                         this.bossHealthBar.visible = false;
+                        this.bossHealthBarNumber.setText("");
 
                     } else {
 
@@ -414,6 +415,7 @@ export default class level_h3 extends GameLevel {
                     if (dead){
 
                         this.bossHealthBar2.visible = false;
+                        this.bossHealthBarNumber2.setText("");
 
                     } else {
 
@@ -431,6 +433,7 @@ export default class level_h3 extends GameLevel {
                     if (dead){
 
                         this.bossHealthBar3.visible = false;
+                        this.bossHealthBarNumber3.setText("");
 
                     } else {
 
