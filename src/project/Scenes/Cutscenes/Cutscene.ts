@@ -256,7 +256,7 @@ export default class Cutscene extends Scene{
         let num = 0;
 
         splitline.map((word) => {
-            if (word.length + 1 + this.buffers[num].length > 100){
+            if (word.length + 1 + this.buffers[num].length > 90){
                 this.buffers[++num] += word + " ";
             } else {
                 this.buffers[num] += word + " ";

@@ -254,7 +254,6 @@ export default class level_h2 extends GameLevel {
             if(this.currentWave >= 3 && this.currentNumEnemies === 0) {
                 //end level and move to level z3
                     
-                this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "hades"});
                 this.cleanUp();
                 this.changeLevelTimer = new Timer(5000, () => {
 
