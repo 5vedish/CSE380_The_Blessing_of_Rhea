@@ -150,6 +150,8 @@ export default class GameLevel extends Scene{
 
     protected levelMusic: string;
 
+    protected projetiles: Array<AnimatedSprite> = [];
+
     // items
     protected itemsArray = ["honey_jar", "fractured_aegis", "poisoned_goblet",
         "hourglass_", "hermes_sandals_", "bolt_", "goblet_of_dionysus_", "aegis_", "artemis_bow_"]; // "_" means chance to roll 1/2/3
@@ -652,7 +654,6 @@ export default class GameLevel extends Scene{
     }
 
     protected pauseEntities(){
-        console.log("PAUSE")
         this.startSceneTimer.pause();
         if(this.enemyArray.length > 0){
             this.enemyArray.map((enemy) => {
@@ -672,7 +673,18 @@ export default class GameLevel extends Scene{
         if(this.rheaStatueCooldown != undefined) {
             this.rheaStatueCooldown.pause();
         }
-        this.emitter.fireEvent(Project_Events.GAMEPAUSE);
+
+        //Freeze all visible projetiles
+        for(let p of this.projetiles){
+            if(this.sceneGraph.getNode(p.id) != undefined){
+                if(p.visible){
+                    p.freeze();
+                    p.setAIActive(false, {});
+                    (<ProjectileAI>p._ai).pause();
+                }
+            }
+        }
+        // this.emitter.fireEvent(Project_Events.GAMEPAUSE);
     }
 
     protected unpauseEntities(){
@@ -699,7 +711,19 @@ export default class GameLevel extends Scene{
         if(this.rheaStatueCooldown != undefined) {
             this.rheaStatueCooldown.unpause();
         }
-        this.emitter.fireEvent(Project_Events.GAMEUNPAUSE);
+
+        //Unfreeze all projetiles
+        //Freeze all visible projetiles
+        for(let p of this.projetiles){
+            if(this.sceneGraph.getNode(p.id) != undefined){
+                if(p.visible){
+                    p.unfreeze();
+                    p.setAIActive(true, {});
+                    (<ProjectileAI>p._ai).unpause();
+                }
+            }
+        }
+        // this.emitter.fireEvent(Project_Events.GAMEUNPAUSE);
     }
 
     protected cleanUp(): void{
@@ -889,6 +913,7 @@ export default class GameLevel extends Scene{
         console.log(number);
         for (let i = 0; i < number; i++) {
             projectiles[i] = this.add.animatedSprite(sprite, "primary");
+            this.projetiles.push(projectiles[i]);
             console.log(`PRojectile id: ${projectiles[i].id}`)
             projectiles[i].position = new Vec2(0, 0);
             projectiles[i].visible = false;

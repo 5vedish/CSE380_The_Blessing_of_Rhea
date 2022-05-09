@@ -80,6 +80,16 @@ export default class ProjectileAI implements AI {
         }
     }
 
+    pause(): void{
+        this.timeToLive.pause();
+        this.paused = true;
+    }
+
+    unpause(): void {
+        this.paused = false;
+        this.timeToLive.unpause();
+    }
+
     update(deltaT: number): void {
         while(this.receiver.hasNextEvent()){
             this.handleEvent(this.receiver.getNextEvent());
