@@ -149,7 +149,7 @@ export default class level_p2 extends GameLevel {
         
         this.rheaStatueZone = this.add.graphic(GraphicType.RECT, "primary",{position: this.rheaStatue.position, size: new Vec2(3*32,3*32)});
         this.rheaStatueZone.color = Color.TRANSPARENT;
-        this.rheaStatueCooldown = new Timer(30000);
+        this.rheaStatueCooldown = new Timer(17500);
 
         this.populateHUD();
 

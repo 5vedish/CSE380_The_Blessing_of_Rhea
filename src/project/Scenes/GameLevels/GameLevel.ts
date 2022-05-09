@@ -280,7 +280,7 @@ export default class GameLevel extends Scene{
 
         // Inventory Box Label
         let inventoryBorder = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(this.viewport.getHalfSize().x + 216.5, this.viewport.getHalfSize().y - 179), 
-            size: new Vec2(320, 80)});
+            size: new Vec2(320, 120)});
         inventoryBorder.color = Color.BLACK;
         inventoryBorder.alpha = .5;
 
@@ -350,7 +350,7 @@ export default class GameLevel extends Scene{
 
           let HUD = this.addUILayer("HUD");
           HUD.setDepth(999);
-         HUD.disable();
+        HUD.disable();
 
           // player stats HUD
           this.hpHUD = <Label> this.add.uiElement(UIElementType.LABEL, "HUD", { position: new Vec2(this.viewport.getOrigin().x-350,
