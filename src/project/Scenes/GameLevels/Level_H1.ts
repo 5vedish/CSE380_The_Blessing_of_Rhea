@@ -250,7 +250,8 @@ export default class level_h1 extends GameLevel {
     
             if(this.gameTimer.getTimeLeft() <= 0){
                 // end level and move to level 2
-              
+            
+                this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "hades"});
                 this.cleanUp();
                 this.changeLevelTimer = new Timer(5000, () => {
 

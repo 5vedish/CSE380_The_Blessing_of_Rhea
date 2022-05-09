@@ -81,7 +81,8 @@ export default class level_h3 extends GameLevel {
 
         // load sound effects (tbd)
 
-        // load audio (but here we use the same audio as level 2)
+        this.load.audio("hades", "project_assets/music/Tartarus.mp3");
+
 
         super.loadScene();
     }

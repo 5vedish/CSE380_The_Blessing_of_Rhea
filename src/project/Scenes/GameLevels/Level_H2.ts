@@ -53,7 +53,7 @@ export default class level_h2 extends GameLevel {
         this.load.image("wave_three", "project_assets/sprites/h2_wave3.png");
 
         // Load audio and music
-        // this.load.audio("hades", "project_assets/music/main_menu.mp3"); (same music for now)
+        this.load.audio("hades", "project_assets/music/Tartarus.mp3");
 
 
         super.loadScene();
