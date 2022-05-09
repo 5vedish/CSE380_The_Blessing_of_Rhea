@@ -864,7 +864,7 @@ export default class GameLevel extends Scene{
                 break;
             case "blastV2":
                 ai = BlastV2AI;
-                speed = 5;
+                speed = 4;
                 break;
             case "feather":
                 ai = ProjectileAI;
