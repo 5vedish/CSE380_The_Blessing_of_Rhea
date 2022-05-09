@@ -115,6 +115,7 @@ export default class ProjectileAI implements AI {
     }
 
     destroy(): void {
+        console.log("DESTROY")
         this.receiver.destroy();
     }
 

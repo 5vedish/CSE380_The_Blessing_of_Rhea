@@ -134,6 +134,8 @@ export default class GameLevel extends Scene{
     protected item2: Sprite;
     protected item3: Sprite;
 
+    finishedLevel: boolean = false;
+
     protected itemSelectButton: UIElement;
     protected itemSelectButtonLabel: Sprite;
 
@@ -884,6 +886,7 @@ export default class GameLevel extends Scene{
         }
 
         let projectiles = new Array(number);
+        console.log(number);
         for (let i = 0; i < number; i++) {
             projectiles[i] = this.add.animatedSprite(sprite, "primary");
             console.log(`PRojectile id: ${projectiles[i].id}`)

@@ -259,7 +259,7 @@ export default class level_p2 extends GameLevel {
                 this.gameTimer.start();
             }
 
-            if(!this.gameTimer.isStopped() && this.currentNumEnemies < this.maxEnemies && !this.pauseFlag){
+            if(!this.gameTimer.isStopped() && this.currentNumEnemies < this.maxEnemies && !this.pauseFlag && !this.finishedLevel){
                 let enemyType = this.spawnableEnemies[Math.floor(Math.random() * this.spawnableEnemies.length)];
     
                 let enemyPosition = this.randomSpawn();
@@ -305,7 +305,7 @@ export default class level_p2 extends GameLevel {
                 if(this.gameTimer.getTimeLeft() <= 0) {
                 //end level and move to level z2
                
-
+                this.finishedLevel = true;
                 this.cleanUp();
                 this.changeLevelTimer = new Timer(5000, () => {
 
