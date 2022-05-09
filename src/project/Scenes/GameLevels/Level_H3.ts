@@ -30,6 +30,7 @@ import CerberusAI from "../../AI/CerberusAI";
 import HadesController from "../../AI/HadesController";
 import FireballAI from "../../AI/FireballAI";
 import CanvasNode from "../../../Wolfie2D/Nodes/CanvasNode";
+import HoundAI from "../../AI/HoundAI";
 
 export default class level_h3 extends GameLevel {
 
@@ -131,7 +132,7 @@ export default class level_h3 extends GameLevel {
         this.initializeWeapons();
         this.initPlayer();
 
-        this.enemyConstructorPairings = new Map([["Skull" , EnemyAI], ["Witch", RangeAI], ["Hellhound", EnemyAI]]);
+        this.enemyConstructorPairings = new Map([["Skull" , EnemyAI], ["Witch", RangeAI], ["Hellhound", HoundAI]]);
     
     
         // healthbar adjustment and rebalancing

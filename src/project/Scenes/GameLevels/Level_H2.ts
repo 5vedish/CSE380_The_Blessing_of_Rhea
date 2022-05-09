@@ -19,6 +19,7 @@ import MainMenu from "../MainMenu";
 import { GameEventType } from "../../../Wolfie2D/Events/GameEventType";
 import level_h3 from "./Level_H3";
 import H3_Cutscene from "../Cutscenes/H3_Cutscene";
+import HoundAI from "../../AI/HoundAI";
 
 export default class level_h2 extends GameLevel {
 
@@ -100,7 +101,7 @@ export default class level_h2 extends GameLevel {
         this.initializeWeapons();
         this.initPlayer();
 
-        this.enemyConstructorPairings = new Map([["Skull" , EnemyAI], ["Witch", RangeAI], ["Hellhound", EnemyAI]]);
+        this.enemyConstructorPairings = new Map([["Skull" , EnemyAI], ["Witch", RangeAI], ["Hellhound", HoundAI]]);
 
         // set game time
         this.gameTimer = new Timer(5000);
