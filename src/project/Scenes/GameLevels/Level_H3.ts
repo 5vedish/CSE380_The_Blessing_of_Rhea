@@ -31,6 +31,7 @@ import HadesController from "../../AI/HadesController";
 import FireballAI from "../../AI/FireballAI";
 import CanvasNode from "../../../Wolfie2D/Nodes/CanvasNode";
 import HoundAI from "../../AI/HoundAI";
+import SplashScreen from "../SplashScreen";
 
 export default class level_h3 extends GameLevel {
 
@@ -599,7 +600,7 @@ export default class level_h3 extends GameLevel {
                 this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "hades"});
                 this.viewport.setSize(1600, 900);
                 // maintain scene variables
-                this.sceneManager.changeToScene(MainMenu, {
+                this.sceneManager.changeToScene(SplashScreen, {
                     invincible: this.invincible, 
                     unlockAll: this.unlockAll,
                     instant_kill: this.instant_kill,
