@@ -64,6 +64,7 @@ export default class level_h2 extends GameLevel {
         // retrieve stats from previous level
         if (init.characterStats) {
             this.playerStats = init.characterStats;
+            this.upgradedWeapon = init.upgradedWeapon;
         } 
         
         // preserve cheats
@@ -270,7 +271,8 @@ export default class level_h2 extends GameLevel {
                         instant_kill: this.instant_kill,
                         speedUp: this.speedUp,
                         unlockedLevels: this.unlockedLevels,
-                        inventory: this.inventory
+                        inventory: this.inventory,
+                        upgradedWeapon: this.upgradedWeapon,
                     }, this.sceneOptions);
 
                 });

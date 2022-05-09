@@ -94,6 +94,7 @@ export default class level_h3 extends GameLevel {
         // retain stats if possible
         if (init.characterStats) {
             this.playerStats = init.characterStats;
+            this.upgradedWeapon = init.upgradedWeapon;
         } 
         
         // retain scene variables

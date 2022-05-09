@@ -17,6 +17,7 @@ export default class VenomAi extends ProjectileAI{
         this.timeToLive = new Timer(1500, () => {
             this.receiver.unsubscribe(Project_Events.GAMEPAUSE);
             this.receiver.unsubscribe(Project_Events.GAMEUNPAUSE);
+            this.receiver.ignoreEvents();
             this.owner.position = Vec2.ZERO;
             this.owner.visible = false;
             this.owner.setAIActive(false, {});
@@ -41,6 +42,7 @@ export default class VenomAi extends ProjectileAI{
                 (<PlayerController>this.player._ai).damage(this.damage, true);
                 this.receiver.unsubscribe(Project_Events.GAMEPAUSE);
                 this.receiver.unsubscribe(Project_Events.GAMEUNPAUSE);
+                this.receiver.ignoreEvents();
                 this.owner.position = Vec2.ZERO;
                 this.owner.visible = false;
                 this.owner.setAIActive(false, {});

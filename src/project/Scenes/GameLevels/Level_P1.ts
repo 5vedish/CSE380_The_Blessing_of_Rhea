@@ -284,7 +284,8 @@ export default class level_p1 extends GameLevel {
                         unlockedLevels: this.unlockedLevels,
                         characterStats: this.playerStats, 
                         weapon: (<PlayerController>this.player._ai).weapon,
-                        inventory: this.inventory
+                        inventory: this.inventory,
+                        upgradedWeapon: this.upgradedWeapon,
                     }, this.sceneOptions);
 
                 });
