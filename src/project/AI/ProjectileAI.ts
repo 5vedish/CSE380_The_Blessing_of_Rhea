@@ -31,7 +31,7 @@ export default class ProjectileAI implements AI {
     protected player: AnimatedSprite;
 
     // Stats
-    protected damage: number = 30;
+    protected damage: number = 25;
 
     protected emitter: Emitter;
 
