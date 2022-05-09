@@ -84,7 +84,7 @@ export default class level_p1 extends GameLevel {
         // this.viewport.setFocus(new Vec2(this.playerSpawn.x, this.playerSpawn.y));
         
         
-        this.maxEnemies = 12;
+        this.maxEnemies = 15;
         
         super.startScene();
         this.initLayers();
@@ -112,26 +112,26 @@ export default class level_p1 extends GameLevel {
             speed: 125,
             weapon: this.createWeapon("knife"),
             range: 16,
-            experience: 200
+            experience: 100
         });
 
         this.spawnableEnemies.push({
             name: "cyclops",
-            health: 450,
+            health: 550,
             player: this.player,
             speed: 100,
             weapon: this.createWeapon("knife"),
             range: 32,
-            experience: 600,
+            experience: 400,
         });
 
         this.spawnableEnemies.push({
             name: "octopus",
-            health: 200,
+            health: 250,
             player: this.player,
             speed: 150,
             weapon: this.createWeapon("knife"),
-            range: 125,
+            range: 150,
             experience: 250,
         });
 
@@ -178,7 +178,7 @@ export default class level_p1 extends GameLevel {
         let weapon = this.createWeapon("trident");
         if (this.instant_kill) weapon.type.damage = 10000;
         
-        this.playerStats = new CharacterStat(175, weapon.type.damage, 10,(this.speedUp) ? 15 :  2, weapon.cooldownTimer.getTotalTime());
+        this.playerStats = new CharacterStat(175, weapon.type.damage, 10,(this.speedUp) ? 15 :  2, weapon.cooldownTimer.getTotalTime(), .05);
         // TODO - ADD PLAYER AI HERE
         this.player.addAI(PlayerController,
             {

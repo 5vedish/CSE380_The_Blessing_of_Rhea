@@ -123,17 +123,17 @@ export default class level_p2 extends GameLevel {
             speed: 125,
             weapon: this.createWeapon("knife"),
             range: 16,
-            experience: 200
+            experience: 100
         });
 
         this.spawnableEnemies.push({
             name: "cyclops",
-            health: 450,
+            health: 550,
             player: this.player,
             speed: 100,
             weapon: this.createWeapon("knife"),
             range: 32,
-            experience: 600,
+            experience: 400,
         });
 
         this.enemyConstructorPairings = new Map([["crab" , EnemyAI], ["cyclops", EnemyAI], ["octopus", RangeAI]]);
@@ -177,7 +177,7 @@ export default class level_p2 extends GameLevel {
             // create weapon
             this.weapon = this.createWeapon("trident");
             if (this.instant_kill) this.weapon.type.damage = 10000;
-            this.playerStats = new CharacterStat(175, this.weapon.type.damage, 10, (this.speedUp) ? 15 : 2, this.weapon.cooldownTimer.getTotalTime());
+            this.playerStats = new CharacterStat(175, this.weapon.type.damage, 10, (this.speedUp) ? 15 : 2, this.weapon.cooldownTimer.getTotalTime(), .05);
             
             //Create an enemy for players to get exp
             let enemy = this.add.animatedSprite("crab", "primary");
@@ -284,14 +284,15 @@ export default class level_p2 extends GameLevel {
             if(this.gameTimer.getTimeLeft() <= this.gameTimer.getTotalTime()/2 && !this.halfway){
                 this.spawnableEnemies.push({
                     name: "octopus",
-                    health: 200,
+                    health: 250,
                     player: this.player,
                     speed: 150,
                     weapon: this.createWeapon("knife"),
-                    range: 125,
+                    range: 150,
                     experience: 250,
                 });
                 this.halfway = true;
+                this.maxEnemies = 20;
             }
     
             //Half way through add harpies

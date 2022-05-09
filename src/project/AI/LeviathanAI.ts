@@ -61,7 +61,7 @@ export default class LeviathanAI extends EnemyAI{
                 projectile.visible = true;
             }
             this.attackCooldown.start();
-        } else if (this.upgradeWeapon && !this.removeProjectiles) {
+        } else if (!this.dead && this.upgradeWeapon && !this.removeProjectiles) {
             // Delete old projectiles after upgrading weapon
             this.removeProjectiles = true;
             for(let p of this.projectiles){

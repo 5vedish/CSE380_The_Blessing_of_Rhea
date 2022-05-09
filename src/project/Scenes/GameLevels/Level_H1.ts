@@ -151,7 +151,7 @@ export default class level_h1 extends GameLevel {
         this.player.addPhysics(new AABB(Vec2.ZERO, new Vec2(16, 16)));
         
         // last argument is arbitrary because Hades will not use the weapon system, health was 75
-        this.playerStats = new CharacterStat(75, 5, 5, (this.speedUp) ? 15 : 3, HadesController.HADESCD);
+        this.playerStats = new CharacterStat(75, 5, 5, (this.speedUp) ? 15 : 3, HadesController.HADESCD, .05);
         // add player AI: range/weapon is arbitrary ... weaponV2 will possible be an updated sprite
         this.player.addAI(HadesController,
             {

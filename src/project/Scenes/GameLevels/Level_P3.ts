@@ -99,7 +99,7 @@ export default class level_p3 extends GameLevel {
         this.playerSpawn = new Vec2((32*32) + 16, (32*32) + 16);
         // this.viewport.setFocus(new Vec2(this.playerSpawn.x, this.playerSpawn.y));
         
-        this.maxEnemies = 15;
+        this.maxEnemies = 17;
         
         super.startScene();
         this.initLayers();
@@ -140,26 +140,26 @@ export default class level_p3 extends GameLevel {
             speed: 125,
             weapon: this.createWeapon("knife"),
             range: 16,
-            experience: 200
+            experience: 100
         });
 
         this.spawnableEnemies.push({
             name: "cyclops",
-            health: 450,
+            health: 550,
             player: this.player,
             speed: 100,
             weapon: this.createWeapon("knife"),
             range: 32,
-            experience: 600,
+            experience: 400,
         });
 
         this.spawnableEnemies.push({
             name: "octopus",
-            health: 200,
+            health: 250,
             player: this.player,
             speed: 150,
             weapon: this.createWeapon("blast"),
-            range: 125,
+            range: 150,
             experience: 250,
         });
 
@@ -210,7 +210,7 @@ export default class level_p3 extends GameLevel {
             // create weapon
             this.weapon = this.createWeapon("trident");
             if (this.instant_kill) this.weapon.type.damage = 10000;
-            this.playerStats = new CharacterStat(175, this.weapon.type.damage, 10, (this.speedUp) ? 15 : 2, this.weapon.cooldownTimer.getTotalTime());
+            this.playerStats = new CharacterStat(175, this.weapon.type.damage, 10, (this.speedUp) ? 15 : 2, this.weapon.cooldownTimer.getTotalTime(), .05);
 
             //Create an enemy for players to get exp
             let enemy = this.add.animatedSprite("crab", "primary");

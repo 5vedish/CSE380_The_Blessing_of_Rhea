@@ -54,6 +54,9 @@ import RockAI from "../../AI/RockAI";
 import FracturedAegis from "../../GameSystems/items/Upgrades/FracturedAegis";
 import Bolt3 from "../../GameSystems/items/Upgrades/Bolt3";
 import PoisonedGoblet from "../../GameSystems/items/Upgrades/PoisonedGoblet";
+import ArtemisBow1 from "../../GameSystems/items/Upgrades/ArtemisBow1";
+import ArtemisBow2 from "../../GameSystems/items/Upgrades/ArtemisBow2";
+import ArtemisBow3 from "../../GameSystems/items/Upgrades/ArtemisBow3";
 
 export interface CustomEnemy {
     name: string,
@@ -145,12 +148,12 @@ export default class GameLevel extends Scene{
 
     // items
     protected itemsArray = ["honey_jar", "fractured_aegis", "poisoned_goblet",
-        "hourglass_", "hermes_sandals_", "bolt_", "goblet_of_dionysus_", "aegis_"]; // "_" means chance to roll 1/2/3
+        "hourglass_", "hermes_sandals_", "bolt_", "goblet_of_dionysus_", "aegis_", "artemis_bow_"]; // "_" means chance to roll 1/2/3
     protected selectionArray: Array<string> = [];
     protected itemConstructorPairings: Map<string,any> = new Map([["honey_jar", HoneyJar], ["fractured_aegis", FracturedAegis], ["poisoned_goblet", PoisonedGoblet],
-        ["hourglass_1" , Hourglass1], ["hermes_sandals_1", HermesSandals1], ["bolt_1", Bolt1], ["goblet_of_dionysus_1", Goblet1], ["aegis_1", Aegis1],
-        ["hourglass_2" , Hourglass2], ["hermes_sandals_2", HermesSandals2], ["bolt_2", Bolt2], ["goblet_of_dionysus_2", Goblet2], ["aegis_2", Aegis2],
-        ["hourglass_3" , Hourglass3], ["hermes_sandals_3", HermesSandals3], ["bolt_3", Bolt3], ["goblet_of_dionysus_3", Goblet3], ["aegis_3", Aegis3]
+        ["hourglass_1" , Hourglass1], ["hermes_sandals_1", HermesSandals1], ["bolt_1", Bolt1], ["goblet_of_dionysus_1", Goblet1], ["aegis_1", Aegis1], ["artemis_bow_1", ArtemisBow1],
+        ["hourglass_2" , Hourglass2], ["hermes_sandals_2", HermesSandals2], ["bolt_2", Bolt2], ["goblet_of_dionysus_2", Goblet2], ["aegis_2", Aegis2], ["artemis_bow_2", ArtemisBow2],
+        ["hourglass_3" , Hourglass3], ["hermes_sandals_3", HermesSandals3], ["bolt_3", Bolt3], ["goblet_of_dionysus_3", Goblet3], ["aegis_3", Aegis3], ["artemis_bow_3", ArtemisBow3],
     ]);
 
     //Sprite to hold weapon icon
@@ -179,6 +182,7 @@ export default class GameLevel extends Scene{
         this.load.spritesheet("slice", "project_assets/spritesheets/slice.json");
         this.load.spritesheet("leaf", "project_assets/spritesheets/Leaf.json");
         this.load.spritesheet("rheaStatue", "project_assets/spritesheets/RheaStatue.json");
+        this.load.spritesheet("critText", "project_assets/spritesheets/critText.json");
         
         // Images
         this.load.image("pause_screen", "project_assets/screens/pause.png");
@@ -190,12 +194,14 @@ export default class GameLevel extends Scene{
         this.load.image("poisoned_goblet", "project_assets/sprites/poisoned_goblet.png");
 
         this.load.image("aegis_1", "project_assets/sprites/aegis_1.png");
+        this.load.image("artemis_bow_1", "project_assets/sprites/artemis_bow1.png");
         this.load.image("bolt_1", "project_assets/sprites/bolt_1.png");
         this.load.image("goblet_of_dionysus_1", "project_assets/sprites/goblet_1.png");
         this.load.image("hermes_sandals_1", "project_assets/sprites/hermes_sandals_1.png");
         this.load.image("hourglass_1", "project_assets/sprites/hourglass_1.png");
 
         this.load.image("aegis_2", "project_assets/sprites/aegis_2.png");
+        this.load.image("artemis_bow_2", "project_assets/sprites/artemis_bow2.png");
         this.load.image("bolt_2", "project_assets/sprites/bolt_2.png");
         this.load.image("goblet_of_dionysus_2", "project_assets/sprites/goblet_2.png");
         this.load.image("hermes_sandals_2", "project_assets/sprites/hermes_sandals_2.png");
@@ -203,6 +209,7 @@ export default class GameLevel extends Scene{
 
 
         this.load.image("aegis_3", "project_assets/sprites/aegis_3.png");
+        this.load.image("artemis_bow_3", "project_assets/sprites/artemis_bow3.png");
         this.load.image("bolt_3", "project_assets/sprites/bolt_3.png");
         this.load.image("goblet_of_dionysus_3", "project_assets/sprites/goblet_3.png");
         this.load.image("hermes_sandals_3", "project_assets/sprites/hermes_sandals_3.png");
@@ -524,6 +531,10 @@ export default class GameLevel extends Scene{
                         let attackSprite = event.data.get("owner");
                         attackSprite.destroy();     
                         break;
+                case Project_Events.CRITHIT:
+                        let cText = event.data.get("owner");
+                        cText.destroy();
+                        break;
                            
             }
         }    
@@ -697,7 +708,8 @@ export default class GameLevel extends Scene{
             Project_Events.HEALTHCHANGED, 
             Project_Events.LEVELUP,
             Project_Events.BOSSDIED,
-            Project_Events.MELEEATTACK
+            Project_Events.MELEEATTACK,
+            Project_Events.CRITHIT
         ]);
     }
 
@@ -849,11 +861,14 @@ export default class GameLevel extends Scene{
         let rolledItem;
         let tier;
         let dupes = [];
+
+        if(this.playerStats.stats.health >= this.playerStats.stats.maxHealth){ // filter out heal if full hp
+            this.itemsArray = this.itemsArray.filter(item => item !== "honey_jar");
+            dupes.push("honey_jar");
+        }
+
         while (this.selectionArray.length < 3){
-            if(this.playerStats.stats.health >= this.playerStats.stats.maxHealth){ // filter out heal if full hp
-                this.itemsArray = this.itemsArray.filter(item => item !== "honey_jar");
-                dupes.push("honey_jar");
-            }
+            
 
             rolledItem = this.itemsArray[Math.floor(Math.random() * this.itemsArray.length)];
 
