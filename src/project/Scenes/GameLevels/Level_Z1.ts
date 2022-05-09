@@ -88,7 +88,7 @@ export default class level_z1 extends GameLevel {
         
         //Create how long players need to survive for
         // this.gameTimer = new Timer(10000);  // (testing timer)
-        this.gameTimer = new Timer(8000); // (production timer)
+        this.gameTimer = new Timer(120000); // (production timer)
         this.gameTime = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(this.viewport.getHalfSize().x, 20), text: `${this.parseTimeLeft(this.gameTimer.getTotalTime())}`});
         
         this.healthNumber = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(196, 17), text: `${this.playerStats.stats.health} / ${this.playerStats.stats.maxHealth}`})
