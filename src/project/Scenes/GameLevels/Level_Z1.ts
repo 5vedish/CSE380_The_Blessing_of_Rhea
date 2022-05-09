@@ -114,7 +114,7 @@ export default class level_z1 extends GameLevel {
         this.enemyConstructorPairings = new Map([["snake" , EnemyAI], ["harpy", RangeAI]]);
         //Position the rhea statue and zone
         this.rheaStatue = this.add.animatedSprite("rheaStatue", "primary");
-        this.rheaStatue.position = new Vec2(33*32, 61*32);
+        this.rheaStatue.position = new Vec2(33*32, 45*32);
         this.rheaStatue.animation.play("idle");
 
         this.rheaStatueZone = this.add.graphic(GraphicType.RECT, "primary",{position: new Vec2(33*32, 61*32), size: new Vec2(6*32,6*32)});
@@ -229,8 +229,8 @@ export default class level_z1 extends GameLevel {
                 //end level and move to level z2
          
 
+                this.cleanUp();
                 this.changeLevelTimer = new Timer(3000, () => {
-                    this.cleanUp();
                     this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "zeus"});
                     this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "main_menu", loop: true, holdReference: true});
                     this.viewport.setSize(1600, 900);

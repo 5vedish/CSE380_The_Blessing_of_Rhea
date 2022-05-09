@@ -96,7 +96,7 @@ export default class level_z2 extends GameLevel {
         this.playerSpawn = new Vec2(32*32, 32*32);
         // this.viewport.setFocus(new Vec2(this.playerSpawn.x, this.playerSpawn.y));
         
-        this.maxEnemies = 10;
+        this.maxEnemies = 1;
         
         super.startScene();
         this.initLayers();
@@ -132,25 +132,25 @@ export default class level_z2 extends GameLevel {
         this.weaponIconCoolDown.color = Color.GRAY;
         this.weaponIconCoolDown.alpha = 0;
         
-        this.spawnableEnemies.push({
-            name: "snake",
-            health: 150,
-            player: this.player,
-            speed: 115,
-            weapon: this.createWeapon("knife"),
-            range: 16,
-            experience: 100
-        });
+        // this.spawnableEnemies.push({
+        //     name: "snake",
+        //     health: 150,
+        //     player: this.player,
+        //     speed: 115,
+        //     weapon: this.createWeapon("knife"),
+        //     range: 16,
+        //     experience: 100
+        // });
 
-        this.spawnableEnemies.push({
-            name: "harpy",
-            health: 200,
-            player: this.player,
-            speed: 145,
-            weapon: this.createWeapon("knife"),
-            range: 150,
-            experience: 200,
-        });
+        // this.spawnableEnemies.push({
+        //     name: "harpy",
+        //     health: 200,
+        //     player: this.player,
+        //     speed: 145,
+        //     weapon: this.createWeapon("knife"),
+        //     range: 150,
+        //     experience: 200,
+        // });
 
         this.spawnableEnemies.push({
             name: "giant",
@@ -239,8 +239,8 @@ export default class level_z2 extends GameLevel {
             if(this.currentWave >= 3 && this.currentNumEnemies === 0) {
                 //end level and move to level z3
       
+                this.cleanUp();
                 this.changeLevelTimer = new Timer(5000, ()=> {
-                    this.cleanUp();
 
                     this.viewport.setSize(1600, 900);
                     this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "zeus"});

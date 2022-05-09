@@ -571,8 +571,8 @@ export default class level_h3 extends GameLevel {
         // boss is defeated and no enemies remaining -> end level timer
         if(this.deadBosses === 3 && this.currentNumEnemies === 0) {
   
-            this.changeLevelTimer = new Timer(5000, () => {
                 this.cleanUp();
+            this.changeLevelTimer = new Timer(5000, () => {
 
                 this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "hades"});
                 this.viewport.setSize(1600, 900);

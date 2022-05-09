@@ -671,8 +671,20 @@ export default class GameLevel extends Scene{
 
     protected cleanUp(): void{
         // UI stuff
-        this.healthBar.destroy();
-        this.expBar.destroy();
+        // this.healthBar.destroy();
+        // this.expBar.destroy();
+
+        //Remove all enemies from the level
+        if(this.enemyArray.length > 0){
+            this.enemyArray.map((enemy) => {
+                enemy.freeze()
+                enemy.setAIActive(false, {});
+                enemy.animation.stop();
+                enemy.visible = false;
+                enemy.position = Vec2.ZERO
+            });
+            this.battleManager.enemies = [];
+        }
 
         // extraneous things like receivers that must be destroyed
         this.levelReceiver.destroy();
@@ -786,7 +798,7 @@ export default class GameLevel extends Scene{
                 break;
             case "venom":
                 ai= VenomAi;
-                speed = 5;
+                speed = 4;
                 break;
             case "blast":
                 ai = BlastAI;
@@ -807,7 +819,7 @@ export default class GameLevel extends Scene{
                 break;
             case "rock":
                 ai = RockAI;
-                speed = 4
+                speed = 3
                 break;
             default:
                 return null;

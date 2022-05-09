@@ -164,7 +164,7 @@ export default class level_z3 extends GameLevel {
             speed: 125,
             weapon: this.createWeapon("knife"),
             range: 10,
-            experience: 100
+            experience: 200
         });
 
         this.spawnableEnemies.push({
@@ -174,7 +174,7 @@ export default class level_z3 extends GameLevel {
             speed: 150,
             weapon: this.createWeapon("knife"),
             range: 150,
-            experience: 200,
+            experience: 400,
         });
 
         this.spawnableEnemies.push({
@@ -184,7 +184,7 @@ export default class level_z3 extends GameLevel {
             speed: 100,
             weapon: this.createWeapon("batSwing"),
             range: 64,
-            experience: 400,
+            experience: 800,
         });
         
         let echidnaTailWhip = this.createWeapon("tailwhip");
@@ -362,8 +362,8 @@ export default class level_z3 extends GameLevel {
 
         if(this.bossDefeated && this.currentNumEnemies === 0) {
     
+            this.cleanUp();
             this.changeLevelTimer = new Timer(5000, ()=> {
-                this.cleanUp();
 
                 this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "echidna"});
                 this.viewport.setSize(1600, 900);
