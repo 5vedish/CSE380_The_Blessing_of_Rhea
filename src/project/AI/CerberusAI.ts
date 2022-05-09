@@ -84,6 +84,15 @@ export default class CerberusAI extends EnemyAI {
 
     }
 
+    destroy(): void {
+        for(let p of this.projectiles){
+            if(this.scene.getSceneGraph().getNode(p.id) != undefined){
+                (<ProjectileAI>p._ai).destroy()
+            }
+        }
+        super.destroy();
+    }
+
     update(deltaT: number): void {
         super.update(deltaT);
 
