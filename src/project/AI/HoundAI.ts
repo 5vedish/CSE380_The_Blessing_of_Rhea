@@ -9,7 +9,7 @@ import RangeAI from "./RangeAI";
 
 export default class HoundAI extends EnemyAI {
 
-    dashTimer: Timer = new Timer(5000); // 5s CD for dash
+    dashTimer: Timer = new Timer(7000); // 5-10s CD for dash
   
 
     initializeAI(owner: AnimatedSprite, options: Record<string, any>): void {

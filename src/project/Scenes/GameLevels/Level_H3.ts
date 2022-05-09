@@ -123,7 +123,7 @@ export default class level_h3 extends GameLevel {
         this.playerSpawn = new Vec2(32*32, 32*32);
 
         // specify enemy count
-        this.maxEnemies = 8;
+        this.maxEnemies = 4;
         
         // super methods from GameLevel
         super.startScene();

@@ -9,14 +9,14 @@ import Stack from "../../../Wolfie2D/DataTypes/Stack";
 import AnimatedSprite from "../../../Wolfie2D/Nodes/Sprites/AnimatedSprite";
 
 export default class Dash extends EnemyState {
-    
+  
     // The return object for this state
     retObj: Record<string, any>;
 
     currentPath : NavigationPath;
     player : GameNode;
 
-    static DASHSPD = 8.5;
+    duration: Timer = new Timer(3000);
 
     constructor(parent: EnemyAI, owner: GameNode, player: GameNode) {
         super(parent, owner);
@@ -25,32 +25,42 @@ export default class Dash extends EnemyState {
 
     onEnter(options: Record<string, any>): void {
         let stack = new Stack<Vec2>();
-        const dir = this.player.position.clone().sub(this.owner.position.clone()).normalize(); // get direction
-        const pos = this.owner.position.clone().add(dir.scale(this.distanceToPlayer()*1.5)); // scale the direction
-        stack.push(pos);
+        stack.push(this.player.position);
         this.currentPath = new NavigationPath(stack);
-        this.owner.isCollidable = false;
-        console.log("ENTERING DASH");
-
-        console.log("OUR SPEED" + this.parent.speed);
+        this.duration.start();
     }
 
     handleInput(event: GameEvent): void { }
 
     update(deltaT: number): void {
 
-        if (this.currentPath.isDone()){
-
-            this.finished(EnemyStates.DEFAULT);
-
-        } else {
-            this.owner.moveOnPath(Dash.DASHSPD, this.currentPath);
-            (<AnimatedSprite>this.owner).animation.playIfNotAlready("moving", true);
-
-            if ((<AnimatedSprite> this.owner).boundary.overlapArea((<AnimatedSprite> this.player).boundary)){
+            if (this.duration.isStopped()){
                 this.finished(EnemyStates.DEFAULT);
             }
+        
+            if (this.currentPath.isDone()){
+                // if current path is empty
+                const xVar = Math.random() * ((Math.random() < .5) ? -64 : 64);
+                const yVar = Math.random() * ((Math.random() < .5) ? -64 : 64);
+
+                let pos = this.player.position.clone().sub(this.owner.position.clone()).normalize().scale(this.distanceToPlayer() * 2); // unit vector * distance * scaling
+
+                pos = this.player.position.clone().add(new Vec2(xVar, yVar));
+
+                let stack = new Stack<Vec2>();
+                stack.push(pos);
+                this.currentPath = new NavigationPath(stack);
+            } else {
+                let moveSpeed = this.parent.speed * (4 - ((this.duration.getTimeLeft()/this.duration.getTotalTime())*2)) * deltaT;
+                this.owner.moveOnPath(moveSpeed, this.currentPath);
+                (<AnimatedSprite> this.owner).animation.playIfNotAlready("moving");
+
+                if ((<AnimatedSprite>this.owner).boundary.overlapArea((<AnimatedSprite> this.player).boundary)){
+                    this.finished(EnemyStates.DEFAULT);
+                }
+    
         }
+
     }
 
     distanceToPlayer(): number{
@@ -58,8 +68,6 @@ export default class Dash extends EnemyState {
     }
 
     onExit(): Record<string, any> {
-        console.log("EXITING DASH");
-        this.owner.isCollidable = true;
         return this.retObj;
     }
 
