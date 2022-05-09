@@ -179,6 +179,7 @@ export default class level_z2 extends GameLevel {
     updateScene(deltaT: number): void {
         super.updateScene(deltaT);
         // Spawn enemies in
+
         if(this.startSceneTimer.isStopped()){
             if(!this.startedLevel){
                 this.player.unfreeze();

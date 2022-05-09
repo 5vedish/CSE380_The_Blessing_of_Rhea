@@ -176,6 +176,8 @@ export default class GameLevel extends Scene{
     protected speedUp: boolean;
     protected unlockedLevels: boolean[];
 
+    private numEnemiesLabel: Label;
+
     loadScene(): void {
         // Objects
         this.load.object("weaponData", "project_assets/data/weaponData.json");
@@ -247,6 +249,8 @@ export default class GameLevel extends Scene{
         this.subscribeToEvents();
         this.addUILayer("gui");
 
+        this.numEnemiesLabel = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(this.viewport.getHalfSize().x, 35), text: `Enemies Left: ${this.currentNumEnemies}`})
+
         this.addUILayer("pause").disable();
         let pauseScreen = this.add.sprite("pause_screen", "pause");
         pauseScreen.position.copy(this.viewport.getOrigin());
@@ -280,7 +284,7 @@ export default class GameLevel extends Scene{
 
         // Inventory Box Label
         let inventoryBorder = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(this.viewport.getHalfSize().x + 216.5, this.viewport.getHalfSize().y - 179), 
-            size: new Vec2(320, 80)});
+            size: new Vec2(320, 120)});
         inventoryBorder.color = Color.BLACK;
         inventoryBorder.alpha = .5;
 
@@ -350,7 +354,7 @@ export default class GameLevel extends Scene{
 
           let HUD = this.addUILayer("HUD");
           HUD.setDepth(999);
-         HUD.disable();
+        HUD.disable();
 
           // player stats HUD
           this.hpHUD = <Label> this.add.uiElement(UIElementType.LABEL, "HUD", { position: new Vec2(this.viewport.getOrigin().x-350,
@@ -468,6 +472,7 @@ export default class GameLevel extends Scene{
         }
 
         // main events
+        this.numEnemiesLabel.text = `Enemies Left: ${this.currentNumEnemies}`
         while (this.receiver.hasNextEvent() && !this.pauseFlag) {
             let event = this.receiver.getNextEvent();
 
@@ -528,7 +533,7 @@ export default class GameLevel extends Scene{
 
                 case Project_Events.BOSSDIED:
                     const boss = <CanvasNode>event.data.get("enemy");
-
+                    this.currentNumEnemies -= 1;
                     this.battleManager.enemies = this.battleManager.enemies.filter(enemy => enemy !== <BattlerAI>(boss._ai));
                     this.enemyArray = this.enemyArray.filter(enemy => enemy !== boss);
                     this.bossDefeated = true;
@@ -553,12 +558,14 @@ export default class GameLevel extends Scene{
             }
         }    
 
+        
+
         //Rhea statue
         if(this.rheaStatueCooldown.isStopped() && !this.rheaStatueUsed){
             if (this.rheaStatueZone.boundary.overlapArea(this.player.boundary) && this.playerStats.stats.health < this.playerStats.stats.maxHealth) {
                 this.rheaStatue.animation.play("heal");
                 this.rheaStatue.animation.queue("used");
-                this.playerStats.editHealth(this.rheaStatueHeal);
+                this.playerStats.editHealth(this.playerStats.stats.maxHealth * 0.2);
                 this.emitter.fireEvent(Project_Events.HEALTHCHANGED);
                 this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "heal", loop: false, holdReference: false});
                 this.rheaStatueCooldown.start();
@@ -644,7 +651,6 @@ export default class GameLevel extends Scene{
 
     protected pauseEntities(){
         console.log("PAUSE")
-        console.log(this.enemyArray);
         this.startSceneTimer.pause();
         if(this.enemyArray.length > 0){
             this.enemyArray.map((enemy) => {
@@ -708,6 +714,7 @@ export default class GameLevel extends Scene{
                 enemy.visible = false;
                 enemy.position = Vec2.ZERO
             });
+            this.currentNumEnemies = 0;
             this.battleManager.enemies = [];
         }
 
@@ -857,7 +864,7 @@ export default class GameLevel extends Scene{
                 break;
             case "blastV2":
                 ai = BlastV2AI;
-                speed = 8;
+                speed = 5;
                 break;
             case "feather":
                 ai = ProjectileAI;

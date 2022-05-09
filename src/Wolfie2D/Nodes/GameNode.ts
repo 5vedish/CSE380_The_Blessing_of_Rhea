@@ -97,7 +97,6 @@ export default abstract class GameNode implements Positioned, Unique, Updateable
 		}
 
 		if(this._ai){
-			console.log("HAS AI"+ this.id);
 			this._ai.destroy();
 			delete this._ai;
 			this.scene.getAIManager().removeActor(this);

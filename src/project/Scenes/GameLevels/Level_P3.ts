@@ -100,7 +100,7 @@ export default class level_p3 extends GameLevel {
         this.playerSpawn = new Vec2((32*32) + 16, (32*32) + 16);
         // this.viewport.setFocus(new Vec2(this.playerSpawn.x, this.playerSpawn.y));
         
-        this.maxEnemies = 17;
+        this.maxEnemies = 15;
         
         super.startScene();
         this.initLayers();
@@ -184,7 +184,7 @@ export default class level_p3 extends GameLevel {
          
          this.rheaStatueZone = this.add.graphic(GraphicType.RECT, "primary",{position: this.rheaStatue.position, size: new Vec2(3*32,3*32)});
          this.rheaStatueZone.color = Color.TRANSPARENT;
-         this.rheaStatueCooldown = new Timer(30000);
+         this.rheaStatueCooldown = new Timer(15000);
 
         this.populateHUD();
 
@@ -315,6 +315,7 @@ export default class level_p3 extends GameLevel {
                 this.leviathan.position = options.position;
                 this.leviathan.addAI(options.ai, options);
                 this.leviathan.setGroup("enemy");
+                this.currentNumEnemies += 1;
 
                 if(this.battleManager.enemies === undefined){
                     this.battleManager.setEnemies([<BattlerAI>this.leviathan._ai])
@@ -356,7 +357,7 @@ export default class level_p3 extends GameLevel {
             if(!this.freeKill && this.leviathan._ai !== undefined){
                 let bossPercentage = (<LeviathanAI>this.leviathan._ai).health/(<LeviathanAI>this.leviathan._ai).maxHealth;
                 this.bossHealthBar.size = new Vec2(600*bossPercentage, 16);
-                this.bossHealthNumber.text =`${(<LeviathanAI>this.leviathan._ai).health} / ${(<LeviathanAI>this.leviathan._ai).maxHealth}`;
+                this.bossHealthNumber.text =`${(<LeviathanAI>this.leviathan._ai).health.toFixed(2)} / ${(<LeviathanAI>this.leviathan._ai).maxHealth}`;
             }
     
             if(this.bossDefeated && this.currentNumEnemies === 0) {

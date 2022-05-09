@@ -218,6 +218,7 @@ export default class level_z3 extends GameLevel {
         this.enemyArray.push(this.echidna);
         this.echidna.freeze();
         this.echidna.setAIActive(false, {});
+        this.currentNumEnemies += 1;
 
         //Add boss health bar
         this.bossHealthBar = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(400, 425), size: new Vec2(600, 16)});
@@ -253,7 +254,7 @@ export default class level_z3 extends GameLevel {
                 let spawnIndex = Math.floor(Math.random()*4)
                 for(let i = 0; i < 2; i++){
                     spawnIndex = (spawnIndex + 1) % 3;
-                    if(this.currentNumEnemies < this.maxEnemies){
+                    if(this.currentNumEnemies < this.maxEnemies && !this.bossDefeated){
                         let enemyType = this.spawnableEnemies[Math.floor(Math.random() * this.spawnableEnemies.length)];
                         let enemy = this.add.animatedSprite(enemyType.name, "primary");
                         enemy.scale.set(1.5,1.5);
@@ -371,7 +372,6 @@ export default class level_z3 extends GameLevel {
         super.updateScene(deltaT);
 
         if(this.bossDefeated && this.currentNumEnemies === 0) {
-    
             this.cleanUp();
             this.changeLevelTimer = new Timer(5000, ()=> {
 
@@ -412,7 +412,6 @@ export default class level_z3 extends GameLevel {
         }
 
         if(this.player.position.y < 33*32 && !this.fightStarted){
-            console.log("STARTY FIGHT")
             this.fightStarted = true;
             this.echidna.unfreeze();
             this.echidna.setAIActive(true, {});
