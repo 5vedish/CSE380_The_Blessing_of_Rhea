@@ -80,7 +80,7 @@ export default class level_h1 extends GameLevel {
         
         this.playerSpawn = new Vec2(32*32, 32*32);        
         
-        this.maxEnemies = 5;
+        this.maxEnemies = 25;
         
         super.startScene();
         this.initLayers();
@@ -105,26 +105,16 @@ export default class level_h1 extends GameLevel {
         this.weaponIconCoolDown = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(48, 24), size: new Vec2(32,32)});
         this.weaponIconCoolDown.color = Color.GRAY;
         this.weaponIconCoolDown.alpha = 0;
-
+  
         this.spawnableEnemies.push({
-            name: "Hellhound",
-            health: 500,
+            name: "Skull",
+            health: 47, // make them one-shottable
             player: this.player,
-            speed: 125,
+            speed: 200,
             weapon: this.createWeapon("knife"),
             range: 16,
-            experience: 1000,
+            experience: 25
         });
-        
-        // this.spawnableEnemies.push({
-        //     name: "Skull",
-        //     health: 47, // make them one-shottable
-        //     player: this.player,
-        //     speed: 200,
-        //     weapon: this.createWeapon("knife"),
-        //     range: 16,
-        //     experience: 25
-        // });
 
         this.spawnableEnemies[0].weapon.type.damage = 7; // make them weak
 
@@ -165,7 +155,7 @@ export default class level_h1 extends GameLevel {
         this.player.addPhysics(new AABB(Vec2.ZERO, new Vec2(16, 16)));
         
         // last argument is arbitrary because Hades will not use the weapon system, health was 75
-        this.playerStats = new CharacterStat(75, 5, 5, (this.speedUp) ? 15 : 3, HadesController.HADESCD, .05);
+        this.playerStats = new CharacterStat(75, 5, 5, (this.speedUp) ? 15 : /*3*/3.31, HadesController.HADESCD, .05);
         // add player AI: range/weapon is arbitrary ... weaponV2 will possible be an updated sprite
         this.player.addAI(HadesController,
             {
