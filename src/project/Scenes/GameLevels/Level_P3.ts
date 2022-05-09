@@ -23,6 +23,7 @@ import { GameEventType } from "../../../Wolfie2D/Events/GameEventType";
 import level_h1 from "./Level_H1";
 import Graphic from "../../../Wolfie2D/Nodes/Graphic";
 import AnimatedSprite from "../../../Wolfie2D/Nodes/Sprites/AnimatedSprite";
+import H1_Cutscene from "../Cutscenes/H1_Cutscene";
 
 export default class level_p3 extends GameLevel {
     private freeKill: boolean = false;
@@ -369,7 +370,7 @@ export default class level_p3 extends GameLevel {
 
                     this.viewport.setSize(1600, 900);
                     this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "leviathan"});
-                    this.sceneManager.changeToScene(level_h1, {
+                    this.sceneManager.changeToScene(H1_Cutscene, {
                         invincible: this.invincible, 
                         unlockAll: this.unlockAll,
                         instant_kill: this.instant_kill,

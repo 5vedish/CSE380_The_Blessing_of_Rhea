@@ -910,11 +910,9 @@ export default class GameLevel extends Scene{
         }
 
         let projectiles = new Array(number);
-        console.log(number);
         for (let i = 0; i < number; i++) {
             projectiles[i] = this.add.animatedSprite(sprite, "primary");
             this.projetiles.push(projectiles[i]);
-            console.log(`PRojectile id: ${projectiles[i].id}`)
             projectiles[i].position = new Vec2(0, 0);
             projectiles[i].visible = false;
             (<AnimatedSprite>projectiles[i]).scale.set(scaleSize.x, scaleSize.y);
