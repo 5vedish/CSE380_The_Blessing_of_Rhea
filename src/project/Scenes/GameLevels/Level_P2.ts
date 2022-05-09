@@ -294,7 +294,7 @@ export default class level_p2 extends GameLevel {
                     experience: 250,
                 });
                 this.halfway = true;
-                this.maxEnemies = 20;
+                this.maxEnemies = 17;
             }
     
             //Half way through add harpies
