@@ -249,8 +249,8 @@ export default class level_h1 extends GameLevel {
               
                     
                 this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "hades"});
+                this.cleanUp();
                 this.changeLevelTimer = new Timer(5000, () => {
-                    this.cleanUp();
 
                     //preserve projectile attack and cooldown
 

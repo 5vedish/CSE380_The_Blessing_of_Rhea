@@ -19,9 +19,8 @@ export default class GiantAI extends EnemyAI {
 
     update(deltaT: number): void {
         super.update(deltaT);
-        console.log(this.health/this.maxHealth <= .5);
         if(this.health/this.maxHealth <= .5 && !this.changedState){
-            this.inRange *= 3;
+            this.inRange *= 4;
             this.changeState(EnemyStates.GIANT);
             this.changedState = true;
         }
@@ -54,13 +53,6 @@ export default class GiantAI extends EnemyAI {
                 }
             
             }
-        }
-    }
-
-    destroy(): void {
-        for(let p of this.projectiles){
-            console.log("DESTORY PROJECTILE AI RECEIVER");
-            (<ProjectileAI>p._ai).destroy()
         }
     }
 

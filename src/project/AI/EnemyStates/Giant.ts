@@ -23,7 +23,7 @@ export default class Giant extends EnemyState {
     constructor(parent: EnemyAI, owner: GameNode, player: GameNode, range: number, ) {
         super(parent, owner);
         this.player = player;
-        this.range = range * 3;
+        this.range = range * 4;
         
         // Regularly update the player location
         this.pollTimer = new Timer(100);
