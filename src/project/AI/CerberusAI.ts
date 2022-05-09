@@ -57,8 +57,12 @@ export default class CerberusAI extends EnemyAI {
     activate(options: Record<string, any>): void { }
 
     damage(damage: number): void {
-
-        this.health -= damage;
+        if(this.health - damage <= 0){
+            this.health = 0;
+        } else {
+            this.health -= damage;
+        }
+        
         this.owner.animation.play("damage");
         this.owner.animation.queue("moving", true);
 

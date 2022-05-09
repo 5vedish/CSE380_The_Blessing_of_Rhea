@@ -108,7 +108,7 @@ export default class level_h3 extends GameLevel {
 
     startScene(): void {
 
-        this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "hades"});
+        this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "hades", loop: true});
 
         // add in the tilemap and walls
         let tilemapLayers = this.add.tilemap("levelH3", new Vec2(1, 1));
@@ -395,54 +395,54 @@ export default class level_h3 extends GameLevel {
                 // update bosses healthbar
                 if (headNum === 1){
 
-                    if (dead){
+                    // if (dead){
 
-                        this.bossHealthBar.visible = false;
-                        this.bossHealthBarNumber.setText("");
+                    //     // this.bossHealthBar.visible = false;
+                    //     // this.bossHealthBarNumber.setText("");
 
-                    } else {
+                    // } else {
 
                         const bossPercentage = (<CerberusAI>this.Cerberus._ai).health/(<CerberusAI>this.Cerberus._ai).maxHealth;
                         this.bossHealthBar.size = new Vec2(160*bossPercentage, 16);
                         this.bossHealthBar.position = new Vec2(400 + (bossPercentage-1)*80,425);
                         this.bossHealthBarNumber.text = `${(<CerberusAI>this.Cerberus._ai).health.toFixed(2)} / ${(<CerberusAI>this.Cerberus._ai).maxHealth}`
 
-                    }
+                    // }
 
                 } 
 
                 if (headNum === 2){
 
-                    if (dead){
+                    // if (dead){
 
-                        this.bossHealthBar2.visible = false;
-                        this.bossHealthBarNumber2.setText("");
+                    //     // this.bossHealthBar2.visible = false;
+                    //     // this.bossHealthBarNumber2.setText("");
 
-                    } else {
+                    // } else {
 
                         const bossPercentage2 = (<CerberusAI>this.Cerberus2._ai).health/(<CerberusAI>this.Cerberus2._ai).maxHealth;
                         this.bossHealthBar2.size = new Vec2(160*bossPercentage2, 16);
                         this.bossHealthBar2.position = new Vec2(150 + (bossPercentage2-1)*80,425);
                         this.bossHealthBarNumber2.text = `${(<CerberusAI>this.Cerberus2._ai).health.toFixed(2)} / ${(<CerberusAI>this.Cerberus2._ai).maxHealth}`
 
-                    }
+                    // }
 
                 } 
 
                 if (headNum === 3){
 
-                    if (dead){
+                    // if (dead){
 
-                        this.bossHealthBar3.visible = false;
-                        this.bossHealthBarNumber3.setText("");
+                    //     // this.bossHealthBar3.visible = false;
+                    //     // this.bossHealthBarNumber3.setText("");
 
-                    } else {
+                    // } else {
 
                         const bossPercentage3 = (<CerberusAI>this.Cerberus3._ai).health/(<CerberusAI>this.Cerberus3._ai).maxHealth;
                         this.bossHealthBar3.size = new Vec2(160*bossPercentage3, 16);
                         this.bossHealthBar3.position = new Vec2(650 + (bossPercentage3-1)*80,425);
                         this.bossHealthBarNumber3.text = `${(<CerberusAI>this.Cerberus3._ai).health.toFixed(2)} / ${(<CerberusAI>this.Cerberus3._ai).maxHealth}`
-                    }
+                    // }
 
                 } 
 
