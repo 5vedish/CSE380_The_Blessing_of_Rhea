@@ -16,6 +16,20 @@ export default class SplashScreen extends Scene {
   private startLabel: Sprite;
   private flash: Timer;
 
+  private invincible: boolean;
+  private unlockAll: boolean;
+  private instant_kill: boolean;
+  private speedUp: boolean;
+  private unlockedLevels: boolean[];
+
+  initScene(init: Record<string, any>): void {
+    this.invincible = init.invincible;
+    this.unlockAll = init.unlockAll;
+    this.instant_kill = init.instant_kill;
+    this.speedUp = init.speedUp;
+    this.unlockedLevels = init.unlockedLevels;
+  }
+
   loadScene() {
     this.load.image("splash_screen", "project_assets/screens/Splash.png");
     this.load.image("start_label", "project_assets/sprites/start_label.png");  
@@ -57,7 +71,14 @@ export default class SplashScreen extends Scene {
       console.log(event);
 
       if (event.type === "start") {
-        this.sceneManager.changeToScene(MainMenu, {});
+        let options = {
+          invincible: this.invincible, 
+          unlockAll: this.unlockAll,
+          instant_kill: this.instant_kill,
+          speedUp: this.speedUp, 
+          unlockedLevels: this.unlockedLevels
+        }
+        this.sceneManager.changeToScene(MainMenu, options);
       }
     }
   }
