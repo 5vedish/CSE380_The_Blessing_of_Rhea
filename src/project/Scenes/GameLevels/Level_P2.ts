@@ -283,7 +283,7 @@ export default class level_p2 extends GameLevel {
             //Update game timer
             this.gameTime.text = `${this.parseTimeLeft(this.gameTimer.getTimeLeft())}`;
 
-            if(this.gameTimer.getTimeLeft() <= this.gameTimer.getTotalTime()/2 && !this.halfway){
+            if(!this.freeKill && this.gameTimer.getTimeLeft() <= this.gameTimer.getTotalTime()/2 && !this.halfway){
                 this.spawnableEnemies.push({
                     name: "octopus",
                     health: 250,
@@ -294,7 +294,7 @@ export default class level_p2 extends GameLevel {
                     experience: 250,
                 });
                 this.halfway = true;
-                this.maxEnemies = 17;
+                this.maxEnemies = 20;
             }
     
             //Half way through add harpies
