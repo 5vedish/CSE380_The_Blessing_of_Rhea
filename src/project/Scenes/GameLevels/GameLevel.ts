@@ -284,7 +284,7 @@ export default class GameLevel extends Scene{
 
         // Inventory Box Label
         let inventoryBorder = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(this.viewport.getHalfSize().x + 216.5, this.viewport.getHalfSize().y - 179), 
-            size: new Vec2(320, 120)});
+            size: new Vec2(320, 144)});
         inventoryBorder.color = Color.BLACK;
         inventoryBorder.alpha = .5;
 
