@@ -96,7 +96,7 @@ export default class level_z2 extends GameLevel {
         this.playerSpawn = new Vec2(32*32, 32*32);
         // this.viewport.setFocus(new Vec2(this.playerSpawn.x, this.playerSpawn.y));
         
-        this.maxEnemies = 1;
+        this.maxEnemies = 10;
         
         super.startScene();
         this.initLayers();
@@ -111,6 +111,8 @@ export default class level_z2 extends GameLevel {
         //Add health bar and exp bar
         // update health bar
         let percentage = this.playerStats.stats.health/this.playerStats.stats.maxHealth;
+        this.healthNumber = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(196, 17), text: `${this.playerStats.stats.health} / ${this.playerStats.stats.maxHealth}`});
+        this.healthNumber.textColor = Color.WHITE;
         // scale by percentage
         this.healthBar.size = new Vec2(percentage*256, 8);
         // rebalance position
@@ -132,25 +134,25 @@ export default class level_z2 extends GameLevel {
         this.weaponIconCoolDown.color = Color.GRAY;
         this.weaponIconCoolDown.alpha = 0;
         
-        // this.spawnableEnemies.push({
-        //     name: "snake",
-        //     health: 150,
-        //     player: this.player,
-        //     speed: 115,
-        //     weapon: this.createWeapon("knife"),
-        //     range: 16,
-        //     experience: 100
-        // });
+        this.spawnableEnemies.push({
+            name: "snake",
+            health: 150,
+            player: this.player,
+            speed: 115,
+            weapon: this.createWeapon("knife"),
+            range: 16,
+            experience: 100
+        });
 
-        // this.spawnableEnemies.push({
-        //     name: "harpy",
-        //     health: 200,
-        //     player: this.player,
-        //     speed: 145,
-        //     weapon: this.createWeapon("knife"),
-        //     range: 150,
-        //     experience: 200,
-        // });
+        this.spawnableEnemies.push({
+            name: "harpy",
+            health: 200,
+            player: this.player,
+            speed: 145,
+            weapon: this.createWeapon("knife"),
+            range: 150,
+            experience: 200,
+        });
 
         this.spawnableEnemies.push({
             name: "giant",
@@ -277,7 +279,7 @@ export default class level_z2 extends GameLevel {
             // create weapon
             this.weapon = this.createWeapon("lightning");
             if (this.instant_kill) this.weapon.type.damage = 10000;
-            this.playerStats = new CharacterStat(150, 100, 10, (this.speedUp) ? 15 : 2, this.weapon.cooldownTimer.getTotalTime(), .08);
+            this.playerStats = new CharacterStat(100, 100, 10, (this.speedUp) ? 15 : 2, this.weapon.cooldownTimer.getTotalTime(), .08);
             //Create an enemy for players to get exp
             let enemy = this.add.animatedSprite("snake", "primary");
             enemy.scale.set(1,1);

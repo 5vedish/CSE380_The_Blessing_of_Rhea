@@ -42,6 +42,10 @@ export default class level_h3 extends GameLevel {
     private bossHealthBar: Graphic;
     private bossHealthBar2: Graphic;
     private bossHealthBar3: Graphic;
+
+    private bossHealthBarNumber: Label;
+    private bossHealthBarNumber2: Label;
+    private bossHealthBarNumber3: Label;
     private bossReceiver: Receiver;
     private deadBosses: number = 0;
 
@@ -146,6 +150,8 @@ export default class level_h3 extends GameLevel {
             text: "Lvl" + this.playerStats.level});
         this.levelUI.textColor = Color.BLACK;
 
+        this.healthNumber = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(196, 17), text: `${this.playerStats.stats.health} / ${this.playerStats.stats.maxHealth}`})
+        this.healthNumber.textColor = Color.WHITE;
         // weapon cooldown indicator
         this.weaponIcon = this.add.sprite("bident", "gui");
         this.weaponIcon.position = new Vec2(48, 24);
@@ -295,13 +301,22 @@ export default class level_h3 extends GameLevel {
         let bossHealthBarBorder = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(400, 425), size: new Vec2(160, 16)});
         bossHealthBarBorder.alpha = 0.5;
 
+        this.bossHealthBarNumber = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(400, 425), text: `${(<CerberusAI>this.Cerberus._ai).health} / ${(<CerberusAI>this.Cerberus._ai).maxHealth}`});
+        this.bossHealthBarNumber.textColor = Color.WHITE;
+
         this.bossHealthBar2 = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(150, 425), size: new Vec2(160, 16)});
         let bossHealthBarBorder2 = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(150, 425), size: new Vec2(160, 16)});
         bossHealthBarBorder2.alpha = 0.5;
 
+        this.bossHealthBarNumber2 = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(150, 425), text: `${(<CerberusAI>this.Cerberus2._ai).health} / ${(<CerberusAI>this.Cerberus2._ai).maxHealth}`});
+        this.bossHealthBarNumber2.textColor = Color.WHITE;
+
         this.bossHealthBar3 = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(650, 425), size: new Vec2(160, 16)});
         let bossHealthBarBorder3 = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(650, 425), size: new Vec2(160, 16)});
         bossHealthBarBorder3.alpha = 0.5;
+
+        this.bossHealthBarNumber3 = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(650, 425), text: `${(<CerberusAI>this.Cerberus3._ai).health} / ${(<CerberusAI>this.Cerberus3._ai).maxHealth}`});
+        this.bossHealthBarNumber3.textColor = Color.WHITE;
 
 
         // position the Rhea statue and zone
@@ -384,6 +399,7 @@ export default class level_h3 extends GameLevel {
                         const bossPercentage = (<CerberusAI>this.Cerberus._ai).health/(<CerberusAI>this.Cerberus._ai).maxHealth;
                         this.bossHealthBar.size = new Vec2(160*bossPercentage, 16);
                         this.bossHealthBar.position = new Vec2(400 + (bossPercentage-1)*80,425);
+                        this.bossHealthBarNumber.text = `${(<CerberusAI>this.Cerberus._ai).health.toFixed(2)} / ${(<CerberusAI>this.Cerberus._ai).maxHealth}`
 
                     }
 
@@ -400,6 +416,7 @@ export default class level_h3 extends GameLevel {
                         const bossPercentage2 = (<CerberusAI>this.Cerberus2._ai).health/(<CerberusAI>this.Cerberus2._ai).maxHealth;
                         this.bossHealthBar2.size = new Vec2(160*bossPercentage2, 16);
                         this.bossHealthBar2.position = new Vec2(150 + (bossPercentage2-1)*80,425);
+                        this.bossHealthBarNumber2.text = `${(<CerberusAI>this.Cerberus2._ai).health.toFixed(2)} / ${(<CerberusAI>this.Cerberus2._ai).maxHealth}`
 
                     }
 
@@ -416,7 +433,7 @@ export default class level_h3 extends GameLevel {
                         const bossPercentage3 = (<CerberusAI>this.Cerberus3._ai).health/(<CerberusAI>this.Cerberus3._ai).maxHealth;
                         this.bossHealthBar3.size = new Vec2(160*bossPercentage3, 16);
                         this.bossHealthBar3.position = new Vec2(650 + (bossPercentage3-1)*80,425);
-
+                        this.bossHealthBarNumber3.text = `${(<CerberusAI>this.Cerberus3._ai).health.toFixed(2)} / ${(<CerberusAI>this.Cerberus3._ai).maxHealth}`
                     }
 
                 } 

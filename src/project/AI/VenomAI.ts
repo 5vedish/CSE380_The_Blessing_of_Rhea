@@ -28,6 +28,7 @@ export default class VenomAi extends ProjectileAI{
 		}
         
         if(this.owner.visible && !this.paused){
+            this.damage = (<PlayerController>this.player._ai).playerStats.stats.maxHealth * 0.08; 
             // Update the position
             this.owner.rotation = this.angle;
             this.owner.move(this.dir.scaled(this.current_speed));

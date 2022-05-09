@@ -41,6 +41,8 @@ export default class level_z3 extends GameLevel {
 
     private bossReceiver: Receiver;
 
+    private bossHealthNumber: Label;
+
     private spawnablePositions: Array<Vec2>;
 
     loadScene(): void {
@@ -118,7 +120,7 @@ export default class level_z3 extends GameLevel {
         this.bossReceiver = new Receiver();
         this.bossReceiver.subscribe([Project_Events.BOSSSPAWNENEMIES]);
 
-        this.maxEnemies = 15;
+        this.maxEnemies = 8;
 
         this.spawnablePositions = new Array<Vec2>();
         this.spawnablePositions.push(new Vec2(45*32, 36*32));
@@ -140,6 +142,9 @@ export default class level_z3 extends GameLevel {
         this.healthBar.size = new Vec2(percentage*256, 8);
         // rebalance position
         this.healthBar.position = new Vec2(196 + (percentage-1)*128,16);
+
+        this.healthNumber = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(196, 17), text: `${this.playerStats.stats.health} / ${this.playerStats.stats.maxHealth}`});
+        this.healthNumber.textColor = Color.WHITE;
 
         //Update the exp bar
         let reqExp = Math.pow(this.playerStats.level, 1.5);
@@ -187,9 +192,9 @@ export default class level_z3 extends GameLevel {
             experience: 850,
         });
         
+        //Creating echidna
         let echidnaTailWhip = this.createWeapon("tailwhip");
         echidnaTailWhip.sprite.scale.set(2,2);
-        // console.log(echidnaTailWhip);
         this.echidna = this.add.animatedSprite("echidna", "primary");
         this.echidna.position = new Vec2(32*32 , 20*32);
         this.echidna.scale.set(2,2);
@@ -218,6 +223,7 @@ export default class level_z3 extends GameLevel {
         this.bossHealthBar = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(400, 425), size: new Vec2(600, 16)});
         let bossHealthBarBorder = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(400, 425), size: new Vec2(600, 16)});
         bossHealthBarBorder.alpha = 0.5;
+        this.bossHealthNumber = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(400, 425), text: `${(<EchidnaAI>this.echidna._ai).health.toFixed(2)} / ${(<EchidnaAI>this.echidna._ai).maxHealth}`});
 
         if(this.battleManager.enemies === undefined){
             this.battleManager.setEnemies([<BattlerAI>this.echidna._ai])
@@ -244,35 +250,39 @@ export default class level_z3 extends GameLevel {
         switch (event.type) {
             case Project_Events.BOSSSPAWNENEMIES:
                 //Spawn two enemies next to the boss
+                let spawnIndex = Math.floor(Math.random()*4)
                 for(let i = 0; i < 2; i++){
-                    let enemyType = this.spawnableEnemies[Math.floor(Math.random() * this.spawnableEnemies.length)]
-                    let enemy = this.add.animatedSprite(enemyType.name, "primary");
-                    enemy.scale.set(1.5,1.5);
-                    enemy.addPhysics(new AABB(Vec2.ZERO, new Vec2(8,8)));
-                    enemy.animation.play("moving")
-                    let postion = this.spawnablePositions[Math.floor(Math.random()*4)];
-                    enemy.position = postion.clone();
-                    let options = {
-                        health: enemyType.health*(Math.pow(1.05, this.playerStats.level)),
-                        player: enemyType.player,
-                        speed: enemyType.speed,
-                        weapon: enemyType.weapon,
-                        range: enemyType.range,
-                        experience: enemyType.experience,
-                        projectiles: (enemyType.name === "harpy") ? this.createProjectiles(3,"feather") : 
-                        (enemyType.name === "giant") ? this.createProjectiles(1,"rock") : null,
-                        cooldown: 1000,
-                        scene: this,
-                    }
-                    enemy.addAI(this.enemyConstructorPairings.get(enemyType.name), options);
-                    enemy.setGroup("enemy");
-                    this.enemyArray.push(enemy);
-                    this.currentNumEnemies += 1;
+                    spawnIndex = (spawnIndex + 1) % 3;
+                    if(this.currentNumEnemies < this.maxEnemies){
+                        let enemyType = this.spawnableEnemies[Math.floor(Math.random() * this.spawnableEnemies.length)];
+                        let enemy = this.add.animatedSprite(enemyType.name, "primary");
+                        enemy.scale.set(1.5,1.5);
+                        enemy.addPhysics(new AABB(Vec2.ZERO, new Vec2(8,8)));
+                        enemy.animation.play("moving")
+                        let postion = this.spawnablePositions[spawnIndex];
+                        enemy.position = postion.clone();
+                        let options = {
+                            health: enemyType.health*(Math.pow(1.05, this.playerStats.level)),
+                            player: enemyType.player,
+                            speed: enemyType.speed,
+                            weapon: enemyType.weapon,
+                            range: enemyType.range,
+                            experience: enemyType.experience,
+                            projectiles: (enemyType.name === "harpy") ? this.createProjectiles(3,"feather") : 
+                            (enemyType.name === "giant") ? this.createProjectiles(1,"rock") : null,
+                            cooldown: 1000,
+                            scene: this,
+                        }
+                        enemy.addAI(this.enemyConstructorPairings.get(enemyType.name), options);
+                        enemy.setGroup("enemy");
+                        this.enemyArray.push(enemy);
+                        this.currentNumEnemies += 1;
 
-                    if(this.battleManager.enemies === undefined){
-                        this.battleManager.setEnemies([<BattlerAI>enemy._ai])
-                    } else {
-                        this.battleManager.enemies.push(<BattlerAI>enemy._ai);
+                        if(this.battleManager.enemies === undefined){
+                            this.battleManager.setEnemies([<BattlerAI>enemy._ai])
+                        } else {
+                            this.battleManager.enemies.push(<BattlerAI>enemy._ai);
+                        }
                     }
                 }
                 break;
@@ -293,7 +303,7 @@ export default class level_z3 extends GameLevel {
             // create weapon
             this.weapon = this.createWeapon("lightning");
             if (this.instant_kill) this.weapon.type.damage = 10000;
-            this.playerStats = new CharacterStat(150, 100, 10, (this.speedUp) ? 15 : 2, this.weapon.cooldownTimer.getTotalTime(), .08);
+            this.playerStats = new CharacterStat(100, 100, 10, (this.speedUp) ? 15 : 2, this.weapon.cooldownTimer.getTotalTime(), .08);
             //Create an enemy for players to get exp
             let enemy = this.add.animatedSprite("snake", "primary");
             enemy.scale.set(1,1);
@@ -412,6 +422,7 @@ export default class level_z3 extends GameLevel {
         if(this.echidna._ai !== undefined){
             let bossPercentage = (<EchidnaAI>this.echidna._ai).health/(<EchidnaAI>this.echidna._ai).maxHealth;
             this.bossHealthBar.size = new Vec2(600*bossPercentage, 16);
+            this.bossHealthNumber.text = `${(<EchidnaAI>this.echidna._ai).health.toFixed(2)} / ${(<EchidnaAI>this.echidna._ai).maxHealth}`;
         }
     }
 

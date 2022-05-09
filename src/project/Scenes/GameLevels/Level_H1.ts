@@ -97,6 +97,8 @@ export default class level_h1 extends GameLevel {
             text: "Lvl" + this.playerStats.level});
         this.levelUI.textColor = Color.BLACK;
 
+        this.healthNumber = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(196, 17), text: `${this.playerStats.stats.health} / ${this.playerStats.stats.maxHealth}`})
+        this.healthNumber.textColor = Color.WHITE;
         // cooldown icon
         this.weaponIcon = this.add.sprite("bident", "gui");
         this.weaponIcon.position = new Vec2(48, 24);

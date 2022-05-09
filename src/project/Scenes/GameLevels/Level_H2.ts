@@ -111,6 +111,8 @@ export default class level_h2 extends GameLevel {
         this.healthBar.size = new Vec2(percentage*256, 8);
         this.healthBar.position = new Vec2(196 + (percentage-1)*128,16);
 
+        this.healthNumber = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(196, 17), text: `${this.playerStats.stats.health} / ${this.playerStats.stats.maxHealth}`})
+        this.healthNumber.textColor = Color.WHITE;
         // update exp
         let reqExp = Math.pow(this.playerStats.level, 1.5);
         let expPercentage = this.playerStats.experience / (reqExp * 500);

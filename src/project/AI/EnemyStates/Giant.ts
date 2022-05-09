@@ -41,6 +41,9 @@ export default class Giant extends EnemyState {
     update(deltaT: number): void {
         if (Math.sqrt(Math.pow(this.player.position.x - this.owner.position.x, 2) + Math.pow(this.player.position.y - this.owner.position.y, 2)) <= this.range) {
             //Do nothing and just throw rocks
+            // if((<AnimatedSprite>this.owner).animation.isPlaying("moving")){
+            //     (<AnimatedSprite>this.owner).animation.stop();
+            // }
         } else {
             if (this.currentPath.isDone()){
                 // if current path is empty
