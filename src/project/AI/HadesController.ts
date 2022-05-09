@@ -101,6 +101,7 @@ export default class HadesController extends PlayerController {
                     (<ProjectileAI> projectile._ai).setAngle(Vec2.UP.angleToCCW(dir));
                     projectile.setAIActive(true, {speed: 4});
                     projectile.visible = true;
+                    (<FireballAI> projectile._ai).setCrit(Math.random() <= this.playerStats.stats.critRate);
                     (<FireballAI> projectile._ai).setPierce(this.pierce);
                     (<FireballAI> projectile._ai).checkInvuln();
 

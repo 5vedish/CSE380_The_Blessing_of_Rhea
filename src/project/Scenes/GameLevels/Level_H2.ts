@@ -302,12 +302,12 @@ export default class level_h2 extends GameLevel {
            enemy.animation.play("moving");
            enemy.position = new Vec2(this.player.position.x , this.player.position.y - 32);
            let options = {
-               health: /*1*/ 1000,
+               health: 1,
                player: this.player,    
                speed: 0,
                weapon: this.createWeapon("knife"),
                range: 0,
-               experience: /*10000*/100000,
+               experience: 10000,
                projectiles: this.createProjectiles(3 , "fireball"),
                cooldown: 1000,
                scene: this,

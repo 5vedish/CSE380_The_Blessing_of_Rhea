@@ -10,6 +10,7 @@ export default class FireballAI extends ProjectileAI{
     protected enemies: Array<AnimatedSprite>;
     protected pierce: number;
     protected invuln: Array<AnimatedSprite> = [];
+    protected crit: boolean;
 
     initializeAI(owner: AnimatedSprite, options: Record<string, any>): void {
         super.initializeAI(owner, options);
@@ -21,6 +22,7 @@ export default class FireballAI extends ProjectileAI{
             this.owner.position = Vec2.ZERO;
             this.owner.visible = false;
             this.owner.setAIActive(false, {});
+            this.crit = false;
         });
     }
 
@@ -42,7 +44,7 @@ export default class FireballAI extends ProjectileAI{
 
                 if (this.owner.boundary.overlapArea(enemy.boundary) && enemy.ai){
 
-                    (<EnemyAI> enemy._ai).damage(this.damage);
+                    (<EnemyAI> enemy._ai).damage(this.damage, this.crit);
                     this.invuln.push(enemy); // to re-add later
                     this.enemies = this.enemies.filter(target => target !== enemy); // remove from array temporarily
 
@@ -50,6 +52,7 @@ export default class FireballAI extends ProjectileAI{
                         this.owner.position = Vec2.ZERO;
                         this.owner.visible = false;
                         this.owner.setAIActive(false, {});
+                        this.crit = false;
                     }
 
                     this.pierce -= 1;
@@ -69,6 +72,10 @@ export default class FireballAI extends ProjectileAI{
 
     setPierce(pierce: number):void{
         this.pierce = pierce;
+    }
+
+    setCrit(crit: boolean){
+        this.crit = crit;
     }
 
     checkInvuln():void{
