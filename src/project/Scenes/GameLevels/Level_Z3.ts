@@ -383,7 +383,7 @@ export default class level_z3 extends GameLevel {
                 instant_kill: this.instant_kill,
                 speedUp: this.speedUp, 
                 unlockedLevels: this.unlockedLevels
-            });
+            }, this.sceneOptions);
 
             });
             this.createChallengeLabel("end");

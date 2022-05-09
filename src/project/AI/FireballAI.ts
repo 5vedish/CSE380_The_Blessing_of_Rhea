@@ -4,6 +4,7 @@ import ProjectileAI from "./ProjectileAI";
 import GameEvent from "../../Wolfie2D/Events/GameEvent";
 import EnemyAI from "./EnemyAI";
 import Timer from "../../Wolfie2D/Timing/Timer";
+import { Project_Events } from "../project_constants";
 
 export default class FireballAI extends ProjectileAI{
 
@@ -19,6 +20,8 @@ export default class FireballAI extends ProjectileAI{
 
         this.timeToLive = new Timer(3000, () => {
             // reset on end
+            this.receiver.unsubscribe(Project_Events.GAMEPAUSE);
+            this.receiver.unsubscribe(Project_Events.GAMEUNPAUSE);
             this.owner.position = Vec2.ZERO;
             this.owner.visible = false;
             this.owner.setAIActive(false, {});
@@ -49,6 +52,8 @@ export default class FireballAI extends ProjectileAI{
                     this.enemies = this.enemies.filter(target => target !== enemy); // remove from array temporarily
 
                     if (this.pierce === 0){
+                        this.receiver.unsubscribe(Project_Events.GAMEPAUSE);
+                        this.receiver.unsubscribe(Project_Events.GAMEUNPAUSE);
                         this.owner.position = Vec2.ZERO;
                         this.owner.visible = false;
                         this.owner.setAIActive(false, {});

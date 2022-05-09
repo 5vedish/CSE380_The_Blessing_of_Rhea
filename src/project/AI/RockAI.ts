@@ -13,6 +13,8 @@ export default class RockAI extends ProjectileAI{
         this.damage = 35; // should be higher damage
 
         this.timeToLive = new Timer(5000, () => {
+            this.receiver.unsubscribe(Project_Events.GAMEPAUSE);
+            this.receiver.unsubscribe(Project_Events.GAMEUNPAUSE);
             this.owner.position = Vec2.ZERO;
             this.owner.visible = false;
             this.owner.setAIActive(false, {});

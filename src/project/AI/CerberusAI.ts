@@ -21,7 +21,7 @@ export default class CerberusAI extends EnemyAI {
 
     initializeAI(owner: AnimatedSprite, options: Record<string, any>): void {
         super.initializeAI(owner, options);
-    
+        
         this.projectiles = options.projectiles;
         this.headNum = options.headNum;
 
@@ -57,8 +57,12 @@ export default class CerberusAI extends EnemyAI {
     activate(options: Record<string, any>): void { }
 
     damage(damage: number): void {
-
-        this.health -= damage;
+        if(this.health - damage <= 0){
+            this.health = 0;
+        } else {
+            this.health -= damage;
+        }
+        
         this.owner.animation.play("damage");
         this.owner.animation.queue("moving", true);
 
@@ -80,6 +84,15 @@ export default class CerberusAI extends EnemyAI {
 
     }
 
+    destroy(): void {
+        for(let p of this.projectiles){
+            if(this.scene.getSceneGraph().getNode(p.id) != undefined){
+                (<ProjectileAI>p._ai).destroy()
+            }
+        }
+        super.destroy();
+    }
+
     update(deltaT: number): void {
         super.update(deltaT);
 
@@ -93,7 +106,8 @@ export default class CerberusAI extends EnemyAI {
 
                 let projectile = this.projectiles[i];
 
-                if (!projectile.visible){
+                if (!projectile.visible)
+                    (<ProjectileAI> projectile._ai).receiver.subscribe([Project_Events.GAMEPAUSE, Project_Events.GAMEUNPAUSE]);{
 
                     projectile.position = this.owner.position.clone();
 

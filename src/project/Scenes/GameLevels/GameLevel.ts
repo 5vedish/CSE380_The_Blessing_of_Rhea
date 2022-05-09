@@ -284,7 +284,7 @@ export default class GameLevel extends Scene{
 
         // Inventory Box Label
         let inventoryBorder = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(this.viewport.getHalfSize().x + 216.5, this.viewport.getHalfSize().y - 179), 
-            size: new Vec2(320, 144)});
+            size: new Vec2(320, 158)});
         inventoryBorder.color = Color.BLACK;
         inventoryBorder.alpha = .5;
 
@@ -864,7 +864,7 @@ export default class GameLevel extends Scene{
                 break;
             case "blastV2":
                 ai = BlastV2AI;
-                speed = 5;
+                speed = 4;
                 break;
             case "feather":
                 ai = ProjectileAI;

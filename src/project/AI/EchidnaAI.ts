@@ -32,7 +32,6 @@ export default class EchidnaAI extends EnemyAI {
     initializeAI(owner: AnimatedSprite, options: Record<string, any>): void {
         super.initializeAI(owner, options);
         this.venomRange = options.venomRange;
-        this.scene = options.scene;
 
         this.speed = options.speed;
 
@@ -109,6 +108,7 @@ export default class EchidnaAI extends EnemyAI {
                         break;
                     }
                     let projectile = this.projectiles[i];
+                    (<ProjectileAI> projectile._ai).receiver.subscribe([Project_Events.GAMEPAUSE, Project_Events.GAMEUNPAUSE]);
                     projectile.position = this.owner.position.clone();
                     if(i === 0){
                         (<ProjectileAI> projectile._ai).setDirection(dir.clone().rotateCCW(Math.PI/8));
@@ -139,6 +139,15 @@ export default class EchidnaAI extends EnemyAI {
             }
         }
 
+    }
+
+    destroy(): void {
+        for(let p of this.projectiles){
+            if(this.scene.getSceneGraph().getNode(p.id) != undefined){
+                (<ProjectileAI>p._ai).destroy()
+            }
+        }
+        super.destroy();
     }
 
     distanceToPlayer(): number{

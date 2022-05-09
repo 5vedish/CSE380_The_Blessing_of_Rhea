@@ -51,6 +51,7 @@ export default class LeviathanAI extends EnemyAI{
             }
     
             if (projectile !== null) {
+                (<ProjectileAI> projectile._ai).receiver.subscribe([Project_Events.GAMEPAUSE, Project_Events.GAMEUNPAUSE]);
                 let dir = this.player.position.clone().sub(this.owner.position.clone()).normalize();
                 projectile.position = this.owner.position.clone();
                 projectile.position.y -= 40;
@@ -73,7 +74,6 @@ export default class LeviathanAI extends EnemyAI{
             }
         }
     }
-
     damage(damage: number): void {
         if (this.health - damage <= 0) this.health = 0; 
         else this.health -= damage;
@@ -119,15 +119,14 @@ export default class LeviathanAI extends EnemyAI{
             if(this.scene.getSceneGraph().getNode(p.id) === undefined){
                 continue;
             } else {
-                p.destroy();
+                (<ProjectileAI>p._ai).destroy()
             }
         }
-
-        for(let p2 of this.projectilesV2){
-            if(this.scene.getSceneGraph().getNode(p2.id) === undefined){
+        for(let p of this.projectilesV2){
+            if(this.scene.getSceneGraph().getNode(p.id) === undefined){
                 continue;
             } else {
-                p2.destroy();
+                (<ProjectileAI>p._ai).destroy()
             }
         }
         super.destroy();
