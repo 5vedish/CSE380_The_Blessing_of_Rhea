@@ -454,7 +454,7 @@ export default class level_h3 extends GameLevel {
         let enemy;
         if (this.playerStats === undefined) {
        
-            this.playerStats = new CharacterStat(75, 50, 5, (this.speedUp) ? 15 : 3, HadesController.HADESCD);
+            this.playerStats = new CharacterStat(75, 50, 5, (this.speedUp) ? 15 : 3, HadesController.HADESCD, .05);
 
             // exp supply drop
             enemy = this.add.animatedSprite("Skull", "primary");

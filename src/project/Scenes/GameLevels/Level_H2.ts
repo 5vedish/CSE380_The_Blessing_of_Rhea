@@ -294,7 +294,7 @@ export default class level_h2 extends GameLevel {
        // last argument is arbitrary because Hades will not use the weapon system, health was 75
        let enemy;
        if (!this.playerStats){
-           this.playerStats = new CharacterStat(75, 50, 5, (this.speedUp) ? 15 : 3, HadesController.HADESCD);
+           this.playerStats = new CharacterStat(75, 50, 5, (this.speedUp) ? 15 : 3, HadesController.HADESCD, 1);
            //Create an enemy for players to get exp
            enemy = this.add.animatedSprite("Skull", "primary");
            enemy.scale.set(1,1);
@@ -302,7 +302,7 @@ export default class level_h2 extends GameLevel {
            enemy.animation.play("moving");
            enemy.position = new Vec2(this.player.position.x , this.player.position.y - 32);
            let options = {
-               health: 1,
+               health: /*1*/ 1000,
                player: this.player,    
                speed: 0,
                weapon: this.createWeapon("knife"),
