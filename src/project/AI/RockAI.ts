@@ -10,7 +10,7 @@ import Timer from "../../Wolfie2D/Timing/Timer";
 export default class RockAI extends ProjectileAI{
     initializeAI(owner: AnimatedSprite, options: Record<string, any>): void {
         super.initializeAI(owner, options);
-        this.damage = 40; // should be higher damage
+        this.damage = 35; // should be higher damage
 
         this.timeToLive = new Timer(5000, () => {
             this.owner.position = Vec2.ZERO;

@@ -289,6 +289,8 @@ export default class level_h3 extends GameLevel {
         this.Cerberus3.setGroup("enemy");
         this.enemyArray.push(this.Cerberus3);
 
+        this.currentNumEnemies += 3;
+
         // include boss in battle manager
         if(this.battleManager.enemies === undefined){
             this.battleManager.setEnemies([<BattlerAI>this.Cerberus3._ai])
@@ -447,7 +449,7 @@ export default class level_h3 extends GameLevel {
                     this.battleManager.enemies = this.battleManager.enemies.filter(enemy => enemy !== <BattlerAI>(cerberus._ai));
                     this.enemyArray = this.enemyArray.filter(enemy => enemy !== cerberus);
                     cerberus.destroy();
-
+                    this.currentNumEnemies -= 1;
                     this.deadBosses += 1;
 
                 break;
@@ -495,6 +497,7 @@ export default class level_h3 extends GameLevel {
             enemy.setGroup("enemy");
             enemy.freeze();
             this.enemyArray.push(enemy);
+            this.currentNumEnemies += 1;
 
             if(this.battleManager.enemies === undefined){
                 this.battleManager.setEnemies([<BattlerAI>enemy._ai])

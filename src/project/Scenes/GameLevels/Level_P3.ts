@@ -315,6 +315,7 @@ export default class level_p3 extends GameLevel {
                 this.leviathan.position = options.position;
                 this.leviathan.addAI(options.ai, options);
                 this.leviathan.setGroup("enemy");
+                this.currentNumEnemies += 1;
 
                 if(this.battleManager.enemies === undefined){
                     this.battleManager.setEnemies([<BattlerAI>this.leviathan._ai])
