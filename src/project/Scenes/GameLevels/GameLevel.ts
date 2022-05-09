@@ -558,7 +558,7 @@ export default class GameLevel extends Scene{
             if (this.rheaStatueZone.boundary.overlapArea(this.player.boundary) && this.playerStats.stats.health < this.playerStats.stats.maxHealth) {
                 this.rheaStatue.animation.play("heal");
                 this.rheaStatue.animation.queue("used");
-                this.playerStats.editHealth(this.rheaStatueHeal);
+                this.playerStats.editHealth(this.playerStats.stats.maxHealth * 0.2);
                 this.emitter.fireEvent(Project_Events.HEALTHCHANGED);
                 this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "heal", loop: false, holdReference: false});
                 this.rheaStatueCooldown.start();
