@@ -11,6 +11,6 @@
     "speakerSprite": ["zeus", "snake"],
     "speakerPositions": ["left", "right", "left", "right", "left","left","left","left"],
     "speakerAnimations": ["idle", "moving", "idle", "moving", "attacking", "attacking", "attacking", "attacking"],
-    "speakerName": ["Zeus", "Snake Thingy", "Zeus", "Snake Thingy", "Zeus", "Zeus", "Zeus", "Zeus"]
+    "speakerName": ["Zeus", "Snake", "Zeus", "Snake", "Zeus", "Zeus", "Zeus", "Zeus"]
     }
 }
