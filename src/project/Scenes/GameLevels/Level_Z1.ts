@@ -117,7 +117,7 @@ export default class level_z1 extends GameLevel {
         this.rheaStatue.position = new Vec2(33*32, 45*32);
         this.rheaStatue.animation.play("idle");
 
-        this.rheaStatueZone = this.add.graphic(GraphicType.RECT, "primary",{position: new Vec2(33*32, 61*32), size: new Vec2(6*32,6*32)});
+        this.rheaStatueZone = this.add.graphic(GraphicType.RECT, "primary",{position: new Vec2(33*32, 45*32), size: new Vec2(6*32,6*32)});
         this.rheaStatueZone.color = Color.TRANSPARENT;
 
         this.populateHUD();
