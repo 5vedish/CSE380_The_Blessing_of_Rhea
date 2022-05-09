@@ -203,7 +203,7 @@ export default class level_h1 extends GameLevel {
                 this.startedLevel = true;
             }
 
-            if(this.currentNumEnemies < this.maxEnemies && !this.pauseFlag){
+            if(this.currentNumEnemies < this.maxEnemies && !this.pauseFlag && !this.finishedLevel){
                 let enemyType = this.spawnableEnemies[Math.floor(Math.random() * this.spawnableEnemies.length)];
     
                 let enemyPosition = this.randomSpawn();
@@ -252,6 +252,7 @@ export default class level_h1 extends GameLevel {
                 // end level and move to level 2
             
                 this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "hades"});
+                this.finishedLevel = true;
                 this.cleanUp();
                 this.changeLevelTimer = new Timer(5000, () => {
 
