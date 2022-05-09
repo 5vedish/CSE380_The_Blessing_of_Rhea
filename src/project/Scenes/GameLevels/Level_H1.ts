@@ -18,6 +18,7 @@ import FireballAI from "../../AI/FireballAI";
 import level_h2 from "./Level_H2";
 import { GameEventType } from "../../../Wolfie2D/Events/GameEventType";
 import H2_Cutscene from "../Cutscenes/H2_Cutscene";
+import HoundAI from "../../AI/HoundAI";
 
 export default class level_h1 extends GameLevel {
 
@@ -34,6 +35,7 @@ export default class level_h1 extends GameLevel {
         // load enemies
         this.load.spritesheet("Skull", "project_assets/spritesheets/Skull.json")
         this.load.spritesheet("Witch", "project_assets/spritesheets/Witch.json")
+        this.load.spritesheet("Hellhound", "project_assets/spritesheets/Hellhound.json");
 
         // load tilemap
         this.load.tilemap("levelH1", "project_assets/tilemaps/LevelH1.json");
@@ -78,7 +80,7 @@ export default class level_h1 extends GameLevel {
         
         this.playerSpawn = new Vec2(32*32, 32*32);        
         
-        this.maxEnemies = 30;
+        this.maxEnemies = 5;
         
         super.startScene();
         this.initLayers();
@@ -103,20 +105,30 @@ export default class level_h1 extends GameLevel {
         this.weaponIconCoolDown = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(48, 24), size: new Vec2(32,32)});
         this.weaponIconCoolDown.color = Color.GRAY;
         this.weaponIconCoolDown.alpha = 0;
-        
+
         this.spawnableEnemies.push({
-            name: "Skull",
-            health: 47, // make them one-shottable
+            name: "Hellhound",
+            health: 500,
             player: this.player,
-            speed: 200,
+            speed: 125,
             weapon: this.createWeapon("knife"),
             range: 16,
-            experience: 25
+            experience: 1000,
         });
+        
+        // this.spawnableEnemies.push({
+        //     name: "Skull",
+        //     health: 47, // make them one-shottable
+        //     player: this.player,
+        //     speed: 200,
+        //     weapon: this.createWeapon("knife"),
+        //     range: 16,
+        //     experience: 25
+        // });
 
         this.spawnableEnemies[0].weapon.type.damage = 7; // make them weak
 
-        this.enemyConstructorPairings = new Map([["Skull" , EnemyAI], ["Witch", RangeAI]]);
+        this.enemyConstructorPairings = new Map([["Skull" , EnemyAI], ["Witch", RangeAI], ["Hellhound", HoundAI]]);
         
         // position the Rhea statue and zone
         this.rheaStatue = this.add.animatedSprite("rheaStatue", "primary");
