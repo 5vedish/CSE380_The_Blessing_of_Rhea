@@ -121,10 +121,10 @@ export default class level_z3 extends GameLevel {
         this.maxEnemies = 15;
 
         this.spawnablePositions = new Array<Vec2>();
-        this.spawnablePositions.push(new Vec2(40*32, 19*32));
-        this.spawnablePositions.push(new Vec2(40*32, 35*32));
-        this.spawnablePositions.push(new Vec2(24*32, 19*32));
-        this.spawnablePositions.push(new Vec2(24*32, 35*32));
+        this.spawnablePositions.push(new Vec2(45*32, 36*32));
+        this.spawnablePositions.push(new Vec2(45*32, 15*32));
+        this.spawnablePositions.push(new Vec2(19*32, 36*32));
+        this.spawnablePositions.push(new Vec2(19*32, 15*32));
         
         super.startScene();
         this.initLayers();
@@ -164,7 +164,7 @@ export default class level_z3 extends GameLevel {
             speed: 125,
             weapon: this.createWeapon("knife"),
             range: 10,
-            experience: 200
+            experience: 250
         });
 
         this.spawnableEnemies.push({
@@ -174,7 +174,7 @@ export default class level_z3 extends GameLevel {
             speed: 150,
             weapon: this.createWeapon("knife"),
             range: 150,
-            experience: 400,
+            experience: 450,
         });
 
         this.spawnableEnemies.push({
@@ -184,7 +184,7 @@ export default class level_z3 extends GameLevel {
             speed: 100,
             weapon: this.createWeapon("batSwing"),
             range: 64,
-            experience: 800,
+            experience: 850,
         });
         
         let echidnaTailWhip = this.createWeapon("tailwhip");
