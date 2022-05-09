@@ -41,6 +41,8 @@ export default class level_z3 extends GameLevel {
 
     private bossReceiver: Receiver;
 
+    private bossHealthNumber: Label;
+
     private spawnablePositions: Array<Vec2>;
 
     loadScene(): void {
@@ -141,6 +143,9 @@ export default class level_z3 extends GameLevel {
         // rebalance position
         this.healthBar.position = new Vec2(196 + (percentage-1)*128,16);
 
+        this.healthNumber = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(196, 17), text: `${this.playerStats.stats.health} / ${this.playerStats.stats.maxHealth}`});
+        this.healthNumber.textColor = Color.WHITE;
+
         //Update the exp bar
         let reqExp = Math.pow(this.playerStats.level, 1.5);
         let expPercentage = this.playerStats.experience / (reqExp * 500);
@@ -218,6 +223,7 @@ export default class level_z3 extends GameLevel {
         this.bossHealthBar = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(400, 425), size: new Vec2(600, 16)});
         let bossHealthBarBorder = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(400, 425), size: new Vec2(600, 16)});
         bossHealthBarBorder.alpha = 0.5;
+        this.bossHealthNumber = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(400, 425), text: `${(<EchidnaAI>this.echidna._ai).health.toFixed(2)} / ${(<EchidnaAI>this.echidna._ai).maxHealth}`});
 
         if(this.battleManager.enemies === undefined){
             this.battleManager.setEnemies([<BattlerAI>this.echidna._ai])
@@ -412,6 +418,7 @@ export default class level_z3 extends GameLevel {
         if(this.echidna._ai !== undefined){
             let bossPercentage = (<EchidnaAI>this.echidna._ai).health/(<EchidnaAI>this.echidna._ai).maxHealth;
             this.bossHealthBar.size = new Vec2(600*bossPercentage, 16);
+            this.bossHealthNumber.text = `${(<EchidnaAI>this.echidna._ai).health} / ${(<EchidnaAI>this.echidna._ai).maxHealth}`;
         }
     }
 

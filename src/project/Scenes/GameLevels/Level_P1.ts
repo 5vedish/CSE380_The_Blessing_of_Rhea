@@ -98,6 +98,9 @@ export default class level_p1 extends GameLevel {
             text: "Lvl" + this.playerStats.level});
         this.levelUI.textColor = Color.BLACK;
 
+        this.healthNumber = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(196, 17), text: `${this.playerStats.stats.health} / ${this.playerStats.stats.maxHealth}`})
+        this.healthNumber.textColor = Color.WHITE;
+
         this.weaponIcon = this.add.sprite("tridentImg", "gui");
         this.weaponIcon.position = new Vec2(48, 24);
         this.weaponIconCoolDown = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(48, 24), size: new Vec2(32,32)});

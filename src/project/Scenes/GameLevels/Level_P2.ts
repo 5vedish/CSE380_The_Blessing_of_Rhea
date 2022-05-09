@@ -105,6 +105,9 @@ export default class level_p2 extends GameLevel {
         // rebalance position
         this.healthBar.position = new Vec2(196 + (percentage-1)*128,16);
 
+        this.healthNumber = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(196, 17), text: `${this.playerStats.stats.health} / ${this.playerStats.stats.maxHealth}`})
+        this.healthNumber.textColor = Color.WHITE;
+
         this.levelUI = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(86, 32), 
             text: "Lvl" + this.playerStats.level});
         this.levelUI.textColor = Color.BLACK;

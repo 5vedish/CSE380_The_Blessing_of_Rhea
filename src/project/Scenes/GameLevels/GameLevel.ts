@@ -110,6 +110,7 @@ export default class GameLevel extends Scene{
 
     // guis
     protected healthBar: Graphic;
+    protected healthNumber: Label;
     protected levelUI: Label;
     protected expBar: Graphic;
     protected inventory: Array<InventoryItemGraphic> = [];
@@ -503,6 +504,7 @@ export default class GameLevel extends Scene{
                     this.healthBar.size = new Vec2(percentage*256, 8);
                     // rebalance position
                     this.healthBar.position = new Vec2(196 + (percentage-1)*128,16);
+                    this.healthNumber.text = `${this.playerStats.stats.health} / ${this.playerStats.stats.maxHealth}`
                     break;
 
                 case Project_Events.LEVELUP:

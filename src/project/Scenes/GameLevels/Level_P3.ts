@@ -29,6 +29,7 @@ export default class level_p3 extends GameLevel {
     private bossHealthBar: Graphic;
     private boss: CustomEnemy;
     private bossSpawned: boolean = false;
+    private bossHealthNumber: Label;
     private leviathan: AnimatedSprite;
     private weapon: Weapon;
     
@@ -112,7 +113,10 @@ export default class level_p3 extends GameLevel {
         this.healthBar.size = new Vec2(percentage*256, 8);
         // rebalance position
         this.healthBar.position = new Vec2(196 + (percentage-1)*128,16);
-        
+
+        this.healthNumber = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(196, 17), text: `${this.playerStats.stats.health} / ${this.playerStats.stats.maxHealth}`})
+        this.healthNumber.textColor = Color.WHITE;
+
         this.levelUI = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(86, 32), 
             text: "Lvl" + this.playerStats.level});
         this.levelUI.textColor = Color.BLACK;
@@ -169,6 +173,7 @@ export default class level_p3 extends GameLevel {
         this.bossHealthBar = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(400, 425), size: new Vec2(600, 16)});
         let bossHealthBarBorder = this.add.graphic(GraphicType.RECT, "gui", {position: new Vec2(400, 425), size: new Vec2(600, 16)});
         bossHealthBarBorder.alpha = 0.5;
+        
         
          //Position the rhea statue and zone
          this.rheaStatue = this.add.animatedSprite("rheaStatue", "primary");
@@ -317,6 +322,9 @@ export default class level_p3 extends GameLevel {
                     this.battleManager.enemies.push(<BattlerAI>this.leviathan._ai);
                 }
 
+                this.bossHealthNumber = <Label>this.add.uiElement(UIElementType.LABEL, "gui", {position: new Vec2(400, 425), text: `${(<LeviathanAI>this.leviathan._ai).health.toFixed(2)} / ${(<LeviathanAI>this.leviathan._ai).maxHealth}`});
+                this.bossHealthNumber.textColor = Color.WHITE;
+
                 this.enemyArray.push(this.leviathan);
                 
                 this.bossSpawned = true;
@@ -348,6 +356,7 @@ export default class level_p3 extends GameLevel {
             if(!this.freeKill && this.leviathan._ai !== undefined){
                 let bossPercentage = (<LeviathanAI>this.leviathan._ai).health/(<LeviathanAI>this.leviathan._ai).maxHealth;
                 this.bossHealthBar.size = new Vec2(600*bossPercentage, 16);
+                this.bossHealthNumber.text =`${(<LeviathanAI>this.leviathan._ai).health} / ${(<LeviathanAI>this.leviathan._ai).maxHealth}`;
             }
     
             if(this.bossDefeated && this.currentNumEnemies === 0) {
