@@ -25,6 +25,7 @@ export default class LeviathanAI extends EnemyAI{
         this.projectilesV2 = options.projectilesV2;
         this.attackCooldown = new Timer(options.cooldown);
         this.upgradeWeapon = false;
+        this.pSpeed = 4;
         this.removeProjectiles = false;
         this.scene = options.scene;
     }
@@ -38,7 +39,6 @@ export default class LeviathanAI extends EnemyAI{
             if (!this.upgradeWeapon && this.health <= this.maxHealth * 0.6) {
                 this.attackCooldown = new Timer(500);
                 this.upgradeWeapon = true;
-                this.pSpeed = 5;
             }
             
             let projectile: AnimatedSprite = null;

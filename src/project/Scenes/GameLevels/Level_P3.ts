@@ -356,7 +356,7 @@ export default class level_p3 extends GameLevel {
             if(!this.freeKill && this.leviathan._ai !== undefined){
                 let bossPercentage = (<LeviathanAI>this.leviathan._ai).health/(<LeviathanAI>this.leviathan._ai).maxHealth;
                 this.bossHealthBar.size = new Vec2(600*bossPercentage, 16);
-                this.bossHealthNumber.text =`${(<LeviathanAI>this.leviathan._ai).health} / ${(<LeviathanAI>this.leviathan._ai).maxHealth}`;
+                this.bossHealthNumber.text =`${(<LeviathanAI>this.leviathan._ai).health.toFixed(2)} / ${(<LeviathanAI>this.leviathan._ai).maxHealth}`;
             }
     
             if(this.bossDefeated && this.currentNumEnemies === 0) {
