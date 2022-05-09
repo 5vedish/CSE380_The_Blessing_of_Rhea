@@ -268,7 +268,8 @@ export default class level_h1 extends GameLevel {
                         instant_kill: this.instant_kill,
                         speedUp: this.speedUp,
                         unlockedLevels: this.unlockedLevels,
-                        inventory: this.inventory
+                        inventory: this.inventory,
+                        upgradedWeapon: this.upgradedWeapon,
                     }, this.sceneOptions);
 
                 });

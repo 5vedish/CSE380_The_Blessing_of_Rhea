@@ -33,6 +33,7 @@ export default class level_p2 extends GameLevel {
             weapon.cooldownTimer = new Timer(this.playerStats.weaponCoolDown);
             weapon.sprite.setScene(this);
             this.weapon = weapon;
+            this.upgradedWeapon = init.upgradedWeapon;
         } 
         
         this.invincible = init.invincible;
@@ -318,7 +319,8 @@ export default class level_p2 extends GameLevel {
                         unlockedLevels: this.unlockedLevels,
                         characterStats: this.playerStats, 
                         weapon: (<PlayerController>this.player._ai).weapon,
-                        inventory: this.inventory
+                        inventory: this.inventory,
+                        upgradedWeapon: this.upgradedWeapon,
                     }, this.sceneOptions);
                 });
                 this.changeLevelTimer.start();
