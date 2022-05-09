@@ -51,6 +51,7 @@ export default class LeviathanAI extends EnemyAI{
             }
     
             if (projectile !== null) {
+                (<ProjectileAI> projectile._ai).receiver.subscribe([Project_Events.GAMEPAUSE, Project_Events.GAMEUNPAUSE]);
                 let dir = this.player.position.clone().sub(this.owner.position.clone()).normalize();
                 projectile.position = this.owner.position.clone();
                 projectile.position.y -= 40;

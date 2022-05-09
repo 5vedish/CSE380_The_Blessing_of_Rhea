@@ -14,6 +14,8 @@ export default class CerberusFireballAI extends ProjectileAI{
         this.damage = 80; // should be higher damage
 
         this.timeToLive = new Timer(10000, () => {
+            this.receiver.unsubscribe(Project_Events.GAMEPAUSE);
+            this.receiver.unsubscribe(Project_Events.GAMEUNPAUSE);
             this.owner.position = Vec2.ZERO;
             this.owner.visible = false;
             this.owner.setAIActive(false, {});

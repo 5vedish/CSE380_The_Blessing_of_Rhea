@@ -21,7 +21,7 @@ export default class CerberusAI extends EnemyAI {
 
     initializeAI(owner: AnimatedSprite, options: Record<string, any>): void {
         super.initializeAI(owner, options);
-    
+        
         this.projectiles = options.projectiles;
         this.headNum = options.headNum;
 
@@ -106,7 +106,8 @@ export default class CerberusAI extends EnemyAI {
 
                 let projectile = this.projectiles[i];
 
-                if (!projectile.visible){
+                if (!projectile.visible)
+                    (<ProjectileAI> projectile._ai).receiver.subscribe([Project_Events.GAMEPAUSE, Project_Events.GAMEUNPAUSE]);{
 
                     projectile.position = this.owner.position.clone();
 

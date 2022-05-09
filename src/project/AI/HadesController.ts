@@ -93,6 +93,7 @@ export default class HadesController extends PlayerController {
                 }
     
                 if (projectile !== null) {
+                    (<ProjectileAI> projectile._ai).receiver.subscribe([Project_Events.GAMEPAUSE, Project_Events.GAMEUNPAUSE]);
                     this.owner.animation.play("attacking", false, null);
                     // player to mouse -> write mouse to player
                     let dir = Input.getGlobalMousePosition().clone().sub(this.owner.position.clone()).normalize();

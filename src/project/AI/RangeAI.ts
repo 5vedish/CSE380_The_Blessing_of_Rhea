@@ -4,6 +4,7 @@ import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 import AnimatedSprite from "../../Wolfie2D/Nodes/Sprites/AnimatedSprite";
 import Scene from "../../Wolfie2D/Scene/Scene";
 import Timer from "../../Wolfie2D/Timing/Timer";
+import { Project_Events } from "../project_constants";
 import EnemyAI from "./EnemyAI";
 import ProjectileAI from "./ProjectileAI";
 
@@ -34,6 +35,7 @@ export default class RangeAI extends EnemyAI{
             }
     
             if (projectile !== null) {
+                (<ProjectileAI> projectile._ai).receiver.subscribe([Project_Events.GAMEPAUSE, Project_Events.GAMEUNPAUSE]);
                 let dir = this.player.position.clone().sub(this.owner.position.clone()).normalize();
                 projectile.position = this.owner.position.clone();
                 (<ProjectileAI> projectile._ai).setDirection(dir);

@@ -38,7 +38,7 @@ export default class ProjectileAI implements AI {
     timeToLive: Timer;
 
     // An event emitter and receiver to hook into the event system
-    protected receiver: Receiver
+    receiver: Receiver
 
     initializeAI(owner: AnimatedSprite, options: Record<string, any>): void {
         this.owner = owner;
@@ -49,7 +49,7 @@ export default class ProjectileAI implements AI {
 
         
         this.receiver = new Receiver();
-        this.receiver.subscribe([Project_Events.GAMEPAUSE, Project_Events.GAMEUNPAUSE]);
+        // this.receiver.subscribe([Project_Events.GAMEPAUSE, Project_Events.GAMEUNPAUSE]);
 
         this.player = options.player;
 
@@ -93,6 +93,8 @@ export default class ProjectileAI implements AI {
             //Check if it hits the player
             if(this.owner.boundary.overlapArea(this.player.boundary)){
                 (<PlayerController>this.player._ai).damage(this.damage);
+                this.receiver.unsubscribe(Project_Events.GAMEPAUSE);
+                this.receiver.unsubscribe(Project_Events.GAMEUNPAUSE);
                 this.owner.position = Vec2.ZERO;
                 this.owner.visible = false;
                 this.owner.setAIActive(false, {});

@@ -14,7 +14,7 @@ export default class Receiver {
 
 	/** Creates a new Receiver */
 	constructor(){
-		this.MAX_SIZE = 300;
+		this.MAX_SIZE = 100;
         this.q = new Queue(this.MAX_SIZE);
 	}
 
@@ -28,6 +28,11 @@ export default class Receiver {
 	 */
 	subscribe(eventTypes: string | Array<string>): void {
 		EventQueue.getInstance().subscribe(this, eventTypes);
+		this.q.clear();
+	}
+
+	unsubscribe(eventTypes: string): void {
+		EventQueue.getInstance().unsubscribe(this, eventTypes);
 		this.q.clear();
 	}
 

@@ -13,6 +13,8 @@ export default class BlastV2AI extends ProjectileAI{
 
         // 10 Blasts
         this.timeToLive = new Timer(5000, () => {
+            this.receiver.unsubscribe(Project_Events.GAMEPAUSE);
+            this.receiver.unsubscribe(Project_Events.GAMEUNPAUSE);
             this.owner.position = Vec2.ZERO;
             this.owner.visible = false;
             this.owner.setAIActive(false, {});
@@ -32,6 +34,8 @@ export default class BlastV2AI extends ProjectileAI{
             //Check if it hits the player
             if(this.owner.boundary.overlapArea(this.player.boundary)){
                 (<PlayerController>this.player._ai).damage(this.damage, true);
+                this.receiver.unsubscribe(Project_Events.GAMEPAUSE);
+                this.receiver.unsubscribe(Project_Events.GAMEUNPAUSE);
                 this.owner.position = Vec2.ZERO;
                 this.owner.visible = false;
                 this.owner.setAIActive(false, {});

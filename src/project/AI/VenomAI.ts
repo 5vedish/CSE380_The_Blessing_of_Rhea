@@ -15,6 +15,8 @@ export default class VenomAi extends ProjectileAI{
         this.damage = (<PlayerController>this.player._ai).playerStats.stats.maxHealth * 0.08; 
 
         this.timeToLive = new Timer(1500, () => {
+            this.receiver.unsubscribe(Project_Events.GAMEPAUSE);
+            this.receiver.unsubscribe(Project_Events.GAMEUNPAUSE);
             this.owner.position = Vec2.ZERO;
             this.owner.visible = false;
             this.owner.setAIActive(false, {});
@@ -23,6 +25,7 @@ export default class VenomAi extends ProjectileAI{
     }
 
     update(deltaT: number): void {
+        console.log("HERRO")
         while(this.receiver.hasNextEvent()){
             this.handleEvent(this.receiver.getNextEvent());
 		}
@@ -36,6 +39,8 @@ export default class VenomAi extends ProjectileAI{
             //Check if it hits the player
             if(this.owner.boundary.overlapArea(this.player.boundary)){
                 (<PlayerController>this.player._ai).damage(this.damage, true);
+                this.receiver.unsubscribe(Project_Events.GAMEPAUSE);
+                this.receiver.unsubscribe(Project_Events.GAMEUNPAUSE);
                 this.owner.position = Vec2.ZERO;
                 this.owner.visible = false;
                 this.owner.setAIActive(false, {});

@@ -71,6 +71,7 @@ export default class EnemyAI extends StateMachineGoapAI implements BattlerAI {
         this.player = options.player;
         this.weapon = options.weapon;
         this.experience = options.experience;
+        this.scene = options.scene;
 
         this.speed = options.speed;
 

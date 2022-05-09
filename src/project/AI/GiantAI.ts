@@ -1,6 +1,7 @@
 import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
 import AnimatedSprite from "../../Wolfie2D/Nodes/Sprites/AnimatedSprite";
 import Timer from "../../Wolfie2D/Timing/Timer";
+import { Project_Events } from "../project_constants";
 import EnemyAI, { EnemyStates } from "./EnemyAI";
 import EnemyState from "./EnemyStates/EnemyState";
 import ProjectileAI from "./ProjectileAI";
@@ -37,6 +38,7 @@ export default class GiantAI extends EnemyAI {
                 let projectile = this.projectiles[0];
 
                 if (!projectile.visible){
+                    (<ProjectileAI> projectile._ai).receiver.subscribe([Project_Events.GAMEPAUSE, Project_Events.GAMEUNPAUSE]);
                     this.owner.animation.stop();
                     this.owner.animation.play("attack");
                     projectile.position = this.owner.position.clone();
