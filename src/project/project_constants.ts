@@ -10,7 +10,8 @@ export enum Project_Events {
     GAMEUNPAUSE = "GAMEUNPAUSE",
     MELEEATTACK = "meleeAttacked",
     BOSSSPAWNENEMIES = "bossSpawnEnemies",
-    CRITHIT = "critHit"
+    CRITHIT = "critHit",
+    CRITEND = "critEnd"
 }
 
 export enum Cerberus_Positions {

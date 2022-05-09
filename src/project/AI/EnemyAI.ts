@@ -83,11 +83,11 @@ export default class EnemyAI extends StateMachineGoapAI implements BattlerAI {
     damage(damage: number, critHit : boolean = false): void {
 
         if (critHit){
-            console.log("CRIT");
             damage *= 1.5; 
-            const cText = this.scene.add.animatedSprite("critText", "primary");
-            cText.position = this.owner.position.clone();
-            cText.animation.play("crit", false, Project_Events.CRITHIT);
+            console.log("CRIT: ", damage);
+            this.emitter.fireEvent(Project_Events.CRITHIT, {
+                position: this.owner.position.clone()
+            })
         }
         this.health -= damage;
         this.owner.animation.play("damage");

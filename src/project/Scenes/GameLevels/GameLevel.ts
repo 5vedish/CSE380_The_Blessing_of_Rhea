@@ -120,6 +120,7 @@ export default class GameLevel extends Scene{
     protected cdHUD: Label;
     protected defHUD: Label;
     protected spdHUD: Label;
+    protected critHUD: Label;
 
     // leveling
     private levelUpLayer: Layer;
@@ -376,6 +377,11 @@ export default class GameLevel extends Scene{
           this.spdHUD.textColor = Color.WHITE;
           this.spdHUD.setHAlign(HAlign.LEFT);
 
+          this.critHUD = <Label> this.add.uiElement(UIElementType.LABEL, "HUD", { position: new Vec2(this.viewport.getOrigin().x-350,
+            this.viewport.getOrigin().y+150), text: "CRIT: "});
+          this.critHUD.textColor = Color.WHITE;
+          this.critHUD.setHAlign(HAlign.LEFT);
+
           this.populateInitInventory();
     
     }
@@ -527,15 +533,21 @@ export default class GameLevel extends Scene{
                     boss.destroy();
                     break;
                 case Project_Events.MELEEATTACK:
-                        //handle removing attack sprite
-                        let attackSprite = event.data.get("owner");
-                        attackSprite.destroy();     
-                        break;
+                    //handle removing attack sprite
+                    let attackSprite = event.data.get("owner");
+                    attackSprite.destroy();     
+                    break;
                 case Project_Events.CRITHIT:
-                        let cText = event.data.get("owner");
-                        cText.destroy();
-                        break;
-                           
+                    let position = event.data.get("position");
+                    position.y -= 32;
+                    let crit = this.add.animatedSprite("critText", "primary");
+                    crit.position = position;
+                    crit.animation.play("crit", false, Project_Events.CRITEND);
+                    break;
+                case Project_Events.CRITEND:
+                    let critText = event.data.get("owner");
+                    critText.destroy(); 
+                    break;
             }
         }    
 
@@ -709,7 +721,8 @@ export default class GameLevel extends Scene{
             Project_Events.LEVELUP,
             Project_Events.BOSSDIED,
             Project_Events.MELEEATTACK,
-            Project_Events.CRITHIT
+            Project_Events.CRITHIT,
+            Project_Events.CRITEND
         ]);
     }
 
@@ -997,6 +1010,8 @@ export default class GameLevel extends Scene{
         this.defHUD.setText("DEF: " + this.playerStats.stats.defense.toFixed(2).toString());
 
         this.spdHUD.setText("SPD: " + this.playerStats.stats.speed.toFixed(2).toString());
+
+        this.critHUD.setText("CRIT: " + this.playerStats.stats.critRate.toFixed(2).toString());
     }
 
     protected populateInventory(item: string): void {
