@@ -250,14 +250,16 @@ export default class level_z3 extends GameLevel {
         switch (event.type) {
             case Project_Events.BOSSSPAWNENEMIES:
                 //Spawn two enemies next to the boss
+                let spawnIndex = Math.floor(Math.random()*4)
                 for(let i = 0; i < 2; i++){
+                    spawnIndex = (spawnIndex + 1) % 3;
                     if(this.currentNumEnemies < this.maxEnemies){
-                        let enemyType = this.spawnableEnemies[Math.floor(Math.random() * this.spawnableEnemies.length)]
+                        let enemyType = this.spawnableEnemies[Math.floor(Math.random() * this.spawnableEnemies.length)];
                         let enemy = this.add.animatedSprite(enemyType.name, "primary");
                         enemy.scale.set(1.5,1.5);
                         enemy.addPhysics(new AABB(Vec2.ZERO, new Vec2(8,8)));
                         enemy.animation.play("moving")
-                        let postion = this.spawnablePositions[Math.floor(Math.random()*4)];
+                        let postion = this.spawnablePositions[spawnIndex];
                         enemy.position = postion.clone();
                         let options = {
                             health: enemyType.health*(Math.pow(1.05, this.playerStats.level)),
