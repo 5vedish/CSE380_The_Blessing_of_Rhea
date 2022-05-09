@@ -106,8 +106,8 @@ export default class CerberusAI extends EnemyAI {
 
                 let projectile = this.projectiles[i];
 
-                if (!projectile.visible)
-                    (<ProjectileAI> projectile._ai).receiver.subscribe([Project_Events.GAMEPAUSE, Project_Events.GAMEUNPAUSE]);{
+                if (!projectile.visible){
+                    (<ProjectileAI> projectile._ai).receiver.subscribe([Project_Events.GAMEPAUSE, Project_Events.GAMEUNPAUSE]);
 
                     projectile.position = this.owner.position.clone();
 
