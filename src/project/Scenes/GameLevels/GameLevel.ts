@@ -756,7 +756,31 @@ export default class GameLevel extends Scene{
         let enemy = this.add.animatedSprite(spriteKey, "primary");
 
         enemy.scale.set(1,1);
-        enemy.addPhysics(new AABB(Vec2.ZERO, new Vec2(8,8))); //Monkey patched collision box, dynamic later
+        // Adjust collision shape size based on type of enemy
+        switch (spriteKey) {
+            case "snake":
+            case "crab":
+                enemy.addPhysics(new AABB(Vec2.ZERO, new Vec2(8,8)));
+                break;
+            case "octopus":
+            case "Skull":
+            case "harpy":
+                enemy.addPhysics(new AABB(Vec2.ZERO, new Vec2(12,12)));
+                break;
+            case "Witch":
+                enemy.addPhysics(new AABB(Vec2.ZERO, new Vec2(12,16)));
+                break;
+            case "Hellhound":
+                enemy.addPhysics(new AABB(Vec2.ZERO, new Vec2(16,12)));
+                break;
+            case "giant":
+            case "cyclops":
+                enemy.addPhysics(new AABB(Vec2.ZERO, new Vec2(16,16)));
+                break;
+            default:
+                break;
+        }
+        
         enemy.animation.play("moving");
         enemy.position = options.position;
         enemy.addAI(options.ai, options);

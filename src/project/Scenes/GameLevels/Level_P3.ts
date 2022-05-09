@@ -310,7 +310,7 @@ export default class level_p3 extends GameLevel {
                 this.leviathan = this.add.animatedSprite("leviathan", "primary");
 
                 this.leviathan.scale.set(1.5,1.5);
-                this.leviathan.addPhysics(new AABB(Vec2.ZERO, new Vec2(8,8))); //Monkey patched collision box, dynamic later
+                this.leviathan.addPhysics(new AABB(Vec2.ZERO, new Vec2(32,32))); //Monkey patched collision box, dynamic later
                 this.leviathan.animation.play("moving");
                 this.leviathan.position = options.position;
                 this.leviathan.addAI(options.ai, options);
