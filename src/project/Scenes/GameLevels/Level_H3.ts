@@ -109,7 +109,7 @@ export default class level_h3 extends GameLevel {
 
     startScene(): void {
 
-        this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "hades", loop: true});
+        this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "hades", loop: true, holdReference: true});
 
         // add in the tilemap and walls
         let tilemapLayers = this.add.tilemap("levelH3", new Vec2(1, 1));
@@ -598,8 +598,8 @@ export default class level_h3 extends GameLevel {
         // boss is defeated and no enemies remaining -> end level timer
         if(this.deadBosses === 3 && this.currentNumEnemies === 0) {
   
-            this.cleanUp();
             this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "hades"});
+            this.cleanUp();
             this.changeLevelTimer = new Timer(5000, () => {
 
                 this.viewport.setSize(1600, 900);
