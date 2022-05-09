@@ -95,6 +95,7 @@ export default class ProjectileAI implements AI {
                 (<PlayerController>this.player._ai).damage(this.damage);
                 this.receiver.unsubscribe(Project_Events.GAMEPAUSE);
                 this.receiver.unsubscribe(Project_Events.GAMEUNPAUSE);
+                this.receiver.ignoreEvents();
                 this.owner.position = Vec2.ZERO;
                 this.owner.visible = false;
                 this.owner.setAIActive(false, {});

@@ -15,6 +15,7 @@ export default class RockAI extends ProjectileAI{
         this.timeToLive = new Timer(5000, () => {
             this.receiver.unsubscribe(Project_Events.GAMEPAUSE);
             this.receiver.unsubscribe(Project_Events.GAMEUNPAUSE);
+            this.receiver.ignoreEvents();
             this.owner.position = Vec2.ZERO;
             this.owner.visible = false;
             this.owner.setAIActive(false, {});

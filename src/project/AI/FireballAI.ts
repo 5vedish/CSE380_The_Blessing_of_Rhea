@@ -22,6 +22,7 @@ export default class FireballAI extends ProjectileAI{
             // reset on end
             this.receiver.unsubscribe(Project_Events.GAMEPAUSE);
             this.receiver.unsubscribe(Project_Events.GAMEUNPAUSE);
+            this.receiver.ignoreEvents();
             this.owner.position = Vec2.ZERO;
             this.owner.visible = false;
             this.owner.setAIActive(false, {});
@@ -54,6 +55,7 @@ export default class FireballAI extends ProjectileAI{
                     if (this.pierce === 0){
                         this.receiver.unsubscribe(Project_Events.GAMEPAUSE);
                         this.receiver.unsubscribe(Project_Events.GAMEUNPAUSE);
+                        this.receiver.ignoreEvents();
                         this.owner.position = Vec2.ZERO;
                         this.owner.visible = false;
                         this.owner.setAIActive(false, {});
