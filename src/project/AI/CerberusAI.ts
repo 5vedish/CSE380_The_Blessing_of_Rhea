@@ -56,7 +56,15 @@ export default class CerberusAI extends EnemyAI {
 
     activate(options: Record<string, any>): void { }
 
-    damage(damage: number): void {
+    damage(damage: number, critHit : boolean = false): void {
+        if (critHit){
+            damage *= 1.5; 
+            console.log("CRIT: ", damage);
+            this.emitter.fireEvent(Project_Events.CRITHIT, {
+                position: this.owner.position.clone()
+            })
+        }
+        
         if(this.health - damage <= 0){
             this.health = 0;
         } else {

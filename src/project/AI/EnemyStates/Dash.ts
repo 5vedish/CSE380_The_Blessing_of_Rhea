@@ -53,7 +53,9 @@ export default class Dash extends EnemyState {
             } else {
                 let moveSpeed = this.parent.speed * (4 - ((this.duration.getTimeLeft()/this.duration.getTotalTime())*2)) * deltaT;
                 this.owner.moveOnPath(moveSpeed, this.currentPath);
-                (<AnimatedSprite> this.owner).animation.playIfNotAlready("moving");
+                if(!(<AnimatedSprite> this.owner).animation.isPlaying("damage")){
+                    (<AnimatedSprite> this.owner).animation.playIfNotAlready("moving");
+                }
 
                 if ((<AnimatedSprite>this.owner).boundary.overlapArea((<AnimatedSprite> this.player).boundary)){
                     this.finished(EnemyStates.DEFAULT);
