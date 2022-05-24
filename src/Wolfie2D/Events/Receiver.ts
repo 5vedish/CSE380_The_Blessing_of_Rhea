@@ -42,6 +42,10 @@ export default class Receiver {
 	 */
 	receive(event: GameEvent): void {
 		try{
+			if (this.q.getSize() === 99){
+				console.log("I'M EMPTYING YOU");
+				this.q.clear();
+			}
 		this.q.enqueue(event);
 		} catch(e){
 			console.warn("Receiver overflow for event " + event.toString());
